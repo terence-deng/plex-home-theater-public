@@ -260,7 +260,6 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
 
         if (m_guiState.get())
           m_guiState->SaveViewAsControl(viewMode);
-
         UpdateButtons();
         return true;
       }
@@ -455,6 +454,7 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
 
       if (m_guiState.get())
         m_guiState->SaveViewAsControl(viewMode);
+
       UpdateButtons();
       return true;
     }
