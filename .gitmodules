@@ -1,0 +1,3 @@
+[submodule "vendor/homebrew.git"]
+	path = vendor/homebrew.git
+	url = git://github.com/mxcl/homebrew.git
