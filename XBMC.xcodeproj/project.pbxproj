@@ -41,7 +41,6 @@
 		43352CD31071520C00706B8A /* TextureBundleXPR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43352CCC1071520C00706B8A /* TextureBundleXPR.cpp */; };
 		43352CD41071520C00706B8A /* XBTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43352CCE1071520C00706B8A /* XBTF.cpp */; };
 		43352CD51071520C00706B8A /* XBTFReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43352CD01071520C00706B8A /* XBTFReader.cpp */; };
-		43352CEE1071634600706B8A /* libsquish-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43352CED1071634600706B8A /* libsquish-x86-osx.a */; };
 		439E16451078C02700B91B03 /* DDSImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439E16421078C02700B91B03 /* DDSImage.cpp */; };
 		43BF09081080C6BA00E25290 /* Neptune.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF08A41080C6B900E25290 /* Neptune.cpp */; };
 		43BF09091080C6BA00E25290 /* NptBase64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF08A71080C6B900E25290 /* NptBase64.cpp */; };
@@ -92,8 +91,55 @@
 		43BF09A21080D1E900E25290 /* AVTransportSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF099E1080D1E900E25290 /* AVTransportSCPD.cpp */; };
 		43BF09A31080D1E900E25290 /* RenderingControlSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF099F1080D1E900E25290 /* RenderingControlSCPD.cpp */; };
 		43BF09AB1080D2ED00E25290 /* RdrConnectionManagerSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF09A81080D2ED00E25290 /* RdrConnectionManagerSCPD.cpp */; };
-		60CF88BF10CB49F3000921B6 /* libcmyth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CF88BE10CB49F3000921B6 /* libcmyth.a */; };
-		60CF88C110CB4A16000921B6 /* librefmem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CF88C010CB4A16000921B6 /* librefmem.a */; };
+		74462EE712E37BF600C8B41F /* libwavpack.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EE612E37BF600C8B41F /* libwavpack.a */; };
+		74462EEB12E37C3600C8B41F /* libcdio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EEA12E37C3600C8B41F /* libcdio.a */; };
+		74462EF212E37D7900C8B41F /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EF112E37D7900C8B41F /* libpcre.a */; };
+		74462EF612E37DC800C8B41F /* libsqlite3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EF512E37DC800C8B41F /* libsqlite3.a */; };
+		74462EFA12E37E8A00C8B41F /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EF912E37E8A00C8B41F /* libSDL.a */; };
+		74462EFE12E37F4000C8B41F /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EFD12E37F4000C8B41F /* libGLEW.a */; };
+		74462F0212E37F8400C8B41F /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0112E37F8400C8B41F /* libSDL_image.a */; };
+		74462F0612E37FD300C8B41F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0512E37FD300C8B41F /* libiconv.dylib */; };
+		74462F0A12E3806200C8B41F /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0912E3806200C8B41F /* libmysqlclient.a */; };
+		74462F0E12E3808700C8B41F /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0D12E3808700C8B41F /* libSDL_mixer.a */; };
+		74462F1212E380B000C8B41F /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1112E380B000C8B41F /* libogg.a */; };
+		74462F1612E380DB00C8B41F /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1512E380DB00C8B41F /* libpcrecpp.a */; };
+		74462F1A12E3811600C8B41F /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1912E3811600C8B41F /* libvorbis.a */; };
+		74462F1E12E3814800C8B41F /* liblzo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1D12E3814800C8B41F /* liblzo.a */; };
+		74462F2112E381B800C8B41F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F57E21400E3C3AD400700C9D /* libz.dylib */; };
+		74462F2512E381E900C8B41F /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2412E381E900C8B41F /* libmpeg2.a */; };
+		74462F2912E3822000C8B41F /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2812E3822000C8B41F /* libfribidi.a */; };
+		74462F2D12E3826400C8B41F /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2C12E3826400C8B41F /* libvorbisenc.a */; };
+		74462F3112E3830600C8B41F /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3012E3830600C8B41F /* libsamplerate.a */; };
+		74462F3512E3833C00C8B41F /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3412E3833C00C8B41F /* libfontconfig.dylib */; };
+		74462F3912E3838D00C8B41F /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3812E3838D00C8B41F /* libvorbisfile.a */; };
+		74462F3D12E383C400C8B41F /* liblzo2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3C12E383C400C8B41F /* liblzo2.a */; };
+		74462F4112E3840D00C8B41F /* libmad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4012E3840D00C8B41F /* libmad.a */; };
+		74462F4912E3847200C8B41F /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4812E3847200C8B41F /* libfreetype.dylib */; };
+		74462F7912E3853C00C8B41F /* libbz2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F7812E3853C00C8B41F /* libbz2.a */; };
+		7446301612E38A6000C8B41F /* libapetag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC888A110A654000EE1B15 /* libapetag.a */; };
+		7446301712E38A6000C8B41F /* libsquish-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43352CED1071634600706B8A /* libsquish-x86-osx.a */; };
+		7446301812E38A6000C8B41F /* libxbms-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC8816110A4B8900EE1B15 /* libxbms-x86-osx.a */; };
+		744630FA12E38C4F00C8B41F /* librtv-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E256C0D263A1C00618676 /* librtv-x86-osx.a */; };
+		7446319812E3921C00C8B41F /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7446319512E3921C00C8B41F /* json_reader.cpp */; };
+		7446319912E3921C00C8B41F /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7446319612E3921C00C8B41F /* json_value.cpp */; };
+		7446319A12E3921C00C8B41F /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7446319712E3921C00C8B41F /* json_writer.cpp */; };
+		744631C612E3929100C8B41F /* XBMCOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631A912E3929100C8B41F /* XBMCOperations.cpp */; };
+		744631C712E3929100C8B41F /* VideoLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631AB12E3929100C8B41F /* VideoLibrary.cpp */; };
+		744631C812E3929100C8B41F /* TCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631AD12E3929100C8B41F /* TCPServer.cpp */; };
+		744631C912E3929100C8B41F /* SystemOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631AF12E3929100C8B41F /* SystemOperations.cpp */; };
+		744631CA12E3929100C8B41F /* PlaylistOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B112E3929100C8B41F /* PlaylistOperations.cpp */; };
+		744631CB12E3929100C8B41F /* PlayerOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B312E3929100C8B41F /* PlayerOperations.cpp */; };
+		744631CC12E3929100C8B41F /* PicturePlayerOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B512E3929100C8B41F /* PicturePlayerOperations.cpp */; };
+		744631CD12E3929100C8B41F /* JSONRPC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B912E3929100C8B41F /* JSONRPC.cpp */; };
+		744631CE12E3929100C8B41F /* FileOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631BD12E3929100C8B41F /* FileOperations.cpp */; };
+		744631CF12E3929100C8B41F /* FileItemHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631BF12E3929100C8B41F /* FileItemHandler.cpp */; };
+		744631D012E3929100C8B41F /* AVPlaylistOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631C112E3929100C8B41F /* AVPlaylistOperations.cpp */; };
+		744631D112E3929100C8B41F /* AVPlayerOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631C312E3929100C8B41F /* AVPlayerOperations.cpp */; };
+		744631D212E3929100C8B41F /* AudioLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631C512E3929100C8B41F /* AudioLibrary.cpp */; };
+		744631DC12E392E800C8B41F /* HttpApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631D612E392E800C8B41F /* HttpApi.cpp */; };
+		744631DE12E392E800C8B41F /* XBMChttp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631DA12E392E800C8B41F /* XBMChttp.cpp */; };
+		744632D112E3A13F00C8B41F /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 744632D012E3A13F00C8B41F /* libssl.a */; };
+		744632D612E3A23D00C8B41F /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 744632D512E3A23D00C8B41F /* libcrypto.a */; };
 		7C2D6AE40F35453E00DD2E85 /* SpecialProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */; };
 		7C45DBE910F325C400D4BBF3 /* DAVDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */; };
 		7C45DD681102AB5100D4BBF3 /* GUIStaticItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C45DD661102AB5100D4BBF3 /* GUIStaticItem.cpp */; };
@@ -155,7 +201,6 @@
 		8883CEA10DD817D1004E8B72 /* DVDOverlayCodecSSA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8883CE9E0DD817D1004E8B72 /* DVDOverlayCodecSSA.cpp */; };
 		8883CEA70DD81807004E8B72 /* DVDSubtitleParserSSA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8883CEA30DD81807004E8B72 /* DVDSubtitleParserSSA.cpp */; };
 		8883CEA80DD81807004E8B72 /* DVDSubtitlesLibass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8883CEA50DD81807004E8B72 /* DVDSubtitlesLibass.cpp */; };
-		889693370DF0B72500F1DA75 /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 889693360DF0B72500F1DA75 /* libbz2.1.0.dylib */; };
 		889B4D8E0E0EF86C00FAD25E /* RSSDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 889B4D8C0E0EF86C00FAD25E /* RSSDirectory.cpp */; };
 		88ACB01B0DCF40800083CFDF /* ASAPFileDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ACB0190DCF40800083CFDF /* ASAPFileDirectory.cpp */; };
 		88ACB01F0DCF409E0083CFDF /* ASAPCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ACB01C0DCF409E0083CFDF /* ASAPCodec.cpp */; };
@@ -163,8 +208,6 @@
 		88D9FF600DD264B500EDA56F /* XBPythonDllFuncs.S in Sources */ = {isa = PBXBuildFile; fileRef = 88D9FF5F0DD264B500EDA56F /* XBPythonDllFuncs.S */; };
 		88E384640E20D6EF0028AFC0 /* GUIListGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E384620E20D6EF0028AFC0 /* GUIListGroup.cpp */; };
 		88ECB6590DE013C4003396A7 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88ECB6580DE013C4003396A7 /* DiskArbitration.framework */; };
-		88ECB6E70DE07BA6003396A7 /* libfontconfig.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88ECB6E60DE07BA6003396A7 /* libfontconfig.1.dylib */; };
-		88ECB6EA0DE07BEE003396A7 /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88ECB6E90DE07BEE003396A7 /* libogg.0.dylib */; };
 		8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */; };
 		C80425711158A0DE00D158A6 /* controlslider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C80425701158A0DE00D158A6 /* controlslider.cpp */; };
 		C85EB756117460D50008E5A5 /* AddonDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C85EB754117460D50008E5A5 /* AddonDatabase.cpp */; };
@@ -250,7 +293,6 @@
 		E38E1F330D25F9FD00618676 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E145A0D25F9F900618676 /* tinyxmlparser.cpp */; };
 		E38E1F340D25F9FD00618676 /* VisibleEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E145D0D25F9F900618676 /* VisibleEffect.cpp */; };
 		E38E1F350D25F9FD00618676 /* XMLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E145F0D25F9F900618676 /* XMLUtils.cpp */; };
-		E38E1F360D25F9FD00618676 /* APEv2Tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E14620D25F9F900618676 /* APEv2Tag.cpp */; };
 		E38E1F370D25F9FD00618676 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E14640D25F9F900618676 /* Application.cpp */; };
 		E38E1F380D25F9FD00618676 /* ApplicationMessenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E14660D25F9F900618676 /* ApplicationMessenger.cpp */; };
 		E38E1F3C0D25F9FD00618676 /* Autorun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E146E0D25F9F900618676 /* Autorun.cpp */; };
@@ -366,7 +408,6 @@
 		E38E20030D25F9FD00618676 /* CDDADirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E169B0D25F9FA00618676 /* CDDADirectory.cpp */; };
 		E38E20040D25F9FD00618676 /* cddb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E169D0D25F9FA00618676 /* cddb.cpp */; };
 		E38E20050D25F9FD00618676 /* cdioSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E169F0D25F9FA00618676 /* cdioSupport.cpp */; };
-		E38E20060D25F9FD00618676 /* DAAPDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16AA0D25F9FA00618676 /* DAAPDirectory.cpp */; };
 		E38E20070D25F9FD00618676 /* Directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16AC0D25F9FA00618676 /* Directory.cpp */; };
 		E38E20080D25F9FD00618676 /* DirectoryCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16AE0D25F9FA00618676 /* DirectoryCache.cpp */; };
 		E38E20090D25F9FD00618676 /* DirectoryHistory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16B00D25F9FA00618676 /* DirectoryHistory.cpp */; };
@@ -378,7 +419,6 @@
 		E38E200F0D25F9FD00618676 /* FileCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16BC0D25F9FA00618676 /* FileCache.cpp */; };
 		E38E20100D25F9FD00618676 /* FileCDDA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16BE0D25F9FA00618676 /* FileCDDA.cpp */; };
 		E38E20110D25F9FD00618676 /* FileCurl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16C00D25F9FA00618676 /* FileCurl.cpp */; };
-		E38E20120D25F9FD00618676 /* FileDAAP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16C20D25F9FA00618676 /* FileDAAP.cpp */; };
 		E38E20130D25F9FD00618676 /* FileFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16C40D25F9FA00618676 /* FileFactory.cpp */; };
 		E38E20140D25F9FD00618676 /* FileFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16C60D25F9FA00618676 /* FileFileReader.cpp */; };
 		E38E20160D25F9FD00618676 /* FileHD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16CA0D25F9FA00618676 /* FileHD.cpp */; };
@@ -638,14 +678,12 @@
 		E38E227F0D25F9FE00618676 /* MusicInfoLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1D910D25F9FD00618676 /* MusicInfoLoader.cpp */; };
 		E38E22800D25F9FE00618676 /* MusicInfoScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1D930D25F9FD00618676 /* MusicInfoScanner.cpp */; };
 		E38E22820D25F9FE00618676 /* MusicInfoTagLoaderAAC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1D970D25F9FD00618676 /* MusicInfoTagLoaderAAC.cpp */; };
-		E38E22840D25F9FE00618676 /* MusicInfoTagLoaderApe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1D9B0D25F9FD00618676 /* MusicInfoTagLoaderApe.cpp */; };
 		E38E22850D25F9FE00618676 /* MusicInfoTagLoaderCDDA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1D9D0D25F9FD00618676 /* MusicInfoTagLoaderCDDA.cpp */; };
 		E38E22860D25F9FE00618676 /* MusicInfoTagLoaderDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1D9F0D25F9FD00618676 /* MusicInfoTagLoaderDatabase.cpp */; };
 		E38E22880D25F9FE00618676 /* MusicInfoTagLoaderFlac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DA30D25F9FD00618676 /* MusicInfoTagLoaderFlac.cpp */; };
 		E38E228A0D25F9FE00618676 /* MusicInfoTagLoaderMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DA70D25F9FD00618676 /* MusicInfoTagLoaderMod.cpp */; };
 		E38E228B0D25F9FE00618676 /* MusicInfoTagLoaderMP3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DA90D25F9FD00618676 /* MusicInfoTagLoaderMP3.cpp */; };
 		E38E228C0D25F9FE00618676 /* MusicInfoTagLoaderMP4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DAB0D25F9FD00618676 /* MusicInfoTagLoaderMP4.cpp */; };
-		E38E228D0D25F9FE00618676 /* MusicInfoTagLoaderMPC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DAD0D25F9FD00618676 /* MusicInfoTagLoaderMPC.cpp */; };
 		E38E228E0D25F9FE00618676 /* MusicInfoTagLoaderNSF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DAF0D25F9FD00618676 /* MusicInfoTagLoaderNSF.cpp */; };
 		E38E228F0D25F9FE00618676 /* MusicInfoTagLoaderOgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DB10D25F9FD00618676 /* MusicInfoTagLoaderOgg.cpp */; };
 		E38E22900D25F9FE00618676 /* MusicInfoTagLoaderShn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1DB30D25F9FD00618676 /* MusicInfoTagLoaderShn.cpp */; };
@@ -739,14 +777,8 @@
 		E38E23960D2626E600618676 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E238F0D2626E600618676 /* CoreServices.framework */; };
 		E38E23970D2626E600618676 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E23900D2626E600618676 /* Foundation.framework */; };
 		E38E23980D2626E600618676 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E23910D2626E600618676 /* OpenGL.framework */; };
-		E38E242B0D26317D00618676 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E24230D26317D00618676 /* libfreetype.dylib */; };
-		E38E242C0D26317D00618676 /* libfribidi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E24240D26317D00618676 /* libfribidi.dylib */; };
-		E38E242D0D26317D00618676 /* libGLEW.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E24250D26317D00618676 /* libGLEW.dylib */; };
-		E38E242F0D26317D00618676 /* liblzo.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E24270D26317D00618676 /* liblzo.dylib */; };
 		E38E25350D26365C00618676 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E25330D26365C00618676 /* AppKit.framework */; };
 		E38E25360D26365C00618676 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E25340D26365C00618676 /* ApplicationServices.framework */; };
-		E38E25690D2639F100618676 /* libxdaap-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E25680D2639F100618676 /* libxdaap-x86-osx.a */; };
-		E38E256D0D263A1C00618676 /* librtv-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E256C0D263A1C00618676 /* librtv-x86-osx.a */; };
 		E38E25780D263BF600618676 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25770D263BF600618676 /* unpack.cpp */; };
 		E38E257C0D263C4400618676 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E257B0D263C4400618676 /* rar.cpp */; };
 		E38E259D0D263CE000618676 /* action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E257E0D263CE000618676 /* action.cpp */; };
@@ -788,7 +820,6 @@
 		E3A4781A0D29032C00F3C3A6 /* GUIDialogAccessPoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3A478190D29032C00F3C3A6 /* GUIDialogAccessPoints.cpp */; };
 		E3B53E7C0D97B08100021A96 /* DVDSubtitleParserMicroDVD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3B53E7A0D97B08100021A96 /* DVDSubtitleParserMicroDVD.cpp */; };
 		E3BBB7990D7EA78A00CAAFD3 /* MythSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3BBB7980D7EA78A00CAAFD3 /* MythSession.cpp */; };
-		E3BBB7A20D7EA8B200CAAFD3 /* libpcre.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BBB7A10D7EA8B200CAAFD3 /* libpcre.dylib */; };
 		E3D87AEB0D3182F4000CF031 /* XCriticalSection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3D87AE90D3182F4000CF031 /* XCriticalSection.cpp */; };
 		E3DAAF8C0D6E1B0500F17647 /* FileSmb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3DAAF8A0D6E1B0500F17647 /* FileSmb.cpp */; };
 		E3DAAF8D0D6E1B0500F17647 /* SMBDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3DAAF8B0D6E1B0500F17647 /* SMBDirectory.cpp */; };
@@ -796,14 +827,11 @@
 		E3E91FFE0D8C61DF002BF43D /* EventServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3E91FFB0D8C61DF002BF43D /* EventServer.cpp */; };
 		E3E91FFF0D8C61DF002BF43D /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3E91FFC0D8C61DF002BF43D /* Socket.cpp */; };
 		E3E920020D8C622A002BF43D /* EventClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3E920010D8C622A002BF43D /* EventClient.cpp */; };
-		E3EB8F080D5D5C0300FFF489 /* libvorbis.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E3EB8F050D5D5C0300FFF489 /* libvorbis.dylib */; };
 		E43196170FB2382E0030E150 /* HTSPDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E43196140FB2382E0030E150 /* HTSPDirectory.cpp */; };
 		E43196180FB2382E0030E150 /* HTSPSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E43196160FB2382E0030E150 /* HTSPSession.cpp */; };
 		E435380411076A2900792AB8 /* eprintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5ACB5370FC3DF3D00AAA056 /* eprintf.cpp */; };
 		E46F7C2A0F77217400C25D29 /* Zeroconf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E46F7C280F77217400C25D29 /* Zeroconf.cpp */; };
 		E46F7C2D0F77219700C25D29 /* ZeroconfOSX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E46F7C2C0F77219700C25D29 /* ZeroconfOSX.cpp */; };
-		E49070F4110E7E76003865FD /* libvorbisenc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E49070F3110E7E76003865FD /* libvorbisenc.dylib */; };
-		E4907BF80FDAC38B00E2F075 /* libmysqlclient.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4907BF70FDAC38B00E2F075 /* libmysqlclient.dylib */; };
 		E49ACD8C100745C400A86ECD /* ZeroconfDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E49ACD8B100745C400A86ECD /* ZeroconfDirectory.cpp */; };
 		E49ACD9F10074A4000A86ECD /* ZeroconfBrowserOSX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E49ACD9D10074A4000A86ECD /* ZeroconfBrowserOSX.cpp */; };
 		E49ACDD510074F9200A86ECD /* ZeroconfBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E49ACDD410074F9200A86ECD /* ZeroconfBrowser.cpp */; };
@@ -845,8 +873,6 @@
 		F56A08E00F4D3C20003F9F87 /* GUITexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F56A08DF0F4D3C20003F9F87 /* GUITexture.cpp */; };
 		F56A08E50F4D3C2E003F9F87 /* GUITextureGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F56A08E20F4D3C2E003F9F87 /* GUITextureGL.cpp */; };
 		F57B6F801071B8B500079ACB /* JobManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F57B6F7E1071B8B500079ACB /* JobManager.cpp */; };
-		F57E213F0E3C3AB300700C9D /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F57E213E0E3C3AB200700C9D /* libiconv.dylib */; };
-		F57E21410E3C3AD400700C9D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F57E21400E3C3AD400700C9D /* libz.dylib */; };
 		F584E0FC0F25427500DB26A5 /* MusicInfoTagLoaderMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F584E0FB0F25427500DB26A5 /* MusicInfoTagLoaderMidi.cpp */; };
 		F584E1290F257BD800DB26A5 /* FileSpecialProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F584E1270F257BD800DB26A5 /* FileSpecialProtocol.cpp */; };
 		F584E12E0F257C5100DB26A5 /* HTTPDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F584E12D0F257C5100DB26A5 /* HTTPDirectory.cpp */; };
@@ -854,7 +880,6 @@
 		F595994510E9F322004B58B3 /* DVDVideoCodecCrystalHD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F595994410E9F322004B58B3 /* DVDVideoCodecCrystalHD.cpp */; };
 		F59876BC0FBA34C0008EF4FB /* DVDPlayerAudioResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F59876BA0FBA34C0008EF4FB /* DVDPlayerAudioResampler.cpp */; };
 		F59876C00FBA351D008EF4FB /* VideoReferenceClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F59876BF0FBA351D008EF4FB /* VideoReferenceClock.cpp */; };
-		F59876C40FBA3569008EF4FB /* libsamplerate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F59876C30FBA3569008EF4FB /* libsamplerate.dylib */; };
 		F59879080FBAA0C3008EF4FB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F59879070FBAA0C3008EF4FB /* QuartzCore.framework */; };
 		F5987B250FBB9682008EF4FB /* librefmscrobbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5987B220FBB9682008EF4FB /* librefmscrobbler.cpp */; };
 		F5987B260FBB9682008EF4FB /* lastfmscrobbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5987B230FBB9682008EF4FB /* lastfmscrobbler.cpp */; };
@@ -862,17 +887,10 @@
 		F5987FDB0FBE2DFD008EF4FB /* PAPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5987FDA0FBE2DFD008EF4FB /* PAPlayer.cpp */; };
 		F599CD2B108E65370010EC2A /* IoSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F599CD29108E65370010EC2A /* IoSupport.cpp */; };
 		F599CD74108E6A7A0010EC2A /* DarwinStorageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F599CD73108E6A7A0010EC2A /* DarwinStorageProvider.cpp */; };
-		F59FC1A712AF11E70063D9F2 /* libvorbisfile.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F59FC1A612AF11E70063D9F2 /* libvorbisfile.dylib */; };
 		F5A00B080EFDDDFC00CD59F3 /* AudioRendererFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A00B070EFDDDFC00CD59F3 /* AudioRendererFactory.cpp */; };
 		F5A00B260EFDE44100CD59F3 /* NullDirectSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A00B240EFDE44100CD59F3 /* NullDirectSound.cpp */; };
-		F5A2BD600F7AE6CB0006ABA0 /* libsmbclient.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E3D547950D723EFD00F36320 /* libsmbclient.dylib */; };
 		F5A7A6211127980A0059D6AA /* posix-realtime-stub.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A7A61F1127980A0059D6AA /* posix-realtime-stub.c */; };
-		F5A7A6F1112893330059D6AA /* libjsoncpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A7A6F0112893330059D6AA /* libjsoncpp.a */; };
-		F5A7A6F4112893440059D6AA /* libjsonrpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A7A6F3112893440059D6AA /* libjsonrpc.a */; };
-		F5A7A6F71128934C0059D6AA /* libhttpapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A7A6F61128934C0059D6AA /* libhttpapi.a */; };
 		F5A7A702112893E50059D6AA /* AnnouncementManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A7A700112893E50059D6AA /* AnnouncementManager.cpp */; };
-		F5A7A8131128F4DA0059D6AA /* libmicrohttpd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A7A8121128F4DA0059D6AA /* libmicrohttpd.a */; };
-		F5A7A85B112908F00059D6AA /* WebServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A7A859112908F00059D6AA /* WebServer.cpp */; };
 		F5A7B376113AFB5F0059D6AA /* FileSFTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A7B374113AFB5F0059D6AA /* FileSFTP.cpp */; };
 		F5A7B37E113AFB900059D6AA /* SFTPDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A7B37C113AFB900059D6AA /* SFTPDirectory.cpp */; };
 		F5A7B41C113CBB250059D6AA /* GUIRenderingControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A7B41B113CBB250059D6AA /* GUIRenderingControl.cpp */; };
@@ -880,7 +898,6 @@
 		F5A7B430113CBBE20059D6AA /* GUIDialogAddonSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A7B42E113CBBE20059D6AA /* GUIDialogAddonSettings.cpp */; };
 		F5A7B434113CBC6A0059D6AA /* GUIWindowAddonBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A7B433113CBC6A0059D6AA /* GUIWindowAddonBrowser.cpp */; };
 		F5A9D3091097C9370050490F /* AliasShortcutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A9D3081097C9370050490F /* AliasShortcutUtils.cpp */; };
-		F5AAC9CF0FB0D20100DBB77C /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5AAC9CE0FB0D20100DBB77C /* libsqlite3.0.dylib */; };
 		F5AACA680FB3DE2D00DBB77C /* GUIDialogSelect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5AACA670FB3DE2D00DBB77C /* GUIDialogSelect.cpp */; };
 		F5AACA970FB3E2B800DBB77C /* GUIDialogSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5AACA950FB3E2B800DBB77C /* GUIDialogSlider.cpp */; };
 		F5AC52890F58504F003EEAA4 /* DTSCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5AC52880F58504F003EEAA4 /* DTSCodec.cpp */; };
@@ -891,21 +908,13 @@
 		F5D8D733102BB3B1004A11AB /* OverlayRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5D8D731102BB3B1004A11AB /* OverlayRenderer.cpp */; };
 		F5D8EF5B103912A4004A11AB /* DVDSubtitleParserVplayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5D8EF59103912A4004A11AB /* DVDSubtitleParserVplayer.cpp */; };
 		F5D8F86C104CD1C0004A11AB /* DVDInputStreamMMS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5D8F86B104CD1C0004A11AB /* DVDInputStreamMMS.cpp */; };
-		F5D8F881104CD40B004A11AB /* liblzo2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D8F880104CD40B004A11AB /* liblzo2.dylib */; };
-		F5D8F88C104CD47D004A11AB /* libmms.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D8F88B104CD47D004A11AB /* libmms.dylib */; };
 		F5DC87E2110A287400EE1B15 /* RingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DC87E1110A287400EE1B15 /* RingBuffer.cpp */; };
-		F5DC87FC110A460000EE1B15 /* libpcrecpp.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC87FB110A460000EE1B15 /* libpcrecpp.dylib */; };
 		F5DC8801110A46C700EE1B15 /* ModplugCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DC8800110A46C700EE1B15 /* ModplugCodec.cpp */; };
-		F5DC8809110A495600EE1B15 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC8808110A495600EE1B15 /* libcrypto.dylib */; };
 		F5DC880F110A4A0B00EE1B15 /* FileXBMSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DC880E110A4A0B00EE1B15 /* FileXBMSP.cpp */; };
 		F5DC8813110A4A2400EE1B15 /* XBMSDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DC8812110A4A2400EE1B15 /* XBMSDirectory.cpp */; };
-		F5DC8817110A4B8900EE1B15 /* libxbms-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC8816110A4B8900EE1B15 /* libxbms-x86-osx.a */; };
-		F5DC888B110A654000EE1B15 /* libapetag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC888A110A654000EE1B15 /* libapetag.a */; };
 		F5E55B5D10741272006E788A /* DVDPlayerTeletext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5E55B5B10741272006E788A /* DVDPlayerTeletext.cpp */; };
 		F5E55B66107412DE006E788A /* GUIDialogTeletext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5E55B65107412DE006E788A /* GUIDialogTeletext.cpp */; };
 		F5E55B7010741340006E788A /* Teletext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5E55B6E10741340006E788A /* Teletext.cpp */; };
-		F5E55C861075B60F006E788A /* libmad.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E3EB8F030D5D5C0300FFF489 /* libmad.dylib */; };
-		F5E560711077003E006E788A /* libSDL_mixer-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 810CA0080D683DEF0095F5DD /* libSDL_mixer-x86-osx.a */; };
 		F5E560BC10770F9F006E788A /* OggCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5E560BB10770F9F006E788A /* OggCallback.cpp */; };
 		F5E5697310803FC3006E788A /* fastmemcpy.c in Sources */ = {isa = PBXBuildFile; fileRef = F5E5697210803FC3006E788A /* fastmemcpy.c */; };
 		F5E56BA61082A675006E788A /* PosixMountProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5E56BA51082A675006E788A /* PosixMountProvider.cpp */; };
@@ -914,15 +923,11 @@
 		F5EA02270F6DA9A5005C2EC5 /* PowerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5EA021A0F6DA7E8005C2EC5 /* PowerManager.cpp */; };
 		F5EA04800F72F188005C2EC5 /* SDLMain.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5EA04280F72EB88005C2EC5 /* SDLMain.mm */; };
 		F5EA05C20F733812005C2EC5 /* CocoaInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5EA05C00F733812005C2EC5 /* CocoaInterface.mm */; };
-		F5EA08860F78B1E7005C2EC5 /* libcdio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EA08840F78B1E7005C2EC5 /* libcdio.dylib */; };
 		F5EEB973106B07910019B552 /* GUIInfoTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5EEB971106B07910019B552 /* GUIInfoTypes.cpp */; };
 		F5EEBA87107015070019B552 /* SamiTagConvertor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5EEBA85107015070019B552 /* SamiTagConvertor.cpp */; };
 		F5F23E8E11041531009126C6 /* Semaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F23E8D11041531009126C6 /* Semaphore.cpp */; };
 		F5F23E9611041596009126C6 /* SemaphoreDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F23E9511041596009126C6 /* SemaphoreDarwin.cpp */; };
-		F5F23EBC1104245F009126C6 /* libSDL-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 810CA0050D683DEF0095F5DD /* libSDL-x86-osx.a */; };
 		F5F240EF110A4F76009126C6 /* CrystalHD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F240EB110A4F76009126C6 /* CrystalHD.cpp */; };
-		F5F241D5110BFCD6009126C6 /* libmpeg2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F241D4110BFCD6009126C6 /* libmpeg2.dylib */; };
-		F5F241D8110BFCF4009126C6 /* libwavpack.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F241D7110BFCF4009126C6 /* libwavpack.dylib */; };
 		F5F244651110DC6B009126C6 /* FileOperationJob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F244641110DC6B009126C6 /* FileOperationJob.cpp */; };
 		F5F245DA1112C6AC009126C6 /* DVDAudioCodecPassthroughFFmpeg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F245D81112C6AC009126C6 /* DVDAudioCodecPassthroughFFmpeg.cpp */; };
 		F5F245EE1112C9AB009126C6 /* FileUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F245EC1112C9AB009126C6 /* FileUtils.cpp */; };
@@ -946,6 +951,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
 			remoteInfo = XBMC;
+		};
+		74462FF012E3875D00C8B41F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74462F7D12E3862F00C8B41F;
+			remoteInfo = libsquish;
+		};
+		74462FFF12E3881E00C8B41F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74462FFC12E387FC00C8B41F;
+			remoteInfo = libapetag;
+		};
+		7446300D12E389FC00C8B41F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7446300A12E389E900C8B41F;
+			remoteInfo = libXBMS;
+		};
+		744630F612E38C3700C8B41F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 744630F312E38C1E00C8B41F;
+			remoteInfo = libRTV;
+		};
+		7446310212E38CAB00C8B41F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 744630FF12E38C8C00C8B41F;
+			remoteInfo = libhttpapi;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -993,7 +1033,6 @@
 		43352CD11071520C00706B8A /* XBTFReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBTFReader.h; sourceTree = "<group>"; };
 		43352CE61071545C00706B8A /* squish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = squish.h; path = libsquish/squish.h; sourceTree = "<group>"; };
 		43352CED1071634600706B8A /* libsquish-x86-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsquish-x86-osx.a"; path = "xbmc/lib/libsquish/libsquish-x86-osx.a"; sourceTree = "<group>"; };
-		43352CEF1071639400706B8A /* libsquish-powerpc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsquish-powerpc-osx.a"; path = "xbmc/lib/libsquish/libsquish-powerpc-osx.a"; sourceTree = "<group>"; };
 		436B38F3106628850049AB3B /* EndianSwap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndianSwap.h; sourceTree = "<group>"; };
 		439E16421078C02700B91B03 /* DDSImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DDSImage.cpp; sourceTree = "<group>"; };
 		439E16431078C02700B91B03 /* DDSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSImage.h; sourceTree = "<group>"; };
@@ -1099,14 +1138,74 @@
 		43BF09A81080D2ED00E25290 /* RdrConnectionManagerSCPD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RdrConnectionManagerSCPD.cpp; sourceTree = "<group>"; };
 		43BF09A91080D2ED00E25290 /* RenderingControlSCPD_Full.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = RenderingControlSCPD_Full.xml; sourceTree = "<group>"; };
 		43BF09DD1080D39300E25290 /* fastmemcpy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fastmemcpy.h; sourceTree = "<group>"; };
-		60CF88BE10CB49F3000921B6 /* libcmyth.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcmyth.a; path = xbmc/lib/cmyth/libcmyth/libcmyth.a; sourceTree = "<group>"; };
-		60CF88C010CB4A16000921B6 /* librefmem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librefmem.a; path = xbmc/lib/cmyth/librefmem/librefmem.a; sourceTree = "<group>"; };
 		6E2FACD20E26E92800DF79EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = xbmc/osx/Info.plist; sourceTree = "<group>"; };
 		6E97BDBF0DA2B620003A2A89 /* EventClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventClient.h; sourceTree = "<group>"; };
 		6E97BDC00DA2B620003A2A89 /* EventPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventPacket.h; sourceTree = "<group>"; };
 		6E97BDC10DA2B620003A2A89 /* EventServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventServer.h; sourceTree = "<group>"; };
 		6E97BDC30DA2B620003A2A89 /* Fanart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fanart.h; sourceTree = "<group>"; };
 		6E97BDC40DA2B620003A2A89 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
+		74462EE612E37BF600C8B41F /* libwavpack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwavpack.a; path = vendor/homebrew.git/lib/libwavpack.a; sourceTree = "<group>"; };
+		74462EEA12E37C3600C8B41F /* libcdio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcdio.a; path = vendor/homebrew.git/lib/libcdio.a; sourceTree = "<group>"; };
+		74462EF112E37D7900C8B41F /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = vendor/homebrew.git/lib/libpcre.a; sourceTree = "<group>"; };
+		74462EF512E37DC800C8B41F /* libsqlite3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsqlite3.a; path = vendor/homebrew.git/lib/libsqlite3.a; sourceTree = "<group>"; };
+		74462EF912E37E8A00C8B41F /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = vendor/homebrew.git/lib/libSDL.a; sourceTree = "<group>"; };
+		74462EFD12E37F4000C8B41F /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = vendor/homebrew.git/lib/libGLEW.a; sourceTree = "<group>"; };
+		74462F0112E37F8400C8B41F /* libSDL_image.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_image.a; path = vendor/homebrew.git/lib/libSDL_image.a; sourceTree = "<group>"; };
+		74462F0512E37FD300C8B41F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = vendor/homebrew.git/lib/libiconv.dylib; sourceTree = "<group>"; };
+		74462F0912E3806200C8B41F /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = vendor/homebrew.git/lib/mysql/libmysqlclient.a; sourceTree = "<group>"; };
+		74462F0D12E3808700C8B41F /* libSDL_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_mixer.a; path = vendor/homebrew.git/lib/libSDL_mixer.a; sourceTree = "<group>"; };
+		74462F1112E380B000C8B41F /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = vendor/homebrew.git/lib/libogg.a; sourceTree = "<group>"; };
+		74462F1512E380DB00C8B41F /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = vendor/homebrew.git/lib/libpcrecpp.a; sourceTree = "<group>"; };
+		74462F1912E3811600C8B41F /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = vendor/homebrew.git/lib/libvorbis.a; sourceTree = "<group>"; };
+		74462F1D12E3814800C8B41F /* liblzo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo.a; path = vendor/homebrew.git/lib/liblzo.a; sourceTree = "<group>"; };
+		74462F2412E381E900C8B41F /* libmpeg2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpeg2.a; path = vendor/homebrew.git/lib/libmpeg2.a; sourceTree = "<group>"; };
+		74462F2812E3822000C8B41F /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = vendor/homebrew.git/lib/libfribidi.a; sourceTree = "<group>"; };
+		74462F2C12E3826400C8B41F /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = vendor/homebrew.git/lib/libvorbisenc.a; sourceTree = "<group>"; };
+		74462F3012E3830600C8B41F /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = vendor/homebrew.git/lib/libsamplerate.a; sourceTree = "<group>"; };
+		74462F3412E3833C00C8B41F /* libfontconfig.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /usr/X11/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
+		74462F3812E3838D00C8B41F /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = vendor/homebrew.git/lib/libvorbisfile.a; sourceTree = "<group>"; };
+		74462F3C12E383C400C8B41F /* liblzo2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo2.a; path = vendor/homebrew.git/lib/liblzo2.a; sourceTree = "<group>"; };
+		74462F4012E3840D00C8B41F /* libmad.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmad.a; path = vendor/homebrew.git/lib/libmad.a; sourceTree = "<group>"; };
+		74462F4812E3847200C8B41F /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
+		74462F7812E3853C00C8B41F /* libbz2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbz2.a; path = vendor/homebrew.git/lib/libbz2.a; sourceTree = "<group>"; };
+		7446319512E3921C00C8B41F /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_reader.cpp; path = lib/jsoncpp/jsoncpp/src/lib_json/json_reader.cpp; sourceTree = "<group>"; };
+		7446319612E3921C00C8B41F /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_value.cpp; path = lib/jsoncpp/jsoncpp/src/lib_json/json_value.cpp; sourceTree = "<group>"; };
+		7446319712E3921C00C8B41F /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_writer.cpp; path = lib/jsoncpp/jsoncpp/src/lib_json/json_writer.cpp; sourceTree = "<group>"; };
+		744631A812E3929100C8B41F /* XBMCOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBMCOperations.h; path = xbmc/lib/libjsonrpc/XBMCOperations.h; sourceTree = "<group>"; };
+		744631A912E3929100C8B41F /* XBMCOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XBMCOperations.cpp; path = xbmc/lib/libjsonrpc/XBMCOperations.cpp; sourceTree = "<group>"; };
+		744631AA12E3929100C8B41F /* VideoLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoLibrary.h; path = xbmc/lib/libjsonrpc/VideoLibrary.h; sourceTree = "<group>"; };
+		744631AB12E3929100C8B41F /* VideoLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoLibrary.cpp; path = xbmc/lib/libjsonrpc/VideoLibrary.cpp; sourceTree = "<group>"; };
+		744631AC12E3929100C8B41F /* TCPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCPServer.h; path = xbmc/lib/libjsonrpc/TCPServer.h; sourceTree = "<group>"; };
+		744631AD12E3929100C8B41F /* TCPServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TCPServer.cpp; path = xbmc/lib/libjsonrpc/TCPServer.cpp; sourceTree = "<group>"; };
+		744631AE12E3929100C8B41F /* SystemOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemOperations.h; path = xbmc/lib/libjsonrpc/SystemOperations.h; sourceTree = "<group>"; };
+		744631AF12E3929100C8B41F /* SystemOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SystemOperations.cpp; path = xbmc/lib/libjsonrpc/SystemOperations.cpp; sourceTree = "<group>"; };
+		744631B012E3929100C8B41F /* PlaylistOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlaylistOperations.h; path = xbmc/lib/libjsonrpc/PlaylistOperations.h; sourceTree = "<group>"; };
+		744631B112E3929100C8B41F /* PlaylistOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlaylistOperations.cpp; path = xbmc/lib/libjsonrpc/PlaylistOperations.cpp; sourceTree = "<group>"; };
+		744631B212E3929100C8B41F /* PlayerOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerOperations.h; path = xbmc/lib/libjsonrpc/PlayerOperations.h; sourceTree = "<group>"; };
+		744631B312E3929100C8B41F /* PlayerOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlayerOperations.cpp; path = xbmc/lib/libjsonrpc/PlayerOperations.cpp; sourceTree = "<group>"; };
+		744631B412E3929100C8B41F /* PicturePlayerOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PicturePlayerOperations.h; path = xbmc/lib/libjsonrpc/PicturePlayerOperations.h; sourceTree = "<group>"; };
+		744631B512E3929100C8B41F /* PicturePlayerOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PicturePlayerOperations.cpp; path = xbmc/lib/libjsonrpc/PicturePlayerOperations.cpp; sourceTree = "<group>"; };
+		744631B712E3929100C8B41F /* JSONUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONUtils.h; path = xbmc/lib/libjsonrpc/JSONUtils.h; sourceTree = "<group>"; };
+		744631B812E3929100C8B41F /* JSONRPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONRPC.h; path = xbmc/lib/libjsonrpc/JSONRPC.h; sourceTree = "<group>"; };
+		744631B912E3929100C8B41F /* JSONRPC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JSONRPC.cpp; path = xbmc/lib/libjsonrpc/JSONRPC.cpp; sourceTree = "<group>"; };
+		744631BA12E3929100C8B41F /* ITransportLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITransportLayer.h; path = xbmc/lib/libjsonrpc/ITransportLayer.h; sourceTree = "<group>"; };
+		744631BB12E3929100C8B41F /* IClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IClient.h; path = xbmc/lib/libjsonrpc/IClient.h; sourceTree = "<group>"; };
+		744631BC12E3929100C8B41F /* FileOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOperations.h; path = xbmc/lib/libjsonrpc/FileOperations.h; sourceTree = "<group>"; };
+		744631BD12E3929100C8B41F /* FileOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileOperations.cpp; path = xbmc/lib/libjsonrpc/FileOperations.cpp; sourceTree = "<group>"; };
+		744631BE12E3929100C8B41F /* FileItemHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileItemHandler.h; path = xbmc/lib/libjsonrpc/FileItemHandler.h; sourceTree = "<group>"; };
+		744631BF12E3929100C8B41F /* FileItemHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileItemHandler.cpp; path = xbmc/lib/libjsonrpc/FileItemHandler.cpp; sourceTree = "<group>"; };
+		744631C012E3929100C8B41F /* AVPlaylistOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlaylistOperations.h; path = xbmc/lib/libjsonrpc/AVPlaylistOperations.h; sourceTree = "<group>"; };
+		744631C112E3929100C8B41F /* AVPlaylistOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AVPlaylistOperations.cpp; path = xbmc/lib/libjsonrpc/AVPlaylistOperations.cpp; sourceTree = "<group>"; };
+		744631C212E3929100C8B41F /* AVPlayerOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlayerOperations.h; path = xbmc/lib/libjsonrpc/AVPlayerOperations.h; sourceTree = "<group>"; };
+		744631C312E3929100C8B41F /* AVPlayerOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AVPlayerOperations.cpp; path = xbmc/lib/libjsonrpc/AVPlayerOperations.cpp; sourceTree = "<group>"; };
+		744631C412E3929100C8B41F /* AudioLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioLibrary.h; path = xbmc/lib/libjsonrpc/AudioLibrary.h; sourceTree = "<group>"; };
+		744631C512E3929100C8B41F /* AudioLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioLibrary.cpp; path = xbmc/lib/libjsonrpc/AudioLibrary.cpp; sourceTree = "<group>"; };
+		744631D612E392E800C8B41F /* HttpApi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HttpApi.cpp; path = xbmc/lib/libhttpapi/HttpApi.cpp; sourceTree = "<group>"; };
+		744631D712E392E800C8B41F /* HttpApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpApi.h; path = xbmc/lib/libhttpapi/HttpApi.h; sourceTree = "<group>"; };
+		744631DA12E392E800C8B41F /* XBMChttp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XBMChttp.cpp; path = xbmc/lib/libhttpapi/XBMChttp.cpp; sourceTree = "<group>"; };
+		744631DB12E392E800C8B41F /* XBMChttp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBMChttp.h; path = xbmc/lib/libhttpapi/XBMChttp.h; sourceTree = "<group>"; };
+		744632D012E3A13F00C8B41F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = vendor/homebrew.git/lib/libssl.a; sourceTree = "<group>"; };
+		744632D512E3A23D00C8B41F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = vendor/homebrew.git/lib/libcrypto.a; sourceTree = "<group>"; };
 		7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpecialProtocol.cpp; sourceTree = "<group>"; };
 		7C2D6AE30F35453E00DD2E85 /* SpecialProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialProtocol.h; sourceTree = "<group>"; };
 		7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAVDirectory.cpp; sourceTree = "<group>"; };
@@ -1249,7 +1348,6 @@
 		8883CEA40DD81807004E8B72 /* DVDSubtitleParserSSA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDSubtitleParserSSA.h; sourceTree = "<group>"; };
 		8883CEA50DD81807004E8B72 /* DVDSubtitlesLibass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDSubtitlesLibass.cpp; sourceTree = "<group>"; };
 		8883CEA60DD81807004E8B72 /* DVDSubtitlesLibass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDSubtitlesLibass.h; sourceTree = "<group>"; };
-		889693360DF0B72500F1DA75 /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = /opt/local/lib/libbz2.1.0.dylib; sourceTree = "<absolute>"; };
 		889B4D8C0E0EF86C00FAD25E /* RSSDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RSSDirectory.cpp; sourceTree = "<group>"; };
 		889B4D8D0E0EF86C00FAD25E /* RSSDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSDirectory.h; sourceTree = "<group>"; };
 		88ACB0190DCF40800083CFDF /* ASAPFileDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ASAPFileDirectory.cpp; sourceTree = "<group>"; };
@@ -1263,8 +1361,6 @@
 		88E384620E20D6EF0028AFC0 /* GUIListGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIListGroup.cpp; sourceTree = "<group>"; };
 		88E384630E20D6EF0028AFC0 /* GUIListGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIListGroup.h; sourceTree = "<group>"; };
 		88ECB6580DE013C4003396A7 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
-		88ECB6E60DE07BA6003396A7 /* libfontconfig.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.1.dylib; path = /opt/local/lib/libfontconfig.1.dylib; sourceTree = "<absolute>"; };
-		88ECB6E90DE07BEE003396A7 /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = /opt/local/lib/libogg.0.dylib; sourceTree = "<absolute>"; };
 		8DD76F7E0486A8DE00D96B5E /* XBMC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = XBMC; sourceTree = BUILT_PRODUCTS_DIR; };
 		C80425701158A0DE00D158A6 /* controlslider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlslider.cpp; sourceTree = "<group>"; };
 		C85EB754117460D50008E5A5 /* AddonDatabase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddonDatabase.cpp; sourceTree = "<group>"; };
@@ -1430,8 +1526,6 @@
 		E38E145E0D25F9F900618676 /* VisibleEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisibleEffect.h; sourceTree = "<group>"; };
 		E38E145F0D25F9F900618676 /* XMLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLUtils.cpp; sourceTree = "<group>"; };
 		E38E14600D25F9F900618676 /* XMLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLUtils.h; sourceTree = "<group>"; };
-		E38E14620D25F9F900618676 /* APEv2Tag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = APEv2Tag.cpp; sourceTree = "<group>"; };
-		E38E14630D25F9F900618676 /* APEv2Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APEv2Tag.h; sourceTree = "<group>"; };
 		E38E14640D25F9F900618676 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		E38E14650D25F9F900618676 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		E38E14660D25F9F900618676 /* ApplicationMessenger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationMessenger.cpp; sourceTree = "<group>"; };
@@ -1731,8 +1825,6 @@
 		E38E169E0D25F9FA00618676 /* cddb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cddb.h; sourceTree = "<group>"; };
 		E38E169F0D25F9FA00618676 /* cdioSupport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cdioSupport.cpp; sourceTree = "<group>"; };
 		E38E16A00D25F9FA00618676 /* cdioSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cdioSupport.h; sourceTree = "<group>"; };
-		E38E16AA0D25F9FA00618676 /* DAAPDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAAPDirectory.cpp; sourceTree = "<group>"; };
-		E38E16AB0D25F9FA00618676 /* DAAPDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAAPDirectory.h; sourceTree = "<group>"; };
 		E38E16AC0D25F9FA00618676 /* Directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Directory.cpp; sourceTree = "<group>"; };
 		E38E16AD0D25F9FA00618676 /* Directory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Directory.h; sourceTree = "<group>"; };
 		E38E16AE0D25F9FA00618676 /* DirectoryCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectoryCache.cpp; sourceTree = "<group>"; };
@@ -2372,8 +2464,6 @@
 		E38E1D940D25F9FD00618676 /* MusicInfoScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoScanner.h; sourceTree = "<group>"; };
 		E38E1D970D25F9FD00618676 /* MusicInfoTagLoaderAAC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderAAC.cpp; sourceTree = "<group>"; };
 		E38E1D980D25F9FD00618676 /* MusicInfoTagLoaderAAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderAAC.h; sourceTree = "<group>"; };
-		E38E1D9B0D25F9FD00618676 /* MusicInfoTagLoaderApe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderApe.cpp; sourceTree = "<group>"; };
-		E38E1D9C0D25F9FD00618676 /* MusicInfoTagLoaderApe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderApe.h; sourceTree = "<group>"; };
 		E38E1D9D0D25F9FD00618676 /* MusicInfoTagLoaderCDDA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderCDDA.cpp; sourceTree = "<group>"; };
 		E38E1D9E0D25F9FD00618676 /* MusicInfoTagLoaderCDDA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderCDDA.h; sourceTree = "<group>"; };
 		E38E1D9F0D25F9FD00618676 /* MusicInfoTagLoaderDatabase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderDatabase.cpp; sourceTree = "<group>"; };
@@ -2386,8 +2476,6 @@
 		E38E1DAA0D25F9FD00618676 /* MusicInfoTagLoaderMP3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderMP3.h; sourceTree = "<group>"; };
 		E38E1DAB0D25F9FD00618676 /* MusicInfoTagLoaderMP4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderMP4.cpp; sourceTree = "<group>"; };
 		E38E1DAC0D25F9FD00618676 /* MusicInfoTagLoaderMP4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderMP4.h; sourceTree = "<group>"; };
-		E38E1DAD0D25F9FD00618676 /* MusicInfoTagLoaderMPC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderMPC.cpp; sourceTree = "<group>"; };
-		E38E1DAE0D25F9FD00618676 /* MusicInfoTagLoaderMPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderMPC.h; sourceTree = "<group>"; };
 		E38E1DAF0D25F9FD00618676 /* MusicInfoTagLoaderNSF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderNSF.cpp; sourceTree = "<group>"; };
 		E38E1DB00D25F9FD00618676 /* MusicInfoTagLoaderNSF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderNSF.h; sourceTree = "<group>"; };
 		E38E1DB10D25F9FD00618676 /* MusicInfoTagLoaderOgg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderOgg.cpp; sourceTree = "<group>"; };
@@ -2569,13 +2657,8 @@
 		E38E238F0D2626E600618676 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E38E23900D2626E600618676 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		E38E23910D2626E600618676 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
-		E38E24230D26317D00618676 /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /opt/local/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
-		E38E24240D26317D00618676 /* libfribidi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfribidi.dylib; path = /opt/local/lib/libfribidi.dylib; sourceTree = "<absolute>"; };
-		E38E24250D26317D00618676 /* libGLEW.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.dylib; path = /opt/local/lib/libGLEW.dylib; sourceTree = "<absolute>"; };
-		E38E24270D26317D00618676 /* liblzo.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblzo.dylib; path = /opt/local/lib/liblzo.dylib; sourceTree = "<absolute>"; };
 		E38E25330D26365C00618676 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		E38E25340D26365C00618676 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
-		E38E25680D2639F100618676 /* libxdaap-x86-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libxdaap-x86-osx.a"; path = "xbmc/lib/libXDAAP/libxdaap-x86-osx.a"; sourceTree = "<group>"; };
 		E38E256C0D263A1C00618676 /* librtv-x86-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librtv-x86-osx.a"; path = "xbmc/lib/libRTV/librtv-x86-osx.a"; sourceTree = "<group>"; };
 		E38E25770D263BF600618676 /* unpack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unpack.cpp; sourceTree = "<group>"; };
 		E38E257B0D263C4400618676 /* rar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rar.cpp; sourceTree = "<group>"; };
@@ -2619,8 +2702,6 @@
 		E3B53E7A0D97B08100021A96 /* DVDSubtitleParserMicroDVD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDSubtitleParserMicroDVD.cpp; sourceTree = "<group>"; };
 		E3B53E7B0D97B08100021A96 /* DVDSubtitleParserMicroDVD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDSubtitleParserMicroDVD.h; sourceTree = "<group>"; };
 		E3BBB7980D7EA78A00CAAFD3 /* MythSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MythSession.cpp; sourceTree = "<group>"; };
-		E3BBB7A10D7EA8B200CAAFD3 /* libpcre.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcre.dylib; path = /opt/local/lib/libpcre.dylib; sourceTree = "<absolute>"; };
-		E3D547950D723EFD00F36320 /* libsmbclient.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsmbclient.dylib; path = /opt/local/lib/samba3/libsmbclient.dylib; sourceTree = "<absolute>"; };
 		E3D87AE90D3182F4000CF031 /* XCriticalSection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XCriticalSection.cpp; sourceTree = "<group>"; };
 		E3D87AEA0D3182F4000CF031 /* XCriticalSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCriticalSection.h; sourceTree = "<group>"; };
 		E3DAAF8A0D6E1B0500F17647 /* FileSmb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSmb.cpp; sourceTree = "<group>"; };
@@ -2629,8 +2710,6 @@
 		E3E91FFB0D8C61DF002BF43D /* EventServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventServer.cpp; sourceTree = "<group>"; };
 		E3E91FFC0D8C61DF002BF43D /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
 		E3E920010D8C622A002BF43D /* EventClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventClient.cpp; sourceTree = "<group>"; };
-		E3EB8F030D5D5C0300FFF489 /* libmad.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmad.dylib; path = /opt/local/lib/libmad.dylib; sourceTree = "<absolute>"; };
-		E3EB8F050D5D5C0300FFF489 /* libvorbis.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.dylib; path = /opt/local/lib/libvorbis.dylib; sourceTree = "<absolute>"; };
 		E43196130FB2382D0030E150 /* HTSPDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTSPDirectory.h; sourceTree = "<group>"; };
 		E43196140FB2382E0030E150 /* HTSPDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HTSPDirectory.cpp; sourceTree = "<group>"; };
 		E43196150FB2382E0030E150 /* HTSPSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTSPSession.h; sourceTree = "<group>"; };
@@ -2639,8 +2718,6 @@
 		E46F7C290F77217400C25D29 /* Zeroconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zeroconf.h; sourceTree = "<group>"; };
 		E46F7C2B0F77219700C25D29 /* ZeroconfOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZeroconfOSX.h; sourceTree = "<group>"; };
 		E46F7C2C0F77219700C25D29 /* ZeroconfOSX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZeroconfOSX.cpp; sourceTree = "<group>"; };
-		E49070F3110E7E76003865FD /* libvorbisenc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisenc.dylib; path = /opt/local/lib/libvorbisenc.dylib; sourceTree = "<absolute>"; };
-		E4907BF70FDAC38B00E2F075 /* libmysqlclient.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmysqlclient.dylib; path = /opt/local/lib/mysql5/mysql/libmysqlclient.dylib; sourceTree = "<absolute>"; };
 		E49ACD8A100745C400A86ECD /* ZeroconfDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZeroconfDirectory.h; sourceTree = "<group>"; };
 		E49ACD8B100745C400A86ECD /* ZeroconfDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZeroconfDirectory.cpp; sourceTree = "<group>"; };
 		E49ACD9D10074A4000A86ECD /* ZeroconfBrowserOSX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZeroconfBrowserOSX.cpp; sourceTree = "<group>"; };
@@ -2726,7 +2803,6 @@
 		F56A08E30F4D3C2E003F9F87 /* GUITextureGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUITextureGL.h; sourceTree = "<group>"; };
 		F57B6F7E1071B8B500079ACB /* JobManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JobManager.cpp; sourceTree = "<group>"; };
 		F57B6F7F1071B8B500079ACB /* JobManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JobManager.h; sourceTree = "<group>"; };
-		F57E213E0E3C3AB200700C9D /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /opt/local/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		F57E21400E3C3AD400700C9D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		F584E0FA0F25427500DB26A5 /* MusicInfoTagLoaderMidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicInfoTagLoaderMidi.h; path = xbmc/MusicInfoTagLoaderMidi.h; sourceTree = SOURCE_ROOT; };
 		F584E0FB0F25427500DB26A5 /* MusicInfoTagLoaderMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MusicInfoTagLoaderMidi.cpp; path = xbmc/MusicInfoTagLoaderMidi.cpp; sourceTree = SOURCE_ROOT; };
@@ -2742,7 +2818,6 @@
 		F59876BB0FBA34C0008EF4FB /* DVDPlayerAudioResampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDPlayerAudioResampler.h; sourceTree = "<group>"; };
 		F59876BE0FBA351D008EF4FB /* VideoReferenceClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoReferenceClock.h; sourceTree = "<group>"; };
 		F59876BF0FBA351D008EF4FB /* VideoReferenceClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoReferenceClock.cpp; sourceTree = "<group>"; };
-		F59876C30FBA3569008EF4FB /* libsamplerate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsamplerate.dylib; path = /opt/local/lib/libsamplerate.dylib; sourceTree = "<absolute>"; };
 		F59879070FBAA0C3008EF4FB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		F5987B210FBB9682008EF4FB /* lastfmscrobbler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lastfmscrobbler.h; sourceTree = "<group>"; };
 		F5987B220FBB9682008EF4FB /* librefmscrobbler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = librefmscrobbler.cpp; sourceTree = "<group>"; };
@@ -2756,26 +2831,15 @@
 		F599CD2A108E65370010EC2A /* IoSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoSupport.h; sourceTree = "<group>"; };
 		F599CD72108E6A7A0010EC2A /* DarwinStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarwinStorageProvider.h; sourceTree = "<group>"; };
 		F599CD73108E6A7A0010EC2A /* DarwinStorageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DarwinStorageProvider.cpp; sourceTree = "<group>"; };
-		F59FC1A612AF11E70063D9F2 /* libvorbisfile.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.dylib; path = /opt/local/lib/libvorbisfile.dylib; sourceTree = "<absolute>"; };
 		F5A00B070EFDDDFC00CD59F3 /* AudioRendererFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = AudioRendererFactory.cpp; path = xbmc/cores/AudioRenderers/AudioRendererFactory.cpp; sourceTree = SOURCE_ROOT; };
 		F5A00B090EFDDE5F00CD59F3 /* AudioRendererFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AudioRendererFactory.h; path = xbmc/cores/AudioRenderers/AudioRendererFactory.h; sourceTree = SOURCE_ROOT; };
 		F5A00B240EFDE44100CD59F3 /* NullDirectSound.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = NullDirectSound.cpp; path = xbmc/cores/AudioRenderers/NullDirectSound.cpp; sourceTree = SOURCE_ROOT; };
 		F5A00B250EFDE44100CD59F3 /* NullDirectSound.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = NullDirectSound.h; path = xbmc/cores/AudioRenderers/NullDirectSound.h; sourceTree = SOURCE_ROOT; };
-		F5A1CC010F6B1FB600A96ABD /* librtv-powerpc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librtv-powerpc-osx.a"; path = "xbmc/lib/libRTV/librtv-powerpc-osx.a"; sourceTree = SOURCE_ROOT; };
-		F5A1CC050F6B203100A96ABD /* libxbms-powerpc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libxbms-powerpc-osx.a"; path = "xbmc/lib/libXBMS/libxbms-powerpc-osx.a"; sourceTree = SOURCE_ROOT; };
-		F5A1CC070F6B209400A96ABD /* libxdaap-powerpc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libxdaap-powerpc-osx.a"; path = "xbmc/lib/libXDAAP/libxdaap-powerpc-osx.a"; sourceTree = SOURCE_ROOT; };
-		F5A1CC0D0F6B214800A96ABD /* libSDL-powerpc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSDL-powerpc-osx.a"; path = "lib/libSDL-OSX/libSDL-powerpc-osx.a"; sourceTree = "<group>"; };
-		F5A1CC130F6B216400A96ABD /* libSDL_mixer-powerpc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSDL_mixer-powerpc-osx.a"; path = "lib/libSDL-OSX/libSDL_mixer-powerpc-osx.a"; sourceTree = "<group>"; };
 		F5A7A61F1127980A0059D6AA /* posix-realtime-stub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "posix-realtime-stub.c"; sourceTree = "<group>"; };
 		F5A7A6201127980A0059D6AA /* posix-realtime-stub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "posix-realtime-stub.h"; sourceTree = "<group>"; };
-		F5A7A6F0112893330059D6AA /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = lib/jsoncpp/jsoncpp/src/lib_json/libjsoncpp.a; sourceTree = "<group>"; };
-		F5A7A6F3112893440059D6AA /* libjsonrpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsonrpc.a; path = xbmc/lib/libjsonrpc/libjsonrpc.a; sourceTree = "<group>"; };
 		F5A7A6F61128934C0059D6AA /* libhttpapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhttpapi.a; path = xbmc/lib/libhttpapi/libhttpapi.a; sourceTree = "<group>"; };
 		F5A7A700112893E50059D6AA /* AnnouncementManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnnouncementManager.cpp; sourceTree = "<group>"; };
 		F5A7A701112893E50059D6AA /* AnnouncementManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnnouncementManager.h; sourceTree = "<group>"; };
-		F5A7A8121128F4DA0059D6AA /* libmicrohttpd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmicrohttpd.a; path = lib/libmicrohttpd/src/daemon/.libs/libmicrohttpd.a; sourceTree = "<group>"; };
-		F5A7A859112908F00059D6AA /* WebServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebServer.cpp; sourceTree = "<group>"; };
-		F5A7A85A112908F00059D6AA /* WebServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServer.h; sourceTree = "<group>"; };
 		F5A7B374113AFB5F0059D6AA /* FileSFTP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSFTP.cpp; sourceTree = "<group>"; };
 		F5A7B375113AFB5F0059D6AA /* FileSFTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSFTP.h; sourceTree = "<group>"; };
 		F5A7B37C113AFB900059D6AA /* SFTPDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFTPDirectory.cpp; sourceTree = "<group>"; };
@@ -2790,7 +2854,6 @@
 		F5A7B433113CBC6A0059D6AA /* GUIWindowAddonBrowser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIWindowAddonBrowser.cpp; sourceTree = "<group>"; };
 		F5A9D3071097C9370050490F /* AliasShortcutUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AliasShortcutUtils.h; sourceTree = "<group>"; };
 		F5A9D3081097C9370050490F /* AliasShortcutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AliasShortcutUtils.cpp; sourceTree = "<group>"; };
-		F5AAC9CE0FB0D20100DBB77C /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = /opt/local/lib/libsqlite3.0.dylib; sourceTree = "<absolute>"; };
 		F5AACA660FB3DE2D00DBB77C /* GUIDialogSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIDialogSelect.h; sourceTree = "<group>"; };
 		F5AACA670FB3DE2D00DBB77C /* GUIDialogSelect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIDialogSelect.cpp; sourceTree = "<group>"; };
 		F5AACA950FB3E2B800DBB77C /* GUIDialogSlider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIDialogSlider.cpp; sourceTree = "<group>"; };
@@ -2816,14 +2879,10 @@
 		F5D8F31D1041B068004A11AB /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MathUtils.h; path = xbmc/MathUtils.h; sourceTree = SOURCE_ROOT; };
 		F5D8F86A104CD1C0004A11AB /* DVDInputStreamMMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDInputStreamMMS.h; sourceTree = "<group>"; };
 		F5D8F86B104CD1C0004A11AB /* DVDInputStreamMMS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDInputStreamMMS.cpp; sourceTree = "<group>"; };
-		F5D8F880104CD40B004A11AB /* liblzo2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblzo2.dylib; path = /opt/local/lib/liblzo2.dylib; sourceTree = "<absolute>"; };
-		F5D8F88B104CD47D004A11AB /* libmms.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmms.dylib; path = /opt/local/lib/libmms.dylib; sourceTree = "<absolute>"; };
 		F5DC87E0110A287400EE1B15 /* RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
 		F5DC87E1110A287400EE1B15 /* RingBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RingBuffer.cpp; sourceTree = "<group>"; };
-		F5DC87FB110A460000EE1B15 /* libpcrecpp.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcrecpp.dylib; path = /opt/local/lib/libpcrecpp.dylib; sourceTree = "<absolute>"; };
 		F5DC87FF110A46C700EE1B15 /* ModplugCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModplugCodec.h; sourceTree = "<group>"; };
 		F5DC8800110A46C700EE1B15 /* ModplugCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModplugCodec.cpp; sourceTree = "<group>"; };
-		F5DC8808110A495600EE1B15 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /opt/local/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
 		F5DC880D110A4A0B00EE1B15 /* FileXBMSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileXBMSP.h; sourceTree = "<group>"; };
 		F5DC880E110A4A0B00EE1B15 /* FileXBMSP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileXBMSP.cpp; sourceTree = "<group>"; };
 		F5DC8811110A4A2400EE1B15 /* XBMSDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBMSDirectory.h; sourceTree = "<group>"; };
@@ -2852,7 +2911,6 @@
 		F5EA04E80F72F9CA005C2EC5 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = xbmc/osx/SDLMain.h; sourceTree = SOURCE_ROOT; };
 		F5EA05C00F733812005C2EC5 /* CocoaInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CocoaInterface.mm; path = xbmc/osx/CocoaInterface.mm; sourceTree = SOURCE_ROOT; };
 		F5EA05C30F73381A005C2EC5 /* CocoaInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaInterface.h; path = xbmc/osx/CocoaInterface.h; sourceTree = SOURCE_ROOT; };
-		F5EA08840F78B1E7005C2EC5 /* libcdio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcdio.dylib; path = /opt/local/lib/libcdio.dylib; sourceTree = "<absolute>"; };
 		F5EEB971106B07910019B552 /* GUIInfoTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIInfoTypes.cpp; sourceTree = "<group>"; };
 		F5EEB972106B07910019B552 /* GUIInfoTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIInfoTypes.h; sourceTree = "<group>"; };
 		F5EEBA85107015070019B552 /* SamiTagConvertor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SamiTagConvertor.cpp; sourceTree = "<group>"; };
@@ -2863,8 +2921,6 @@
 		F5F23E9511041596009126C6 /* SemaphoreDarwin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SemaphoreDarwin.cpp; sourceTree = "<group>"; };
 		F5F240EB110A4F76009126C6 /* CrystalHD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrystalHD.cpp; sourceTree = "<group>"; };
 		F5F240EC110A4F76009126C6 /* CrystalHD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrystalHD.h; sourceTree = "<group>"; };
-		F5F241D4110BFCD6009126C6 /* libmpeg2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmpeg2.dylib; path = /opt/local/lib/libmpeg2.dylib; sourceTree = "<absolute>"; };
-		F5F241D7110BFCF4009126C6 /* libwavpack.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libwavpack.dylib; path = /opt/local/lib/libwavpack.dylib; sourceTree = "<absolute>"; };
 		F5F244631110DC6B009126C6 /* FileOperationJob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileOperationJob.h; sourceTree = "<group>"; };
 		F5F244641110DC6B009126C6 /* FileOperationJob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileOperationJob.cpp; sourceTree = "<group>"; };
 		F5F245D81112C6AC009126C6 /* DVDAudioCodecPassthroughFFmpeg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDAudioCodecPassthroughFFmpeg.cpp; sourceTree = "<group>"; };
@@ -2909,51 +2965,44 @@
 				E38E23960D2626E600618676 /* CoreServices.framework in Frameworks */,
 				E38E23970D2626E600618676 /* Foundation.framework in Frameworks */,
 				E38E23980D2626E600618676 /* OpenGL.framework in Frameworks */,
-				E38E242B0D26317D00618676 /* libfreetype.dylib in Frameworks */,
-				E38E242C0D26317D00618676 /* libfribidi.dylib in Frameworks */,
-				E38E242D0D26317D00618676 /* libGLEW.dylib in Frameworks */,
-				E38E242F0D26317D00618676 /* liblzo.dylib in Frameworks */,
 				E38E25350D26365C00618676 /* AppKit.framework in Frameworks */,
 				E38E25360D26365C00618676 /* ApplicationServices.framework in Frameworks */,
-				E38E25690D2639F100618676 /* libxdaap-x86-osx.a in Frameworks */,
-				E38E256D0D263A1C00618676 /* librtv-x86-osx.a in Frameworks */,
 				E33466A60D2E5103005A65EC /* IOKit.framework in Frameworks */,
 				E35EF2550D380C3D00DB5CD5 /* QuickTime.framework in Frameworks */,
 				E35EF3240D380E1E00DB5CD5 /* Carbon.framework in Frameworks */,
-				E3EB8F080D5D5C0300FFF489 /* libvorbis.dylib in Frameworks */,
-				E3BBB7A20D7EA8B200CAAFD3 /* libpcre.dylib in Frameworks */,
 				88ECB6590DE013C4003396A7 /* DiskArbitration.framework in Frameworks */,
-				88ECB6E70DE07BA6003396A7 /* libfontconfig.1.dylib in Frameworks */,
-				88ECB6EA0DE07BEE003396A7 /* libogg.0.dylib in Frameworks */,
-				889693370DF0B72500F1DA75 /* libbz2.1.0.dylib in Frameworks */,
-				F57E213F0E3C3AB300700C9D /* libiconv.dylib in Frameworks */,
-				F57E21410E3C3AD400700C9D /* libz.dylib in Frameworks */,
-				F5EA08860F78B1E7005C2EC5 /* libcdio.dylib in Frameworks */,
-				F5A2BD600F7AE6CB0006ABA0 /* libsmbclient.dylib in Frameworks */,
-				F5AAC9CF0FB0D20100DBB77C /* libsqlite3.0.dylib in Frameworks */,
-				F59876C40FBA3569008EF4FB /* libsamplerate.dylib in Frameworks */,
 				F59879080FBAA0C3008EF4FB /* QuartzCore.framework in Frameworks */,
-				E4907BF80FDAC38B00E2F075 /* libmysqlclient.dylib in Frameworks */,
-				F5D8F881104CD40B004A11AB /* liblzo2.dylib in Frameworks */,
-				F5D8F88C104CD47D004A11AB /* libmms.dylib in Frameworks */,
-				43352CEE1071634600706B8A /* libsquish-x86-osx.a in Frameworks */,
-				F5E55C861075B60F006E788A /* libmad.dylib in Frameworks */,
-				F5E560711077003E006E788A /* libSDL_mixer-x86-osx.a in Frameworks */,
-				60CF88BF10CB49F3000921B6 /* libcmyth.a in Frameworks */,
-				60CF88C110CB4A16000921B6 /* librefmem.a in Frameworks */,
-				F5F23EBC1104245F009126C6 /* libSDL-x86-osx.a in Frameworks */,
-				F5DC87FC110A460000EE1B15 /* libpcrecpp.dylib in Frameworks */,
-				F5DC8809110A495600EE1B15 /* libcrypto.dylib in Frameworks */,
-				F5DC8817110A4B8900EE1B15 /* libxbms-x86-osx.a in Frameworks */,
-				F5DC888B110A654000EE1B15 /* libapetag.a in Frameworks */,
-				F5F241D5110BFCD6009126C6 /* libmpeg2.dylib in Frameworks */,
-				F5F241D8110BFCF4009126C6 /* libwavpack.dylib in Frameworks */,
-				E49070F4110E7E76003865FD /* libvorbisenc.dylib in Frameworks */,
-				F5A7A6F1112893330059D6AA /* libjsoncpp.a in Frameworks */,
-				F5A7A6F4112893440059D6AA /* libjsonrpc.a in Frameworks */,
-				F5A7A6F71128934C0059D6AA /* libhttpapi.a in Frameworks */,
-				F5A7A8131128F4DA0059D6AA /* libmicrohttpd.a in Frameworks */,
-				F59FC1A712AF11E70063D9F2 /* libvorbisfile.dylib in Frameworks */,
+				74462EE712E37BF600C8B41F /* libwavpack.a in Frameworks */,
+				74462EEB12E37C3600C8B41F /* libcdio.a in Frameworks */,
+				74462EF212E37D7900C8B41F /* libpcre.a in Frameworks */,
+				74462EF612E37DC800C8B41F /* libsqlite3.a in Frameworks */,
+				74462EFA12E37E8A00C8B41F /* libSDL.a in Frameworks */,
+				74462F0212E37F8400C8B41F /* libSDL_image.a in Frameworks */,
+				74462F0E12E3808700C8B41F /* libSDL_mixer.a in Frameworks */,
+				74462EFE12E37F4000C8B41F /* libGLEW.a in Frameworks */,
+				74462F0612E37FD300C8B41F /* libiconv.dylib in Frameworks */,
+				74462F0A12E3806200C8B41F /* libmysqlclient.a in Frameworks */,
+				74462F1212E380B000C8B41F /* libogg.a in Frameworks */,
+				74462F1612E380DB00C8B41F /* libpcrecpp.a in Frameworks */,
+				74462F1A12E3811600C8B41F /* libvorbis.a in Frameworks */,
+				74462F2D12E3826400C8B41F /* libvorbisenc.a in Frameworks */,
+				74462F1E12E3814800C8B41F /* liblzo.a in Frameworks */,
+				74462F2112E381B800C8B41F /* libz.dylib in Frameworks */,
+				74462F2512E381E900C8B41F /* libmpeg2.a in Frameworks */,
+				74462F2912E3822000C8B41F /* libfribidi.a in Frameworks */,
+				74462F3112E3830600C8B41F /* libsamplerate.a in Frameworks */,
+				74462F3512E3833C00C8B41F /* libfontconfig.dylib in Frameworks */,
+				74462F3912E3838D00C8B41F /* libvorbisfile.a in Frameworks */,
+				74462F3D12E383C400C8B41F /* liblzo2.a in Frameworks */,
+				74462F4112E3840D00C8B41F /* libmad.a in Frameworks */,
+				74462F4912E3847200C8B41F /* libfreetype.dylib in Frameworks */,
+				74462F7912E3853C00C8B41F /* libbz2.a in Frameworks */,
+				7446301612E38A6000C8B41F /* libapetag.a in Frameworks */,
+				7446301712E38A6000C8B41F /* libsquish-x86-osx.a in Frameworks */,
+				7446301812E38A6000C8B41F /* libxbms-x86-osx.a in Frameworks */,
+				744630FA12E38C4F00C8B41F /* librtv-x86-osx.a in Frameworks */,
+				744632D112E3A13F00C8B41F /* libssl.a in Frameworks */,
+				744632D612E3A23D00C8B41F /* libcrypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2965,6 +3014,7 @@
 			children = (
 				6E2FACD20E26E92800DF79EA /* Info.plist */,
 				F5B413131065900C0035D105 /* config.h */,
+				7446316012E3911400C8B41F /* Libs */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E96029091FE04C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
@@ -2985,24 +3035,9 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				F57E1ED30E36E96B00700C9D /* macport libs */,
+				744632E812E3A29F00C8B41F /* system */,
+				F57E1ED30E36E96B00700C9D /* vendor */,
 				F57E1ED20E36E8FD00700C9D /* internal libs */,
-				F57E21400E3C3AD400700C9D /* libz.dylib */,
-				88ECB6580DE013C4003396A7 /* DiskArbitration.framework */,
-				E35EF3230D380E1E00DB5CD5 /* Carbon.framework */,
-				E35EF2540D380C3D00DB5CD5 /* QuickTime.framework */,
-				E33466A50D2E5103005A65EC /* IOKit.framework */,
-				E38E25330D26365C00618676 /* AppKit.framework */,
-				E38E25340D26365C00618676 /* ApplicationServices.framework */,
-				E38E238B0D2626E600618676 /* AudioToolbox.framework */,
-				E38E238C0D2626E600618676 /* AudioUnit.framework */,
-				E38E238D0D2626E600618676 /* Cocoa.framework */,
-				E38E238E0D2626E600618676 /* CoreAudio.framework */,
-				E38E238F0D2626E600618676 /* CoreServices.framework */,
-				F59879070FBAA0C3008EF4FB /* QuartzCore.framework */,
-				E38E23900D2626E600618676 /* Foundation.framework */,
-				E38E23910D2626E600618676 /* OpenGL.framework */,
-				09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -3045,6 +3080,98 @@
 				8DD76F7E0486A8DE00D96B5E /* XBMC */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7446316012E3911400C8B41F /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				744631D512E392CA00C8B41F /* libhttpapi */,
+				744631A612E3926800C8B41F /* libjsonrpc */,
+				7446319112E3920D00C8B41F /* jsoncpp */,
+			);
+			name = Libs;
+			sourceTree = "<group>";
+		};
+		7446319112E3920D00C8B41F /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				7446319512E3921C00C8B41F /* json_reader.cpp */,
+				7446319612E3921C00C8B41F /* json_value.cpp */,
+				7446319712E3921C00C8B41F /* json_writer.cpp */,
+			);
+			name = jsoncpp;
+			sourceTree = "<group>";
+		};
+		744631A612E3926800C8B41F /* libjsonrpc */ = {
+			isa = PBXGroup;
+			children = (
+				744631A812E3929100C8B41F /* XBMCOperations.h */,
+				744631A912E3929100C8B41F /* XBMCOperations.cpp */,
+				744631AA12E3929100C8B41F /* VideoLibrary.h */,
+				744631AB12E3929100C8B41F /* VideoLibrary.cpp */,
+				744631AC12E3929100C8B41F /* TCPServer.h */,
+				744631AD12E3929100C8B41F /* TCPServer.cpp */,
+				744631AE12E3929100C8B41F /* SystemOperations.h */,
+				744631AF12E3929100C8B41F /* SystemOperations.cpp */,
+				744631B012E3929100C8B41F /* PlaylistOperations.h */,
+				744631B112E3929100C8B41F /* PlaylistOperations.cpp */,
+				744631B212E3929100C8B41F /* PlayerOperations.h */,
+				744631B312E3929100C8B41F /* PlayerOperations.cpp */,
+				744631B412E3929100C8B41F /* PicturePlayerOperations.h */,
+				744631B512E3929100C8B41F /* PicturePlayerOperations.cpp */,
+				744631B712E3929100C8B41F /* JSONUtils.h */,
+				744631B812E3929100C8B41F /* JSONRPC.h */,
+				744631B912E3929100C8B41F /* JSONRPC.cpp */,
+				744631BA12E3929100C8B41F /* ITransportLayer.h */,
+				744631BB12E3929100C8B41F /* IClient.h */,
+				744631BC12E3929100C8B41F /* FileOperations.h */,
+				744631BD12E3929100C8B41F /* FileOperations.cpp */,
+				744631BE12E3929100C8B41F /* FileItemHandler.h */,
+				744631BF12E3929100C8B41F /* FileItemHandler.cpp */,
+				744631C012E3929100C8B41F /* AVPlaylistOperations.h */,
+				744631C112E3929100C8B41F /* AVPlaylistOperations.cpp */,
+				744631C212E3929100C8B41F /* AVPlayerOperations.h */,
+				744631C312E3929100C8B41F /* AVPlayerOperations.cpp */,
+				744631C412E3929100C8B41F /* AudioLibrary.h */,
+				744631C512E3929100C8B41F /* AudioLibrary.cpp */,
+			);
+			name = libjsonrpc;
+			sourceTree = "<group>";
+		};
+		744631D512E392CA00C8B41F /* libhttpapi */ = {
+			isa = PBXGroup;
+			children = (
+				744631D612E392E800C8B41F /* HttpApi.cpp */,
+				744631D712E392E800C8B41F /* HttpApi.h */,
+				744631DA12E392E800C8B41F /* XBMChttp.cpp */,
+				744631DB12E392E800C8B41F /* XBMChttp.h */,
+			);
+			name = libhttpapi;
+			sourceTree = "<group>";
+		};
+		744632E812E3A29F00C8B41F /* system */ = {
+			isa = PBXGroup;
+			children = (
+				F57E21400E3C3AD400700C9D /* libz.dylib */,
+				74462F4812E3847200C8B41F /* libfreetype.dylib */,
+				74462F3412E3833C00C8B41F /* libfontconfig.dylib */,
+				E38E238E0D2626E600618676 /* CoreAudio.framework */,
+				88ECB6580DE013C4003396A7 /* DiskArbitration.framework */,
+				E35EF3230D380E1E00DB5CD5 /* Carbon.framework */,
+				E35EF2540D380C3D00DB5CD5 /* QuickTime.framework */,
+				E33466A50D2E5103005A65EC /* IOKit.framework */,
+				E38E25330D26365C00618676 /* AppKit.framework */,
+				E38E25340D26365C00618676 /* ApplicationServices.framework */,
+				E38E238B0D2626E600618676 /* AudioToolbox.framework */,
+				E38E238C0D2626E600618676 /* AudioUnit.framework */,
+				E38E238D0D2626E600618676 /* Cocoa.framework */,
+				E38E238F0D2626E600618676 /* CoreServices.framework */,
+				F59879070FBAA0C3008EF4FB /* QuartzCore.framework */,
+				E38E23900D2626E600618676 /* Foundation.framework */,
+				E38E23910D2626E600618676 /* OpenGL.framework */,
+				09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */,
+			);
+			name = system;
 			sourceTree = "<group>";
 		};
 		7C5608C30F1754930056433A /* ExternalPlayer */ = {
@@ -3503,8 +3630,6 @@
 				E38A06CC0D95AA5500FF8227 /* GUIDialogKaiToast.cpp */,
 				E38A06CD0D95AA5500FF8227 /* GUIDialogKaiToast.h */,
 				E3A478190D29032C00F3C3A6 /* GUIDialogAccessPoints.cpp */,
-				E38E14620D25F9F900618676 /* APEv2Tag.cpp */,
-				E38E14630D25F9F900618676 /* APEv2Tag.h */,
 				E38E14640D25F9F900618676 /* Application.cpp */,
 				E38E14650D25F9F900618676 /* Application.h */,
 				E38E14660D25F9F900618676 /* ApplicationMessenger.cpp */,
@@ -3740,8 +3865,6 @@
 				880DBE4D0DC223FF00E26B71 /* MusicInfoTag.h */,
 				E38E1D970D25F9FD00618676 /* MusicInfoTagLoaderAAC.cpp */,
 				E38E1D980D25F9FD00618676 /* MusicInfoTagLoaderAAC.h */,
-				E38E1D9B0D25F9FD00618676 /* MusicInfoTagLoaderApe.cpp */,
-				E38E1D9C0D25F9FD00618676 /* MusicInfoTagLoaderApe.h */,
 				88ACB0200DCF40D00083CFDF /* MusicInfoTagLoaderASAP.cpp */,
 				88ACB0210DCF40D00083CFDF /* MusicInfoTagLoaderASAP.h */,
 				E38E1D9D0D25F9FD00618676 /* MusicInfoTagLoaderCDDA.cpp */,
@@ -3758,8 +3881,6 @@
 				E38E1DAA0D25F9FD00618676 /* MusicInfoTagLoaderMP3.h */,
 				E38E1DAB0D25F9FD00618676 /* MusicInfoTagLoaderMP4.cpp */,
 				E38E1DAC0D25F9FD00618676 /* MusicInfoTagLoaderMP4.h */,
-				E38E1DAD0D25F9FD00618676 /* MusicInfoTagLoaderMPC.cpp */,
-				E38E1DAE0D25F9FD00618676 /* MusicInfoTagLoaderMPC.h */,
 				E38E1DAF0D25F9FD00618676 /* MusicInfoTagLoaderNSF.cpp */,
 				E38E1DB00D25F9FD00618676 /* MusicInfoTagLoaderNSF.h */,
 				E38E1DB10D25F9FD00618676 /* MusicInfoTagLoaderOgg.cpp */,
@@ -4476,8 +4597,6 @@
 				E38E169E0D25F9FA00618676 /* cddb.h */,
 				E38E169F0D25F9FA00618676 /* cdioSupport.cpp */,
 				E38E16A00D25F9FA00618676 /* cdioSupport.h */,
-				E38E16AA0D25F9FA00618676 /* DAAPDirectory.cpp */,
-				E38E16AB0D25F9FA00618676 /* DAAPDirectory.h */,
 				7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */,
 				7C45DBE810F325C400D4BBF3 /* DAVDirectory.h */,
 				E38E16AC0D25F9FA00618676 /* Directory.cpp */,
@@ -5766,8 +5885,6 @@
 				7CF1FD68123E049300B2CBCB /* Variant.h */,
 				E38E1E8D0D25F9FD00618676 /* Weather.cpp */,
 				E38E1E8E0D25F9FD00618676 /* Weather.h */,
-				F5A7A859112908F00059D6AA /* WebServer.cpp */,
-				F5A7A85A112908F00059D6AA /* WebServer.h */,
 				E38E1E8F0D25F9FD00618676 /* Win32Exception.cpp */,
 				E38E1E900D25F9FD00618676 /* Win32Exception.h */,
 				E38E1E920D25F9FD00618676 /* WindowsShortcut.h */,
@@ -5847,48 +5964,47 @@
 		F57E1ED20E36E8FD00700C9D /* internal libs */ = {
 			isa = PBXGroup;
 			children = (
-				60CF88BE10CB49F3000921B6 /* libcmyth.a */,
-				60CF88C010CB4A16000921B6 /* librefmem.a */,
 				F5DC888A110A654000EE1B15 /* libapetag.a */,
 				F5A7A6F61128934C0059D6AA /* libhttpapi.a */,
-				F5A7A6F3112893440059D6AA /* libjsonrpc.a */,
-				F5A7A6F0112893330059D6AA /* libjsoncpp.a */,
-				F5A7A8121128F4DA0059D6AA /* libmicrohttpd.a */,
+				43352CED1071634600706B8A /* libsquish-x86-osx.a */,
+				E38E256C0D263A1C00618676 /* librtv-x86-osx.a */,
+				F5DC8816110A4B8900EE1B15 /* libxbms-x86-osx.a */,
+				810CA0050D683DEF0095F5DD /* libSDL-x86-osx.a */,
+				810CA0080D683DEF0095F5DD /* libSDL_mixer-x86-osx.a */,
 				F5A1C86A0F6B048000A96ABD /* x86 */,
-				F5A1C8690F6B047D00A96ABD /* ppc */,
 			);
 			name = "internal libs";
 			sourceTree = "<group>";
 		};
-		F57E1ED30E36E96B00700C9D /* macport libs */ = {
+		F57E1ED30E36E96B00700C9D /* vendor */ = {
 			isa = PBXGroup;
 			children = (
-				E49070F3110E7E76003865FD /* libvorbisenc.dylib */,
-				E4907BF70FDAC38B00E2F075 /* libmysqlclient.dylib */,
-				E38E24270D26317D00618676 /* liblzo.dylib */,
-				F5D8F880104CD40B004A11AB /* liblzo2.dylib */,
-				E38E24250D26317D00618676 /* libGLEW.dylib */,
-				E3BBB7A10D7EA8B200CAAFD3 /* libpcre.dylib */,
-				F5DC87FB110A460000EE1B15 /* libpcrecpp.dylib */,
-				F5DC8808110A495600EE1B15 /* libcrypto.dylib */,
-				889693360DF0B72500F1DA75 /* libbz2.1.0.dylib */,
-				88ECB6E90DE07BEE003396A7 /* libogg.0.dylib */,
-				E3EB8F030D5D5C0300FFF489 /* libmad.dylib */,
-				F5F241D4110BFCD6009126C6 /* libmpeg2.dylib */,
-				F5F241D7110BFCF4009126C6 /* libwavpack.dylib */,
-				F5D8F88B104CD47D004A11AB /* libmms.dylib */,
-				E3EB8F050D5D5C0300FFF489 /* libvorbis.dylib */,
-				F59FC1A612AF11E70063D9F2 /* libvorbisfile.dylib */,
-				E38E24240D26317D00618676 /* libfribidi.dylib */,
-				F57E213E0E3C3AB200700C9D /* libiconv.dylib */,
-				E38E24230D26317D00618676 /* libfreetype.dylib */,
-				F5EA08840F78B1E7005C2EC5 /* libcdio.dylib */,
-				F59876C30FBA3569008EF4FB /* libsamplerate.dylib */,
-				E3D547950D723EFD00F36320 /* libsmbclient.dylib */,
-				F5AAC9CE0FB0D20100DBB77C /* libsqlite3.0.dylib */,
-				88ECB6E60DE07BA6003396A7 /* libfontconfig.1.dylib */,
+				744632D012E3A13F00C8B41F /* libssl.a */,
+				744632D512E3A23D00C8B41F /* libcrypto.a */,
+				74462F7812E3853C00C8B41F /* libbz2.a */,
+				74462F3C12E383C400C8B41F /* liblzo2.a */,
+				74462F3812E3838D00C8B41F /* libvorbisfile.a */,
+				74462F3012E3830600C8B41F /* libsamplerate.a */,
+				74462F2C12E3826400C8B41F /* libvorbisenc.a */,
+				74462F2812E3822000C8B41F /* libfribidi.a */,
+				74462F2412E381E900C8B41F /* libmpeg2.a */,
+				74462F1D12E3814800C8B41F /* liblzo.a */,
+				74462F1912E3811600C8B41F /* libvorbis.a */,
+				74462F1512E380DB00C8B41F /* libpcrecpp.a */,
+				74462F1112E380B000C8B41F /* libogg.a */,
+				74462F0D12E3808700C8B41F /* libSDL_mixer.a */,
+				74462F0912E3806200C8B41F /* libmysqlclient.a */,
+				74462F0512E37FD300C8B41F /* libiconv.dylib */,
+				74462F0112E37F8400C8B41F /* libSDL_image.a */,
+				74462EFD12E37F4000C8B41F /* libGLEW.a */,
+				74462EF912E37E8A00C8B41F /* libSDL.a */,
+				74462EF512E37DC800C8B41F /* libsqlite3.a */,
+				74462EF112E37D7900C8B41F /* libpcre.a */,
+				74462EEA12E37C3600C8B41F /* libcdio.a */,
+				74462EE612E37BF600C8B41F /* libwavpack.a */,
+				74462F4012E3840D00C8B41F /* libmad.a */,
 			);
-			name = "macport libs";
+			name = vendor;
 			sourceTree = "<group>";
 		};
 		F5A00B060EFDDDB700CD59F3 /* AudioRenderers */ = {
@@ -5905,28 +6021,9 @@
 			name = AudioRenderers;
 			sourceTree = "<group>";
 		};
-		F5A1C8690F6B047D00A96ABD /* ppc */ = {
-			isa = PBXGroup;
-			children = (
-				43352CEF1071639400706B8A /* libsquish-powerpc-osx.a */,
-				F5A1CC010F6B1FB600A96ABD /* librtv-powerpc-osx.a */,
-				F5A1CC050F6B203100A96ABD /* libxbms-powerpc-osx.a */,
-				F5A1CC070F6B209400A96ABD /* libxdaap-powerpc-osx.a */,
-				F5A1CC0D0F6B214800A96ABD /* libSDL-powerpc-osx.a */,
-				F5A1CC130F6B216400A96ABD /* libSDL_mixer-powerpc-osx.a */,
-			);
-			name = ppc;
-			sourceTree = "<group>";
-		};
 		F5A1C86A0F6B048000A96ABD /* x86 */ = {
 			isa = PBXGroup;
 			children = (
-				43352CED1071634600706B8A /* libsquish-x86-osx.a */,
-				E38E256C0D263A1C00618676 /* librtv-x86-osx.a */,
-				F5DC8816110A4B8900EE1B15 /* libxbms-x86-osx.a */,
-				E38E25680D2639F100618676 /* libxdaap-x86-osx.a */,
-				810CA0050D683DEF0095F5DD /* libSDL-x86-osx.a */,
-				810CA0080D683DEF0095F5DD /* libSDL_mixer-x86-osx.a */,
 			);
 			name = x86;
 			sourceTree = "<group>";
@@ -6059,6 +6156,79 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXLegacyTarget section */
+		74462F7D12E3862F00C8B41F /* libsquish */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 74462F8212E3867F00C8B41F /* Build configuration list for PBXLegacyTarget "libsquish" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libsquish;
+			dependencies = (
+			);
+			name = libsquish;
+			passBuildSettingsInEnvironment = 1;
+			productName = libsquish;
+		};
+		74462FFC12E387FC00C8B41F /* libapetag */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 7446300312E3882C00C8B41F /* Build configuration list for PBXLegacyTarget "libapetag" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libapetag;
+			dependencies = (
+			);
+			name = libapetag;
+			passBuildSettingsInEnvironment = 1;
+			productName = libapetag;
+		};
+		7446300A12E389E900C8B41F /* libXBMS */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 7446301312E38A1A00C8B41F /* Build configuration list for PBXLegacyTarget "libXBMS" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libXBMS;
+			dependencies = (
+			);
+			name = libXBMS;
+			passBuildSettingsInEnvironment = 1;
+			productName = libXBMS;
+		};
+		744630F312E38C1E00C8B41F /* libRTV */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 744630FD12E38C5800C8B41F /* Build configuration list for PBXLegacyTarget "libRTV" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libRTV;
+			dependencies = (
+			);
+			name = libRTV;
+			passBuildSettingsInEnvironment = 1;
+			productName = libRTV;
+		};
+		744630FF12E38C8C00C8B41F /* libhttpapi */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 7446310612E38CAD00C8B41F /* Build configuration list for PBXLegacyTarget "libhttpapi" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libhttpapi;
+			dependencies = (
+			);
+			name = libhttpapi;
+			passBuildSettingsInEnvironment = 1;
+			productName = libhttpapi;
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		8DD76F740486A8DE00D96B5E /* XBMC */ = {
 			isa = PBXNativeTarget;
@@ -6070,6 +6240,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				74462FF112E3875D00C8B41F /* PBXTargetDependency */,
+				7446300012E3881E00C8B41F /* PBXTargetDependency */,
+				7446300E12E389FC00C8B41F /* PBXTargetDependency */,
+				744630F712E38C3700C8B41F /* PBXTargetDependency */,
+				7446310312E38CAB00C8B41F /* PBXTargetDependency */,
 			);
 			name = XBMC;
 			productInstallPath = "$(HOME)/bin";
@@ -6098,6 +6273,11 @@
 			targets = (
 				8DD76F740486A8DE00D96B5E /* XBMC */,
 				6E2FACBA0E26DF7A00DF79EA /* XBMC.app */,
+				74462F7D12E3862F00C8B41F /* libsquish */,
+				74462FFC12E387FC00C8B41F /* libapetag */,
+				7446300A12E389E900C8B41F /* libXBMS */,
+				744630F312E38C1E00C8B41F /* libRTV */,
+				744630FF12E38C8C00C8B41F /* libhttpapi */,
 			);
 		};
 /* End PBXProject section */
@@ -6219,7 +6399,6 @@
 				E38E1F330D25F9FD00618676 /* tinyxmlparser.cpp in Sources */,
 				E38E1F340D25F9FD00618676 /* VisibleEffect.cpp in Sources */,
 				E38E1F350D25F9FD00618676 /* XMLUtils.cpp in Sources */,
-				E38E1F360D25F9FD00618676 /* APEv2Tag.cpp in Sources */,
 				E38E1F370D25F9FD00618676 /* Application.cpp in Sources */,
 				E38E1F380D25F9FD00618676 /* ApplicationMessenger.cpp in Sources */,
 				E38E1F3C0D25F9FD00618676 /* Autorun.cpp in Sources */,
@@ -6335,7 +6514,6 @@
 				E38E20030D25F9FD00618676 /* CDDADirectory.cpp in Sources */,
 				E38E20040D25F9FD00618676 /* cddb.cpp in Sources */,
 				E38E20050D25F9FD00618676 /* cdioSupport.cpp in Sources */,
-				E38E20060D25F9FD00618676 /* DAAPDirectory.cpp in Sources */,
 				E38E20070D25F9FD00618676 /* Directory.cpp in Sources */,
 				E38E20080D25F9FD00618676 /* DirectoryCache.cpp in Sources */,
 				E38E20090D25F9FD00618676 /* DirectoryHistory.cpp in Sources */,
@@ -6347,7 +6525,6 @@
 				E38E200F0D25F9FD00618676 /* FileCache.cpp in Sources */,
 				E38E20100D25F9FD00618676 /* FileCDDA.cpp in Sources */,
 				E38E20110D25F9FD00618676 /* FileCurl.cpp in Sources */,
-				E38E20120D25F9FD00618676 /* FileDAAP.cpp in Sources */,
 				E38E20130D25F9FD00618676 /* FileFactory.cpp in Sources */,
 				E38E20140D25F9FD00618676 /* FileFileReader.cpp in Sources */,
 				E38E20160D25F9FD00618676 /* FileHD.cpp in Sources */,
@@ -6607,14 +6784,12 @@
 				E38E227F0D25F9FE00618676 /* MusicInfoLoader.cpp in Sources */,
 				E38E22800D25F9FE00618676 /* MusicInfoScanner.cpp in Sources */,
 				E38E22820D25F9FE00618676 /* MusicInfoTagLoaderAAC.cpp in Sources */,
-				E38E22840D25F9FE00618676 /* MusicInfoTagLoaderApe.cpp in Sources */,
 				E38E22850D25F9FE00618676 /* MusicInfoTagLoaderCDDA.cpp in Sources */,
 				E38E22860D25F9FE00618676 /* MusicInfoTagLoaderDatabase.cpp in Sources */,
 				E38E22880D25F9FE00618676 /* MusicInfoTagLoaderFlac.cpp in Sources */,
 				E38E228A0D25F9FE00618676 /* MusicInfoTagLoaderMod.cpp in Sources */,
 				E38E228B0D25F9FE00618676 /* MusicInfoTagLoaderMP3.cpp in Sources */,
 				E38E228C0D25F9FE00618676 /* MusicInfoTagLoaderMP4.cpp in Sources */,
-				E38E228D0D25F9FE00618676 /* MusicInfoTagLoaderMPC.cpp in Sources */,
 				E38E228E0D25F9FE00618676 /* MusicInfoTagLoaderNSF.cpp in Sources */,
 				E38E228F0D25F9FE00618676 /* MusicInfoTagLoaderOgg.cpp in Sources */,
 				E38E22900D25F9FE00618676 /* MusicInfoTagLoaderShn.cpp in Sources */,
@@ -6979,7 +7154,6 @@
 				7C644FC7112367A60012D34D /* GUILabel.cpp in Sources */,
 				F5A7A6211127980A0059D6AA /* posix-realtime-stub.c in Sources */,
 				F5A7A702112893E50059D6AA /* AnnouncementManager.cpp in Sources */,
-				F5A7A85B112908F00059D6AA /* WebServer.cpp in Sources */,
 				7C7B2B301134F36400713D6D /* mysqldataset.cpp in Sources */,
 				F5A7B376113AFB5F0059D6AA /* FileSFTP.cpp in Sources */,
 				F5A7B37E113AFB900059D6AA /* SFTPDirectory.cpp in Sources */,
@@ -7014,6 +7188,24 @@
 				7CDFC2AE12021E9E00E182BC /* AutoPtrHandle.cpp in Sources */,
 				F5E728D01227527D00B152C1 /* DVDInputStreamBluray.cpp in Sources */,
 				7CF1FD6A123E049300B2CBCB /* Variant.cpp in Sources */,
+				7446319812E3921C00C8B41F /* json_reader.cpp in Sources */,
+				7446319912E3921C00C8B41F /* json_value.cpp in Sources */,
+				7446319A12E3921C00C8B41F /* json_writer.cpp in Sources */,
+				744631C612E3929100C8B41F /* XBMCOperations.cpp in Sources */,
+				744631C712E3929100C8B41F /* VideoLibrary.cpp in Sources */,
+				744631C812E3929100C8B41F /* TCPServer.cpp in Sources */,
+				744631C912E3929100C8B41F /* SystemOperations.cpp in Sources */,
+				744631CA12E3929100C8B41F /* PlaylistOperations.cpp in Sources */,
+				744631CB12E3929100C8B41F /* PlayerOperations.cpp in Sources */,
+				744631CC12E3929100C8B41F /* PicturePlayerOperations.cpp in Sources */,
+				744631CD12E3929100C8B41F /* JSONRPC.cpp in Sources */,
+				744631CE12E3929100C8B41F /* FileOperations.cpp in Sources */,
+				744631CF12E3929100C8B41F /* FileItemHandler.cpp in Sources */,
+				744631D012E3929100C8B41F /* AVPlaylistOperations.cpp in Sources */,
+				744631D112E3929100C8B41F /* AVPlayerOperations.cpp in Sources */,
+				744631D212E3929100C8B41F /* AudioLibrary.cpp in Sources */,
+				744631DC12E392E800C8B41F /* HttpApi.cpp in Sources */,
+				744631DE12E392E800C8B41F /* XBMChttp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7024,6 +7216,31 @@
 			isa = PBXTargetDependency;
 			target = 8DD76F740486A8DE00D96B5E /* XBMC */;
 			targetProxy = 6E2FACC30E26E08100DF79EA /* PBXContainerItemProxy */;
+		};
+		74462FF112E3875D00C8B41F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 74462F7D12E3862F00C8B41F /* libsquish */;
+			targetProxy = 74462FF012E3875D00C8B41F /* PBXContainerItemProxy */;
+		};
+		7446300012E3881E00C8B41F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 74462FFC12E387FC00C8B41F /* libapetag */;
+			targetProxy = 74462FFF12E3881E00C8B41F /* PBXContainerItemProxy */;
+		};
+		7446300E12E389FC00C8B41F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7446300A12E389E900C8B41F /* libXBMS */;
+			targetProxy = 7446300D12E389FC00C8B41F /* PBXContainerItemProxy */;
+		};
+		744630F712E38C3700C8B41F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 744630F312E38C1E00C8B41F /* libRTV */;
+			targetProxy = 744630F612E38C3700C8B41F /* PBXContainerItemProxy */;
+		};
+		7446310312E38CAB00C8B41F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 744630FF12E38C8C00C8B41F /* libhttpapi */;
+			targetProxy = 7446310212E38CAB00C8B41F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -7066,11 +7283,10 @@
 					xbmc/cores/dvdplayer,
 					xbmc/utils,
 					xbmc/lib,
-					xbmc/lib/libPython/Python/Include,
 					lib/jsoncpp/jsoncpp/include,
 					lib/cpluff/libcpluff,
 					lib/libmicrohttpd/src/include,
-					"lib/libcurl-OSX/include",
+					/System/Library/Frameworks/Python.framework/Versions/2.5/include,
 				);
 				INFOPLIST_FILE = $SRCROOT/xbmc/osx/Info.plist;
 				INSTALL_PATH = /usr/local/bin;
@@ -7087,17 +7303,36 @@
 					"lib/libSDL-OSX",
 					lib/jsoncpp/jsoncpp/src/lib_json,
 					lib/libmicrohttpd/src/daemon/.libs,
-					/opt/local/lib,
-					/opt/local/lib/mysql5/mysql,
-					/opt/local/lib/samba3,
+					vendor/homebrew.git/lib,
+					vendor/homebrew.git/lib/mysql,
+					/usr/lib/samba,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					/usr/X11/lib,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				OTHER_LDFLAGS = (
 					"-headerpad_max_install_names",
 					"-all_load",
 				);
 				PRODUCT_NAME = XBMC;
-				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg /opt/local/include /opt/local/include/freetype2 /opt/local/include/mysql5 /opt/local/include/glib-2.0 /opt/local/lib/glib-2.0/include /usr/X11R6/include";
+				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
 				ZERO_LINK = NO;
 			};
 			name = Debug;
@@ -7143,11 +7378,10 @@
 					xbmc/cores/dvdplayer,
 					xbmc/utils,
 					xbmc/lib,
-					xbmc/lib/libPython/Python/Include,
 					lib/jsoncpp/jsoncpp/include,
 					lib/cpluff/libcpluff,
 					lib/libmicrohttpd/src/include,
-					"lib/libcurl-OSX/include",
+					/System/Library/Frameworks/Python.framework/Versions/2.5/include,
 				);
 				INFOPLIST_FILE = $SRCROOT/xbmc/osx/Info.plist;
 				INSTALL_PATH = /usr/local/bin;
@@ -7164,17 +7398,36 @@
 					"lib/libSDL-OSX",
 					lib/jsoncpp/jsoncpp/src/lib_json,
 					lib/libmicrohttpd/src/daemon/.libs,
-					/opt/local/lib,
-					/opt/local/lib/mysql5/mysql,
-					/opt/local/lib/samba3,
+					vendor/homebrew.git/lib,
+					vendor/homebrew.git/lib/mysql,
+					/usr/lib/samba,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					/usr/X11/lib,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				OTHER_LDFLAGS = (
 					"-headerpad_max_install_names",
 					"-all_load",
 				);
 				PRODUCT_NAME = XBMC;
-				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg /opt/local/include /opt/local/include/freetype2 /opt/local/include/mysql5 /opt/local/include/glib-2.0 /opt/local/lib/glib-2.0/include /usr/X11R6/include";
+				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -7182,8 +7435,8 @@
 		1DEB924C08733DCA0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_VERSION = 4.0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -7195,14 +7448,15 @@
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg";
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
 		};
 		1DEB924D08733DCA0010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
@@ -7213,6 +7467,7 @@
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg";
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
 		};
@@ -7233,6 +7488,111 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = XBMC.app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		74462F7E12E3862F00C8B41F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = libsquish;
+			};
+			name = Debug;
+		};
+		74462F7F12E3862F00C8B41F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = libsquish;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		74462FFD12E387FC00C8B41F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = libapetag;
+			};
+			name = Debug;
+		};
+		74462FFE12E387FC00C8B41F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = libapetag;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7446300B12E389E900C8B41F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = libXBMS;
+			};
+			name = Debug;
+		};
+		7446300C12E389E900C8B41F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = libXBMS;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		744630F412E38C1F00C8B41F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = libRTV;
+			};
+			name = Debug;
+		};
+		744630F512E38C1F00C8B41F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = libRTV;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7446310012E38C8C00C8B41F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = libhttpapi;
+			};
+			name = Debug;
+		};
+		7446310112E38C8C00C8B41F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = libhttpapi;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -7263,6 +7623,51 @@
 			buildConfigurations = (
 				6E2FACBB0E26DF7A00DF79EA /* Debug */,
 				6E2FACBD0E26DF7A00DF79EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		74462F8212E3867F00C8B41F /* Build configuration list for PBXLegacyTarget "libsquish" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74462F7E12E3862F00C8B41F /* Debug */,
+				74462F7F12E3862F00C8B41F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7446300312E3882C00C8B41F /* Build configuration list for PBXLegacyTarget "libapetag" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74462FFD12E387FC00C8B41F /* Debug */,
+				74462FFE12E387FC00C8B41F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7446301312E38A1A00C8B41F /* Build configuration list for PBXLegacyTarget "libXBMS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7446300B12E389E900C8B41F /* Debug */,
+				7446300C12E389E900C8B41F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		744630FD12E38C5800C8B41F /* Build configuration list for PBXLegacyTarget "libRTV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				744630F412E38C1F00C8B41F /* Debug */,
+				744630F512E38C1F00C8B41F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7446310612E38CAD00C8B41F /* Build configuration list for PBXLegacyTarget "libhttpapi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7446310012E38C8C00C8B41F /* Debug */,
+				7446310112E38C8C00C8B41F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
