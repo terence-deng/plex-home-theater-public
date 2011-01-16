@@ -38,7 +38,7 @@
 #define HAS_EVENT_SERVER
 #define HAS_KARAOKE
 #define HAS_SCREENSAVER
-#define HAS_PYTHON
+//#define HAS_PYTHON
 #define HAS_SYSINFO
 #define HAS_UPNP
 #define HAS_VIDEO_PLAYBACK

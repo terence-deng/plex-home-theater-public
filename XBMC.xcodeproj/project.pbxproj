@@ -175,8 +175,6 @@
 		7CCF7F1D1069F3AE00992676 /* Builtins.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CCF7F1B1069F3AE00992676 /* Builtins.cpp */; };
 		7CCF7FC9106A0DF500992676 /* TimeUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CCF7FC7106A0DF500992676 /* TimeUtils.cpp */; };
 		7CD2C3AB11940B270009EFC1 /* DirectoryNodeCountry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CD2C3A811940B270009EFC1 /* DirectoryNodeCountry.cpp */; };
-		7CD2CD0311B38B000009EFC1 /* PythonAddon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CD2CCFE11B38B000009EFC1 /* PythonAddon.cpp */; };
-		7CD2CD0411B38B000009EFC1 /* xbmcaddonmodule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CD2CD0011B38B000009EFC1 /* xbmcaddonmodule.cpp */; };
 		7CD9742A11BC6EAA00649E31 /* GUITextureGLES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CD9742711BC6EAA00649E31 /* GUITextureGLES.cpp */; };
 		7CDAE9050FFCA3520040B25F /* DVDTSCorrection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAE9030FFCA3520040B25F /* DVDTSCorrection.cpp */; };
 		7CDAEA7D1001CD6E0040B25F /* karaokelyricstextustar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAEA7B1001CD6E0040B25F /* karaokelyricstextustar.cpp */; };
@@ -205,11 +203,9 @@
 		88ACB01B0DCF40800083CFDF /* ASAPFileDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ACB0190DCF40800083CFDF /* ASAPFileDirectory.cpp */; };
 		88ACB01F0DCF409E0083CFDF /* ASAPCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ACB01C0DCF409E0083CFDF /* ASAPCodec.cpp */; };
 		88ACB0220DCF40D00083CFDF /* MusicInfoTagLoaderASAP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ACB0200DCF40D00083CFDF /* MusicInfoTagLoaderASAP.cpp */; };
-		88D9FF600DD264B500EDA56F /* XBPythonDllFuncs.S in Sources */ = {isa = PBXBuildFile; fileRef = 88D9FF5F0DD264B500EDA56F /* XBPythonDllFuncs.S */; };
 		88E384640E20D6EF0028AFC0 /* GUIListGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E384620E20D6EF0028AFC0 /* GUIListGroup.cpp */; };
 		88ECB6590DE013C4003396A7 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88ECB6580DE013C4003396A7 /* DiskArbitration.framework */; };
 		8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */; };
-		C80425711158A0DE00D158A6 /* controlslider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C80425701158A0DE00D158A6 /* controlslider.cpp */; };
 		C85EB756117460D50008E5A5 /* AddonDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C85EB754117460D50008E5A5 /* AddonDatabase.cpp */; };
 		C85EB75C1174614E0008E5A5 /* Repository.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C85EB75A1174614E0008E5A5 /* Repository.cpp */; };
 		C85EB762117461830008E5A5 /* GUIViewStateAddonBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C85EB760117461830008E5A5 /* GUIViewStateAddonBrowser.cpp */; };
@@ -217,7 +213,6 @@
 		E33206380D5070AA00435CE3 /* DVDDemuxVobsub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E33206370D5070AA00435CE3 /* DVDDemuxVobsub.cpp */; };
 		E33466A60D2E5103005A65EC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E33466A50D2E5103005A65EC /* IOKit.framework */; };
 		E33979960D62FD48004ECDDA /* DVDInputStreamTV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E33979940D62FD47004ECDDA /* DVDInputStreamTV.cpp */; };
-		E354EF040D99EDC900B55311 /* controlradiobutton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E354EF030D99EDC900B55311 /* controlradiobutton.cpp */; };
 		E35EF2550D380C3D00DB5CD5 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E35EF2540D380C3D00DB5CD5 /* QuickTime.framework */; };
 		E35EF3240D380E1E00DB5CD5 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E35EF3230D380E1E00DB5CD5 /* Carbon.framework */; };
 		E36578880D3AA7B40033CC1C /* DVDPlayerCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E36578860D3AA7B40033CC1C /* DVDPlayerCodec.cpp */; };
@@ -579,9 +574,6 @@
 		E38E20D60D25F9FD00618676 /* LangCodeExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E18560D25F9FA00618676 /* LangCodeExpander.cpp */; };
 		E38E20D70D25F9FD00618676 /* LangInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E18580D25F9FA00618676 /* LangInfo.cpp */; };
 		E38E20D80D25F9FD00618676 /* LastFmManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E185A0D25F9FA00618676 /* LastFmManager.cpp */; };
-		E38E21600D25F9FD00618676 /* XBPython.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1A0D0D25F9FB00618676 /* XBPython.cpp */; };
-		E38E21610D25F9FD00618676 /* XBPythonDll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1A0F0D25F9FB00618676 /* XBPythonDll.cpp */; };
-		E38E21620D25F9FD00618676 /* XBPyThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1A110D25F9FB00618676 /* XBPyThread.cpp */; };
 		E38E21670D25F9FD00618676 /* scrobbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1A250D25F9FB00618676 /* scrobbler.cpp */; };
 		E38E21740D25F9FD00618676 /* MediaCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1ABD0D25F9FB00618676 /* MediaCrawler.cpp */; };
 		E38E21760D25F9FD00618676 /* PltMicroMediaController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1AC20D25F9FB00618676 /* PltMicroMediaController.cpp */; };
@@ -781,37 +773,6 @@
 		E38E25360D26365C00618676 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E25340D26365C00618676 /* ApplicationServices.framework */; };
 		E38E25780D263BF600618676 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25770D263BF600618676 /* unpack.cpp */; };
 		E38E257C0D263C4400618676 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E257B0D263C4400618676 /* rar.cpp */; };
-		E38E259D0D263CE000618676 /* action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E257E0D263CE000618676 /* action.cpp */; };
-		E38E259E0D263CE000618676 /* control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E257F0D263CE000618676 /* control.cpp */; };
-		E38E259F0D263CE000618676 /* controlbutton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25800D263CE000618676 /* controlbutton.cpp */; };
-		E38E25A00D263CE000618676 /* controlcheckmark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25810D263CE000618676 /* controlcheckmark.cpp */; };
-		E38E25A10D263CE000618676 /* controlfadelabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25820D263CE000618676 /* controlfadelabel.cpp */; };
-		E38E25A20D263CE000618676 /* controlgroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25830D263CE000618676 /* controlgroup.cpp */; };
-		E38E25A30D263CE000618676 /* controlimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25840D263CE000618676 /* controlimage.cpp */; };
-		E38E25A40D263CE000618676 /* controllabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25850D263CE000618676 /* controllabel.cpp */; };
-		E38E25A50D263CE000618676 /* controllist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25860D263CE000618676 /* controllist.cpp */; };
-		E38E25A60D263CE000618676 /* controlprogress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25870D263CE000618676 /* controlprogress.cpp */; };
-		E38E25A70D263CE000618676 /* controlspin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25880D263CE000618676 /* controlspin.cpp */; };
-		E38E25A80D263CE000618676 /* controltextbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25890D263CE000618676 /* controltextbox.cpp */; };
-		E38E25A90D263CE000618676 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E258A0D263CE000618676 /* dialog.cpp */; };
-		E38E25AA0D263CE000618676 /* GUIPythonWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E258B0D263CE000618676 /* GUIPythonWindow.cpp */; };
-		E38E25AB0D263CE000618676 /* GUIPythonWindowDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E258C0D263CE000618676 /* GUIPythonWindowDialog.cpp */; };
-		E38E25AC0D263CE000618676 /* GUIPythonWindowXML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E258D0D263CE000618676 /* GUIPythonWindowXML.cpp */; };
-		E38E25AD0D263CE000618676 /* GUIPythonWindowXMLDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E258E0D263CE000618676 /* GUIPythonWindowXMLDialog.cpp */; };
-		E38E25AE0D263CE000618676 /* infotagmusic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E258F0D263CE000618676 /* infotagmusic.cpp */; };
-		E38E25AF0D263CE000618676 /* infotagvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25900D263CE000618676 /* infotagvideo.cpp */; };
-		E38E25B00D263CE000618676 /* keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25910D263CE000618676 /* keyboard.cpp */; };
-		E38E25B10D263CE000618676 /* listitem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25920D263CE000618676 /* listitem.cpp */; };
-		E38E25B20D263CE000618676 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25930D263CE000618676 /* player.cpp */; };
-		E38E25B30D263CE000618676 /* pyplaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25940D263CE000618676 /* pyplaylist.cpp */; };
-		E38E25B40D263CE000618676 /* PythonPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25950D263CE000618676 /* PythonPlayer.cpp */; };
-		E38E25B50D263CE000618676 /* pyutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25960D263CE000618676 /* pyutil.cpp */; };
-		E38E25B60D263CE000618676 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25970D263CE000618676 /* window.cpp */; };
-		E38E25B70D263CE000618676 /* winxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25980D263CE000618676 /* winxml.cpp */; };
-		E38E25B80D263CE000618676 /* winxmldialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25990D263CE000618676 /* winxmldialog.cpp */; };
-		E38E25B90D263CE000618676 /* xbmcguimodule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E259A0D263CE000618676 /* xbmcguimodule.cpp */; };
-		E38E25BA0D263CE000618676 /* xbmcmodule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E259B0D263CE000618676 /* xbmcmodule.cpp */; };
-		E38E25BB0D263CE000618676 /* xbmcplugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E259C0D263CE000618676 /* xbmcplugin.cpp */; };
 		E38E25C00D263DC100618676 /* DVDFactoryDemuxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25BF0D263DC100618676 /* DVDFactoryDemuxer.cpp */; };
 		E38E25C30D263DE200618676 /* DVDDemuxFFmpeg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E25C20D263DE200618676 /* DVDDemuxFFmpeg.cpp */; };
 		E38F12C20D29FF200035C331 /* FileShoutcast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38F12C10D29FF200035C331 /* FileShoutcast.cpp */; };
@@ -1289,9 +1250,6 @@
 		7CCF7FC8106A0DF500992676 /* TimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeUtils.h; sourceTree = "<group>"; };
 		7CD2C3A811940B270009EFC1 /* DirectoryNodeCountry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectoryNodeCountry.cpp; sourceTree = "<group>"; };
 		7CD2C3A911940B270009EFC1 /* DirectoryNodeCountry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryNodeCountry.h; sourceTree = "<group>"; };
-		7CD2CCFE11B38B000009EFC1 /* PythonAddon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PythonAddon.cpp; sourceTree = "<group>"; };
-		7CD2CCFF11B38B000009EFC1 /* PythonAddon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PythonAddon.h; sourceTree = "<group>"; };
-		7CD2CD0011B38B000009EFC1 /* xbmcaddonmodule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xbmcaddonmodule.cpp; sourceTree = "<group>"; };
 		7CD9742711BC6EAA00649E31 /* GUITextureGLES.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUITextureGLES.cpp; sourceTree = "<group>"; };
 		7CD9742811BC6EAA00649E31 /* GUITextureGLES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUITextureGLES.h; sourceTree = "<group>"; };
 		7CDAE9030FFCA3520040B25F /* DVDTSCorrection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDTSCorrection.cpp; sourceTree = "<group>"; };
@@ -1357,12 +1315,10 @@
 		88ACB01E0DCF409E0083CFDF /* DllASAP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DllASAP.h; sourceTree = "<group>"; };
 		88ACB0200DCF40D00083CFDF /* MusicInfoTagLoaderASAP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicInfoTagLoaderASAP.cpp; sourceTree = "<group>"; };
 		88ACB0210DCF40D00083CFDF /* MusicInfoTagLoaderASAP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicInfoTagLoaderASAP.h; sourceTree = "<group>"; };
-		88D9FF5F0DD264B500EDA56F /* XBPythonDllFuncs.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = XBPythonDllFuncs.S; sourceTree = "<group>"; };
 		88E384620E20D6EF0028AFC0 /* GUIListGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIListGroup.cpp; sourceTree = "<group>"; };
 		88E384630E20D6EF0028AFC0 /* GUIListGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIListGroup.h; sourceTree = "<group>"; };
 		88ECB6580DE013C4003396A7 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
 		8DD76F7E0486A8DE00D96B5E /* XBMC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = XBMC; sourceTree = BUILT_PRODUCTS_DIR; };
-		C80425701158A0DE00D158A6 /* controlslider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlslider.cpp; sourceTree = "<group>"; };
 		C85EB754117460D50008E5A5 /* AddonDatabase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddonDatabase.cpp; sourceTree = "<group>"; };
 		C85EB755117460D50008E5A5 /* AddonDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddonDatabase.h; sourceTree = "<group>"; };
 		C85EB75A1174614E0008E5A5 /* Repository.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Repository.cpp; path = addons/Repository.cpp; sourceTree = "<group>"; };
@@ -1375,7 +1331,6 @@
 		E33466A50D2E5103005A65EC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E33979940D62FD47004ECDDA /* DVDInputStreamTV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDInputStreamTV.cpp; sourceTree = "<group>"; };
 		E33979950D62FD47004ECDDA /* DVDInputStreamTV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDInputStreamTV.h; sourceTree = "<group>"; };
-		E354EF030D99EDC900B55311 /* controlradiobutton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlradiobutton.cpp; sourceTree = "<group>"; };
 		E35EF2540D380C3D00DB5CD5 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		E35EF3230D380E1E00DB5CD5 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		E36578860D3AA7B40033CC1C /* DVDPlayerCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDPlayerCodec.cpp; sourceTree = "<group>"; };
@@ -2191,29 +2146,6 @@
 		E38E19750D25F9FB00618676 /* hdhomerun_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdhomerun_video.h; sourceTree = "<group>"; };
 		E38E19800D25F9FB00618676 /* LZO1X.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LZO1X.H; sourceTree = "<group>"; };
 		E38E19810D25F9FB00618676 /* LZOCONF.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LZOCONF.H; sourceTree = "<group>"; };
-		E38E19DC0D25F9FB00618676 /* action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = action.h; sourceTree = "<group>"; };
-		E38E19DE0D25F9FB00618676 /* control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = control.h; sourceTree = "<group>"; };
-		E38E19EA0D25F9FB00618676 /* dialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog.h; sourceTree = "<group>"; };
-		E38E19EC0D25F9FB00618676 /* GUIPythonWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPythonWindow.h; sourceTree = "<group>"; };
-		E38E19EE0D25F9FB00618676 /* GUIPythonWindowDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPythonWindowDialog.h; sourceTree = "<group>"; };
-		E38E19F00D25F9FB00618676 /* GUIPythonWindowXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPythonWindowXML.h; sourceTree = "<group>"; };
-		E38E19F20D25F9FB00618676 /* GUIPythonWindowXMLDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPythonWindowXMLDialog.h; sourceTree = "<group>"; };
-		E38E19F40D25F9FB00618676 /* infotagmusic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = infotagmusic.h; sourceTree = "<group>"; };
-		E38E19F60D25F9FB00618676 /* infotagvideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = infotagvideo.h; sourceTree = "<group>"; };
-		E38E19F80D25F9FB00618676 /* keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keyboard.h; sourceTree = "<group>"; };
-		E38E19FA0D25F9FB00618676 /* listitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = listitem.h; sourceTree = "<group>"; };
-		E38E19FE0D25F9FB00618676 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
-		E38E1A000D25F9FB00618676 /* pyplaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pyplaylist.h; sourceTree = "<group>"; };
-		E38E1A020D25F9FB00618676 /* PythonPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PythonPlayer.h; sourceTree = "<group>"; };
-		E38E1A040D25F9FB00618676 /* pyutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pyutil.h; sourceTree = "<group>"; };
-		E38E1A060D25F9FB00618676 /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
-		E38E1A080D25F9FB00618676 /* winxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = winxml.h; sourceTree = "<group>"; };
-		E38E1A0D0D25F9FB00618676 /* XBPython.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XBPython.cpp; sourceTree = "<group>"; };
-		E38E1A0E0D25F9FB00618676 /* XBPython.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBPython.h; sourceTree = "<group>"; };
-		E38E1A0F0D25F9FB00618676 /* XBPythonDll.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XBPythonDll.cpp; sourceTree = "<group>"; };
-		E38E1A100D25F9FB00618676 /* XBPythonDll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBPythonDll.h; sourceTree = "<group>"; };
-		E38E1A110D25F9FB00618676 /* XBPyThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XBPyThread.cpp; sourceTree = "<group>"; };
-		E38E1A120D25F9FB00618676 /* XBPyThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBPyThread.h; sourceTree = "<group>"; };
 		E38E1A140D25F9FB00618676 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		E38E1A150D25F9FB00618676 /* guideclient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = guideclient.h; sourceTree = "<group>"; };
 		E38E1A160D25F9FB00618676 /* GuideParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideParser.h; sourceTree = "<group>"; };
@@ -2662,37 +2594,6 @@
 		E38E256C0D263A1C00618676 /* librtv-x86-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librtv-x86-osx.a"; path = "xbmc/lib/libRTV/librtv-x86-osx.a"; sourceTree = "<group>"; };
 		E38E25770D263BF600618676 /* unpack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unpack.cpp; sourceTree = "<group>"; };
 		E38E257B0D263C4400618676 /* rar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rar.cpp; sourceTree = "<group>"; };
-		E38E257E0D263CE000618676 /* action.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = action.cpp; sourceTree = "<group>"; };
-		E38E257F0D263CE000618676 /* control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = control.cpp; sourceTree = "<group>"; };
-		E38E25800D263CE000618676 /* controlbutton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlbutton.cpp; sourceTree = "<group>"; };
-		E38E25810D263CE000618676 /* controlcheckmark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlcheckmark.cpp; sourceTree = "<group>"; };
-		E38E25820D263CE000618676 /* controlfadelabel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlfadelabel.cpp; sourceTree = "<group>"; };
-		E38E25830D263CE000618676 /* controlgroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlgroup.cpp; sourceTree = "<group>"; };
-		E38E25840D263CE000618676 /* controlimage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlimage.cpp; sourceTree = "<group>"; };
-		E38E25850D263CE000618676 /* controllabel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controllabel.cpp; sourceTree = "<group>"; };
-		E38E25860D263CE000618676 /* controllist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controllist.cpp; sourceTree = "<group>"; };
-		E38E25870D263CE000618676 /* controlprogress.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlprogress.cpp; sourceTree = "<group>"; };
-		E38E25880D263CE000618676 /* controlspin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlspin.cpp; sourceTree = "<group>"; };
-		E38E25890D263CE000618676 /* controltextbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controltextbox.cpp; sourceTree = "<group>"; };
-		E38E258A0D263CE000618676 /* dialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog.cpp; sourceTree = "<group>"; };
-		E38E258B0D263CE000618676 /* GUIPythonWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPythonWindow.cpp; sourceTree = "<group>"; };
-		E38E258C0D263CE000618676 /* GUIPythonWindowDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPythonWindowDialog.cpp; sourceTree = "<group>"; };
-		E38E258D0D263CE000618676 /* GUIPythonWindowXML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPythonWindowXML.cpp; sourceTree = "<group>"; };
-		E38E258E0D263CE000618676 /* GUIPythonWindowXMLDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPythonWindowXMLDialog.cpp; sourceTree = "<group>"; };
-		E38E258F0D263CE000618676 /* infotagmusic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = infotagmusic.cpp; sourceTree = "<group>"; };
-		E38E25900D263CE000618676 /* infotagvideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = infotagvideo.cpp; sourceTree = "<group>"; };
-		E38E25910D263CE000618676 /* keyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = keyboard.cpp; sourceTree = "<group>"; };
-		E38E25920D263CE000618676 /* listitem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = listitem.cpp; sourceTree = "<group>"; };
-		E38E25930D263CE000618676 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
-		E38E25940D263CE000618676 /* pyplaylist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pyplaylist.cpp; sourceTree = "<group>"; };
-		E38E25950D263CE000618676 /* PythonPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PythonPlayer.cpp; sourceTree = "<group>"; };
-		E38E25960D263CE000618676 /* pyutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pyutil.cpp; sourceTree = "<group>"; };
-		E38E25970D263CE000618676 /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = window.cpp; sourceTree = "<group>"; };
-		E38E25980D263CE000618676 /* winxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = winxml.cpp; sourceTree = "<group>"; };
-		E38E25990D263CE000618676 /* winxmldialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = winxmldialog.cpp; sourceTree = "<group>"; };
-		E38E259A0D263CE000618676 /* xbmcguimodule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xbmcguimodule.cpp; sourceTree = "<group>"; };
-		E38E259B0D263CE000618676 /* xbmcmodule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xbmcmodule.cpp; sourceTree = "<group>"; };
-		E38E259C0D263CE000618676 /* xbmcplugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xbmcplugin.cpp; sourceTree = "<group>"; };
 		E38E25BF0D263DC100618676 /* DVDFactoryDemuxer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDFactoryDemuxer.cpp; sourceTree = "<group>"; };
 		E38E25C20D263DE200618676 /* DVDDemuxFFmpeg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDDemuxFFmpeg.cpp; sourceTree = "<group>"; };
 		E38F12C10D29FF200035C331 /* FileShoutcast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileShoutcast.cpp; sourceTree = "<group>"; };
@@ -4854,7 +4755,6 @@
 				F551106A0F5C424700955236 /* libhts */,
 				E38E197A0D25F9FB00618676 /* libid3tag */,
 				E38E197D0D25F9FB00618676 /* liblzo */,
-				E38E19820D25F9FB00618676 /* libPython */,
 				E38E1A130D25F9FB00618676 /* libRTV */,
 				E38E1A210D25F9FB00618676 /* libscrobbler */,
 				F5E55E601076B34F006E788A /* libsquish */,
@@ -4915,81 +4815,6 @@
 				E38E19810D25F9FB00618676 /* LZOCONF.H */,
 			);
 			path = liblzo;
-			sourceTree = "<group>";
-		};
-		E38E19820D25F9FB00618676 /* libPython */ = {
-			isa = PBXGroup;
-			children = (
-				88D9FF5F0DD264B500EDA56F /* XBPythonDllFuncs.S */,
-				E38E19DA0D25F9FB00618676 /* xbmcmodule */,
-				E38E1A0D0D25F9FB00618676 /* XBPython.cpp */,
-				E38E1A0E0D25F9FB00618676 /* XBPython.h */,
-				E38E1A0F0D25F9FB00618676 /* XBPythonDll.cpp */,
-				E38E1A100D25F9FB00618676 /* XBPythonDll.h */,
-				E38E1A110D25F9FB00618676 /* XBPyThread.cpp */,
-				E38E1A120D25F9FB00618676 /* XBPyThread.h */,
-			);
-			path = libPython;
-			sourceTree = "<group>";
-		};
-		E38E19DA0D25F9FB00618676 /* xbmcmodule */ = {
-			isa = PBXGroup;
-			children = (
-				7CD2CCFE11B38B000009EFC1 /* PythonAddon.cpp */,
-				7CD2CCFF11B38B000009EFC1 /* PythonAddon.h */,
-				7CD2CD0011B38B000009EFC1 /* xbmcaddonmodule.cpp */,
-				C80425701158A0DE00D158A6 /* controlslider.cpp */,
-				E354EF030D99EDC900B55311 /* controlradiobutton.cpp */,
-				E38E257E0D263CE000618676 /* action.cpp */,
-				E38E19DC0D25F9FB00618676 /* action.h */,
-				E38E257F0D263CE000618676 /* control.cpp */,
-				E38E19DE0D25F9FB00618676 /* control.h */,
-				E38E25800D263CE000618676 /* controlbutton.cpp */,
-				E38E25810D263CE000618676 /* controlcheckmark.cpp */,
-				E38E25820D263CE000618676 /* controlfadelabel.cpp */,
-				E38E25830D263CE000618676 /* controlgroup.cpp */,
-				E38E25840D263CE000618676 /* controlimage.cpp */,
-				E38E25850D263CE000618676 /* controllabel.cpp */,
-				E38E25860D263CE000618676 /* controllist.cpp */,
-				E38E25870D263CE000618676 /* controlprogress.cpp */,
-				E38E25880D263CE000618676 /* controlspin.cpp */,
-				E38E25890D263CE000618676 /* controltextbox.cpp */,
-				E38E258A0D263CE000618676 /* dialog.cpp */,
-				E38E19EA0D25F9FB00618676 /* dialog.h */,
-				E38E258B0D263CE000618676 /* GUIPythonWindow.cpp */,
-				E38E19EC0D25F9FB00618676 /* GUIPythonWindow.h */,
-				E38E258C0D263CE000618676 /* GUIPythonWindowDialog.cpp */,
-				E38E19EE0D25F9FB00618676 /* GUIPythonWindowDialog.h */,
-				E38E258D0D263CE000618676 /* GUIPythonWindowXML.cpp */,
-				E38E19F00D25F9FB00618676 /* GUIPythonWindowXML.h */,
-				E38E258E0D263CE000618676 /* GUIPythonWindowXMLDialog.cpp */,
-				E38E19F20D25F9FB00618676 /* GUIPythonWindowXMLDialog.h */,
-				E38E258F0D263CE000618676 /* infotagmusic.cpp */,
-				E38E19F40D25F9FB00618676 /* infotagmusic.h */,
-				E38E25900D263CE000618676 /* infotagvideo.cpp */,
-				E38E19F60D25F9FB00618676 /* infotagvideo.h */,
-				E38E25910D263CE000618676 /* keyboard.cpp */,
-				E38E19F80D25F9FB00618676 /* keyboard.h */,
-				E38E25920D263CE000618676 /* listitem.cpp */,
-				E38E19FA0D25F9FB00618676 /* listitem.h */,
-				E38E25930D263CE000618676 /* player.cpp */,
-				E38E19FE0D25F9FB00618676 /* player.h */,
-				E38E25940D263CE000618676 /* pyplaylist.cpp */,
-				E38E1A000D25F9FB00618676 /* pyplaylist.h */,
-				E38E25950D263CE000618676 /* PythonPlayer.cpp */,
-				E38E1A020D25F9FB00618676 /* PythonPlayer.h */,
-				E38E25960D263CE000618676 /* pyutil.cpp */,
-				E38E1A040D25F9FB00618676 /* pyutil.h */,
-				E38E25970D263CE000618676 /* window.cpp */,
-				E38E1A060D25F9FB00618676 /* window.h */,
-				E38E25980D263CE000618676 /* winxml.cpp */,
-				E38E1A080D25F9FB00618676 /* winxml.h */,
-				E38E25990D263CE000618676 /* winxmldialog.cpp */,
-				E38E259A0D263CE000618676 /* xbmcguimodule.cpp */,
-				E38E259B0D263CE000618676 /* xbmcmodule.cpp */,
-				E38E259C0D263CE000618676 /* xbmcplugin.cpp */,
-			);
-			path = xbmcmodule;
 			sourceTree = "<group>";
 		};
 		E38E1A130D25F9FB00618676 /* libRTV */ = {
@@ -6685,9 +6510,6 @@
 				E38E20D60D25F9FD00618676 /* LangCodeExpander.cpp in Sources */,
 				E38E20D70D25F9FD00618676 /* LangInfo.cpp in Sources */,
 				E38E20D80D25F9FD00618676 /* LastFmManager.cpp in Sources */,
-				E38E21600D25F9FD00618676 /* XBPython.cpp in Sources */,
-				E38E21610D25F9FD00618676 /* XBPythonDll.cpp in Sources */,
-				E38E21620D25F9FD00618676 /* XBPyThread.cpp in Sources */,
 				E38E21670D25F9FD00618676 /* scrobbler.cpp in Sources */,
 				E38E21740D25F9FD00618676 /* MediaCrawler.cpp in Sources */,
 				E38E21760D25F9FD00618676 /* PltMicroMediaController.cpp in Sources */,
@@ -6878,37 +6700,6 @@
 				E38E23150D25F9FE00618676 /* xbmc.cpp in Sources */,
 				E38E25780D263BF600618676 /* unpack.cpp in Sources */,
 				E38E257C0D263C4400618676 /* rar.cpp in Sources */,
-				E38E259D0D263CE000618676 /* action.cpp in Sources */,
-				E38E259E0D263CE000618676 /* control.cpp in Sources */,
-				E38E259F0D263CE000618676 /* controlbutton.cpp in Sources */,
-				E38E25A00D263CE000618676 /* controlcheckmark.cpp in Sources */,
-				E38E25A10D263CE000618676 /* controlfadelabel.cpp in Sources */,
-				E38E25A20D263CE000618676 /* controlgroup.cpp in Sources */,
-				E38E25A30D263CE000618676 /* controlimage.cpp in Sources */,
-				E38E25A40D263CE000618676 /* controllabel.cpp in Sources */,
-				E38E25A50D263CE000618676 /* controllist.cpp in Sources */,
-				E38E25A60D263CE000618676 /* controlprogress.cpp in Sources */,
-				E38E25A70D263CE000618676 /* controlspin.cpp in Sources */,
-				E38E25A80D263CE000618676 /* controltextbox.cpp in Sources */,
-				E38E25A90D263CE000618676 /* dialog.cpp in Sources */,
-				E38E25AA0D263CE000618676 /* GUIPythonWindow.cpp in Sources */,
-				E38E25AB0D263CE000618676 /* GUIPythonWindowDialog.cpp in Sources */,
-				E38E25AC0D263CE000618676 /* GUIPythonWindowXML.cpp in Sources */,
-				E38E25AD0D263CE000618676 /* GUIPythonWindowXMLDialog.cpp in Sources */,
-				E38E25AE0D263CE000618676 /* infotagmusic.cpp in Sources */,
-				E38E25AF0D263CE000618676 /* infotagvideo.cpp in Sources */,
-				E38E25B00D263CE000618676 /* keyboard.cpp in Sources */,
-				E38E25B10D263CE000618676 /* listitem.cpp in Sources */,
-				E38E25B20D263CE000618676 /* player.cpp in Sources */,
-				E38E25B30D263CE000618676 /* pyplaylist.cpp in Sources */,
-				E38E25B40D263CE000618676 /* PythonPlayer.cpp in Sources */,
-				E38E25B50D263CE000618676 /* pyutil.cpp in Sources */,
-				E38E25B60D263CE000618676 /* window.cpp in Sources */,
-				E38E25B70D263CE000618676 /* winxml.cpp in Sources */,
-				E38E25B80D263CE000618676 /* winxmldialog.cpp in Sources */,
-				E38E25B90D263CE000618676 /* xbmcguimodule.cpp in Sources */,
-				E38E25BA0D263CE000618676 /* xbmcmodule.cpp in Sources */,
-				E38E25BB0D263CE000618676 /* xbmcplugin.cpp in Sources */,
 				E38E25C00D263DC100618676 /* DVDFactoryDemuxer.cpp in Sources */,
 				E38E25C30D263DE200618676 /* DVDDemuxFFmpeg.cpp in Sources */,
 				E3A4780A0D29029A00F3C3A6 /* dlgcache.cpp in Sources */,
@@ -6931,7 +6722,6 @@
 				E3E920020D8C622A002BF43D /* EventClient.cpp in Sources */,
 				E38A06CE0D95AA5500FF8227 /* GUIDialogKaiToast.cpp in Sources */,
 				E3B53E7C0D97B08100021A96 /* DVDSubtitleParserMicroDVD.cpp in Sources */,
-				E354EF040D99EDC900B55311 /* controlradiobutton.cpp in Sources */,
 				E36C29DF0DA72429001F0C9D /* Artist.cpp in Sources */,
 				E36C29E00DA72429001F0C9D /* Album.cpp in Sources */,
 				E36C29E60DA72442001F0C9D /* DVDSubtitleParserSami.cpp in Sources */,
@@ -6943,7 +6733,6 @@
 				88ACB01B0DCF40800083CFDF /* ASAPFileDirectory.cpp in Sources */,
 				88ACB01F0DCF409E0083CFDF /* ASAPCodec.cpp in Sources */,
 				88ACB0220DCF40D00083CFDF /* MusicInfoTagLoaderASAP.cpp in Sources */,
-				88D9FF600DD264B500EDA56F /* XBPythonDllFuncs.S in Sources */,
 				8883CEA10DD817D1004E8B72 /* DVDOverlayCodecSSA.cpp in Sources */,
 				8883CEA70DD81807004E8B72 /* DVDSubtitleParserSSA.cpp in Sources */,
 				8883CEA80DD81807004E8B72 /* DVDSubtitlesLibass.cpp in Sources */,
@@ -7168,7 +6957,6 @@
 				18B4A0061152BFA5001AF8A6 /* ScreenSaver.cpp in Sources */,
 				18B4A0071152BFA5001AF8A6 /* Visualisation.cpp in Sources */,
 				7C8A14571154CB2600E5FCFA /* TextureCache.cpp in Sources */,
-				C80425711158A0DE00D158A6 /* controlslider.cpp in Sources */,
 				7C8A187D115B2A8200E5FCFA /* TextureDatabase.cpp in Sources */,
 				F52BFFDB115D5574004B1D66 /* AddonStatusHandler.cpp in Sources */,
 				C85EB756117460D50008E5A5 /* AddonDatabase.cpp in Sources */,
@@ -7182,8 +6970,6 @@
 				F50FE04A11A3410300C8B8CD /* EncoderFlac.cpp in Sources */,
 				F50FE04E11A3411A00C8B8CD /* EncoderFFmpeg.cpp in Sources */,
 				183FDF8A11AF0B0500B81E9C /* PluginSource.cpp in Sources */,
-				7CD2CD0311B38B000009EFC1 /* PythonAddon.cpp in Sources */,
-				7CD2CD0411B38B000009EFC1 /* xbmcaddonmodule.cpp in Sources */,
 				7CD9742A11BC6EAA00649E31 /* GUITextureGLES.cpp in Sources */,
 				7CDFC2AE12021E9E00E182BC /* AutoPtrHandle.cpp in Sources */,
 				F5E728D01227527D00B152C1 /* DVDInputStreamBluray.cpp in Sources */,

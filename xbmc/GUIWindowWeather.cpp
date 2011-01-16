@@ -28,7 +28,9 @@
 #include "GUISettings.h"
 #include "GUIWindowManager.h"
 #include "Util.h"
+#ifdef HAS_PYTHON
 #include "lib/libPython/XBPython.h"
+#endif
 #include "LangInfo.h"
 #include "utils/log.h"
 #include "utils/SystemInfo.h"

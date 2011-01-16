@@ -53,8 +53,10 @@
 #include "MediaManager.h"
 #include "LocalizeStrings.h"
 #include "SingleLock.h"
+#ifdef HAS_PYTHON
 #include "lib/libPython/xbmcmodule/GUIPythonWindowDialog.h"
 #include "lib/libPython/xbmcmodule/GUIPythonWindowXMLDialog.h"
+#endif
 
 #ifdef HAS_HTTPAPI
 #include "lib/libhttpapi/XBMChttp.h"
@@ -586,6 +588,7 @@ case TMSG_POWERDOWN:
       }
       break;
 
+#ifdef HAS_PYTHON
     case TMSG_GUI_PYTHON_DIALOG:
       {
         if (pMsg->lpVoid)
@@ -597,6 +600,7 @@ case TMSG_POWERDOWN:
         }
       }
       break;
+#endif
 
     case TMSG_GUI_ACTION:
       {

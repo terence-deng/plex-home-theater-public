@@ -75,7 +75,9 @@ class CGUIDialog;
 #define TMSG_GUI_DO_MODAL             600
 #define TMSG_GUI_SHOW                 601
 #define TMSG_GUI_ACTIVATE_WINDOW      604
+#ifdef HAS_PYTHON
 #define TMSG_GUI_PYTHON_DIALOG        605
+#endif
 #define TMSG_GUI_DIALOG_CLOSE         606
 #define TMSG_GUI_ACTION               607
 #define TMSG_GUI_INFOLABEL            608
