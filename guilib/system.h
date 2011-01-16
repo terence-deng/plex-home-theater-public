@@ -45,7 +45,7 @@
 #define HAS_VISUALISATION
 
 #ifdef HAVE_LIBMICROHTTPD
-#define HAS_WEB_SERVER
+//#define HAS_WEB_SERVER
 #define HAS_WEB_INTERFACE
 #endif
 
@@ -58,14 +58,14 @@
 #endif
 
 #define HAS_FILESYSTEM
-#define HAS_FILESYSTEM_SMB
+//#define HAS_FILESYSTEM_SMB
 #define HAS_FILESYSTEM_CDDA
 #define HAS_FILESYSTEM_RTV
-#define HAS_FILESYSTEM_DAAP
+//#define HAS_FILESYSTEM_DAAP
 #define HAS_FILESYSTEM_SAP
 #define HAS_FILESYSTEM_VTP
 #define HAS_FILESYSTEM_HTSP
-#define HAS_FILESYSTEM_MMS
+//#define HAS_FILESYSTEM_MMS
 
 /**********************
  * Non-free Components
