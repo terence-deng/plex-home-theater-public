@@ -330,10 +330,11 @@ bool CWinSystemOSX::ResizeWindow(int newWidth, int newHeight, int newLeft, int n
     }
   }
 
+#pragma warning this needs fixing    
   // HACK: resize SDL's view manually so that mouse bounds are correctly updated.
   // there are two parts to this, the internal SDL (current_video->screen) and
   // the cocoa view ( handled in SetFullScreen).
-  SDL_SetWidthHeight(newWidth, newHeight);
+  //SDL_SetWidthHeight(newWidth, newHeight);
 
   [context makeCurrentContext];
   
