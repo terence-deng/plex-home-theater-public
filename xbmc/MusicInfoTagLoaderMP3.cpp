@@ -87,7 +87,7 @@ bool CMusicInfoTagLoaderMP3::Load(const CStdString& strFileName, CMusicInfoTag& 
       m_replayGainInfo=id3tag.GetReplayGain();
     }
 
-#ifndef ARMEL_ // TODO this will probably be OK next time we sync to trunk
+#if 0 // Disable APE support
     // Check for an APEv2 tag
     CAPEv2Tag apeTag;
     if (PrioritiseAPETags() && apeTag.ReadTag(strFileName.c_str()))
@@ -152,7 +152,7 @@ bool CMusicInfoTagLoaderMP3::Load(const CStdString& strFileName, CMusicInfoTag& 
 
 bool CMusicInfoTagLoaderMP3::ReadSeekAndReplayGainInfo(const CStdString &strFileName)
 {
-#ifndef ARMEL_ // TODO this will probably be OK next time we sync to trunk
+#if 0 // TODO this will probably be OK next time we sync to trunk
   // First check for an APEv2 tag
   CAPEv2Tag apeTag;
   if (apeTag.ReadTag(strFileName.c_str()))

@@ -105,6 +105,7 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CStdString& 
     return (IMusicInfoTagLoader*)pTagLoader;
   }
 #endif
+#if 0 // disable APE support
   else if (strExtension == "ape" || strExtension == "mac")
   {
     CMusicInfoTagLoaderApe *pTagLoader = new CMusicInfoTagLoaderApe();
@@ -115,6 +116,7 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const CStdString& 
     CMusicInfoTagLoaderMPC *pTagLoader = new CMusicInfoTagLoaderMPC();
     return (IMusicInfoTagLoader*)pTagLoader;
   }
+#endif
   else if (strExtension == "shn")
   {
     CMusicInfoTagLoaderSHN *pTagLoader = new CMusicInfoTagLoaderSHN();
