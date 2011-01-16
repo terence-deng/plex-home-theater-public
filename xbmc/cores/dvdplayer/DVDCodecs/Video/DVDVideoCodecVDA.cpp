@@ -69,14 +69,14 @@
 */
 
 // missing in 10.4/10.5 SDKs.
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < 1060)
+/*#if (MAC_OS_X_VERSION_MAX_ALLOWED < 1060)
 #include "dlfcn.h"
 enum {
   // component Y'CbCr 8-bit 4:2:2, ordered Cb Y'0 Cr Y'1 .
   kCVPixelFormatType_422YpCbCr8 = FourCharCode('2vuy'),
   kCVPixelFormatType_32BGRA = FourCharCode('BGRA')
 };
-#endif
+#endif*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // http://developer.apple.com/mac/library/technotes/tn2010/tn2267.html
