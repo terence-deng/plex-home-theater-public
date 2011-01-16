@@ -9,6 +9,7 @@
   public domain.
 */
 
+#import <GL/glew.h>
 #import "SDL/SDL.h"
 #import "SDLMain.h"
 #import <sys/param.h> /* for MAXPATHLEN */
