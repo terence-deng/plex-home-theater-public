@@ -4,11 +4,11 @@
 #  A quick and dirty Makefile to download/build and install librtmp
 #
 #  Darwin: librtmp is built as an .so on OSX for the ability to unload it.
-#  10.4u.sdk is targeted so we can run on the AppleTV. Macports is assumed to
+#  10.5.sdk is targeted so we can run on the AppleTV. Macports is assumed to
 #  be used and the required lib depends installed.
 #
 #  Linux: builds using the existing librtmp make system
-#  
+#
 #  Usage:
 #    make
 #    sudo make install
@@ -19,8 +19,8 @@ OSTYPE	= $(shell uname)
 ifeq ($(OSTYPE),Darwin)
   SYS=darwin
   prefix=/opt/local
-  XCFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I /opt/local/include
-  XLDFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -L/opt/local/lib
+  XCFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
+  XLDFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.5.sdk -L/opt/local/lib
   MACHINE = $(shell uname -m)
   ifeq ($(findstring Power,$(MACHINE)), Power)
     arch = ppc
