@@ -40,7 +40,7 @@ def brew(args):
 
 def brew_install(name, options):
     '''Install a forumula using homebrew'''
-    args = ['install', '--universal', name] + options
+    args = ['install', '--32bit', name] + options
     return brew(args)
 
 
@@ -67,6 +67,7 @@ def main():
     if not update_submodules():
         exit(1)
     requirements = [
+        {'name': 'curl'},
         {'name': 'pcre'},
         {'name': 'expat'},
         {'name': 'libiconv', 'link': True},
