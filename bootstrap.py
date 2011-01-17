@@ -76,7 +76,7 @@ def main():
         {'name': 'pkgconfig'},
         {'name': 'lzo'},
         {'name': 'lzo1'},
-        {'name': 'boost', 'options': ['--universal']},
+        {'name': 'boost'},
         {'name': 'fontconfig'},
         {'name': 'jpeg'},
         {'name': 'libtiff'},
