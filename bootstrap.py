@@ -67,7 +67,7 @@ def main():
     if not update_submodules():
         exit(1)
     requirements = [
-        {'name': 'curl'},
+        {'name': 'curl', 'link': True},
         {'name': 'pcre'},
         {'name': 'expat'},
         {'name': 'libiconv', 'link': True},
