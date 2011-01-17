@@ -1,11 +1,11 @@
 #!/usr/bin/python2.3
 """
 This script is used to build the "official unofficial" universal build on
-Mac OS X. It requires Mac OS X 10.4, Xcode 2.2 and the 10.4u SDK to do its
+Mac OS X. It requires Mac OS X 10.5, Xcode 2.2 and the 10.5 SDK to do its
 work.
 
 Please ensure that this script keeps working with Python 2.3, to avoid
-bootstrap issues (/usr/bin/python is Python 2.3 on OSX 10.4)
+bootstrap issues (/usr/bin/python is Python 2.3 on OSX 10.5)
 
 Usage: see USAGE variable in the script.
 """
@@ -65,7 +65,7 @@ DEPSRC=os.path.join(WORKDIR, 'third-party')
 DEPSRC=os.path.expanduser('~/Universal/other-sources')
 
 # Location of the preferred SDK
-SDKPATH="/Developer/SDKs/MacOSX10.4u.sdk"
+SDKPATH="/Developer/SDKs/MacOSX10.5.sdk"
 #SDKPATH="/"
 
 ARCHLIST=('i386', 'ppc',)
@@ -300,10 +300,10 @@ def checkEnvironment():
     """
 
     if platform.system() != 'Darwin':
-        fatal("This script should be run on a Mac OS X 10.4 system")
+        fatal("This script should be run on a Mac OS X 10.5 system")
 
     if platform.release() <= '8.':
-        fatal("This script should be run on a Mac OS X 10.4 system")
+        fatal("This script should be run on a Mac OS X 10.5 system")
 
     if not os.path.exists(SDKPATH):
         fatal("Please install the latest version of Xcode and the %s SDK"%(

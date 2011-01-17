@@ -3,12 +3,8 @@
 #
 #  A quick and dirty Makefile to download/build and install libbluray
 #
-#  Darwin:
-#  10.4u.sdk is targeted so we can run on the AppleTV. Macports is assumed to
-#  be used and the required lib depends installed.
-#
 #  Linux: builds using the existing libbluray make system
-#  
+#
 #  Usage:
 #    make
 #    sudo make install
@@ -21,9 +17,9 @@ OSTYPE	= $(shell uname)
 
 ifeq ($(OSTYPE),Darwin)
   prefix=/opt/local
-  CFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I /opt/local/include
-  LDFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -L/opt/local/lib
-  CPPFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I /opt/local/include
+  CFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
+  LDFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -L/opt/local/lib
+  CPPFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
 else
   prefix=/usr
 endif

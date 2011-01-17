@@ -2019,7 +2019,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = YES;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../../Neptune/Source/Core";
 				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64 armv6";
 				WARNING_CFLAGS = (
@@ -2427,7 +2427,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = YES;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				STRIP_INSTALLED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../../Neptune/Source/Core";
 				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64 armv6";
@@ -2448,7 +2448,7 @@
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Platinum;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SEPARATE_STRIP = NO;
 			};
 			name = Debug;

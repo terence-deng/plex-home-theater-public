@@ -11,8 +11,8 @@ OBJS += hdhomerun_device.o
 
 CFLAGS += -Wall -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith -fPIC
 ifeq ($(findstring osx,$(ARCH)), osx)
-	CFLAGS +=-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4
-	LDFLAGS +=-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4
+	CFLAGS +=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5
+	LDFLAGS +=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5
 endif
 
 SLIBS += -lws2_32
@@ -31,7 +31,7 @@ else
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -shared -o $@ `cat ../../cores/DllLoader/exports/wrapper.def` \
 		../../cores/DllLoader/exports/wrapper.o
 endif
-	
+
 hdhomerun_dll : $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(SLIBS) -Wl,--out-implib,hdhomerun.lib -shared -o hdhomerun.dll
 

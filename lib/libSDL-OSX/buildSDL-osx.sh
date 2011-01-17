@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 # Get ARCH from Makefile.include
 file=../../Makefile.include
@@ -18,7 +18,7 @@ wget http://www.libsdl.org/release/SDL-1.2.13.tar.gz
 tar -xzf SDL-1.2.13.tar.gz
 cd SDL-1.2.13
 patch -p0 <../SDL_SetWidthHeight.diff
-./configure MACOSX_DEPLOYMENT_TARGET=10.4 CFLAGS="-O2 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4" 
+./configure MACOSX_DEPLOYMENT_TARGET=10.5 CFLAGS="-O2 -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5"
 make
 cp build/.libs/libSDL.a ../libSDL-${ARCH}.a
 cd ..
@@ -32,7 +32,7 @@ cd ..
 wget http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.8.tar.gz
 tar -xzf SDL_mixer-1.2.8.tar.gz
 cd SDL_mixer-1.2.8
-./configure MACOSX_DEPLOYMENT_TARGET=10.4 CFLAGS="-O2 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4" --enable-static --disable-shared --disable-music-ogg --disable-music-mp3 --disable-music-mod --disable-music-midi --disable-sdltest
+./configure MACOSX_DEPLOYMENT_TARGET=10.5 CFLAGS="-O2 -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5" --enable-static --disable-shared --disable-music-ogg --disable-music-mp3 --disable-music-mod --disable-music-midi --disable-sdltest
 make
 cp build/.libs/libSDL_mixer.a ../libSDL_mixer-${ARCH}.a
 cd ..

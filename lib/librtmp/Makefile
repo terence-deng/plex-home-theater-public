@@ -19,8 +19,8 @@ OSTYPE	= $(shell uname)
 ifeq ($(OSTYPE),Darwin)
   SYS=darwin
   prefix=/opt/local
-  XCFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
-  XLDFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.5.sdk -L/opt/local/lib
+  XCFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
+  XLDFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -L/opt/local/lib
   MACHINE = $(shell uname -m)
   ifeq ($(findstring Power,$(MACHINE)), Power)
     arch = ppc
