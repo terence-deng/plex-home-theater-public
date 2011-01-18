@@ -25,6 +25,7 @@ AC_DEFUN([XB_FIND_SONAME],
         sed -e 's/ \+SONAME \+//'; done 2> /dev/null )
   else
     AC_MSG_CHECKING([for lib$2 dylib])
+    local_lib_path=$PWD/vendor/homebrew.git/lib
     gcc_lib_path=[`$CC -print-search-dirs 2>/dev/null | fgrep libraries: | sed 's/[^=]*=\(.*\)/\1/' | sed 's/:/ /g'`]
     env_lib_path=[`echo $LDFLAGS | sed 's/-L[ ]*//g'`]
     if test "$cross_compiling" = yes; then
@@ -32,12 +33,13 @@ AC_DEFUN([XB_FIND_SONAME],
     else
       host_lib_path="/usr/lib /usr/local/lib"
     fi
-    for path in $gcc_lib_path $env_lib_path $host_lib_path; do
+    for path in $local_lib_path $gcc_lib_path $env_lib_path $host_lib_path; do
       lib=[`ls -- $path/lib$2.dylib 2>/dev/null`]
-      if test x$lib != x; then
+      if test "x$lib" != "x"; then
         # we want the path/name that is embedded in the dylib
         $1_SONAME=[`otool -L $lib | grep -v lib$2.dylib | grep lib$2 | awk '{V=1; print $V}'`]
         $1_SONAME=[`basename $$1_SONAME`]
+        break
       fi
     done
   fi
