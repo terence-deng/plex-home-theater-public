@@ -425,15 +425,18 @@ fi
 if test "$host_vendor" = "apple" ; then
   AC_SUBST(MACOSX_DEPLOYMENT_TARGET, "10.5")
   # need these in CFLAGS/CXXFLAGS so AC_CHECK_LIB works
-  CFLAGS="$CFLAGS -I/opt/local/include"
-  CXXFLAGS="$CXXFLAGS -I/opt/local/include"
+  CFLAGS="$CFLAGS -arch i386"
+  CFLAGS="$CFLAGS -I$PWD/vendor/homebrew.git/include"
+  CXXFLAGS="$CXXFLAGS -arch i386"
+  CXXFLAGS="$CXXFLAGS -I$PWD/vendor/homebrew.git/include"
   # standard xbmc paths
   INCLUDES="$INCLUDES -I\$(abs_top_srcdir)/xbmc/osx"
+  LDFLAGS="$LDFLAGS -arch i386"
   LDFLAGS="$LDFLAGS -mmacosx-version-min=10.5"
   LDFLAGS="$LDFLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk"
-  LDFLAGS="$LDFLAGS -L/opt/local/lib"
-  LDFLAGS="$LDFLAGS -L/opt/local/lib/mysql5/mysql"
-  LDFLAGS="$LDFLAGS -L/opt/local/lib/samba3"
+  LDFLAGS="$LDFLAGS -L$PWD/vendor/homebrew.git/lib"
+  dnl LDFLAGS="$LDFLAGS -L/opt/local/lib/mysql5/mysql"
+  dnl LDFLAGS="$LDFLAGS -L/opt/local/lib/samba3"
   LIBS="$LIBS -framework IOKit"
   LIBS="$LIBS -framework Cocoa"
   LIBS="$LIBS -framework OpenGL"
