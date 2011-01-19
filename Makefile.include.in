@@ -43,7 +43,7 @@ DEFINES+= \
 	@DEFS@ \
 
 ifeq ($(findstring osx,$(ARCH)), osx)
-	export MACOSX_DEPLOYMENT_TARGET=10.4
+	export MACOSX_DEPLOYMENT_TARGET=10.5
 endif
 
 ifeq ($(ARCH), powerpc-osx)
@@ -119,7 +119,7 @@ $(LIB): $(OBJS)
 pch: $(PCH:.h=.h.gch)
 	for d in $(DIRS); do (cd "$$d"; $(MAKE) pch ); done
 
-clean: 
+clean:
 	$(RM) $(OBJS) *.o $(LIB) $(SLIB) $(CLEAN_FILES) $(PCH:.h=.h.gch) $(OBJS:.o=.P)
 	for d in $(DIRS); do (if test -f "$$d/Makefile"; then ($(MAKE) -C "$$d" clean); fi ); done
 

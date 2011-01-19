@@ -9,7 +9,7 @@ SLIB=../../../addons/visualization.glspectrum/opengl_spectrum.vis
 
 $(SLIB): $(OBJS)
 ifeq ($(findstring osx,$(ARCH)), osx)
-	@export MACOSX_DEPLOYMENT_TARGET=10.4
+	@export MACOSX_DEPLOYMENT_TARGET=10.5
 	$(CXX) $(CXXFLAGS) -bundle -shared -flat_namespace -undefined suppress -o $@ $(OBJS)
 	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 else
