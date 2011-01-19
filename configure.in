@@ -1904,48 +1904,48 @@ XB_CONFIG_MODULE([xbmc/visualizations/Goom/goom2k4-0],[
   fi
 ], [$BUILD_GOOM])
 
-XB_CONFIG_MODULE([xbmc/screensavers/rsxs-0.9/], [
-if expr "X$host_cpu" : 'Xarm.*' > /dev/null; then :; else
-  if test "$host_vendor" = "apple" ; then
-    ./configure \
-      CFLAGS="$CFLAGS" \
-      CXXFLAGS="$CXXFLAGS" \
-      LDFLAGS="-L/opt/local/lib" \
-      LIBS="-lz" \
-      --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib \
-      --without-xscreensaver \
-      --disable-sound \
-      --disable-cyclone \
-      --disable-fieldlines \
-      --disable-flocks \
-      --disable-flux \
-      --disable-helios \
-      --disable-hyperspace \
-      --disable-lattice \
-      --disable-skyrocket
-  else
-    ./configure \
-      CC="$CC" \
-      CXX="$CXX" \
-      CFLAGS="$CFLAGS" \
-      CXXFLAGS="$CXXFLAGS" \
-      --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
-      --host=$host_alias \
-      --build=$build_alias \
-      --target=$target_alias \
-      --without-xscreensaver \
-      --disable-sound \
-      --disable-cyclone \
-      --disable-fieldlines \
-      --disable-flocks \
-      --disable-flux \
-      --disable-helios \
-      --disable-hyperspace \
-      --disable-lattice \
-      --disable-skyrocket
-  fi
-fi
-], [0])
+dnl XB_CONFIG_MODULE([xbmc/screensavers/rsxs-0.9/], [
+dnl if expr "X$host_cpu" : 'Xarm.*' > /dev/null; then :; else
+dnl   if test "$host_vendor" = "apple" ; then
+dnl     ./configure \
+dnl       CFLAGS="$CFLAGS" \
+dnl       CXXFLAGS="$CXXFLAGS" \
+dnl       LDFLAGS="-L/opt/local/lib" \
+dnl       LIBS="-lz" \
+dnl       --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib \
+dnl       --without-xscreensaver \
+dnl       --disable-sound \
+dnl       --disable-cyclone \
+dnl       --disable-fieldlines \
+dnl       --disable-flocks \
+dnl       --disable-flux \
+dnl       --disable-helios \
+dnl       --disable-hyperspace \
+dnl       --disable-lattice \
+dnl       --disable-skyrocket
+dnl   else
+dnl     ./configure \
+dnl       CC="$CC" \
+dnl       CXX="$CXX" \
+dnl       CFLAGS="$CFLAGS" \
+dnl       CXXFLAGS="$CXXFLAGS" \
+dnl       --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
+dnl       --host=$host_alias \
+dnl       --build=$build_alias \
+dnl       --target=$target_alias \
+dnl       --without-xscreensaver \
+dnl       --disable-sound \
+dnl       --disable-cyclone \
+dnl       --disable-fieldlines \
+dnl       --disable-flocks \
+dnl       --disable-flux \
+dnl       --disable-helios \
+dnl       --disable-hyperspace \
+dnl       --disable-lattice \
+dnl       --disable-skyrocket
+dnl   fi
+dnl fi
+dnl ], [0])
 
 XB_CONFIG_MODULE([xbmc/lib/libapetag], [
   if test "$host_vendor" = "apple" ; then
