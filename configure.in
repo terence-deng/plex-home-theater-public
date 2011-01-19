@@ -1611,18 +1611,18 @@ XB_CONFIG_MODULE([xbmc/lib/libPython/Python], [
   fi
 ], [$USE_EXTERNAL_PYTHON])
 
-dnl XB_CONFIG_MODULE([xbmc/cores/paplayer/FLACCodec/flac-1.2.1], [
-dnl   if test "$host_vendor" = "apple" ; then
-dnl     CFLAGS="$CFLAGS -fno-common" \
-dnl     ./configure MACOSX_DEPLOYMENT_TARGET=10.5 -C \
-dnl       --with-pic \
-dnl       --disable-asm-optimizations \
-dnl       --disable-xmms-plugin \
-dnl       --disable-cpplibs \
-dnl       CC="$CC" \
-dnl       CXX="$CXX"
-dnl   fi
-dnl ], [$HOST_NOT_APPLE])
+XB_CONFIG_MODULE([xbmc/cores/paplayer/FLACCodec/flac-1.2.1], [
+  if test "$host_vendor" = "apple" ; then
+    CFLAGS="$CFLAGS -fno-common" \
+    ./configure MACOSX_DEPLOYMENT_TARGET=10.5 -C \
+      --with-pic \
+      --disable-asm-optimizations \
+      --disable-xmms-plugin \
+      --disable-cpplibs \
+      CC="$CC" \
+      CXX="$CXX"
+  fi
+], [$HOST_NOT_APPLE])
 
 dnl XB_CONFIG_MODULE([xbmc/cores/dvdplayer/Codecs/ffmpeg], [
 dnl   if test "$host_vendor" = "apple" ; then
