@@ -21,9 +21,9 @@ endif
 
 $(SLIB): $(SLIBS)
 ifeq ($(findstring osx,$(ARCH)), osx)
-	$(CXX) -bundle -flat_namespace -undefined suppress -shared -fPIC -lpng -L/opt/local/lib \
+	$(CXX) -bundle -flat_namespace -undefined suppress -fPIC -lpng -L/opt/local/lib \
 		-mmacosx-version-min=10.5 -o $@ \
-		CxImage/*.o jasper/*/*.o jbig/*.o jpeg/*.o raw/*.o tiff/*.o
+		CxImage/*.o jasper/*/*.o jbig/*.o jpeg/*.o raw/*.o tiff/*.o $(LDFLAGS)
 	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else

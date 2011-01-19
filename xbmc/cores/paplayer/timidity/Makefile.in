@@ -54,7 +54,7 @@ SLIB=../../../../system/players/paplayer/timidity-@ARCH@.so
 
 $(SLIB): $(OBJS) exports.def
 ifeq ($(findstring osx,$(ARCH)), osx)
-	ld -bundle -undefined dynamic_lookup -o $@ $(OBJS) $(BUNDLE1_O)
+	$(CXX) -bundle -undefined dynamic_lookup -o $@ $(OBJS) $(BUNDLE1_O) $(LDFLAGS)
 	$(RUBY) ../../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else

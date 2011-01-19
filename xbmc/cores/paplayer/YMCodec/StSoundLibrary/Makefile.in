@@ -14,7 +14,7 @@ SLIB=../../../../../system/players/paplayer/stsoundlibrary-@ARCH@.so
 
 $(SLIB): $(OBJS)
 ifeq ($(findstring osx,$(ARCH)), osx)
-	ld -bundle -flat_namespace -undefined suppress -o $@ $(OBJS) $(BUNDLE1_O)
+	$(CXX) -bundle -flat_namespace -undefined suppress -o $@ $(OBJS) $(BUNDLE1_O) $(LDFLAGS)
 	$(RUBY) ../../../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else

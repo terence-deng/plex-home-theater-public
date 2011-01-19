@@ -25,7 +25,7 @@ SLIB=$(SYSDIR)/$(SO)
 
 $(SLIB): $(OBJS)
 ifeq ($(findstring osx,$(ARCH)), osx)
-	$(CC) $(OBJS) -bundle -flat_namespace -undefined suppress -shared -o $@
+	$(CC) $(OBJS) -bundle -flat_namespace -undefined suppress -o $@ $(LDFLAGS)
 	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else

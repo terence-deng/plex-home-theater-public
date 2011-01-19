@@ -11,8 +11,8 @@ CLEAN_FILES=libid3tag/compat.c libid3tag/frametype.c
 
 ifeq ($(findstring osx,$(ARCH)), osx)
 $(SLIB): libid3tag/.libs/libid3tag.dylib
-	$(CXX) $(CFLAGS) -bundle -flat_namespace -undefined suppress -shared -fPIC \
-		-o $@ libid3tag/.libs/*.o
+	$(CXX) $(CFLAGS) -bundle -flat_namespace -undefined suppress -fPIC \
+		-o $@ libid3tag/.libs/*.o $(LDFLAGS)
 	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else
