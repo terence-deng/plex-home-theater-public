@@ -8,12 +8,15 @@
 config.cache
 config.status
 config.log
+xcuserdata
 *.d
 *.depend
 *.pc
 *.P
 *.mode1v3
 *.pbxuser
+*.xcworkspace
+*.perspectivev3
 *.[oa]
 *.l[oa]
 *.so
@@ -25,6 +28,7 @@ config.log
 *.rej
 *.orig
 *.bak
+*.dSYM
 
 # Windows specific generated files
 *.exp
