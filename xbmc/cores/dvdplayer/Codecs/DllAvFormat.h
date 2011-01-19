@@ -44,8 +44,8 @@ extern "C" {
   #endif
   /* libavformat/riff.h is not a public header, so include it here */
   #include <xbmc/cores/dvdplayer/Codecs/ffmpeg/libavformat/riff.h>
-  /* av_read_frame_flush() is defined for us in lib/xbmc-dll-symbols/DllAvFormat.c */
-  void av_read_frame_flush(AVFormatContext *s);
+  /* ff_read_frame_flush() is defined for us in lib/xbmc-dll-symbols/DllAvFormat.c */
+  void ff_read_frame_flush(AVFormatContext *s);
 #else
   #include "libavformat/avformat.h"
   #include "libavformat/riff.h"
@@ -132,7 +132,7 @@ public:
   virtual void av_close_input_file(AVFormatContext *s) { ::av_close_input_file(s); }
   virtual void av_close_input_stream(AVFormatContext *s) { ::av_close_input_stream(s); }
   virtual int av_read_frame(AVFormatContext *s, AVPacket *pkt) { return ::av_read_frame(s, pkt); }
-  virtual void av_read_frame_flush(AVFormatContext *s) { return ::av_read_frame_flush(s); }
+  virtual void av_read_frame_flush(AVFormatContext *s) { return ::ff_read_frame_flush(s); }
   virtual int av_read_play(AVFormatContext *s) { return ::av_read_play(s); }
   virtual int av_read_pause(AVFormatContext *s) { return ::av_read_pause(s); }
   virtual int av_seek_frame(AVFormatContext *s, int stream_index, int64_t timestamp, int flags) { return ::av_seek_frame(s, stream_index, timestamp, flags); }
