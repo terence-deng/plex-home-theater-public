@@ -435,7 +435,7 @@ if test "$host_vendor" = "apple" ; then
   LDFLAGS="$LDFLAGS -mmacosx-version-min=10.5"
   LDFLAGS="$LDFLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk"
   LDFLAGS="$LDFLAGS -L$PWD/vendor/homebrew.git/lib"
-  dnl LDFLAGS="$LDFLAGS -L/opt/local/lib/mysql5/mysql"
+  LDFLAGS="$LDFLAGS -L$PWD/vendor/homebrew.git/lib/mysql"
   dnl LDFLAGS="$LDFLAGS -L/opt/local/lib/samba3"
   LIBS="$LIBS -framework IOKit"
   LIBS="$LIBS -framework Cocoa"
@@ -628,7 +628,7 @@ AS_CASE([x$use_libbluray],
 # platform dependent libraries
 if test "$host_vendor" = "apple" ; then
   AC_CHECK_LIB([iconv],     [main],, AC_MSG_ERROR($missing_library))
-  dnl AC_CHECK_LIB([mysqlclient], [main],, AC_MSG_ERROR($missing_library))
+  AC_CHECK_LIB([mysqlclient], [main],, AC_MSG_ERROR($missing_library))
   dnl AC_CHECK_LIB([smbclient], [main],, AC_MSG_ERROR($missing_library))
   PKG_CHECK_MODULES([VORBISFILE],     [vorbisfile],
     [INCLUDES="$INCLUDES $VORBISFILE_CFLAGS"; LIBS="$LIBS $VORBISFILE_LIBS"],
