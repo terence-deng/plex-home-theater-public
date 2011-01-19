@@ -1,5 +1,6 @@
 
 ARCH=@ARCH@
+RUBY=@RUBY@
 SO=ImageLib-$(ARCH).so
 ARCHIVE=$(SO:.so=.a)
 SYSDIR=../../../system
@@ -23,7 +24,7 @@ ifeq ($(findstring osx,$(ARCH)), osx)
 	$(CXX) -bundle -flat_namespace -undefined suppress -shared -fPIC -lpng -L/opt/local/lib \
 		-mmacosx-version-min=10.5 -o $@ \
 		CxImage/*.o jasper/*/*.o jbig/*.o jpeg/*.o raw/*.o tiff/*.o
-	../../../tools/Mach5/wrapper.rb $@;mv output.so $@
+	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else
 	$(CXX) $(CFLAGS) $(LDFLAGS) -shared -o $(SLIB) -Wl,--whole-archive $(SLIBS) \

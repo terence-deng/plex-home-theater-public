@@ -1,4 +1,5 @@
 ARCH=@ARCH@
+RUBY=@RUBY@
 INCLUDES=-I. -I../../addons/include
 OBJS=Main.o
 SLIB=../../../addons/visualization.projectm/projectM.vis
@@ -8,13 +9,13 @@ CXXFLAGS=-fPIC
 DIRS=libprojectM
 
 ifeq ($(findstring osx,$(ARCH)), osx)
-CXXFLAGS+=-fno-common 
+CXXFLAGS+=-fno-common
 
 $(SLIB): $(OBJS) libprojectM/libprojectM.dylib
 	$(CXX) -bundle -shared -undefined suppress -flat_namespace $(CFLAGS) -o $(SLIB) \
 		./libprojectM/CMakeFiles/projectM.dir/*.o \
 		$(OBJS)
-	../../../tools/Mach5/wrapper.rb $@;mv output.so $@
+	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	$(MAKE) $(PRESETS)
 
 libprojectM/libprojectM.dylib:
@@ -24,7 +25,7 @@ $(SLIB): $(OBJS) libprojectM/libprojectM.so
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) ./libprojectM/CMakeFiles/projectM.dir/*.o -fPIC -shared -o $(SLIB) $(OBJS) `cat ../../cores/DllLoader/exports/wrapper.def` ../../cores/DllLoader/exports/wrapper.o
 	$(MAKE) $(PRESETS)
 
-libprojectM/libprojectM.so: 
+libprojectM/libprojectM.so:
 	$(MAKE) -C libprojectM
 endif
 

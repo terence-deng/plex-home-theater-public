@@ -1,4 +1,5 @@
 ARCH=@ARCH@
+RUBY=@RUBY@
 
 DIRS=libid3tag
 SYSDIR=../../../system
@@ -12,7 +13,7 @@ ifeq ($(findstring osx,$(ARCH)), osx)
 $(SLIB): libid3tag/.libs/libid3tag.dylib
 	$(CXX) $(CFLAGS) -bundle -flat_namespace -undefined suppress -shared -fPIC \
 		-o $@ libid3tag/.libs/*.o
-	../../../tools/Mach5/wrapper.rb $@;mv output.so $@
+	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else
 $(SLIB): libid3tag/.libs/libid3tag.so

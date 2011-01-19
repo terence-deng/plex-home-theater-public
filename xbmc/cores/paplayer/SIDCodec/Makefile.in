@@ -1,4 +1,5 @@
 ARCH=@ARCH@
+RUBY=@RUBY@
 
 CFLAGS +=-D_LINUX -DHAVE_UNIX -DHAVE_STRCASECMP -DHAVE_STRNCASECMP -DHAVE_IOS_OPENMODE -fPIC -Ilibsidplay/win/VC -Ibuilders/resid-builder/include/sidplay/builders -Ilibsidplay/include/sidplay -Iresid -Ilibsidplay/include -I../../../linux -I../../../utils -I../../../ -I../../../../guilib/ -fPIC
 CXXFLAGS += $(CFLAGS)
@@ -14,7 +15,7 @@ $(SLIB): $(OBJS) ../../../linux/XHandle.o
 ifeq ($(findstring osx,$(ARCH)), osx)
 	ld -bundle -flat_namespace -undefined suppress -o $@ \
 		$(OBJS) ../../../linux/XHandle.o $(BUNDLE1_O)
-	../../../../tools/Mach5/wrapper.rb $@;mv output.so $@
+	$(RUBY) ../../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o $@ $(OBJS) ../../../linux/XHandle.o `cat ../../DllLoader/exports/wrapper.def` ../../DllLoader/exports/wrapper.o

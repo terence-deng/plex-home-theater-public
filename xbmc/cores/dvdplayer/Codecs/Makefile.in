@@ -1,11 +1,12 @@
 CC=@CC@
 CXX=@CXX@
 SHELL=/bin/bash
-LDFLAGS=-shared -fPIC -rdynamic
+9LDFLAGS=-shared -fPIC -rdynamic
 ARCH=@ARCH@
+RUBY=@RUBY@
 SYSDIR=../../../../system/players/dvdplayer
 WRAPPER=../../DllLoader/exports/wrapper.o
-WRAPPER_OSX=../../../../tools/Mach5/wrapper.rb
+WRAPPER_OSX=$(RUBY) ../../../../tools/Mach5/wrapper.rb
 DIRS=
 ifneq (@USE_EXTERNAL_FFMPEG@,1)
   DIRS+=ffmpeg

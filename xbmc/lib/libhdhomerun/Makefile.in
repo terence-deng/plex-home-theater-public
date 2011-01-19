@@ -1,4 +1,5 @@
 ARCH=@ARCH@
+RUBY=@RUBY@
 
 OBJS += hdhomerun_pkt.o
 OBJS += hdhomerun_debug.o
@@ -25,7 +26,7 @@ SLIB=$(SYSDIR)/$(SO)
 $(SLIB): $(OBJS)
 ifeq ($(findstring osx,$(ARCH)), osx)
 	$(CC) $(OBJS) -bundle -flat_namespace -undefined suppress -shared -o $@
-	../../../tools/Mach5/wrapper.rb $@;mv output.so $@
+	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 else
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -shared -o $@ `cat ../../cores/DllLoader/exports/wrapper.def` \

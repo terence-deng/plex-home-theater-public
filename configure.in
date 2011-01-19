@@ -1105,6 +1105,10 @@ fi
 AC_CHECK_PROG(HAVE_SVNVERSION,svnversion,"yes","no",)
 AC_CHECK_PROG(HAVE_GIT,git,"yes","no",)
 
+if test "$host_vendor" = "apple" ; then
+   RUBY=/usr/bin/ruby
+fi
+
 # Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
@@ -1512,6 +1516,7 @@ AC_SUBST(LIBOGG_BASENAME)
 AC_SUBST(LIBVORBISENC_BASENAME)
 AC_SUBST(LIBVORBIS_BASENAME)
 AC_SUBST_FILE(XBMC_STANDALONE_SH_PULSE)
+AC_SUBST(RUBY)
 
 # pushd and popd are not available in other shells besides bash, so implement
 # our own pushd/popd functions
