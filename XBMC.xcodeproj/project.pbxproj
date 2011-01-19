@@ -115,31 +115,20 @@
 		74462F3D12E383C400C8B41F /* liblzo2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3C12E383C400C8B41F /* liblzo2.a */; };
 		74462F4112E3840D00C8B41F /* libmad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4012E3840D00C8B41F /* libmad.a */; };
 		74462F4912E3847200C8B41F /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4812E3847200C8B41F /* libfreetype.dylib */; };
-		74462F7912E3853C00C8B41F /* libbz2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F7812E3853C00C8B41F /* libbz2.a */; };
 		7446301612E38A6000C8B41F /* libapetag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC888A110A654000EE1B15 /* libapetag.a */; };
 		7446301712E38A6000C8B41F /* libsquish-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43352CED1071634600706B8A /* libsquish-x86-osx.a */; };
 		7446301812E38A6000C8B41F /* libxbms-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC8816110A4B8900EE1B15 /* libxbms-x86-osx.a */; };
 		744630FA12E38C4F00C8B41F /* librtv-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E256C0D263A1C00618676 /* librtv-x86-osx.a */; };
-		7446319812E3921C00C8B41F /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7446319512E3921C00C8B41F /* json_reader.cpp */; };
-		7446319912E3921C00C8B41F /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7446319612E3921C00C8B41F /* json_value.cpp */; };
-		7446319A12E3921C00C8B41F /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7446319712E3921C00C8B41F /* json_writer.cpp */; };
-		744631C612E3929100C8B41F /* XBMCOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631A912E3929100C8B41F /* XBMCOperations.cpp */; };
-		744631C712E3929100C8B41F /* VideoLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631AB12E3929100C8B41F /* VideoLibrary.cpp */; };
-		744631C812E3929100C8B41F /* TCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631AD12E3929100C8B41F /* TCPServer.cpp */; };
-		744631C912E3929100C8B41F /* SystemOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631AF12E3929100C8B41F /* SystemOperations.cpp */; };
-		744631CA12E3929100C8B41F /* PlaylistOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B112E3929100C8B41F /* PlaylistOperations.cpp */; };
-		744631CB12E3929100C8B41F /* PlayerOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B312E3929100C8B41F /* PlayerOperations.cpp */; };
-		744631CC12E3929100C8B41F /* PicturePlayerOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B512E3929100C8B41F /* PicturePlayerOperations.cpp */; };
-		744631CD12E3929100C8B41F /* JSONRPC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631B912E3929100C8B41F /* JSONRPC.cpp */; };
-		744631CE12E3929100C8B41F /* FileOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631BD12E3929100C8B41F /* FileOperations.cpp */; };
-		744631CF12E3929100C8B41F /* FileItemHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631BF12E3929100C8B41F /* FileItemHandler.cpp */; };
-		744631D012E3929100C8B41F /* AVPlaylistOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631C112E3929100C8B41F /* AVPlaylistOperations.cpp */; };
-		744631D112E3929100C8B41F /* AVPlayerOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631C312E3929100C8B41F /* AVPlayerOperations.cpp */; };
-		744631D212E3929100C8B41F /* AudioLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631C512E3929100C8B41F /* AudioLibrary.cpp */; };
-		744631DC12E392E800C8B41F /* HttpApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631D612E392E800C8B41F /* HttpApi.cpp */; };
-		744631DE12E392E800C8B41F /* XBMChttp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 744631DA12E392E800C8B41F /* XBMChttp.cpp */; };
 		744632D112E3A13F00C8B41F /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 744632D012E3A13F00C8B41F /* libssl.a */; };
 		744632D612E3A23D00C8B41F /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 744632D512E3A23D00C8B41F /* libcrypto.a */; };
+		7464687212E7592B00B2FF1E /* libjsoncpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464687112E7592B00B2FF1E /* libjsoncpp.a */; };
+		7464687F12E7599A00B2FF1E /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464687C12E7599A00B2FF1E /* libavcodec.a */; };
+		7464688012E7599A00B2FF1E /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464687D12E7599A00B2FF1E /* libavformat.a */; };
+		7464688112E7599A00B2FF1E /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464687E12E7599A00B2FF1E /* libavutil.a */; };
+		7464688312E759B300B2FF1E /* libjsonrpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464688212E759B300B2FF1E /* libjsonrpc.a */; };
+		7464688812E759F900B2FF1E /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464688712E759F900B2FF1E /* libswscale.a */; };
+		7464688C12E75A2A00B2FF1E /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464688B12E75A2A00B2FF1E /* libpostproc.a */; };
+		7464689112E75C5300B2FF1E /* libhttpapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A7A6F61128934C0059D6AA /* libhttpapi.a */; };
 		7C2D6AE40F35453E00DD2E85 /* SpecialProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */; };
 		7C45DBE910F325C400D4BBF3 /* DAVDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */; };
 		7C45DD681102AB5100D4BBF3 /* GUIStaticItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C45DD661102AB5100D4BBF3 /* GUIStaticItem.cpp */; };
@@ -913,41 +902,6 @@
 			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
 			remoteInfo = XBMC;
 		};
-		74462FF012E3875D00C8B41F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 74462F7D12E3862F00C8B41F;
-			remoteInfo = libsquish;
-		};
-		74462FFF12E3881E00C8B41F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 74462FFC12E387FC00C8B41F;
-			remoteInfo = libapetag;
-		};
-		7446300D12E389FC00C8B41F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7446300A12E389E900C8B41F;
-			remoteInfo = libXBMS;
-		};
-		744630F612E38C3700C8B41F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 744630F312E38C1E00C8B41F;
-			remoteInfo = libRTV;
-		};
-		7446310212E38CAB00C8B41F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 744630FF12E38C8C00C8B41F;
-			remoteInfo = libhttpapi;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -1128,45 +1082,15 @@
 		74462F3C12E383C400C8B41F /* liblzo2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo2.a; path = vendor/homebrew.git/lib/liblzo2.a; sourceTree = "<group>"; };
 		74462F4012E3840D00C8B41F /* libmad.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmad.a; path = vendor/homebrew.git/lib/libmad.a; sourceTree = "<group>"; };
 		74462F4812E3847200C8B41F /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
-		74462F7812E3853C00C8B41F /* libbz2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbz2.a; path = vendor/homebrew.git/lib/libbz2.a; sourceTree = "<group>"; };
-		7446319512E3921C00C8B41F /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_reader.cpp; path = lib/jsoncpp/jsoncpp/src/lib_json/json_reader.cpp; sourceTree = "<group>"; };
-		7446319612E3921C00C8B41F /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_value.cpp; path = lib/jsoncpp/jsoncpp/src/lib_json/json_value.cpp; sourceTree = "<group>"; };
-		7446319712E3921C00C8B41F /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_writer.cpp; path = lib/jsoncpp/jsoncpp/src/lib_json/json_writer.cpp; sourceTree = "<group>"; };
-		744631A812E3929100C8B41F /* XBMCOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBMCOperations.h; path = xbmc/lib/libjsonrpc/XBMCOperations.h; sourceTree = "<group>"; };
-		744631A912E3929100C8B41F /* XBMCOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XBMCOperations.cpp; path = xbmc/lib/libjsonrpc/XBMCOperations.cpp; sourceTree = "<group>"; };
-		744631AA12E3929100C8B41F /* VideoLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoLibrary.h; path = xbmc/lib/libjsonrpc/VideoLibrary.h; sourceTree = "<group>"; };
-		744631AB12E3929100C8B41F /* VideoLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoLibrary.cpp; path = xbmc/lib/libjsonrpc/VideoLibrary.cpp; sourceTree = "<group>"; };
-		744631AC12E3929100C8B41F /* TCPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCPServer.h; path = xbmc/lib/libjsonrpc/TCPServer.h; sourceTree = "<group>"; };
-		744631AD12E3929100C8B41F /* TCPServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TCPServer.cpp; path = xbmc/lib/libjsonrpc/TCPServer.cpp; sourceTree = "<group>"; };
-		744631AE12E3929100C8B41F /* SystemOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemOperations.h; path = xbmc/lib/libjsonrpc/SystemOperations.h; sourceTree = "<group>"; };
-		744631AF12E3929100C8B41F /* SystemOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SystemOperations.cpp; path = xbmc/lib/libjsonrpc/SystemOperations.cpp; sourceTree = "<group>"; };
-		744631B012E3929100C8B41F /* PlaylistOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlaylistOperations.h; path = xbmc/lib/libjsonrpc/PlaylistOperations.h; sourceTree = "<group>"; };
-		744631B112E3929100C8B41F /* PlaylistOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlaylistOperations.cpp; path = xbmc/lib/libjsonrpc/PlaylistOperations.cpp; sourceTree = "<group>"; };
-		744631B212E3929100C8B41F /* PlayerOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerOperations.h; path = xbmc/lib/libjsonrpc/PlayerOperations.h; sourceTree = "<group>"; };
-		744631B312E3929100C8B41F /* PlayerOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlayerOperations.cpp; path = xbmc/lib/libjsonrpc/PlayerOperations.cpp; sourceTree = "<group>"; };
-		744631B412E3929100C8B41F /* PicturePlayerOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PicturePlayerOperations.h; path = xbmc/lib/libjsonrpc/PicturePlayerOperations.h; sourceTree = "<group>"; };
-		744631B512E3929100C8B41F /* PicturePlayerOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PicturePlayerOperations.cpp; path = xbmc/lib/libjsonrpc/PicturePlayerOperations.cpp; sourceTree = "<group>"; };
-		744631B712E3929100C8B41F /* JSONUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONUtils.h; path = xbmc/lib/libjsonrpc/JSONUtils.h; sourceTree = "<group>"; };
-		744631B812E3929100C8B41F /* JSONRPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONRPC.h; path = xbmc/lib/libjsonrpc/JSONRPC.h; sourceTree = "<group>"; };
-		744631B912E3929100C8B41F /* JSONRPC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JSONRPC.cpp; path = xbmc/lib/libjsonrpc/JSONRPC.cpp; sourceTree = "<group>"; };
-		744631BA12E3929100C8B41F /* ITransportLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITransportLayer.h; path = xbmc/lib/libjsonrpc/ITransportLayer.h; sourceTree = "<group>"; };
-		744631BB12E3929100C8B41F /* IClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IClient.h; path = xbmc/lib/libjsonrpc/IClient.h; sourceTree = "<group>"; };
-		744631BC12E3929100C8B41F /* FileOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOperations.h; path = xbmc/lib/libjsonrpc/FileOperations.h; sourceTree = "<group>"; };
-		744631BD12E3929100C8B41F /* FileOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileOperations.cpp; path = xbmc/lib/libjsonrpc/FileOperations.cpp; sourceTree = "<group>"; };
-		744631BE12E3929100C8B41F /* FileItemHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileItemHandler.h; path = xbmc/lib/libjsonrpc/FileItemHandler.h; sourceTree = "<group>"; };
-		744631BF12E3929100C8B41F /* FileItemHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileItemHandler.cpp; path = xbmc/lib/libjsonrpc/FileItemHandler.cpp; sourceTree = "<group>"; };
-		744631C012E3929100C8B41F /* AVPlaylistOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlaylistOperations.h; path = xbmc/lib/libjsonrpc/AVPlaylistOperations.h; sourceTree = "<group>"; };
-		744631C112E3929100C8B41F /* AVPlaylistOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AVPlaylistOperations.cpp; path = xbmc/lib/libjsonrpc/AVPlaylistOperations.cpp; sourceTree = "<group>"; };
-		744631C212E3929100C8B41F /* AVPlayerOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlayerOperations.h; path = xbmc/lib/libjsonrpc/AVPlayerOperations.h; sourceTree = "<group>"; };
-		744631C312E3929100C8B41F /* AVPlayerOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AVPlayerOperations.cpp; path = xbmc/lib/libjsonrpc/AVPlayerOperations.cpp; sourceTree = "<group>"; };
-		744631C412E3929100C8B41F /* AudioLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioLibrary.h; path = xbmc/lib/libjsonrpc/AudioLibrary.h; sourceTree = "<group>"; };
-		744631C512E3929100C8B41F /* AudioLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioLibrary.cpp; path = xbmc/lib/libjsonrpc/AudioLibrary.cpp; sourceTree = "<group>"; };
-		744631D612E392E800C8B41F /* HttpApi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HttpApi.cpp; path = xbmc/lib/libhttpapi/HttpApi.cpp; sourceTree = "<group>"; };
-		744631D712E392E800C8B41F /* HttpApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpApi.h; path = xbmc/lib/libhttpapi/HttpApi.h; sourceTree = "<group>"; };
-		744631DA12E392E800C8B41F /* XBMChttp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XBMChttp.cpp; path = xbmc/lib/libhttpapi/XBMChttp.cpp; sourceTree = "<group>"; };
-		744631DB12E392E800C8B41F /* XBMChttp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBMChttp.h; path = xbmc/lib/libhttpapi/XBMChttp.h; sourceTree = "<group>"; };
 		744632D012E3A13F00C8B41F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = vendor/homebrew.git/lib/libssl.a; sourceTree = "<group>"; };
 		744632D512E3A23D00C8B41F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = vendor/homebrew.git/lib/libcrypto.a; sourceTree = "<group>"; };
+		7464687112E7592B00B2FF1E /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = lib/jsoncpp/jsoncpp/src/lib_json/libjsoncpp.a; sourceTree = "<group>"; };
+		7464687C12E7599A00B2FF1E /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = vendor/homebrew.git/lib/libavcodec.a; sourceTree = "<group>"; };
+		7464687D12E7599A00B2FF1E /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = vendor/homebrew.git/lib/libavformat.a; sourceTree = "<group>"; };
+		7464687E12E7599A00B2FF1E /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = vendor/homebrew.git/lib/libavutil.a; sourceTree = "<group>"; };
+		7464688212E759B300B2FF1E /* libjsonrpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsonrpc.a; path = xbmc/lib/libjsonrpc/libjsonrpc.a; sourceTree = "<group>"; };
+		7464688712E759F900B2FF1E /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = vendor/homebrew.git/lib/libswscale.a; sourceTree = "<group>"; };
+		7464688B12E75A2A00B2FF1E /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = ../plexbmc.git/vendor/homebrew.git/lib/libpostproc.a; sourceTree = SOURCE_ROOT; };
 		7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpecialProtocol.cpp; sourceTree = "<group>"; };
 		7C2D6AE30F35453E00DD2E85 /* SpecialProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialProtocol.h; sourceTree = "<group>"; };
 		7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAVDirectory.cpp; sourceTree = "<group>"; };
@@ -2897,13 +2821,20 @@
 				74462F3D12E383C400C8B41F /* liblzo2.a in Frameworks */,
 				74462F4112E3840D00C8B41F /* libmad.a in Frameworks */,
 				74462F4912E3847200C8B41F /* libfreetype.dylib in Frameworks */,
-				74462F7912E3853C00C8B41F /* libbz2.a in Frameworks */,
 				7446301612E38A6000C8B41F /* libapetag.a in Frameworks */,
 				7446301712E38A6000C8B41F /* libsquish-x86-osx.a in Frameworks */,
 				7446301812E38A6000C8B41F /* libxbms-x86-osx.a in Frameworks */,
 				744630FA12E38C4F00C8B41F /* librtv-x86-osx.a in Frameworks */,
 				744632D112E3A13F00C8B41F /* libssl.a in Frameworks */,
 				744632D612E3A23D00C8B41F /* libcrypto.a in Frameworks */,
+				7464687212E7592B00B2FF1E /* libjsoncpp.a in Frameworks */,
+				7464687F12E7599A00B2FF1E /* libavcodec.a in Frameworks */,
+				7464688012E7599A00B2FF1E /* libavformat.a in Frameworks */,
+				7464688112E7599A00B2FF1E /* libavutil.a in Frameworks */,
+				7464688312E759B300B2FF1E /* libjsonrpc.a in Frameworks */,
+				7464688812E759F900B2FF1E /* libswscale.a in Frameworks */,
+				7464688C12E75A2A00B2FF1E /* libpostproc.a in Frameworks */,
+				7464689112E75C5300B2FF1E /* libhttpapi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2915,7 +2846,6 @@
 			children = (
 				6E2FACD20E26E92800DF79EA /* Info.plist */,
 				F5B413131065900C0035D105 /* config.h */,
-				7446316012E3911400C8B41F /* Libs */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E96029091FE04C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
@@ -2981,73 +2911,6 @@
 				8DD76F7E0486A8DE00D96B5E /* XBMC */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		7446316012E3911400C8B41F /* Libs */ = {
-			isa = PBXGroup;
-			children = (
-				744631D512E392CA00C8B41F /* libhttpapi */,
-				744631A612E3926800C8B41F /* libjsonrpc */,
-				7446319112E3920D00C8B41F /* jsoncpp */,
-			);
-			name = Libs;
-			sourceTree = "<group>";
-		};
-		7446319112E3920D00C8B41F /* jsoncpp */ = {
-			isa = PBXGroup;
-			children = (
-				7446319512E3921C00C8B41F /* json_reader.cpp */,
-				7446319612E3921C00C8B41F /* json_value.cpp */,
-				7446319712E3921C00C8B41F /* json_writer.cpp */,
-			);
-			name = jsoncpp;
-			sourceTree = "<group>";
-		};
-		744631A612E3926800C8B41F /* libjsonrpc */ = {
-			isa = PBXGroup;
-			children = (
-				744631A812E3929100C8B41F /* XBMCOperations.h */,
-				744631A912E3929100C8B41F /* XBMCOperations.cpp */,
-				744631AA12E3929100C8B41F /* VideoLibrary.h */,
-				744631AB12E3929100C8B41F /* VideoLibrary.cpp */,
-				744631AC12E3929100C8B41F /* TCPServer.h */,
-				744631AD12E3929100C8B41F /* TCPServer.cpp */,
-				744631AE12E3929100C8B41F /* SystemOperations.h */,
-				744631AF12E3929100C8B41F /* SystemOperations.cpp */,
-				744631B012E3929100C8B41F /* PlaylistOperations.h */,
-				744631B112E3929100C8B41F /* PlaylistOperations.cpp */,
-				744631B212E3929100C8B41F /* PlayerOperations.h */,
-				744631B312E3929100C8B41F /* PlayerOperations.cpp */,
-				744631B412E3929100C8B41F /* PicturePlayerOperations.h */,
-				744631B512E3929100C8B41F /* PicturePlayerOperations.cpp */,
-				744631B712E3929100C8B41F /* JSONUtils.h */,
-				744631B812E3929100C8B41F /* JSONRPC.h */,
-				744631B912E3929100C8B41F /* JSONRPC.cpp */,
-				744631BA12E3929100C8B41F /* ITransportLayer.h */,
-				744631BB12E3929100C8B41F /* IClient.h */,
-				744631BC12E3929100C8B41F /* FileOperations.h */,
-				744631BD12E3929100C8B41F /* FileOperations.cpp */,
-				744631BE12E3929100C8B41F /* FileItemHandler.h */,
-				744631BF12E3929100C8B41F /* FileItemHandler.cpp */,
-				744631C012E3929100C8B41F /* AVPlaylistOperations.h */,
-				744631C112E3929100C8B41F /* AVPlaylistOperations.cpp */,
-				744631C212E3929100C8B41F /* AVPlayerOperations.h */,
-				744631C312E3929100C8B41F /* AVPlayerOperations.cpp */,
-				744631C412E3929100C8B41F /* AudioLibrary.h */,
-				744631C512E3929100C8B41F /* AudioLibrary.cpp */,
-			);
-			name = libjsonrpc;
-			sourceTree = "<group>";
-		};
-		744631D512E392CA00C8B41F /* libhttpapi */ = {
-			isa = PBXGroup;
-			children = (
-				744631D612E392E800C8B41F /* HttpApi.cpp */,
-				744631D712E392E800C8B41F /* HttpApi.h */,
-				744631DA12E392E800C8B41F /* XBMChttp.cpp */,
-				744631DB12E392E800C8B41F /* XBMChttp.h */,
-			);
-			name = libhttpapi;
 			sourceTree = "<group>";
 		};
 		744632E812E3A29F00C8B41F /* system */ = {
@@ -5789,6 +5652,8 @@
 		F57E1ED20E36E8FD00700C9D /* internal libs */ = {
 			isa = PBXGroup;
 			children = (
+				7464688212E759B300B2FF1E /* libjsonrpc.a */,
+				7464687112E7592B00B2FF1E /* libjsoncpp.a */,
 				F5DC888A110A654000EE1B15 /* libapetag.a */,
 				F5A7A6F61128934C0059D6AA /* libhttpapi.a */,
 				43352CED1071634600706B8A /* libsquish-x86-osx.a */,
@@ -5804,9 +5669,13 @@
 		F57E1ED30E36E96B00700C9D /* vendor */ = {
 			isa = PBXGroup;
 			children = (
+				7464688B12E75A2A00B2FF1E /* libpostproc.a */,
+				7464688712E759F900B2FF1E /* libswscale.a */,
+				7464687C12E7599A00B2FF1E /* libavcodec.a */,
+				7464687D12E7599A00B2FF1E /* libavformat.a */,
+				7464687E12E7599A00B2FF1E /* libavutil.a */,
 				744632D012E3A13F00C8B41F /* libssl.a */,
 				744632D512E3A23D00C8B41F /* libcrypto.a */,
-				74462F7812E3853C00C8B41F /* libbz2.a */,
 				74462F3C12E383C400C8B41F /* liblzo2.a */,
 				74462F3812E3838D00C8B41F /* libvorbisfile.a */,
 				74462F3012E3830600C8B41F /* libsamplerate.a */,
@@ -5981,79 +5850,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXLegacyTarget section */
-		74462F7D12E3862F00C8B41F /* libsquish */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 74462F8212E3867F00C8B41F /* Build configuration list for PBXLegacyTarget "libsquish" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libsquish;
-			dependencies = (
-			);
-			name = libsquish;
-			passBuildSettingsInEnvironment = 1;
-			productName = libsquish;
-		};
-		74462FFC12E387FC00C8B41F /* libapetag */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 7446300312E3882C00C8B41F /* Build configuration list for PBXLegacyTarget "libapetag" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libapetag;
-			dependencies = (
-			);
-			name = libapetag;
-			passBuildSettingsInEnvironment = 1;
-			productName = libapetag;
-		};
-		7446300A12E389E900C8B41F /* libXBMS */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 7446301312E38A1A00C8B41F /* Build configuration list for PBXLegacyTarget "libXBMS" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libXBMS;
-			dependencies = (
-			);
-			name = libXBMS;
-			passBuildSettingsInEnvironment = 1;
-			productName = libXBMS;
-		};
-		744630F312E38C1E00C8B41F /* libRTV */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 744630FD12E38C5800C8B41F /* Build configuration list for PBXLegacyTarget "libRTV" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libRTV;
-			dependencies = (
-			);
-			name = libRTV;
-			passBuildSettingsInEnvironment = 1;
-			productName = libRTV;
-		};
-		744630FF12E38C8C00C8B41F /* libhttpapi */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 7446310612E38CAD00C8B41F /* Build configuration list for PBXLegacyTarget "libhttpapi" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/jkp/Development/Plex/plexbmc.git/xbmc/lib/libhttpapi;
-			dependencies = (
-			);
-			name = libhttpapi;
-			passBuildSettingsInEnvironment = 1;
-			productName = libhttpapi;
-		};
-/* End PBXLegacyTarget section */
-
 /* Begin PBXNativeTarget section */
 		8DD76F740486A8DE00D96B5E /* XBMC */ = {
 			isa = PBXNativeTarget;
@@ -6065,11 +5861,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				74462FF112E3875D00C8B41F /* PBXTargetDependency */,
-				7446300012E3881E00C8B41F /* PBXTargetDependency */,
-				7446300E12E389FC00C8B41F /* PBXTargetDependency */,
-				744630F712E38C3700C8B41F /* PBXTargetDependency */,
-				7446310312E38CAB00C8B41F /* PBXTargetDependency */,
 			);
 			name = XBMC;
 			productInstallPath = "$(HOME)/bin";
@@ -6098,11 +5889,6 @@
 			targets = (
 				8DD76F740486A8DE00D96B5E /* XBMC */,
 				6E2FACBA0E26DF7A00DF79EA /* XBMC.app */,
-				74462F7D12E3862F00C8B41F /* libsquish */,
-				74462FFC12E387FC00C8B41F /* libapetag */,
-				7446300A12E389E900C8B41F /* libXBMS */,
-				744630F312E38C1E00C8B41F /* libRTV */,
-				744630FF12E38C8C00C8B41F /* libhttpapi */,
 			);
 		};
 /* End PBXProject section */
@@ -6974,24 +6760,6 @@
 				7CDFC2AE12021E9E00E182BC /* AutoPtrHandle.cpp in Sources */,
 				F5E728D01227527D00B152C1 /* DVDInputStreamBluray.cpp in Sources */,
 				7CF1FD6A123E049300B2CBCB /* Variant.cpp in Sources */,
-				7446319812E3921C00C8B41F /* json_reader.cpp in Sources */,
-				7446319912E3921C00C8B41F /* json_value.cpp in Sources */,
-				7446319A12E3921C00C8B41F /* json_writer.cpp in Sources */,
-				744631C612E3929100C8B41F /* XBMCOperations.cpp in Sources */,
-				744631C712E3929100C8B41F /* VideoLibrary.cpp in Sources */,
-				744631C812E3929100C8B41F /* TCPServer.cpp in Sources */,
-				744631C912E3929100C8B41F /* SystemOperations.cpp in Sources */,
-				744631CA12E3929100C8B41F /* PlaylistOperations.cpp in Sources */,
-				744631CB12E3929100C8B41F /* PlayerOperations.cpp in Sources */,
-				744631CC12E3929100C8B41F /* PicturePlayerOperations.cpp in Sources */,
-				744631CD12E3929100C8B41F /* JSONRPC.cpp in Sources */,
-				744631CE12E3929100C8B41F /* FileOperations.cpp in Sources */,
-				744631CF12E3929100C8B41F /* FileItemHandler.cpp in Sources */,
-				744631D012E3929100C8B41F /* AVPlaylistOperations.cpp in Sources */,
-				744631D112E3929100C8B41F /* AVPlayerOperations.cpp in Sources */,
-				744631D212E3929100C8B41F /* AudioLibrary.cpp in Sources */,
-				744631DC12E392E800C8B41F /* HttpApi.cpp in Sources */,
-				744631DE12E392E800C8B41F /* XBMChttp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7002,31 +6770,6 @@
 			isa = PBXTargetDependency;
 			target = 8DD76F740486A8DE00D96B5E /* XBMC */;
 			targetProxy = 6E2FACC30E26E08100DF79EA /* PBXContainerItemProxy */;
-		};
-		74462FF112E3875D00C8B41F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 74462F7D12E3862F00C8B41F /* libsquish */;
-			targetProxy = 74462FF012E3875D00C8B41F /* PBXContainerItemProxy */;
-		};
-		7446300012E3881E00C8B41F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 74462FFC12E387FC00C8B41F /* libapetag */;
-			targetProxy = 74462FFF12E3881E00C8B41F /* PBXContainerItemProxy */;
-		};
-		7446300E12E389FC00C8B41F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7446300A12E389E900C8B41F /* libXBMS */;
-			targetProxy = 7446300D12E389FC00C8B41F /* PBXContainerItemProxy */;
-		};
-		744630F712E38C3700C8B41F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 744630F312E38C1E00C8B41F /* libRTV */;
-			targetProxy = 744630F612E38C3700C8B41F /* PBXContainerItemProxy */;
-		};
-		7446310312E38CAB00C8B41F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 744630FF12E38C8C00C8B41F /* libhttpapi */;
-			targetProxy = 7446310212E38CAB00C8B41F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -7102,8 +6845,18 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11 = "\"$(SRCROOT)/../plexbmc.git/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
@@ -7197,8 +6950,18 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11 = "\"$(SRCROOT)/../plexbmc.git/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
@@ -7230,7 +6993,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg";
@@ -7249,7 +7012,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg";
@@ -7274,111 +7037,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = XBMC.app;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		74462F7E12E3862F00C8B41F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = libsquish;
-			};
-			name = Debug;
-		};
-		74462F7F12E3862F00C8B41F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PRODUCT_NAME = libsquish;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		74462FFD12E387FC00C8B41F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = libapetag;
-			};
-			name = Debug;
-		};
-		74462FFE12E387FC00C8B41F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PRODUCT_NAME = libapetag;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		7446300B12E389E900C8B41F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = libXBMS;
-			};
-			name = Debug;
-		};
-		7446300C12E389E900C8B41F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PRODUCT_NAME = libXBMS;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		744630F412E38C1F00C8B41F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = libRTV;
-			};
-			name = Debug;
-		};
-		744630F512E38C1F00C8B41F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PRODUCT_NAME = libRTV;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		7446310012E38C8C00C8B41F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = libhttpapi;
-			};
-			name = Debug;
-		};
-		7446310112E38C8C00C8B41F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PRODUCT_NAME = libhttpapi;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -7409,51 +7067,6 @@
 			buildConfigurations = (
 				6E2FACBB0E26DF7A00DF79EA /* Debug */,
 				6E2FACBD0E26DF7A00DF79EA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		74462F8212E3867F00C8B41F /* Build configuration list for PBXLegacyTarget "libsquish" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				74462F7E12E3862F00C8B41F /* Debug */,
-				74462F7F12E3862F00C8B41F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7446300312E3882C00C8B41F /* Build configuration list for PBXLegacyTarget "libapetag" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				74462FFD12E387FC00C8B41F /* Debug */,
-				74462FFE12E387FC00C8B41F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7446301312E38A1A00C8B41F /* Build configuration list for PBXLegacyTarget "libXBMS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7446300B12E389E900C8B41F /* Debug */,
-				7446300C12E389E900C8B41F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		744630FD12E38C5800C8B41F /* Build configuration list for PBXLegacyTarget "libRTV" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				744630F412E38C1F00C8B41F /* Debug */,
-				744630F512E38C1F00C8B41F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7446310612E38CAD00C8B41F /* Build configuration list for PBXLegacyTarget "libhttpapi" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7446310012E38C8C00C8B41F /* Debug */,
-				7446310112E38C8C00C8B41F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
