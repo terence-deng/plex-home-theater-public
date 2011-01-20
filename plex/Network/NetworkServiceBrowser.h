@@ -11,7 +11,9 @@
 #include <boost/asio.hpp>
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
 #include <boost/timer.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 
 #include "NetworkInterface.h"
 #include "NetworkServiceBase.h"
@@ -25,8 +27,8 @@ class NetworkServiceBrowser : public NetworkServiceBase
   NetworkServiceBrowser(io_service& ioService, unsigned short port, int refreshTime=NS_BROWSE_REFRESH_INTERVAL)
    : NetworkServiceBase(ioService)
    , m_port(port)
-   , m_timer(ioService, posix_time::milliseconds(10))
-   , m_deletionTimer(ioService, posix_time::milliseconds(1500))
+   , m_timer(ioService, boost::posix_time::milliseconds(10))
+   , m_deletionTimer(ioService, boost::posix_time::milliseconds(1500))
    , m_refreshTime(refreshTime)
   {
     // Add a timer which we'll use to send out search requests.
@@ -88,15 +90,15 @@ class NetworkServiceBrowser : public NetworkServiceBase
     {
       // Yoohoo! Anyone there?
       BOOST_FOREACH(udp_socket_ptr socket, m_sockets)
-        socket->send_to(asio::buffer(msg, msg.size()), broadcastEndpoint);
+        socket->send_to(boost::asio::buffer(msg, msg.size()), broadcastEndpoint);
       
       // Set a timer after which we'll declare services dead.
-      m_deletionTimer.expires_at(m_timer.expires_at() + posix_time::milliseconds(NS_REMOVAL_INTERVAL));
+      m_deletionTimer.expires_at(m_timer.expires_at() + boost::posix_time::milliseconds(NS_REMOVAL_INTERVAL));
       m_deletionTimer.async_wait(boost::bind(&NetworkServiceBrowser::handleDeletionTimeout, this));
     }
     catch (std::exception& e)
     {
-      wprintf("NetworkServiceBrowser: Error sending out discover packet: %s", e.what());
+      printf("NetworkServiceBrowser: Error sending out discover packet: %s", e.what());
     }
   }
   
@@ -188,7 +190,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
     vector<NetworkServicePtr> deleteMe;
     
     {
-      mutex::scoped_lock lk(m_mutex);
+      boost::mutex::scoped_lock lk(m_mutex);
 
       // Look for services older than the deletion interval.
       BOOST_FOREACH(address_service_pair pair, m_services)
@@ -227,7 +229,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
     sendSearch();
     
     // Wait again.
-    m_timer.expires_at(m_timer.expires_at() + posix_time::milliseconds(m_refreshTime));
+    m_timer.expires_at(m_timer.expires_at() + boost::posix_time::milliseconds(m_refreshTime));
     m_timer.async_wait(boost::bind(&NetworkServiceBrowser::handleTimeout, this));
   }
   
@@ -236,7 +238,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
   {
     // Split into lines.
     vector<string> lines;
-    split(lines, data, is_any_of("\r\n"));
+    split(lines, data, boost::is_any_of("\r\n"));
 
     if (lines.size() > 1)
       verb = lines[0];
@@ -252,7 +254,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
       if (line.size() > 0 && line.find(":") != string::npos)
       {
         vector<string> nameValue;
-        split(nameValue, line, is_any_of(":"));
+        split(nameValue, line, boost::is_any_of(":"));
         if (nameValue.size() == 2)
           msg[nameValue[0]] = nameValue[1].substr(1);
       } 
@@ -263,7 +265,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
   
   unsigned short                       m_port;
   vector<udp_socket_ptr>               m_sockets;
-  mutex                                m_mutex;
+  boost::mutex                         m_mutex;
   deadline_timer                       m_timer;
   deadline_timer                       m_deletionTimer;
   int                                  m_refreshTime;

@@ -79,6 +79,9 @@ class DPMSSupport;
 class CSplash;
 class CGUITextLayout;
 
+class PlexApplication;
+typedef boost::shared_ptr<PlexApplication>PlexApplicationPtr;
+
 class CBackgroundPlayer : public CThread
 {
 public:
@@ -396,6 +399,8 @@ protected:
 #ifdef HAS_EVENT_SERVER
   std::map<std::string, std::map<int, float> > m_lastAxisMap;
 #endif
+    
+  PlexApplicationPtr m_plexApp;
 };
 
 extern CApplication& g_application;

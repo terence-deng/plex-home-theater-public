@@ -15,7 +15,7 @@ class NetworkServiceBase
   /// Constructor.
   NetworkServiceBase(boost::asio::io_service& ioService)
     : m_ioService(ioService)
-    , m_timer(ioService, posix_time::seconds(2))
+    , m_timer(ioService, boost::posix_time::seconds(2))
     , m_firstChange(true)
   {
     // Register for network changes.
@@ -78,7 +78,7 @@ class NetworkServiceBase
     {
       // Dispatch the change with a two second delay.
       dprintf("NetworkService: Dispatch network change after two second delay.");
-      m_timer.expires_from_now(posix_time::seconds(2));
+      m_timer.expires_from_now(boost::posix_time::seconds(2));
       m_timer.async_wait(boost::bind(&NetworkServiceBase::handleNetworkChange, this, interfaces));
     }
   }

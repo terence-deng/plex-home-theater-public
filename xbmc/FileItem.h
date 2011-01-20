@@ -53,7 +53,15 @@ class CURL;
 /* special startoffset used to indicate that we wish to resume */
 #define STARTOFFSET_RESUME (-1)
 
+
 class CMediaSource;
+class CFileItem;
+
+/*!
+ \brief A shared pointer to CFileItem
+ \sa CFileItem
+ */
+typedef boost::shared_ptr<CFileItem> CFileItemPtr;
 
 /*!
   \brief Represents a file on a share
@@ -147,6 +155,8 @@ public:
   bool SortsOnTop() const { return m_specialSort == SORT_ON_TOP; }
   bool SortsOnBottom() const { return m_specialSort == SORT_ON_BOTTOM; }
   void SetSpecialSort(SPECIAL_SORT sort) { m_specialSort = sort; }
+  
+  void SetEpisodeData(int total, int watchedCount);
 
   inline bool HasMusicInfoTag() const
   {
@@ -190,6 +200,18 @@ public:
   CStdString GetCachedArtistThumb() const;
   CStdString GetCachedSeasonThumb() const;
   CStdString GetCachedActorThumb() const;
+  CStdString GetCachedProgramFanart() const;
+  
+  CStdString GetCachedPlexMediaServerThumb() const;
+  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path);
+  
+  CStdString GetCachedPlexMediaServerFanart() const;
+  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path);
+  
+  CStdString GetCachedPlexMediaServerBanner() const;
+  
+  static CStdString GetCachedProgramFanart(const CStdString &path);
+  
   /*!
    \brief Get the cached fanart path for this item if it exists
    \return path to the cached fanart for this item, or empty if none exists
@@ -252,6 +274,13 @@ public:
   bool IsSamePath(const CFileItem *item) const;
 
   bool IsAlbum() const;
+  
+  void SetQuickFanart(const CStdString& fanartURL);
+  const CStdString& GetQuickFanart() const { return m_strFanartUrl; }
+  
+  void SetQuickBanner(const CStdString& bannerURL);
+  const CStdString& GetQuickBanner() const { return m_strBannerUrl; }
+  
 private:
   // Gets the previously cached thumb file (with existence checks)
   CStdString GetPreviouslyCachedMusicThumb() const;
@@ -272,7 +301,19 @@ public:
   CStdString m_strLockCode;
   int m_iHasLock; // 0 - no lock 1 - lock, but unlocked 2 - locked
   int m_iBadPwdCount;
+  
+#warning IMPLEMENT THESE
+  bool m_bIsPopupMenuItem;
+  bool m_bIsSearchDir;            // whether to show keyboard & append input as query
+  CStdString m_strSearchPrompt;   // text to show as keyboard header
+  bool m_bIsSettingsDir;
+  int m_iBitrate;
+  bool m_includeStandardContextItems;
+  std::vector<CFileItemPtr> m_contextItems;
+  std::vector<CFileItemPtr> m_mediaItems;
 private:
+  CStdString m_strFanartUrl;
+  CStdString m_strBannerUrl;
 
   SPECIAL_SORT m_specialSort;
   bool m_bIsParentFolder;
@@ -285,12 +326,6 @@ private:
   CPictureInfoTag* m_pictureInfoTag;
   bool m_bIsAlbum;
 };
-
-/*!
-  \brief A shared pointer to CFileItem
-  \sa CFileItem
-  */
-typedef boost::shared_ptr<CFileItem> CFileItemPtr;
 
 /*!
   \brief A vector of pointer to CFileItem
@@ -428,10 +463,32 @@ public:
   const std::vector<SORT_METHOD_DETAILS> &GetSortDetails() const { return m_sortDetails; };
   bool GetReplaceListing() const { return m_replaceListing; };
   void SetReplaceListing(bool replace);
+  bool GetSaveInHistory() const { return m_saveInHistory; }
+  void SetSaveInHistory(bool save) { m_saveInHistory = save; }
   void SetContent(const CStdString &content) { m_content = content; };
   const CStdString &GetContent() const { return m_content; };
+  
+  void SetFirstTitle(const CStdString& title) { m_firstTitle = title; }
+  const CStdString& GetFirstTitle() const { return m_firstTitle; }
+  
+  void SetSecondTitle(const CStdString& title) { m_secondTitle = title; }
+  const CStdString& GetSecondTitle() const { return m_secondTitle; }
+  
+  void SetDefaultViewMode(int viewMode) { m_defaultViewMode = viewMode; }
+  int GetDefaultViewMode() const { return m_defaultViewMode; }
+  
+  void SetDisabledViewModes(const CStdString& viewModes) { m_disabledViewModes = viewModes; }
+  const CStdString& GetDisabledViewModes() const { return m_disabledViewModes; }
 
   void ClearSortState();
+  
+  virtual bool IsPlexMediaServerMusic() const;
+  
+  bool m_wasListingCancelled;
+  bool m_displayMessage;
+  CStdString m_displayMessageTitle;
+  CStdString m_displayMessageContents;
+  int m_autoRefresh;
 private:
   void Sort(FILEITEMLISTCOMPARISONFUNC func);
   void FillSortFields(FILEITEMFILLFUNC func);
@@ -444,7 +501,14 @@ private:
   SORT_ORDER m_sortOrder;
   CACHE_TYPE m_cacheToDisc;
   bool m_replaceListing;
+  bool m_saveInHistory;
   CStdString m_content;
+  
+  CStdString m_firstTitle;
+  CStdString m_secondTitle;
+  
+  int m_defaultViewMode;
+  CStdString m_disabledViewModes;
 
   std::vector<SORT_METHOD_DETAILS> m_sortDetails;
 

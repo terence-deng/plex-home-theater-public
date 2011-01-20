@@ -86,6 +86,8 @@ public:
   IFile *GetImplemenation() { return m_pFile; }
 
   static bool Exists(const CStdString& strFileName, bool bUseCache = true);
+  static bool IsDir(const CStdString& strFileName);
+  static int  Age(const CStdString& strFileName);
   static int  Stat(const CStdString& strFileName, struct __stat64* buffer);
   int Stat(struct __stat64 *buffer);
   static bool Delete(const CStdString& strFileName);

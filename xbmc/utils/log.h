@@ -87,4 +87,8 @@ void _VerifyGLState(const char* szfile, const char* szfunction, int lineno);
 
 void LogGraphicsInfo();
 
+#define dprintf(format, args...) \
+  CLog::Log(LOGDEBUG, format, ## args)
 
+#define eprintf(format, args...) \
+  CLog::Log(LOGERROR, format, ## args)

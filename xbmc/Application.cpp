@@ -267,6 +267,8 @@
   #include "common/IRServerSuite/IRServerSuite.h"
 #endif
 
+#include "plex/PlexApplication.h"
+
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
@@ -525,6 +527,8 @@ bool CApplication::Create()
     }
     g_settings.m_logFolder = "special://masterprofile/";
   }
+  
+  m_plexApp = PlexApplication::Create();
 
 #ifdef HAS_XRANDR
   g_xrandr.LoadCustomModeLinesToAllOutputs();

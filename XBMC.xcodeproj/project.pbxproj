@@ -129,6 +129,15 @@
 		7464688812E759F900B2FF1E /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464688712E759F900B2FF1E /* libswscale.a */; };
 		7464688C12E75A2A00B2FF1E /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464688B12E75A2A00B2FF1E /* libpostproc.a */; };
 		7464689112E75C5300B2FF1E /* libhttpapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A7A6F61128934C0059D6AA /* libhttpapi.a */; };
+		746469F312E82AD700B2FF1E /* PlexApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 746469F212E82AD700B2FF1E /* PlexApplication.cpp */; };
+		74646A2212E82E8F00B2FF1E /* NetworkInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74646A1912E82E8F00B2FF1E /* NetworkInterface.cpp */; };
+		7482B02612E838440077A38C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B02512E838440077A38C /* SystemConfiguration.framework */; };
+		7482B02C12E83A540077A38C /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B02B12E83A540077A38C /* libboost_system-mt.a */; };
+		7482B0EC12E852400077A38C /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B0EB12E852400077A38C /* libboost_thread-mt.a */; };
+		7482B23312E8C1470077A38C /* PlexSourceScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */; };
+		7482B27612E8C5E90077A38C /* PlexDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7482B27412E8C5E90077A38C /* PlexDirectory.cpp */; };
+		7482B37A12E8E3510077A38C /* CocoaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7482B37912E8E3510077A38C /* CocoaUtils.m */; };
+		7482B38B12E8E3CA0077A38C /* CocoaUtilsPlus.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7482B38A12E8E3CA0077A38C /* CocoaUtilsPlus.mm */; };
 		7C2D6AE40F35453E00DD2E85 /* SpecialProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */; };
 		7C45DBE910F325C400D4BBF3 /* DAVDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */; };
 		7C45DD681102AB5100D4BBF3 /* GUIStaticItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C45DD661102AB5100D4BBF3 /* GUIStaticItem.cpp */; };
@@ -1091,6 +1100,25 @@
 		7464688212E759B300B2FF1E /* libjsonrpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsonrpc.a; path = xbmc/lib/libjsonrpc/libjsonrpc.a; sourceTree = "<group>"; };
 		7464688712E759F900B2FF1E /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = vendor/homebrew.git/lib/libswscale.a; sourceTree = "<group>"; };
 		7464688B12E75A2A00B2FF1E /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = ../plexbmc.git/vendor/homebrew.git/lib/libpostproc.a; sourceTree = SOURCE_ROOT; };
+		746469F112E82AD700B2FF1E /* PlexApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexApplication.h; path = plex/PlexApplication.h; sourceTree = "<group>"; };
+		746469F212E82AD700B2FF1E /* PlexApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexApplication.cpp; path = plex/PlexApplication.cpp; sourceTree = "<group>"; };
+		74646A1912E82E8F00B2FF1E /* NetworkInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkInterface.cpp; sourceTree = "<group>"; };
+		74646A1A12E82E8F00B2FF1E /* NetworkInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkInterface.h; sourceTree = "<group>"; };
+		74646A1C12E82E8F00B2FF1E /* NetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkService.h; sourceTree = "<group>"; };
+		74646A1F12E82E8F00B2FF1E /* NetworkServiceBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkServiceBase.h; sourceTree = "<group>"; };
+		74646A2012E82E8F00B2FF1E /* NetworkServiceBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkServiceBrowser.h; sourceTree = "<group>"; };
+		7482B02512E838440077A38C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7482B02B12E83A540077A38C /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "vendor/homebrew.git/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
+		7482B0EB12E852400077A38C /* libboost_thread-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_thread-mt.a"; path = "vendor/homebrew.git/lib/libboost_thread-mt.a"; sourceTree = "<group>"; };
+		7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexSourceScanner.cpp; path = plex/PlexSourceScanner.cpp; sourceTree = "<group>"; };
+		7482B23212E8C1470077A38C /* PlexSourceScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexSourceScanner.h; path = plex/PlexSourceScanner.h; sourceTree = "<group>"; };
+		7482B27412E8C5E90077A38C /* PlexDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexDirectory.cpp; path = plex/FileSystem/PlexDirectory.cpp; sourceTree = "<group>"; };
+		7482B27512E8C5E90077A38C /* PlexDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexDirectory.h; path = plex/FileSystem/PlexDirectory.h; sourceTree = "<group>"; };
+		7482B37712E8E33E0077A38C /* PlexNetworkServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlexNetworkServices.h; sourceTree = "<group>"; };
+		7482B37812E8E3510077A38C /* CocoaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaUtils.h; path = plex/CocoaUtils.h; sourceTree = "<group>"; };
+		7482B37912E8E3510077A38C /* CocoaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CocoaUtils.m; path = plex/CocoaUtils.m; sourceTree = "<group>"; };
+		7482B38912E8E3CA0077A38C /* CocoaUtilsPlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaUtilsPlus.h; path = plex/CocoaUtilsPlus.h; sourceTree = "<group>"; };
+		7482B38A12E8E3CA0077A38C /* CocoaUtilsPlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CocoaUtilsPlus.mm; path = plex/CocoaUtilsPlus.mm; sourceTree = "<group>"; };
 		7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpecialProtocol.cpp; sourceTree = "<group>"; };
 		7C2D6AE30F35453E00DD2E85 /* SpecialProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialProtocol.h; sourceTree = "<group>"; };
 		7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAVDirectory.cpp; sourceTree = "<group>"; };
@@ -2835,6 +2863,9 @@
 				7464688812E759F900B2FF1E /* libswscale.a in Frameworks */,
 				7464688C12E75A2A00B2FF1E /* libpostproc.a in Frameworks */,
 				7464689112E75C5300B2FF1E /* libhttpapi.a in Frameworks */,
+				7482B02612E838440077A38C /* SystemConfiguration.framework in Frameworks */,
+				7482B02C12E83A540077A38C /* libboost_system-mt.a in Frameworks */,
+				7482B0EC12E852400077A38C /* libboost_thread-mt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2857,6 +2888,7 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				746469DE12E827B500B2FF1E /* plex */,
 				E38E13890D25F9F900618676 /* guilib */,
 				E38E14610D25F9F900618676 /* xbmc */,
 			);
@@ -2934,8 +2966,49 @@
 				E38E23900D2626E600618676 /* Foundation.framework */,
 				E38E23910D2626E600618676 /* OpenGL.framework */,
 				09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */,
+				7482B02512E838440077A38C /* SystemConfiguration.framework */,
 			);
 			name = system;
+			sourceTree = "<group>";
+		};
+		746469DE12E827B500B2FF1E /* plex */ = {
+			isa = PBXGroup;
+			children = (
+				7482B37812E8E3510077A38C /* CocoaUtils.h */,
+				7482B37912E8E3510077A38C /* CocoaUtils.m */,
+				7482B38912E8E3CA0077A38C /* CocoaUtilsPlus.h */,
+				7482B38A12E8E3CA0077A38C /* CocoaUtilsPlus.mm */,
+				7482B36B12E8E3220077A38C /* FileSystem */,
+				74646A1812E82E8F00B2FF1E /* Network */,
+				746469F112E82AD700B2FF1E /* PlexApplication.h */,
+				746469F212E82AD700B2FF1E /* PlexApplication.cpp */,
+				7482B23212E8C1470077A38C /* PlexSourceScanner.h */,
+				7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */,
+			);
+			name = plex;
+			sourceTree = "<group>";
+		};
+		74646A1812E82E8F00B2FF1E /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				74646A1912E82E8F00B2FF1E /* NetworkInterface.cpp */,
+				74646A1A12E82E8F00B2FF1E /* NetworkInterface.h */,
+				74646A1C12E82E8F00B2FF1E /* NetworkService.h */,
+				74646A1F12E82E8F00B2FF1E /* NetworkServiceBase.h */,
+				74646A2012E82E8F00B2FF1E /* NetworkServiceBrowser.h */,
+				7482B37712E8E33E0077A38C /* PlexNetworkServices.h */,
+			);
+			name = Network;
+			path = plex/Network;
+			sourceTree = "<group>";
+		};
+		7482B36B12E8E3220077A38C /* FileSystem */ = {
+			isa = PBXGroup;
+			children = (
+				7482B27512E8C5E90077A38C /* PlexDirectory.h */,
+				7482B27412E8C5E90077A38C /* PlexDirectory.cpp */,
+			);
+			name = FileSystem;
 			sourceTree = "<group>";
 		};
 		7C5608C30F1754930056433A /* ExternalPlayer */ = {
@@ -5669,6 +5742,8 @@
 		F57E1ED30E36E96B00700C9D /* vendor */ = {
 			isa = PBXGroup;
 			children = (
+				7482B0EB12E852400077A38C /* libboost_thread-mt.a */,
+				7482B02B12E83A540077A38C /* libboost_system-mt.a */,
 				7464688B12E75A2A00B2FF1E /* libpostproc.a */,
 				7464688712E759F900B2FF1E /* libswscale.a */,
 				7464687C12E7599A00B2FF1E /* libavcodec.a */,
@@ -6760,6 +6835,12 @@
 				7CDFC2AE12021E9E00E182BC /* AutoPtrHandle.cpp in Sources */,
 				F5E728D01227527D00B152C1 /* DVDInputStreamBluray.cpp in Sources */,
 				7CF1FD6A123E049300B2CBCB /* Variant.cpp in Sources */,
+				746469F312E82AD700B2FF1E /* PlexApplication.cpp in Sources */,
+				74646A2212E82E8F00B2FF1E /* NetworkInterface.cpp in Sources */,
+				7482B23312E8C1470077A38C /* PlexSourceScanner.cpp in Sources */,
+				7482B27612E8C5E90077A38C /* PlexDirectory.cpp in Sources */,
+				7482B37A12E8E3510077A38C /* CocoaUtils.m in Sources */,
+				7482B38B12E8E3CA0077A38C /* CocoaUtilsPlus.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6804,6 +6885,7 @@
 				GENERATE_PROFILING_CODE = NO;
 				HEADER_SEARCH_PATHS = (
 					$SRCROOT,
+					plex,
 					guilib,
 					xbmc,
 					xbmc/osx,
@@ -6850,6 +6932,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -6857,6 +6940,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
@@ -6909,6 +6993,7 @@
 				GCC_VERSION = 4.0;
 				HEADER_SEARCH_PATHS = (
 					$SRCROOT,
+					plex,
 					guilib,
 					xbmc,
 					xbmc/osx,
@@ -6955,6 +7040,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -6962,6 +7048,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";

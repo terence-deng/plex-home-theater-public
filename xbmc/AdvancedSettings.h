@@ -271,6 +271,20 @@ class CAdvancedSettings
     DatabaseSettings m_databaseVideo; // advanced video database setup
 
     unsigned int m_cacheMemBufferSize;
+  
+#pragma warning IMPLEMENT THESE
+    int m_secondsToVisualizer;
+    bool m_bVisualizerOnPlay;
+    int m_nowPlayingFlipTime;
+    bool m_bBackgroundMusicOnlyWhenFocused;
+    
+    bool m_bAutoShuffle;
+    bool m_bUseAnamorphicZoom;
+    bool m_bEnableViewRestrictions;
+    bool m_bEnableKeyboardBacklightControl;
+  
+    CStdString m_language;
+    CStdString m_units;
 };
 
 extern CAdvancedSettings g_advancedSettings;

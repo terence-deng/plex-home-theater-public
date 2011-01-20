@@ -1,6 +1,9 @@
 #ifndef _RAR_CONSIO_
 #define _RAR_CONSIO_
 
+#undef eprintf
+#undef dprintf
+
 enum {ALARM_SOUND,ERROR_SOUND,QUESTION_SOUND};
 
 enum PASSWORD_TYPE {PASSWORD_GLOBAL,PASSWORD_FILE,PASSWORD_ARCHIVE};
