@@ -33,6 +33,7 @@ public:
   static bool CreateThumbnail(const CStdString& file, const CStdString& thumbFile, bool checkExistence = false);
   static bool CacheThumb(const CStdString& sourceUrl, const CStdString& destFile);
   static bool CacheFanart(const CStdString& SourceUrl, const CStdString& destFile);
+  static bool CacheBanner(const CStdString& SourceUrl, const CStdString& destFile);
 
 private:
   static bool CacheImage(const CStdString& sourceUrl, const CStdString& destFile, int width, int height);

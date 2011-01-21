@@ -93,6 +93,11 @@ bool CPicture::CacheFanart(const CStdString& sourceUrl, const CStdString& destFi
   return CacheImage(sourceUrl, destFile, width, height);
 }
 
+bool CPicture::CacheBanner(const CStdString& sourceUrl, const CStdString& destFile)
+{
+  return CacheImage(sourceUrl, destFile, 0, 0);
+}
+
 bool CPicture::CreateThumbnailFromMemory(const unsigned char* buffer, int bufSize, const CStdString& extension, const CStdString& thumbFile)
 {
   CLog::Log(LOGINFO, "Creating album thumb from memory: %s", thumbFile.c_str());

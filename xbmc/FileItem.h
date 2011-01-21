@@ -124,6 +124,10 @@ public:
   bool IsXBMS() const;
   bool IsURL() const;
   bool IsDAAP() const;
+  bool IsPlexMediaServer() const;
+  virtual bool IsPlexMediaServerMusic() const;
+  bool IsPlexMediaServerLibrary() const;
+  bool IsWebKit() const;
   bool IsStack() const;
   bool IsMultiPath() const;
   bool IsMusicDb() const;
@@ -156,7 +160,7 @@ public:
   bool SortsOnBottom() const { return m_specialSort == SORT_ON_BOTTOM; }
   void SetSpecialSort(SPECIAL_SORT sort) { m_specialSort = sort; }
   
-  void SetEpisodeData(int total, int watchedCount) {}
+  void SetEpisodeData(int total, int watchedCount);
 
   inline bool HasMusicInfoTag() const
   {
@@ -202,13 +206,13 @@ public:
   CStdString GetCachedActorThumb() const;
   CStdString GetCachedProgramFanart() const;
   
-  CStdString GetCachedPlexMediaServerThumb() const { return ""; }
-  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path) { return ""; }
+  CStdString GetCachedPlexMediaServerThumb() const;
+  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path);
   
-  CStdString GetCachedPlexMediaServerFanart() const { return ""; }
-  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path) { return ""; }
+  CStdString GetCachedPlexMediaServerFanart() const;
+  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path);
   
-  CStdString GetCachedPlexMediaServerBanner() const { return ""; }
+  CStdString GetCachedPlexMediaServerBanner() const;
   
   static CStdString GetCachedProgramFanart(const CStdString &path);
   
@@ -234,6 +238,8 @@ public:
    \sa CacheLocalFanart, GetCachedFanart
    */
   CStdString GetLocalFanart() const;
+  
+  bool CacheBanner() const;
 
   // Sets the cached thumb for the item if it exists
   void SetCachedVideoThumb();
@@ -275,10 +281,10 @@ public:
 
   bool IsAlbum() const;
   
-  void SetQuickFanart(const CStdString& fanartURL) {}
+  void SetQuickFanart(const CStdString& fanartURL);
   const CStdString& GetQuickFanart() const { return m_strFanartUrl; }
   
-  void SetQuickBanner(const CStdString& bannerURL) {}
+  void SetQuickBanner(const CStdString& bannerURL);
   const CStdString& GetQuickBanner() const { return m_strBannerUrl; }
   
 private:
@@ -482,7 +488,7 @@ public:
 
   void ClearSortState();
   
-  virtual bool IsPlexMediaServerMusic() const { return false; }
+  virtual bool IsPlexMediaServerMusic() const;
   
   bool m_wasListingCancelled;
   bool m_displayMessage;

@@ -54,6 +54,7 @@
 #include "utils/RegExp.h"
 #include "utils/log.h"
 #include "karaoke/karaokelyricsfactory.h"
+#include "CocoaUtils.h"
 
 using namespace std;
 using namespace XFILE;
@@ -115,6 +116,19 @@ CFileItem::CFileItem(const CVideoInfoTag& movie)
   *GetVideoInfoTag() = movie;
   FillInDefaultIcon();
   SetCachedVideoThumb();
+  
+  if (!HasThumbnail())
+  {
+    // Try auto-generated thumbnail.
+    CStdString cachedThumb(GetCachedVideoThumb());
+    CStdString strPath, strFileName;
+    CUtil::Split(cachedThumb, strPath, strFileName);
+    
+    // Create unique thumb for auto generated thumbs.
+    cachedThumb = strPath + "auto-" + strFileName;
+    if (CFile::Exists(cachedThumb))
+      SetThumbnailImage(cachedThumb);
+  }
 }
 
 CFileItem::CFileItem(const CArtist& artist)
@@ -148,6 +162,7 @@ CFileItem::CFileItem(const CFileItem& item): CGUIListItem()
   m_musicInfoTag = NULL;
   m_videoInfoTag = NULL;
   m_pictureInfoTag = NULL;
+  Reset();
   *this = item;
 }
 
@@ -176,6 +191,7 @@ CFileItem::CFileItem(const CStdString& strLabel)
   m_musicInfoTag = NULL;
   m_videoInfoTag = NULL;
   m_pictureInfoTag = NULL;
+  m_bIsSearchDir = false;
   Reset();
   SetLabel(strLabel);
 }
@@ -185,6 +201,7 @@ CFileItem::CFileItem(const CStdString& strPath, bool bIsFolder)
   m_musicInfoTag = NULL;
   m_videoInfoTag = NULL;
   m_pictureInfoTag = NULL;
+  m_bIsSearchDir = false;
   Reset();
   m_strPath = strPath;
   m_bIsFolder = bIsFolder;
@@ -225,6 +242,7 @@ CFileItem::~CFileItem(void)
   m_musicInfoTag = NULL;
   m_videoInfoTag = NULL;
   m_pictureInfoTag = NULL;
+  m_contextItems.clear();
 }
 
 const CFileItem& CFileItem::operator=(const CFileItem& item)
@@ -289,6 +307,25 @@ const CFileItem& CFileItem::operator=(const CFileItem& item)
   m_mimetype = item.m_mimetype;
   m_extrainfo = item.m_extrainfo;
   m_specialSort = item.m_specialSort;
+  m_strFanartUrl = item.m_strFanartUrl;
+  m_strBannerUrl = item.m_strBannerUrl;
+  m_bIsPopupMenuItem = item.m_bIsPopupMenuItem;
+  m_bIsSettingsDir = item.m_bIsSettingsDir;
+  m_bIsSearchDir = item.m_bIsSearchDir;
+  m_strSearchPrompt = item.m_strSearchPrompt;
+  m_iBitrate = item.m_iBitrate;
+  m_includeStandardContextItems = item.m_includeStandardContextItems;
+  
+  m_contextItems.clear();
+  for (int i=0; i < item.m_contextItems.size(); ++i)
+  {
+    m_contextItems.push_back(item.m_contextItems[i]);
+  }
+  
+  m_mapProperties.clear();
+  m_mapProperties = item.m_mapProperties;
+  m_mediaItems = item.m_mediaItems;
+  
   return *this;
 }
 
@@ -328,6 +365,20 @@ void CFileItem::Reset()
   m_pictureInfoTag=NULL;
   m_extrainfo.Empty();
   m_specialSort = SORT_NORMALLY;
+  m_strFanartUrl.Empty();
+  m_strBannerUrl.Empty();
+  
+  m_bIsPopupMenuItem = false;
+  m_bIsSettingsDir = false;
+  m_bIsSearchDir = false;
+  m_strSearchPrompt = "";
+  m_iBitrate = 0;
+  m_includeStandardContextItems = true;
+#pragma warning fix this
+  ClearProperties();
+  
+  
+  m_bIsPopupMenuItem = false;
   SetInvalid();
 }
 
@@ -353,7 +404,9 @@ void CFileItem::Serialize(CArchive& ar)
     ar << m_iLockMode;
     ar << m_strLockCode;
     ar << m_iBadPwdCount;
-
+    ar << m_strFanartUrl;
+    ar << m_strBannerUrl;
+    
     ar << m_bCanQueue;
     ar << m_mimetype;
     ar << m_extrainfo;
@@ -380,6 +433,13 @@ void CFileItem::Serialize(CArchive& ar)
     }
     else
       ar << 0;
+    
+    ar << (int)(m_contextItems.size());
+    for (int i=0; i < m_contextItems.size(); ++i)
+    {
+      CFileItemPtr pContextItem = m_contextItems[i];
+      ar << *pContextItem;
+    }
   }
   else
   {
@@ -401,6 +461,8 @@ void CFileItem::Serialize(CArchive& ar)
     m_iLockMode = (LockType)temp;
     ar >> m_strLockCode;
     ar >> m_iBadPwdCount;
+    ar >> m_strFanartUrl;
+    ar >> m_strBannerUrl;
 
     ar >> m_bCanQueue;
     ar >> m_mimetype;
@@ -418,6 +480,19 @@ void CFileItem::Serialize(CArchive& ar)
     ar >> iType;
     if (iType == 1)
       ar >> *GetPictureInfoTag();
+    
+    int iContextMenuSize = 0;
+    ar >> iContextMenuSize;
+    if (iContextMenuSize > 0)
+    {
+      m_contextItems.reserve(iContextMenuSize);
+      for (int i=0; i < iContextMenuSize; ++i)
+      {
+        CFileItemPtr pItem(new CFileItem);
+        ar >> *pItem;
+        m_contextItems.push_back(pItem);
+      }
+    }
 
     SetInvalid();
   }
@@ -456,6 +531,10 @@ bool CFileItem::Exists(bool bUseCache /* = true */) const
 
 bool CFileItem::IsVideo() const
 {
+  string type = GetProperty("album_type");
+  if (type == "episode" || type == "movie")
+    return true;
+  
   /* check preset mime type */
   if( m_mimetype.Left(6).Equals("video/") )
     return true;
@@ -492,6 +571,10 @@ bool CFileItem::IsVideo() const
 
 bool CFileItem::IsAudio() const
 {
+  string type = GetProperty("album_type");
+  if (type == "track")
+    return true;
+  
   /* check preset mime type */
   if( m_mimetype.Left(6).Equals("audio/") )
     return true;
@@ -745,6 +828,59 @@ bool CFileItem::IsDAAP() const
   return CUtil::IsDAAP(m_strPath);
 }
 
+bool CFileItem::IsPlexMediaServer() const
+{
+  return CUtil::IsPlexMediaServer(m_strPath);
+}
+
+bool CFileItem::IsPlexMediaServerLibrary() const
+{
+  if (IsPlexMediaServer() == false)
+    return false;
+  
+  if (m_strPath.Find("/library/parts/") != -1 || 
+      m_strPath.Find("/library/metadata/") != -1 ||
+      m_strPath.Find("/library/sections/") != -1)
+  {
+    return true;
+  }
+  
+  return false;
+}
+
+bool CFileItem::IsPlexMediaServerMusic() const
+{
+  bool ret = false;
+  
+  if (IsPlexMediaServer() == false)
+  {
+    ret = false;
+  }
+  else
+  {
+    // Look for plex://xxx/music.
+    CStdString str = m_strPath;
+    int firstSlash = str.Find('/');
+    firstSlash = str.Find('/', firstSlash + 2);
+    if (firstSlash > 0)
+    {
+      str = str.substr(firstSlash);
+      if (str.Find("/music/") == 0)
+        ret = true;
+    }
+    
+    if (GetProperty("type") == "track")
+      ret = true;
+  }
+  
+  return ret;
+}
+
+bool CFileItem::IsWebKit() const
+{
+  return CUtil::IsWebKit(m_strPath);
+}
+
 bool CFileItem::IsTuxBox() const
 {
   return CUtil::IsTuxBox(m_strPath);
@@ -987,10 +1123,13 @@ void CFileItem::SetLabel(const CStdString &strLabel)
 
 void CFileItem::SetFileSizeLabel()
 {
-  if( m_bIsFolder && m_dwSize == 0 )
-    SetLabel2("");
-  else
-    SetLabel2(StringUtils::SizeToString(m_dwSize));
+  if (!m_bLabelPreformated)
+  {
+    if( m_bIsFolder && m_dwSize == 0 )
+      SetLabel2("");
+    else
+      SetLabel2(StringUtils::SizeToString(m_dwSize));
+  }
 }
 
 CURL CFileItem::GetAsUrl() const
@@ -1026,7 +1165,48 @@ const CStdString& CFileItem::GetMimeType(bool lookup /*= true*/) const
           || m_strPath.Left(7).Equals("http://")
           || m_strPath.Left(8).Equals("https://"))
     {
-      CFileCurl::GetMimeType(GetAsUrl(), m_ref);
+      int start = 0;
+      if (IsPlexMediaServer() && m_strPath.size() > 8 && (start=m_strPath.find("/", 8)))
+      {
+        CStdString path = m_strPath.substr(start);
+        if (path.substr(0, 6) == "/video")
+          m_ref = "video/unknown";
+        else if (path.substr(0, 6) == "/music")
+          m_ref = "audio/unknown";
+      }
+      else if (IsVideo())
+      {
+        m_ref = "video/unknown";
+      }
+      else if (IsAudio())
+      {
+        m_ref = "audio/unknown";
+      }
+      else if (IsPlayList())
+      {
+        CStdString extension = CUtil::GetExtension(m_strPath);
+        extension.MakeLower();
+        
+        if (extension == ".m3u" || extension == ".strm")
+          m_ref = "audio/mpegurl";
+        
+        if (extension == ".pls")
+          m_ref = "audio/scpls";
+        
+        if (extension == ".wpl")
+          m_ref = "application/vnd.ms-wpl";
+        
+        if (extension == ".asx")
+          m_ref = "video/x-ms-asf";
+        
+        if (extension == ".ram")
+          m_ref = "audio/x-pn-realaudio";
+      }
+      else
+      {
+        // Last chance, slow...
+        CFileCurl::GetMimeType(GetAsUrl(), m_ref);
+      }
 
       // try to get mime-type again but with an NSPlayer User-Agent
       // in order for server to provide correct mime-type.  Allows us
@@ -1111,6 +1291,13 @@ CFileItemList::CFileItemList()
   m_sortMethod=SORT_METHOD_NONE;
   m_sortOrder=SORT_ORDER_NONE;
   m_replaceListing = false;
+  m_saveInHistory = true;
+  m_wasListingCancelled = false;
+  m_displayMessage = false;
+  m_displayMessageTitle = "";
+  m_displayMessageContents = "";
+  m_iBitrate = 0;
+  m_autoRefresh = 0;
 }
 
 CFileItemList::CFileItemList(const CStdString& strPath)
@@ -1122,6 +1309,13 @@ CFileItemList::CFileItemList(const CStdString& strPath)
   m_sortMethod=SORT_METHOD_NONE;
   m_sortOrder=SORT_ORDER_NONE;
   m_replaceListing = false;
+  m_saveInHistory = true;
+  m_wasListingCancelled = false;
+  m_displayMessage = false;
+  m_displayMessageTitle = "";
+  m_displayMessageContents = "";
+  m_iBitrate = 0;
+  m_autoRefresh = 0;
 }
 
 CFileItemList::~CFileItemList()
@@ -1196,7 +1390,18 @@ void CFileItemList::Clear()
   m_cacheToDisc=CACHE_IF_SLOW;
   m_sortDetails.clear();
   m_replaceListing = false;
+  m_saveInHistory = true;
   m_content.Empty();
+  m_firstTitle.Empty();
+  m_secondTitle.Empty();
+  m_defaultViewMode = 0;
+  m_disabledViewModes.Empty();
+  m_wasListingCancelled = false;
+  m_displayMessage = false;
+  m_displayMessageTitle = "";
+  m_displayMessageContents = "";
+  m_iBitrate = 0;
+  m_autoRefresh = 0;
 }
 
 void CFileItemList::ClearItems()
@@ -1296,9 +1501,21 @@ void CFileItemList::Assign(const CFileItemList& itemlist, bool append)
   m_strPath = itemlist.m_strPath;
   m_sortDetails = itemlist.m_sortDetails;
   m_replaceListing = itemlist.m_replaceListing;
+  m_saveInHistory = itemlist.m_saveInHistory;
   m_content = itemlist.m_content;
   m_mapProperties = itemlist.m_mapProperties;
   m_cacheToDisc = itemlist.m_cacheToDisc;
+  
+  m_firstTitle = itemlist.m_firstTitle;
+  m_secondTitle = itemlist.m_secondTitle;
+  m_defaultViewMode = itemlist.m_defaultViewMode;
+  m_disabledViewModes = itemlist.m_disabledViewModes;
+  m_wasListingCancelled = itemlist.m_wasListingCancelled;
+  m_displayMessage = itemlist.m_displayMessage;
+  m_displayMessageTitle = itemlist.m_displayMessageTitle;
+  m_displayMessageContents = itemlist.m_displayMessageContents;
+  m_iBitrate = itemlist.m_iBitrate;
+  m_autoRefresh = itemlist.m_autoRefresh;
 }
 
 bool CFileItemList::Copy(const CFileItemList& items)
@@ -1586,6 +1803,11 @@ void CFileItemList::Serialize(CArchive& ar)
     }
 
     ar << m_content;
+    ar << m_firstTitle;
+    ar << m_secondTitle;
+    ar << m_defaultViewMode;
+    ar << m_disabledViewModes;
+    ar << (int)m_autoRefresh;
 
     for (; i < (int)m_items.size(); ++i)
     {
@@ -1649,6 +1871,11 @@ void CFileItemList::Serialize(CArchive& ar)
     }
 
     ar >> m_content;
+    ar >> m_firstTitle;
+    ar >> m_secondTitle;
+    ar >> m_defaultViewMode;
+    ar >> m_disabledViewModes;
+    ar >> (int&)m_autoRefresh;
 
     for (int i = 0; i < iSize; ++i)
     {
@@ -1667,7 +1894,22 @@ void CFileItemList::FillInDefaultIcons()
   for (int i = 0; i < (int)m_items.size(); ++i)
   {
     CFileItemPtr pItem = m_items[i];
-    pItem->FillInDefaultIcon();
+    if (Cocoa_IsAppBundle(pItem->m_strPath.c_str()))
+    {
+      pItem->SetThumbnailImage(Cocoa_GetAppIcon(pItem->m_strPath));
+      CStdString itemLabel = pItem->GetLabel();
+      CUtil::RemoveExtension(itemLabel);
+      pItem->SetLabel(itemLabel);
+    }
+		else if (Cocoa_IsWflowBundle(pItem->m_strPath.c_str()))
+    {
+      pItem->SetThumbnailImage(Cocoa_GetIconFromBundle("/Applications/Automator.app", "AutomatorDocument"));
+      CStdString itemLabel = pItem->GetLabel();
+      CUtil::RemoveExtension(itemLabel);
+      pItem->SetLabel(itemLabel);
+    }
+    else
+      pItem->FillInDefaultIcon();
   }
 }
 
@@ -2439,6 +2681,17 @@ void CFileItem::SetUserMusicThumb(bool alwaysCheckRemote /* = false */)
 
 CStdString CFileItem::GetCachedVideoThumb() const
 {
+#pragma warning this needs fixing
+  /*
+   if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)
+   {
+   // For Plex Media Server thumbs, use the thumb path, because multiple items can refer to the same thumb.
+   crc.ComputeFromLowerCase(m_strThumbnailImage);
+   root = g_settings.GetPlexMediaServerThumbFolder();
+   }
+   */
+  
+  
   if (IsStack())
     return GetCachedThumb(CStackDirectory::GetFirstStackedFile(m_strPath),g_settings.GetVideoThumbFolder(),true);
   else if (IsVideoDb() && HasVideoInfoTag())
@@ -2654,6 +2907,17 @@ void CFileItem::SetUserVideoThumb()
   SetCachedVideoThumb();
 }
 
+bool CFileItem::CacheBanner() const
+{
+  if (m_strBannerUrl.size() > 0)
+  {
+    CStdString localBanner = GetCachedPlexMediaServerBanner();
+    if (CFile::Exists(localBanner) == false)
+      return CPicture::CacheBanner(m_strBannerUrl, localBanner);
+  }
+  return false;
+}
+
 bool CFileItem::CacheLocalFanart() const
 {
   // first check for an already cached fanart image
@@ -2776,11 +3040,27 @@ CStdString CFileItem::GetCachedThumb(const CStdString &path, const CStdString &p
   Crc32 crc;
   crc.ComputeFromLowerCase(path);
 
-  CStdString thumb;
+  CStdString thumb,root;
   if (split)
   {
     CStdString hex;
     hex.Format("%08x", (__int32)crc);
+    
+#pragma warning needs fixing
+    // For Plex Media Server thumbs, use the thumb path, because multiple items can refer to the same thumb.
+    /*if (IsPlexMediaServer() || CUtil::IsPlexMediaServer(m_strThumbnailImage))
+    {
+      crc.ComputeFromLowerCase(m_strThumbnailImage);
+      root = g_settings.GetPlexMediaServerThumbFolder();
+    }
+    else
+    {
+      crc.ComputeFromLowerCase(m_strPath);
+      root = g_settings.GetPicturesThumbFolder();
+    }
+    
+    thumb.Format("%s\\%c\\%s.tbn", root.c_str(), hex[0], hex.c_str());*/
+    
     thumb.Format("%c\\%08x.tbn", hex[0], (unsigned __int32)crc);
   }
   else
@@ -2916,6 +3196,14 @@ void CFileItemList::ClearSortState()
   m_sortOrder=SORT_ORDER_NONE;
 }
 
+bool CFileItemList::IsPlexMediaServerMusic() const
+{
+  if (GetContent() == "track" || GetContent() == "songs")
+    return true;
+  
+  return CFileItem::IsPlexMediaServerMusic();
+}
+
 CVideoInfoTag* CFileItem::GetVideoInfoTag()
 {
   if (!m_videoInfoTag)
@@ -2938,6 +3226,42 @@ MUSIC_INFO::CMusicInfoTag* CFileItem::GetMusicInfoTag()
     m_musicInfoTag = new MUSIC_INFO::CMusicInfoTag;
 
   return m_musicInfoTag;
+}
+
+void CFileItem::SetEpisodeData(int total, int watchedCount)
+{
+  SetProperty("watchedepisodes", watchedCount);
+  SetProperty("unwatchedepisodes", total - watchedCount);
+  
+  if (total - watchedCount == 1)
+    SetProperty("singularepisodecount", 1);
+  else if (total == 1)
+    SetProperty("singularepisodecount", 1);
+  else
+    ClearProperty("singularepisodecount");
+  
+  if (total - watchedCount == 0)
+    SetProperty("zeroepisodecount", 1);
+  else
+    ClearProperty("zeroepisodecount");
+}
+
+void CFileItem::SetQuickFanart(const CStdString& fanartURL)
+{
+  m_strFanartUrl = fanartURL;
+  
+  // See if it's already cached, and the cached version isn't too old.
+  if (CFile::Exists(GetCachedPlexMediaServerFanart()))
+    SetProperty("fanart_image", GetCachedPlexMediaServerFanart());
+}
+
+void CFileItem::SetQuickBanner(const CStdString& bannerURL)
+{
+  m_strBannerUrl = bannerURL;
+  
+  // See if it's already cached, and the cached version isn't too old.
+  if (CFile::Exists(GetCachedPlexMediaServerBanner()))
+    SetProperty("banner_image", GetCachedPlexMediaServerBanner());
 }
 
 CStdString CFileItem::FindTrailer() const
