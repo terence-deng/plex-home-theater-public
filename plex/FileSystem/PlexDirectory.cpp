@@ -1510,7 +1510,7 @@ void CPlexDirectory::Process()
   url.SetProtocol(protocol);
 
   CStdString content = m_http.GetContent();
-  if (content.Equals("text/xml;charset=utf-8") == false && content.Equals("application/xml") == false)
+  if (false && content.Equals("text/xml;charset=utf-8") == false && content.Equals("application/xml") == false)
   {
     CLog::Log(LOGERROR, "=====================================================================================");
     CLog::Log(LOGERROR, "%s - Invalid content type %s for %s", __FUNCTION__, content.c_str(), m_url.c_str());

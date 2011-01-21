@@ -35,7 +35,7 @@
 using namespace std;
 using namespace XFILE;
 
-#define MAIN_MENU         300
+#define MAIN_MENU         9000 // THIS WAS 300 for Plex skin.
 
 CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
   , m_lastSelectedItem(-1)
@@ -60,7 +60,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(MAIN_MENU);
     m_lastSelectedItem = control->GetSelectedItem();
   }
-  
+
   bool ret = CGUIWindow::OnMessage(message);
   
   switch (message.GetMessage())
