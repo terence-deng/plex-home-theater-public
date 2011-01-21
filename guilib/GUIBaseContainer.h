@@ -83,6 +83,10 @@ public:
 
   void SetStaticContent(const std::vector<CGUIListItemPtr> &items);
   
+  std::vector<CGUIListItemPtr>& GetStaticItems() { return m_staticItems; };
+  CGUIListItem* GetLastItem() const { return m_lastItem; }
+  void SetLastItem(CGUIListItem* lastItem) { m_lastItem = lastItem; }
+  
   /*! \brief Set the offset of the first item in the container from the container's position
    Useful for lists/panels where the focused item may be larger than the non-focused items and thus
    normally cut off from the clipping window defined by the container's position + size.

@@ -29,4 +29,9 @@ class CGUIWindowHome :
 public:
   CGUIWindowHome(void);
   virtual ~CGUIWindowHome(void);
+  
+private:
+  virtual bool OnMessage(CGUIMessage& message);
+  
+  int m_lastSelectedItem;
 };
