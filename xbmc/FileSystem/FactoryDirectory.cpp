@@ -87,6 +87,7 @@
 #include "DirectoryTuxBox.h"
 #include "HDHomeRun.h"
 #include "MythDirectory.h"
+#include "PlexDirectory.h"
 #include "FileItem.h"
 #include "URL.h"
 #include "RSSDirectory.h"
@@ -117,6 +118,11 @@ IDirectory* CFactoryDirectory::Create(const CStdString& strPath)
   CStdString strProtocol = url.GetProtocol();
 
   if (strProtocol.size() == 0 || strProtocol == "file") return new CHDDirectory();
+  
+  // Two cases for Plex
+  if (strProtocol == "plex") return new CPlexDirectory();
+  if (strProtocol == "http" && url.GetPort() == 32400) return new CPlexDirectory();
+  
   if (strProtocol == "special") return new CSpecialProtocolDirectory();
   if (strProtocol == "addons") return new CAddonsDirectory();
 #if defined(HAS_FILESYSTEM_CDDA) && defined(HAS_DVD_DRIVE)
