@@ -26,6 +26,7 @@
 #include "FileSystem/File.h"
 #include "FileItem.h"
 #include "GUIBaseContainer.h"
+#include "GUIStaticItem.h"
 #include "GUIWindowHome.h"
 #include "GUIWindowManager.h"
 #include "GUIUserMessages.h"
@@ -110,7 +111,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       int id = 1000;
       BOOST_FOREACH(CFileItemPtr item, newItems)
       {
-        CFileItemPtr newItem = CFileItemPtr(new CFileItem(item->GetLabel()));
+        CFileItemPtr newItem = CFileItemPtr(new CGUIStaticItem());
+        newItem->SetLabel(item->GetLabel());
         newItem->SetProperty("plex", "1");
         
         CStdString sectionName = item->GetLabel();
@@ -118,9 +120,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           newItem->SetLabel2(item->GetLabel2());
        
         if (item->GetProperty("type") == "artist")
-          newItem->m_strPath = "Plex.ActivateWindow(MyMusicFiles," + item->m_strPath + ",return)";
+          newItem->m_strPath = "XBMC.ActivateWindow(MyMusicFiles," + item->m_strPath + ",return)";
         else
-          newItem->m_strPath = "Plex.ActivateWindow(MyVideoFiles," + item->m_strPath + ",return)";
+          newItem->m_strPath = "XBMC.ActivateWindow(MyVideoFiles," + item->m_strPath + ",return)";
         
         newItem->m_idepth = 0;
         newItem->SetQuickFanart(item->GetQuickFanart());

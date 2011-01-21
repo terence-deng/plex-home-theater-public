@@ -57,6 +57,7 @@ public:
    \param element XML element to construct from
    \param contextWindow window context to use for any info labels
    */
+  CGUIStaticItem() {}
   CGUIStaticItem(const TiXmlElement *element, int contextWindow);
   virtual ~CGUIStaticItem() {};
   virtual CGUIListItem *Clone() const { return new CGUIStaticItem(*this); };
