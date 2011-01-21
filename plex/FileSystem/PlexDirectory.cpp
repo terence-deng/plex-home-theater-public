@@ -38,7 +38,11 @@ using namespace XFILE;
 #define MAX_THUMBNAIL_AGE (3600*24*2)
 #define MAX_FANART_AGE    (3600*24*7)
 
-extern bool Cocoa_IsHostLocal(const string& host);
+bool Cocoa_IsHostLocal(const string& host)
+{
+  // FIXME.
+  return false;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CPlexDirectory::CPlexDirectory(bool parseResults, bool displayDialog)
@@ -149,7 +153,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
 
   // See if the item is too old.
   string cachedFile(CFileItem::GetCachedPlexMediaServerThumb(strFanart));
-  if (CFile::Age(cachedFile) > MAX_FANART_AGE)
+  if (false) // FIMXE - if (CFile::Age(cachedFile) > MAX_FANART_AGE)
     CFile::Delete(cachedFile);
   
   // Walk the parsed tree.
@@ -1489,7 +1493,7 @@ void CPlexDirectory::Process()
 
   // Set request headers.
   m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
-  m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage());
+  //m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); FIXME
   m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
   m_http.SetRequestHeader("X-Plex-Client-Capabilities", "protocols=shoutcast,webkit,http-video,spiff");
   
@@ -1570,7 +1574,7 @@ string CPlexDirectory::ProcessMediaElement(const string& parentPath, const char*
     {
       // See if the item is too old.
       string cachedFile(CFileItem::GetCachedPlexMediaServerThumb(strMedia));
-      if (CFile::Age(cachedFile) > maxAge)
+      if (false) // FIXME - if (CFile::Age(cachedFile) > maxAge)
         CFile::Delete(cachedFile);
     }
     

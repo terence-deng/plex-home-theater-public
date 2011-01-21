@@ -156,7 +156,7 @@ public:
   bool SortsOnBottom() const { return m_specialSort == SORT_ON_BOTTOM; }
   void SetSpecialSort(SPECIAL_SORT sort) { m_specialSort = sort; }
   
-  void SetEpisodeData(int total, int watchedCount);
+  void SetEpisodeData(int total, int watchedCount) {}
 
   inline bool HasMusicInfoTag() const
   {
@@ -202,13 +202,13 @@ public:
   CStdString GetCachedActorThumb() const;
   CStdString GetCachedProgramFanart() const;
   
-  CStdString GetCachedPlexMediaServerThumb() const;
-  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path);
+  CStdString GetCachedPlexMediaServerThumb() const { return ""; }
+  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path) { return ""; }
   
-  CStdString GetCachedPlexMediaServerFanart() const;
-  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path);
+  CStdString GetCachedPlexMediaServerFanart() const { return ""; }
+  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path) { return ""; }
   
-  CStdString GetCachedPlexMediaServerBanner() const;
+  CStdString GetCachedPlexMediaServerBanner() const { return ""; }
   
   static CStdString GetCachedProgramFanart(const CStdString &path);
   
@@ -275,10 +275,10 @@ public:
 
   bool IsAlbum() const;
   
-  void SetQuickFanart(const CStdString& fanartURL);
+  void SetQuickFanart(const CStdString& fanartURL) {}
   const CStdString& GetQuickFanart() const { return m_strFanartUrl; }
   
-  void SetQuickBanner(const CStdString& bannerURL);
+  void SetQuickBanner(const CStdString& bannerURL) {}
   const CStdString& GetQuickBanner() const { return m_strBannerUrl; }
   
 private:
@@ -482,7 +482,7 @@ public:
 
   void ClearSortState();
   
-  virtual bool IsPlexMediaServerMusic() const;
+  virtual bool IsPlexMediaServerMusic() const { return false; }
   
   bool m_wasListingCancelled;
   bool m_displayMessage;

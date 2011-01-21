@@ -16,7 +16,7 @@
 #include "GUIWindowManager.h"
 #include "GUIUserMessages.h"
 
-//map<std::string, HostSourcesPtr> CPlexSourceScanner::g_hostSourcesMap;
+map<std::string, HostSourcesPtr> CPlexSourceScanner::g_hostSourcesMap;
 CCriticalSection CPlexSourceScanner::g_lock;
 int CPlexSourceScanner::g_activeScannerCount = 0;
 
