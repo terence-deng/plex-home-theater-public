@@ -216,7 +216,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
     {
       pItem->SetQuickFanart(strFanart);
       
-      if (strFanart.find("32400/:/resources") != -1)
+      if (strFanart.find("32400/:/resources") != string::npos)
         pItem->SetProperty("fanart_fallback", "1");
     }
     
@@ -647,11 +647,11 @@ class PlexMediaNode
      strDirLabel = "%B";
      strSecondDirLabel = "%Y";
      
-     if (strPath.find("/Albums") != -1)
+     if (strPath.find("/Albums") != string::npos)
        strDirLabel = "%B - %A";
-     else if (strPath.find("/Recently%20Played/By%20Artist") != -1 || strPath.find("/Most%20Played/By%20Artist") != -1)
+     else if (strPath.find("/Recently%20Played/By%20Artist") != string::npos || strPath.find("/Most%20Played/By%20Artist") != string::npos)
        strDirLabel = "%B";
-     else if (strPath.find("/Decades/") != -1 || strPath.find("/Recently%20Added") != -1 || strPath.find("/Most%20Played") != -1 || strPath.find("/Recently%20Played/") != -1 || strPath.find("/Genre/") != -1)
+     else if (strPath.find("/Decades/") != string::npos || strPath.find("/Recently%20Added") != string::npos || strPath.find("/Most%20Played") != string::npos || strPath.find("/Recently%20Played/") != string::npos || strPath.find("/Genre/") != string::npos)
        strDirLabel = "%A - %B";
    }
    
@@ -784,7 +784,7 @@ class PlexMediaNodeLibrary : public PlexMediaNode
       {
         ret = localPath = "stack://";
         
-        for (int i=0; i<urls.size(); i++)
+        for (unsigned int i=0; i<urls.size(); i++)
         {
           ret += urls[i];
           localPath += localPaths[i];
@@ -1290,15 +1290,15 @@ class PlexMediaTrack : public PlexMediaNode
     if (m_hasBitrate == true && m_hasDuration == false)
       strSecondFileLabel = "%B kbps";
     
-    if (strPath.find("/Artists/") != -1 || strPath.find("/Genre/") != -1 || strPath.find("/Albums/") != -1 || 
-        strPath.find("/Recently%20Played/By%20Album/") != -1 || strPath.find("Recently%20Played/By%20Artist") != -1 ||
-        strPath.find("/Recently%20Added/") != -1)
+    if (strPath.find("/Artists/") != string::npos || strPath.find("/Genre/") != string::npos || strPath.find("/Albums/") != string::npos || 
+        strPath.find("/Recently%20Played/By%20Album/") != string::npos || strPath.find("Recently%20Played/By%20Artist") != string::npos ||
+        strPath.find("/Recently%20Added/") != string::npos)
       strFileLabel = "%N - %T";
-    else if (strPath.find("/Compilations/") != -1)
+    else if (strPath.find("/Compilations/") != string::npos)
       strFileLabel = "%N - %A - %T";
-    else if (strPath.find("/Tracks/") != -1)
+    else if (strPath.find("/Tracks/") != string::npos)
       strFileLabel = "%T - %A";
-    else if (strPath.find("/Podcasts/") != -1)
+    else if (strPath.find("/Podcasts/") != string::npos)
       strFileLabel = "%T";
     else
       strFileLabel = "%A - %T";
@@ -1521,7 +1521,7 @@ void CPlexDirectory::Process()
   else
   {
     int size_read = 0;  
-    int size_total = (int)m_http.GetLength();
+    unsigned int size_total = m_http.GetLength();
     int data_size = 0;
   
     m_data.reserve(size_total);
@@ -1590,8 +1590,8 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
   string parentPath(parent);
   
   // If the parent has ? we need to lop off whatever comes after.
-  int questionMark = parentPath.find('?'); 
-  if (questionMark != -1)
+  unsigned int questionMark = parentPath.find('?'); 
+  if (questionMark != string::npos)
     parentPath = parentPath.substr(0, questionMark);
   
   CURL theURL(parentPath);
@@ -1603,7 +1603,7 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
     theURL.SetPort(32400);
   }
 
-  if (url.find("://") != -1)
+  if (url.find("://") != string::npos)
   {
     // It's got its own protocol, so leave it alone.
     return url;

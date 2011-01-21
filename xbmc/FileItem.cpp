@@ -317,7 +317,7 @@ const CFileItem& CFileItem::operator=(const CFileItem& item)
   m_includeStandardContextItems = item.m_includeStandardContextItems;
   
   m_contextItems.clear();
-  for (int i=0; i < item.m_contextItems.size(); ++i)
+  for (unsigned int i=0; i < item.m_contextItems.size(); ++i)
   {
     m_contextItems.push_back(item.m_contextItems[i]);
   }
@@ -435,7 +435,7 @@ void CFileItem::Serialize(CArchive& ar)
       ar << 0;
     
     ar << (int)(m_contextItems.size());
-    for (int i=0; i < m_contextItems.size(); ++i)
+    for (unsigned int i=0; i < m_contextItems.size(); ++i)
     {
       CFileItemPtr pContextItem = m_contextItems[i];
       ar << *pContextItem;
