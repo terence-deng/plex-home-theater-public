@@ -64,6 +64,7 @@ class NetworkService
   void        freshen(map<string, string>& params) { m_parameters = params; m_timeSinceLastSeen.restart(); }
   double      timeSinceLastSeen() { return m_timeSinceLastSeen.elapsed(); }
   double      timeSinceCreation() { return m_timeSinceCreation.elapsed(); }
+  string      getUrl() { return "http://" + m_address.to_string() + ":" + getParam("Port"); }
   
  private:
   

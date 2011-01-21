@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Network/NetworkServiceBrowser.h"
+#include "PlexSourceScanner.h"
 
 class PlexServiceListener;
 typedef boost::shared_ptr < PlexServiceListener > PlexServiceListenerPtr;
@@ -35,18 +36,25 @@ public:
     }
     
     dprintf("NetworkServiceBrowser: SERVICE arrived: %s", service->address().to_string().c_str());
+    
+    // Scan the host.
+    CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
   
   /// Notify of a service going away.
   virtual void handleServiceDeparture(NetworkServicePtr& service) 
   {
     dprintf("NetworkServiceBrowser: SERVICE departed after not being seen for %f seconds: %s", service->timeSinceLastSeen(), service->address().to_string().c_str());
+    CPlexSourceScanner::RemoveHost(service->address().to_string());
   }
   
   /// Notify of a service update.
   virtual void handleServiceUpdate(NetworkServicePtr& service)
   {
     dprintf("NetworkServiceBrowser: SERVICE updated: %s", service->address().to_string().c_str());
+    
+    // Scan the host.
+    CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
 };
 
