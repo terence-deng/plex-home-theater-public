@@ -206,13 +206,13 @@ public:
   CStdString GetCachedActorThumb() const;
   CStdString GetCachedProgramFanart() const;
   
-  CStdString GetCachedPlexMediaServerThumb() const;
-  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path);
+  CStdString GetCachedPlexMediaServerThumb() const { return ""; };
+  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path) { return ""; };
   
-  CStdString GetCachedPlexMediaServerFanart() const;
-  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path);
+  CStdString GetCachedPlexMediaServerFanart() const { return ""; };
+  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path) { return ""; };
   
-  CStdString GetCachedPlexMediaServerBanner() const;
+  CStdString GetCachedPlexMediaServerBanner() const{ return ""; };
   
   static CStdString GetCachedProgramFanart(const CStdString &path);
   
@@ -308,7 +308,6 @@ public:
   int m_iHasLock; // 0 - no lock 1 - lock, but unlocked 2 - locked
   int m_iBadPwdCount;
   
-#warning IMPLEMENT THESE
   bool m_bIsPopupMenuItem;
   bool m_bIsSearchDir;            // whether to show keyboard & append input as query
   CStdString m_strSearchPrompt;   // text to show as keyboard header

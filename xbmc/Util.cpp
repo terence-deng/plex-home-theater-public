@@ -1046,6 +1046,20 @@ bool CUtil::IsAddonsPath(const CStdString& strFile)
   return url.GetProtocol().Equals("addons");
 }
 
+bool CUtil::IsPlexMediaServer(const CStdString& strFile)
+{
+  CURL url(strFile);
+  if (url.GetProtocol() == "plex" || url.GetPort() == 32400)
+    return true;
+  
+  return false;
+}
+
+bool CUtil::IsWebKit(const CStdString& strFile)
+{
+  return strFile.Find("/:/webkit") != -1;
+}
+
 bool CUtil::IsCDDA(const CStdString& strFile)
 {
   return strFile.Left(5).Equals("cdda:");
@@ -1098,6 +1112,15 @@ bool CUtil::IsInternetStream(const CStdString& strFile, bool bStrictCheck /* = f
 {
   CURL url(strFile);
   CStdString strProtocol = url.GetProtocol();
+  
+  // PMS files always count as streams (needed for
+  // thumbnails on LAN, strangely enough).
+  //
+  if (url.GetPort() == 32400)
+    return true;
+  
+  if (IsOnLAN( strFile ))
+    return false;
   
   if (strProtocol.IsEmpty())
     return false;
@@ -3099,6 +3122,21 @@ CStdString CUtil::GetCachedAlbumThumb(const CStdString& album, const CStdString&
 
 CStdString CUtil::GetCachedMusicThumb(const CStdString& path)
 {
+#pragma warning this needs fixing
+  /*
+   // For Plex Media Server thumbs, use the thumb path, because multiple items can refer to the same thumb.
+   if (IsPlexMediaServer() || CUtil::IsPlexMediaServer(m_strThumbnailImage))
+   {
+   crc.ComputeFromLowerCase(m_strThumbnailImage);
+   root = g_settings.GetPlexMediaServerThumbFolder();
+   }
+   else
+   {
+   crc.ComputeFromLowerCase(m_strPath);
+   root = g_settings.GetMusicThumbFolder();
+   }
+   */
+  
   Crc32 crc;
   CStdString noSlashPath(path);
   RemoveSlashAtEnd(noSlashPath);

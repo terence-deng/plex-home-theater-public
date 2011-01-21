@@ -43,6 +43,7 @@
 #include "utils/log.h"
 #include "Thread.h"
 #include "utils/TimeUtils.h"
+#include "LocalizeStrings.h"
 
 void CDemuxStreamAudioFFmpeg::GetStreamInfo(std::string& strInfo)
 {
@@ -278,8 +279,11 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
   {
     // special stream type that makes avformat handle file opening
     // allows internal ffmpeg protocols to be used
-    if( m_dllAvFormat.av_open_input_file(&m_pFormatContext, strFile.c_str(), iformat, FFMPEG_FILE_BUFFER_SIZE, NULL) < 0 )
+    int ret = 0;
+    if( (ret=m_dllAvFormat.av_open_input_file(&m_pFormatContext, strFile.c_str(), iformat, FFMPEG_FILE_BUFFER_SIZE, NULL)) < 0 )
     {
+      m_pInput->SetError(GetErrorString(ret));
+      
       CLog::Log(LOGDEBUG, "Error, could not open file %s", strFile.c_str());
       Dispose();
       return false;
@@ -1286,5 +1290,37 @@ void CDVDDemuxFFmpeg::GetStreamCodecName(int iStreamId, CStdString &strName)
     AVCodec *codec = m_dllAvCodec.avcodec_find_decoder(stream->codec);
     if (codec)
       strName = codec->name;
+  }
+}
+
+std::string CDVDDemuxFFmpeg::GetErrorString(int code)
+{
+  switch (code)
+  {
+    case AVERROR_INVALIDDATA:
+      return g_localizeStrings.Get(42002); // Could not read file header.
+      break;
+      
+    case AVERROR_NOFMT:
+      return g_localizeStrings.Get(42003); // Unknown format.
+      break;
+      
+    case AVERROR(EIO):
+      return g_localizeStrings.Get(42004); // Could not read data from file.
+      
+    case AVERROR(ENOMEM):
+      return g_localizeStrings.Get(42005); // Memory allocation error occurred.
+      break;
+      
+    case AVERROR(ENOENT):
+      return g_localizeStrings.Get(42006); // No such file or directory.
+      break;
+      
+    case AVERROR(EPROTONOSUPPORT):
+      return g_localizeStrings.Get(42007); // Unsupported network protocol.
+      break;
+      
+    default:
+      return g_localizeStrings.Get(42008); // Error while opening file.
   }
 }

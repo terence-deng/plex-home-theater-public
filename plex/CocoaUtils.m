@@ -1149,7 +1149,7 @@ void Cocoa_LaunchFrontRow()
   [NSTask launchedTaskWithLaunchPath:[[NSBundle mainBundle] pathForResource:@"frontrowlauncher" ofType:@""] arguments:[NSArray arrayWithObjects:[[NSBundle mainBundle] bundlePath], nil]];    
   [NSApp terminate:nil];    
 }
-
+#endif // WORKING
 const char* Cocoa_GetAppIcon(const char *applicationPath)
 {
   // Check for info.plist inside the bundle
@@ -1177,7 +1177,6 @@ const char* Cocoa_GetAppIcon(const char *applicationPath)
   }
   return [pngFile UTF8String];
 }
-
 bool Cocoa_IsAppBundle(const char* filePath)
 {
   if (filePath == 0)
@@ -1204,7 +1203,7 @@ bool Cocoa_IsWflowBundle(const char* filePath)
           [fm fileExistsAtPath:appPath] &&
           [fm fileExistsAtPath:[appPath stringByAppendingPathComponent:@"/Contents/document.wflow"]]);
 }
-
+#ifdef WORKING
 const char* Cocoa_GetIconFromBundle(const char *_bundlePath, const char* _iconName)
 {
   NSString* bundlePath = [NSString stringWithCString:_bundlePath];
