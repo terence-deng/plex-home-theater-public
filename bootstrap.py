@@ -12,7 +12,7 @@ import sys
 import os
 
 
-DEBUG=False
+VERBOSE=False
 
 
 class BootstrapError(RuntimeError):
@@ -47,7 +47,7 @@ def run_cmd(args, message = None, stderr = False):
         if out == '' and cmd.poll() != None:
             break
         if out != '':
-            if DEBUG:
+            if VERBOSE:
                 sys.stdout.write(out)
             else:
                 output += out
@@ -110,12 +110,14 @@ def update_submodules():
     run_cmd(args, "Updating submodules")
 
 
-def configure_internal_libs():
+def configure_internal_libs(debug):
     '''Configure the internal vendor libraries'''
-    clean = ['find', '.', '-name', '"config.cache"', '-exec', 'rm', '{}', ';']
+    clean = ['find', '.', '-name', 'config.cache', '-exec', 'rm', '{}', ';']
     run_cmd(clean, "Cleaning caches")
     run_cmd('./bootstrap', "Regenerating configure scripts")
     configure = ['./configure', '--with-arch=i386']
+    if not debug:
+        configure.append('--disable-debug')
     run_cmd(configure, "Configuring internal libs")
     run_cmd(['make', 'clean'])
 
@@ -154,7 +156,7 @@ def bootstrap_dependencies():
         {'name': 'libsamplerate'},
         {'name': 'sdl_mixer'},
         {'name': 'sdl_image'},
-        {'name': 'ffmpeg'},
+        {'name': 'yasm'},
         {'name': 'rtmpdump'},
         {'name': 'mysql', 'options': ['--client-only']}
         ]
@@ -164,28 +166,32 @@ def bootstrap_dependencies():
 
 def usage():
     '''Print script usage information'''
-    print 'usage: bootstrap.py [--debug] [--configure-only]'
-    print 'boostrap a PLEX build environment'
+    print 'bootstrap.py: boostrap a PLEX build environment'
+    print
+    print 'usage: bootstrap.py [--verbose] [--debug] [--configure-only]'
 
 
 def process_args():
     '''Process command line arguments'''
-    global DEBUG
+    global VERBOSE
     result = {
-        'configure_only': False
+        'configure_only': False,
+        'debug': False
         }
     try:
-        options = ["debug", "configure-only"]
+        options = ["verbose", "debug", "configure-only"]
         opts, args = getopt.getopt(sys.argv[1:], "", options)
     except getopt.GetoptError, e:
         print str(e)
         usage()
         sys.exit(2)
     for o, a in opts:
-        if o == '--debug':
-            DEBUG=True
+        if o == '--verbose':
+            VERBOSE=True
         elif o == '--configure-only':
             result['configure_only'] = True
+        elif o == '--debug':
+            result['debug'] = True
     return result
 
 
@@ -194,7 +200,7 @@ def main():
         options = process_args()
         update_submodules()
         bootstrap_dependencies()
-        configure_internal_libs()
+        configure_internal_libs(options['debug'])
         if not options['configure_only']:
             build_internal_libs()
     except BootstrapError, e:
