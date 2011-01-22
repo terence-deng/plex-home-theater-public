@@ -1,9 +1,9 @@
 CC=@CC@
 CXX=@CXX@
 SHELL=/bin/bash
-9LDFLAGS=-shared -fPIC -rdynamic
 ARCH=@ARCH@
 RUBY=@RUBY@
+LDFLAGS=-fPIC -rdynamic -arch i386
 SYSDIR=../../../../system/players/dvdplayer
 WRAPPER=../../DllLoader/exports/wrapper.o
 WRAPPER_OSX=$(RUBY) ../../../../tools/Mach5/wrapper.rb

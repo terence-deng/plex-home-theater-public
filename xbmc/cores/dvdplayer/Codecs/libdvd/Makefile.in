@@ -4,10 +4,9 @@ SYSDIR=../../../../../system/players/dvdplayer
 SOS= libdvdnav-$(ARCH).so
 DIRS=	libdvdread \
 	libdvdnav
-
+RUBY=@RUBY@
 WRAPPER=../../../DllLoader/exports/wrapper.o
 WRAPPER_OSX=$(RUBY) ../../../../../tools/Mach5/wrapper.rb
-RUBY=@RUBY@
 
 LDFLAGS += -shared -fPIC -rdynamic
 ifeq ($(ARCH), powerpc-osx)
