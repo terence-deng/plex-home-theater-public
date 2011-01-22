@@ -58,11 +58,13 @@ bool CGUIPythonWindowDialog::OnMessage(CGUIMessage& message)
 
 void CGUIPythonWindowDialog::Show(bool show /* = true */)
 {
+#ifdef HAS_PYTHON
   int count = ExitCriticalSection(g_graphicsContext);
   ThreadMessage tMsg = {TMSG_GUI_PYTHON_DIALOG, 0, show ? 1 : 0};
   tMsg.lpVoid = this;
   g_application.getApplicationMessenger().SendMessage(tMsg, true);
   RestoreCriticalSection(g_graphicsContext, count);
+#endif
 }
 
 void CGUIPythonWindowDialog::Show_Internal(bool show /* = true */)

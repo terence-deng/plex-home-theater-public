@@ -181,6 +181,9 @@
     <Filter Include="libraries\jsoncpp">
       <UniqueIdentifier>{b27f9ce9-0b2e-4456-9bce-8313af739c2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Plex">
+      <UniqueIdentifier>{45bdd915-11e9-49aa-8abf-5c1ca2ef7f36}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\NetworkWin32.cpp">
@@ -466,9 +469,6 @@
       <Filter>cores\paplayer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\cores\paplayer\FLACcodec.cpp">
-      <Filter>cores\paplayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\cores\paplayer\GYMCodec.cpp">
       <Filter>cores\paplayer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\cores\paplayer\ModplugCodec.cpp">
@@ -811,9 +811,6 @@
       <Filter>Source Files\infoTagReaders</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\MusicInfoTagLoaderFlac.cpp">
-      <Filter>Source Files\infoTagReaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\MusicInfoTagLoaderGYM.cpp">
       <Filter>Source Files\infoTagReaders</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\MusicInfoTagLoaderMidi.cpp">
@@ -2107,6 +2104,27 @@
     <ClCompile Include="..\..\xbmc\utils\Variant.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\plex\PlexApplication.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\PlexMediaServerQueue.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\PlexSourceScanner.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\FileSystem\PlexDirectory.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\Network\NetworkInterface.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\Network\NetworkInterfaceWin32.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\PlexUtils.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\NetworkWin32.h">
@@ -2544,9 +2562,6 @@
     <ClInclude Include="..\..\xbmc\cores\paplayer\FLACcodec.h">
       <Filter>cores\paplayer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\cores\paplayer\GYMCodec.h">
-      <Filter>cores\paplayer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\cores\paplayer\ICodec.h">
       <Filter>cores\paplayer</Filter>
     </ClInclude>
@@ -2794,9 +2809,6 @@
       <Filter>Source Files\infoTagReaders</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\MusicInfoTagLoaderDatabase.h">
-      <Filter>Source Files\infoTagReaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\MusicInfoTagLoaderGYM.h">
       <Filter>Source Files\infoTagReaders</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\MusicInfoTagLoaderMidi.h">
@@ -4434,6 +4446,45 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\utils\Variant.h">
       <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\PlexApplication.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\PlexMediaServerQueue.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\PlexSourceScanner.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\FileSystem\PlexDirectory.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\NetworkInterface.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\NetworkService.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\NetworkServiceAdvertiser.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\NetworkServiceAdvertiserPMS.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\NetworkServiceBase.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\NetworkServiceBrowser.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\NetworkServices.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Network\PlexNetworkServices.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\PlexUtils.h">
+      <Filter>Source Files\Plex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

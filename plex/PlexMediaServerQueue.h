@@ -13,7 +13,6 @@
 
 using namespace std;
 using namespace boost;
-using namespace DIRECTORY;
 using boost::lexical_cast;
 
 class PlexMediaServerQueue : public CThread

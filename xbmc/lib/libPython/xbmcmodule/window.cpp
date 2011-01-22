@@ -386,6 +386,8 @@ namespace PYXBMC
         self->iWindowId != ACTIVE_WINDOW)
       self->iOldWindowId = ACTIVE_WINDOW;
 
+#ifdef HAS_PYTHON
+
     // if it's a dialog, we have to activate it a bit different
     if (WindowDialog_Check(self) || WindowXMLDialog_Check(self))
     {
@@ -402,6 +404,8 @@ namespace PYXBMC
       g_application.getApplicationMessenger().ActivateWindow(self->iWindowId, params, false);
       Py_END_ALLOW_THREADS
     }
+
+#endif
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -426,6 +430,7 @@ namespace PYXBMC
         ((CGUIPythonWindow*)self->pWindow)->PulseActionEvent();
     }
 
+#ifdef HAS_PYTHON
     // if it's a dialog, we have to close it a bit different
     if (WindowDialog_Check(self) || WindowXMLDialog_Check(self))
     {
@@ -443,7 +448,7 @@ namespace PYXBMC
       Py_END_ALLOW_THREADS
     }
     self->iOldWindowId = 0;
-
+#endif
 
     Py_INCREF(Py_None);
     return Py_None;

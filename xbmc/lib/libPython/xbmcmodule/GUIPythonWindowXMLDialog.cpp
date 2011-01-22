@@ -19,6 +19,7 @@
  *
  */
 
+#include "ApplicationMessenger.h"
 #include "GUIPythonWindowXMLDialog.h"
 #include "GUIWindowManager.h"
 #include "Application.h"
@@ -48,11 +49,13 @@ bool CGUIPythonWindowXMLDialog::OnMessage(CGUIMessage &message)
 
 void CGUIPythonWindowXMLDialog::Show(bool show /* = true */)
 {
+#ifdef HAS_PYTHON
   int count = ExitCriticalSection(g_graphicsContext);
   ThreadMessage tMsg = {TMSG_GUI_PYTHON_DIALOG, 1, show ? 1 : 0};
   tMsg.lpVoid = this;
   g_application.getApplicationMessenger().SendMessage(tMsg, true);
   RestoreCriticalSection(g_graphicsContext, count);
+#endif
 }
 
 void CGUIPythonWindowXMLDialog::Show_Internal(bool show /* = true */)

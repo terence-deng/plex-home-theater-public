@@ -158,7 +158,7 @@ void NetworkInterface::WatchForChanges()
   SetupNotifications();
 
   // Start the thread.
-  thread t = thread(boost::bind(&RunWatchingForChanges));
+  boost::thread t = boost::thread(boost::bind(&RunWatchingForChanges));
   t.detach();
 }
 
