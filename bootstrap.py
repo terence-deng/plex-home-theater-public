@@ -6,9 +6,13 @@ bootstrap.py
 Created by Jamie Kirkpatrick on 2011-01-15.
 Copyright (c) 2011 Plex Inc. All rights reserved.
 """
+import getopt
 import subprocess
 import sys
 import os
+
+
+DEBUG=False
 
 
 class BootstrapError(RuntimeError):
@@ -43,7 +47,10 @@ def run_cmd(args, message = None, stderr = False):
         if out == '' and cmd.poll() != None:
             break
         if out != '':
-            output += out
+            if DEBUG:
+                sys.stdout.write(out)
+            else:
+                output += out
     if cmd.wait() != 0:
         raise BootstrapError("Command failed: \"%s\"" % " ".join(args), output)
 
@@ -57,7 +64,7 @@ def get_exe_environ():
         'CXXFLAGS': "-I%s/include" % env_path,
         'ACLOCAL': "aclocal -I \"%s/share/aclocal\"" % env_path,
         'LDFLAGS': "-L%s/lib" % env_path
-    }
+        }
     env.update(local_env)
     return env
 
@@ -108,7 +115,7 @@ def configure_internal_libs():
     clean = ['find', '.', '-name', '"config.cache"', '-exec', 'rm', '{}', ';']
     run_cmd(clean, "Cleaning caches")
     run_cmd('./bootstrap', "Regenerating configure scripts")
-    configure = ['./configure', '--enable-external-ffmpeg']
+    configure = ['./configure']
     run_cmd(configure, "Configuring internal libs")
     run_cmd(['make', 'clean'])
 
@@ -150,13 +157,34 @@ def bootstrap_dependencies():
         {'name': 'ffmpeg'},
         {'name': 'rtmpdump'},
         {'name': 'mysql', 'options': ['--client-only']}
-    ]
+        ]
     for formula in requirements:
         install_formula(formula)
 
 
+def usage():
+    '''Print script usage information'''
+    print 'usage: bootstrap.py [--debug]'
+    print 'boostrap a PLEX build environment'
+
+
+def process_args():
+    '''Process command line arguments'''
+    global DEBUG
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "", ["debug"])
+    except getopt.GetoptError, e:
+        print str(e)
+        usage()
+        sys.exit(2)
+    for o, a in opts:
+        if o == '--debug':
+            DEBUG=True
+
+
 def main():
     try:
+        process_args()
         update_submodules()
         bootstrap_dependencies()
         configure_internal_libs()
