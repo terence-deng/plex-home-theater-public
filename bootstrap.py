@@ -115,7 +115,7 @@ def configure_internal_libs():
     clean = ['find', '.', '-name', '"config.cache"', '-exec', 'rm', '{}', ';']
     run_cmd(clean, "Cleaning caches")
     run_cmd('./bootstrap', "Regenerating configure scripts")
-    configure = ['./configure']
+    configure = ['./configure', '--with-arch=i386']
     run_cmd(configure, "Configuring internal libs")
     run_cmd(['make', 'clean'])
 
@@ -164,15 +164,19 @@ def bootstrap_dependencies():
 
 def usage():
     '''Print script usage information'''
-    print 'usage: bootstrap.py [--debug]'
+    print 'usage: bootstrap.py [--debug] [--configure-only]'
     print 'boostrap a PLEX build environment'
 
 
 def process_args():
     '''Process command line arguments'''
     global DEBUG
+    result = {
+        'configure_only': False
+        }
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "", ["debug"])
+        options = ["debug", "configure-only"]
+        opts, args = getopt.getopt(sys.argv[1:], "", options)
     except getopt.GetoptError, e:
         print str(e)
         usage()
@@ -180,15 +184,19 @@ def process_args():
     for o, a in opts:
         if o == '--debug':
             DEBUG=True
+        elif o == '--configure-only':
+            result['configure_only'] = True
+    return result
 
 
 def main():
     try:
-        process_args()
+        options = process_args()
         update_submodules()
         bootstrap_dependencies()
         configure_internal_libs()
-        build_internal_libs()
+        if not options['configure_only']:
+            build_internal_libs()
     except BootstrapError, e:
         print bcolors.FAIL + ("...%s" % e) + bcolors.ENDC
         print "Output: %s" % e.output
