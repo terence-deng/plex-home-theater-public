@@ -8,6 +8,7 @@
 #pragma once
 
 #include <boost/asio.hpp>
+#include "Plex/PlexUtils.h"
 
 using namespace boost::asio;
 

@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "HTTP.h"
+#include "FileCurl.h"
+#include "Log.h"
 #include "PlexMediaServerQueue.h"
 
 PlexMediaServerQueue PlexMediaServerQueue::g_plexMediaServerQueue;
@@ -27,9 +27,9 @@ void PlexMediaServerQueue::Process()
       string url = m_queue.front();
       
       // Hit the Plex Media Server.
-      CHTTP http;
+      CFileCurl http;
       CStdString reply;
-      http.Open(url, "GET", 0);
+      http.Get(url, reply);
       CLog::Log(LOGNOTICE, "Plex Media Server Queue: %s", url.c_str());
       
       // That's it, pop it off the queue.
