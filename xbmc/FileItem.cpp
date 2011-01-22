@@ -54,7 +54,9 @@
 #include "utils/RegExp.h"
 #include "utils/log.h"
 #include "karaoke/karaokelyricsfactory.h"
+#ifdef __APPLE__
 #include "CocoaUtils.h"
+#endif
 
 using namespace std;
 using namespace XFILE;
@@ -1894,6 +1896,8 @@ void CFileItemList::FillInDefaultIcons()
   for (int i = 0; i < (int)m_items.size(); ++i)
   {
     CFileItemPtr pItem = m_items[i];
+
+#ifdef __APPLE__
     if (Cocoa_IsAppBundle(pItem->m_strPath.c_str()))
     {
       pItem->SetThumbnailImage(Cocoa_GetAppIcon(pItem->m_strPath));
@@ -1909,6 +1913,7 @@ void CFileItemList::FillInDefaultIcons()
       pItem->SetLabel(itemLabel);
     }
     else
+#endif
       pItem->FillInDefaultIcon();
   }
 }
