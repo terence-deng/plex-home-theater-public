@@ -13,14 +13,13 @@
 
 using namespace std;
 using namespace boost;
-using boost::lexical_cast;
 
 class PlexMediaServerQueue : public CThread
 {
  public:
   
   PlexMediaServerQueue();
-  virtual ~PlexMediaServerQueue() { StopThread(); m_mutex.lock(); m_mutex.unlock(); }
+  virtual ~PlexMediaServerQueue() { StopThread(); }
   virtual void Process();
   virtual void StopThread();
   
@@ -38,9 +37,9 @@ class PlexMediaServerQueue : public CThread
       url = CPlexDirectory::ProcessUrl(rootURL, url, false);
       url += "?identifier=" + identifier + 
              "&viewGroup=" + viewGroup + 
-             "&viewMode=" + lexical_cast<string>(viewMode) + 
-             "&sortMode=" + lexical_cast<string>(sortMode) +
-             "&sortAsc=" + lexical_cast<string>(sortAsc);
+             "&viewMode=" + boost::lexical_cast<string>(viewMode) + 
+             "&sortMode=" + boost::lexical_cast<string>(sortMode) +
+             "&sortAsc=" + boost::lexical_cast<string>(sortAsc);
     
       enqueue(url);
     }
@@ -48,7 +47,7 @@ class PlexMediaServerQueue : public CThread
   
   /// Play progress.
   void onPlayingProgress(const CFileItemPtr& item, int ms)
-  { enqueue("progress", item, "&time=" + lexical_cast<string>(ms)); }
+  { enqueue("progress", item, "&time=" + boost::lexical_cast<string>(ms)); }
   
   /// Clear playing progress.
   void onClearPlayingProgress(const CFileItemPtr& item)
@@ -69,7 +68,7 @@ class PlexMediaServerQueue : public CThread
 
   /// Notify of a rate.
   void onRate(const CFileItemPtr& item, float rating)
-  { enqueue("rate", item, "&rating=" + lexical_cast<string>(rating)); }
+  { enqueue("rate", item, "&rating=" + boost::lexical_cast<string>(rating)); }
   
   /// These go to local media server only.
   void onIdleStart();

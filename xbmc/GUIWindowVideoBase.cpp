@@ -1457,6 +1457,7 @@ void CGUIWindowVideoBase::OnDeleteItem(CFileItemPtr item)
 
 void CGUIWindowVideoBase::MarkWatched(const CFileItemPtr &item, bool bMark)
 {
+#pragma warning port plex functionality
   if (!g_settings.GetCurrentProfile().canWriteDatabases())
     return;
   // dont allow update while scanning

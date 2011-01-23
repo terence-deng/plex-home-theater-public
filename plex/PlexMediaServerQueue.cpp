@@ -1,6 +1,8 @@
-#include "FileCurl.h"
-#include "Log.h"
+#include "log.h"
 #include "PlexMediaServerQueue.h"
+#include "FileSystem/FileCurl.h"
+
+using namespace XFILE;
 
 PlexMediaServerQueue PlexMediaServerQueue::g_plexMediaServerQueue;
 
@@ -8,7 +10,7 @@ PlexMediaServerQueue PlexMediaServerQueue::g_plexMediaServerQueue;
 PlexMediaServerQueue::PlexMediaServerQueue()
   : m_allowScrobble(true)
 {
-  Create(true);
+  Create();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -45,6 +47,9 @@ void PlexMediaServerQueue::Process()
 /////////////////////////////////////////////////////////////////////////////
 void PlexMediaServerQueue::StopThread()
 {
+  if (m_bStop)
+    return;
+  
   // Signal the condition.
   m_mutex.lock();
   m_bStop = true;

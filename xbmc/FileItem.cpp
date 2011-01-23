@@ -533,6 +533,7 @@ bool CFileItem::Exists(bool bUseCache /* = true */) const
 
 bool CFileItem::IsVideo() const
 {
+#pragma warning look at this: album_type property not set
   string type = GetProperty("album_type");
   if (type == "episode" || type == "movie")
     return true;

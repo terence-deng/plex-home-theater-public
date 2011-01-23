@@ -3342,6 +3342,8 @@ void CApplication::Stop()
     if (XBMCHelper::GetInstance().IsAlwaysOn() == false)
       XBMCHelper::GetInstance().Stop();
 #endif
+    
+    PlexMediaServerQueue::Get().StopThread();
 
 #if defined(HAVE_LIBCRYSTALHD)
     CCrystalHD::RemoveInstance();
@@ -4037,6 +4039,8 @@ void CApplication::SaveFileState()
       m_progressTrackingVideoResumeBookmark,
       m_progressTrackingPlayCountUpdate);
   CJobManager::GetInstance().AddJob(job, NULL);
+  
+  UpdateViewOffset();
 }
 
 void CApplication::UpdateFileState()
@@ -4092,6 +4096,8 @@ void CApplication::UpdateFileState()
         else
         if (GetTime() > g_advancedSettings.m_videoIgnoreAtStart)
         {
+          PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, m_progressTrackingVideoResumeBookmark.timeInSeconds);
+          
           // Update the bookmark
           m_progressTrackingVideoResumeBookmark.timeInSeconds = GetTime();
           m_progressTrackingVideoResumeBookmark.totalTimeInSeconds = GetTotalTime();
@@ -4104,6 +4110,15 @@ void CApplication::UpdateFileState()
       }
     }
   }
+}
+
+void CApplication::UpdateViewOffset()
+{
+  if (m_progressTrackingVideoResumeBookmark.timeInSeconds < 0.0f)
+    m_progressTrackingItem->ClearProperty("viewOffset");
+  
+  else if (m_progressTrackingVideoResumeBookmark.timeInSeconds > 0.0f)
+    m_progressTrackingItem->SetProperty("viewOffset", boost::lexical_cast<string>(m_progressTrackingVideoResumeBookmark.timeInSeconds));
 }
 
 void CApplication::StopPlaying()
