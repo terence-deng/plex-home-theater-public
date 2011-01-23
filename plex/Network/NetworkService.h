@@ -12,9 +12,9 @@
 
 using namespace boost::asio;
 
-#define NS_BROWSE_REFRESH_INTERVAL  5000
+#define NS_BROWSE_REFRESH_INTERVAL  3000
 #define NS_REMOVAL_INTERVAL         2000
-#define NS_DEAD_SERVER_TIME        10000
+#define NS_DEAD_SERVER_TIME         6000
 
 #define NS_MAX_PACKET_SIZE 2048
 #define NS_BROADCAST_ADDR  ip::address::from_string("239.255.255.250")

@@ -29,9 +29,11 @@ class NetworkServiceBase
     ip::udp::endpoint listenEndpoint(ip::address::from_string(bindAddress), port);
     socket->open(listenEndpoint.protocol());
     
+#if 0
     // Bind.
     try { socket->bind(listenEndpoint); }
     catch (std::exception& ex) { eprintf("NetworkService: Couldn't bind to port %d: %s", port, ex.what()); }
+#endif
     
     // Reuse.
     try { socket->set_option(ip::udp::socket::reuse_address(true)); }

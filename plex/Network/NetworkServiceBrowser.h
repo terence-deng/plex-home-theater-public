@@ -81,7 +81,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
   /// Send out the search request.
   void sendSearch()
   {
-    //dprintf("NetworkServiceBrowser: Searching for services on port %d.", m_port);
+    dprintf("NetworkServiceBrowser: Searching for services on port %d.", m_port);
     
     // Send the search message.
     string msg = NS_SEARCH_MSG;

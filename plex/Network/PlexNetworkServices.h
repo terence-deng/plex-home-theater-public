@@ -35,9 +35,8 @@ public:
       CLog::CLog().Log(LOGINFO, "%s -> %s", param->first.c_str(), param->second.c_str());
     }
     
-    dprintf("NetworkServiceBrowser: SERVICE arrived: %s", service->address().to_string().c_str());
-    
     // Scan the host.
+    dprintf("NetworkServiceBrowser: SERVICE arrived: %s", service->address().to_string().c_str());
     CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
   
@@ -51,9 +50,8 @@ public:
   /// Notify of a service update.
   virtual void handleServiceUpdate(NetworkServicePtr& service)
   {
-    dprintf("NetworkServiceBrowser: SERVICE updated: %s", service->address().to_string().c_str());
-    
     // Scan the host.
+    dprintf("NetworkServiceBrowser: SERVICE updated: %s", service->address().to_string().c_str());
     CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
 };
