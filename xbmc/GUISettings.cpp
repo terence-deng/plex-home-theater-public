@@ -734,7 +734,7 @@ void CGUISettings::Initialize()
 #endif
 
   CSettingsCategory* fl = AddCategory(7, "filelists", 14081);
-  AddBool(fl, "filelists.showparentdiritems", 13306, true);
+  AddBool(fl, "filelists.showparentdiritems", 13306, false);
   AddBool(fl, "filelists.showextensions", 497, true);
   AddBool(fl, "filelists.ignorethewhensorting", 13399, true);
   AddBool(fl, "filelists.allowfiledeletion", 14071, false);

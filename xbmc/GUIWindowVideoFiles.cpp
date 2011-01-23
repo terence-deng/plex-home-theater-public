@@ -212,9 +212,8 @@ bool CGUIWindowVideoFiles::GetDirectory(const CStdString &strDirectory, CFileIte
   else if (!items.IsStack() && g_settings.m_iMyVideoStack != STACK_NONE)
     items.Stack();
 
-  if (info2 && info2->Content() != CONTENT_NONE)
-    items.SetContent(ADDON::TranslateContent(info2->Content()));
-  else
+  //if (info2 && info2->Content() != CONTENT_NONE)
+  if (items.GetContent().IsEmpty())
     items.SetContent("files");
 
   items.SetThumbnailImage("");
