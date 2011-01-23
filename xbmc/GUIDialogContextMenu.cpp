@@ -153,6 +153,10 @@ void CGUIDialogContextMenu::SetupButtons()
 
 void CGUIDialogContextMenu::SetPosition(float posX, float posY)
 {
+#if 1
+  posX = (g_settings.m_ResInfo[m_coordsRes].iWidth - GetWidth()) / 2;
+  posY = (g_settings.m_ResInfo[m_coordsRes].iHeight - GetHeight()) / 2;
+#else
   if (posY + GetHeight() > g_settings.m_ResInfo[m_coordsRes].iHeight)
     posY = g_settings.m_ResInfo[m_coordsRes].iHeight - GetHeight();
   if (posY < 0) posY = 0;
@@ -165,6 +169,8 @@ void CGUIDialogContextMenu::SetPosition(float posX, float posY)
   const CGUIControl *top = GetControl(BACKGROUND_TOP);
   if (top)
     posY += top->GetHeight();
+#endif
+  
   CGUIDialog::SetPosition(posX, posY);
 }
 
