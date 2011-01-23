@@ -3052,6 +3052,13 @@ CStdString CGUIInfoManager::GetMusicTagLabel(int info, const CFileItem *item) co
       }
     }
     break;
+#warning "Enable me"
+#if 0
+  case MUSICPLAYER_FANART:
+    if (item->HasProperty("fanart_fallback") == false)
+      return item->GetProperty("fanart_image");
+    break;
+#endif
   case MUSICPLAYER_RATING:
     return GetItemLabel(item, LISTITEM_RATING);
   case MUSICPLAYER_COMMENT:
@@ -3691,6 +3698,13 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
   if (info >= LISTITEM_PROPERTY_START && info - LISTITEM_PROPERTY_START < (int)m_listitemProperties.size())
   { // grab the property
     CStdString property = m_listitemProperties[info - LISTITEM_PROPERTY_START];
+    
+    // If we don't have fanart (yet?) and we have fallback fanart, use it.
+    if (property == "fanart_image" &&
+        item->GetProperty(property).size() == 0 &&
+        item->GetProperty("fanart_image_fallback").size() > 0)
+      return item->GetProperty("fanart_image_fallback");
+    
     return item->GetProperty(property);
   }
 
