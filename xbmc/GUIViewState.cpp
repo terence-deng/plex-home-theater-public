@@ -285,7 +285,8 @@ bool CGUIViewState::HideExtensions()
 
 bool CGUIViewState::HideParentDirItems()
 {
-  return !g_guiSettings.GetBool("filelists.showparentdiritems");
+  //return !g_guiSettings.GetBool("filelists.showparentdiritems");
+  return true;
 }
 
 bool CGUIViewState::DisableAddSourceButtons()
