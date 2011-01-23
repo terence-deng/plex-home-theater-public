@@ -135,9 +135,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         newItem->m_iprogramCount = id++;
 
         // Load and set fanart.
-        //newItem->CacheFanart(); FIXME
-        //if (CFile::Exists(newItem->GetCachedProgramFanart()))
-        //  newItem->SetProperty("fanart_image", newItem->GetCachedProgramFanart());
+        newItem->CacheLocalFanart();
+        if (CFile::Exists(newItem->GetCachedProgramFanart()))
+          newItem->SetProperty("fanart_image", newItem->GetCachedProgramFanart());
 
         newList.push_back(newItem);
       }
