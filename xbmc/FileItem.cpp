@@ -2925,6 +2925,21 @@ bool CFileItem::CacheBanner() const
 
 bool CFileItem::CacheLocalFanart() const
 {
+  // Check for Plex Media Server fan-art.
+  if (m_strFanartUrl.size() > 0)
+  {
+    CStdString localFanart = GetCachedPlexMediaServerFanart(m_strFanartUrl);
+    if (CFile::Exists(localFanart) == false)
+    {
+      CPicture::CacheFanart(m_strFanartUrl, localFanart);
+      return localFanart;
+    }
+    else
+    {
+      return localFanart;
+    }
+  }
+  
   // first check for an already cached fanart image
   CStdString cachedFanart(GetCachedFanart());
   if (CFile::Exists(cachedFanart))
@@ -3013,6 +3028,52 @@ CStdString CFileItem::GetLocalFanart() const
   return "";
 }
 
+#warning "We need to put back this code"
+#if 0
+
+if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)
+{
+  // For Plex Media Server thumbs, use the thumb path, because multiple items can refer to the same thumb.
+  crc.ComputeFromLowerCase(m_strThumbnailImage);
+  root = g_settings.GetPlexMediaServerThumbFolder();
+}
+else if (IsStack())
+{
+  CStackDirectory dir;
+  crc.ComputeFromLowerCase(dir.GetFirstStackedFile(m_strPath));
+}
+else
+{
+  crc.ComputeFromLowerCase(m_strPath);
+}
+
+#endif
+
+CStdString CFileItem::GetCachedPlexMediaServerFanart() const
+{
+  return CFileItem::GetCachedPlexMediaServerFanart(m_strFanartUrl);
+}
+
+CStdString CFileItem::GetCachedPlexMediaServerBanner() const
+{
+  return CFileItem::GetCachedPlexMediaServerThumb(m_strBannerUrl);
+}
+
+CStdString CFileItem::GetCachedPlexMediaServerFanart(const CStdString &path)
+{
+  return GetCachedThumb(path, g_settings.GetVideoFanartFolder());
+}
+
+CStdString CFileItem::GetCachedPlexMediaServerThumb() const
+{
+  return GetCachedPlexMediaServerThumb(m_strThumbnailImage);
+}
+
+CStdString CFileItem::GetCachedPlexMediaServerThumb(const CStdString& path)
+{
+  return GetCachedThumb(path, g_settings.GetVideoThumbFolder());
+}
+
 CStdString CFileItem::GetCachedFanart() const
 {
   // get the locally cached thumb
@@ -3039,6 +3100,19 @@ CStdString CFileItem::GetCachedFanart() const
   return GetCachedThumb(m_strPath,g_settings.GetVideoFanartFolder());
 }
 
+CStdString CFileItem::GetCachedProgramFanart() const
+{
+  if (m_strFanartUrl.size() > 0)
+    return CFileItem::GetCachedProgramFanart(m_strFanartUrl);
+
+  return CFileItem::GetCachedProgramFanart(m_strPath);
+}
+
+CStdString CFileItem::GetCachedProgramFanart(const CStdString &path)
+{
+  return GetCachedThumb(path, g_settings.GetProgramFanartFolder());
+}
+
 CStdString CFileItem::GetCachedThumb(const CStdString &path, const CStdString &path2, bool split)
 {
   // get the locally cached thumb
@@ -3050,22 +3124,6 @@ CStdString CFileItem::GetCachedThumb(const CStdString &path, const CStdString &p
   {
     CStdString hex;
     hex.Format("%08x", (__int32)crc);
-    
-#pragma warning needs fixing
-    // For Plex Media Server thumbs, use the thumb path, because multiple items can refer to the same thumb.
-    /*if (IsPlexMediaServer() || CUtil::IsPlexMediaServer(m_strThumbnailImage))
-    {
-      crc.ComputeFromLowerCase(m_strThumbnailImage);
-      root = g_settings.GetPlexMediaServerThumbFolder();
-    }
-    else
-    {
-      crc.ComputeFromLowerCase(m_strPath);
-      root = g_settings.GetPicturesThumbFolder();
-    }
-    
-    thumb.Format("%s\\%c\\%s.tbn", root.c_str(), hex[0], hex.c_str());*/
-    
     thumb.Format("%c\\%08x.tbn", hex[0], (unsigned __int32)crc);
   }
   else

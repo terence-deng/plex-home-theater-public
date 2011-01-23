@@ -1717,6 +1717,17 @@ CStdString CSettings::GetVideoFanartFolder() const
   return folder;
 }
 
+CStdString CSettings::GetProgramFanartFolder() const
+{
+  CStdString folder;
+  if (GetCurrentProfile().hasDatabases())
+    CUtil::AddFileToFolder(GetProfileUserDataFolder(), "Thumbnails/Programs/Fanart", folder);
+  else
+    CUtil::AddFileToFolder(GetUserDataFolder(), "Thumbnails/Programs/Fanart", folder);
+
+  return folder;
+}
+
 CStdString CSettings::GetMusicFanartFolder() const
 {
   CStdString folder;

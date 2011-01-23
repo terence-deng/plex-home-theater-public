@@ -252,10 +252,30 @@ bool CVideoThumbLoader::LoadItem(CFileItem* pItem)
 
   if (!pItem->HasProperty("fanart_image"))
   {
-    if (pItem->CacheLocalFanart())
-      pItem->SetProperty("fanart_image",pItem->GetCachedFanart());
+    pItem->CacheLocalFanart();
+    
+    if (pItem->GetQuickFanart().size() > 0)
+    {
+      if (CFile::Exists(pItem->GetCachedPlexMediaServerFanart()))
+        pItem->SetProperty("fanart_image", pItem->GetCachedPlexMediaServerFanart());
+    }
+    else
+    {
+      if (CFile::Exists(pItem->GetCachedFanart()))
+        pItem->SetProperty("fanart_image", pItem->GetCachedFanart());
+    }
   }
-
+  
+  if (!pItem->HasProperty("banner_image"))
+  {
+    pItem->CacheBanner();
+    if (pItem->GetQuickBanner().size() > 0)
+    {
+      if (CFile::Exists(pItem->GetCachedPlexMediaServerBanner()))
+        pItem->SetProperty("banner_image", pItem->GetCachedPlexMediaServerBanner());
+    }
+  }
+  
   if (!pItem->m_bIsFolder &&
        pItem->HasVideoInfoTag() &&
        g_guiSettings.GetBool("myvideos.extractflags") &&

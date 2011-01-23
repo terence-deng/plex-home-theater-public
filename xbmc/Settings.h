@@ -338,6 +338,7 @@ public:
   CStdString GetBookmarksThumbFolder() const;
   CStdString GetSourcesFile() const;
   CStdString GetVideoFanartFolder() const;
+  CStdString GetProgramFanartFolder() const;
   CStdString GetMusicFanartFolder() const;
 
   CStdString GetSettingsFile() const;

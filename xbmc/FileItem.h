@@ -206,13 +206,13 @@ public:
   CStdString GetCachedActorThumb() const;
   CStdString GetCachedProgramFanart() const;
   
-  CStdString GetCachedPlexMediaServerThumb() const { return ""; };
-  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path) { return ""; };
+  CStdString GetCachedPlexMediaServerThumb() const;
+  static CStdString GetCachedPlexMediaServerThumb(const CStdString& path);
   
-  CStdString GetCachedPlexMediaServerFanart() const { return ""; };
-  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path) { return ""; };
+  CStdString GetCachedPlexMediaServerFanart() const;
+  static CStdString GetCachedPlexMediaServerFanart(const CStdString &path);
   
-  CStdString GetCachedPlexMediaServerBanner() const{ return ""; };
+  CStdString GetCachedPlexMediaServerBanner() const;
   
   static CStdString GetCachedProgramFanart(const CStdString &path);
   
