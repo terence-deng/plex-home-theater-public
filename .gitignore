@@ -1213,3 +1213,14 @@ xcuserdata
 /xbmc/visualizations/XBMCProjectM/libprojectM/config.inp
 
 /xbmc/win32/svn_rev.h
+
+build/
+lib/libass/m4/libtool.m4
+lib/libass/m4/ltoptions.m4
+lib/libass/m4/ltsugar.m4
+lib/libass/m4/ltversion.m4
+lib/libass/m4/lt~obsolete.m4
+xbmc/cdrip/Makefile
+xbmc/cores/paplayer/asap/Makefile
+xbmc/osx/Makefile
+
