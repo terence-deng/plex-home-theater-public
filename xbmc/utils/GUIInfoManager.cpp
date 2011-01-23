@@ -3052,7 +3052,7 @@ CStdString CGUIInfoManager::GetMusicTagLabel(int info, const CFileItem *item) co
       }
     }
     break;
-#warning "Enable me"
+#pragma warning "Enable me"
 #if 0
   case MUSICPLAYER_FANART:
     if (item->HasProperty("fanart_fallback") == false)

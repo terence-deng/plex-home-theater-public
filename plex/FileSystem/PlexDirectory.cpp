@@ -1492,10 +1492,15 @@ void CPlexDirectory::Process()
   url.SetPort(32400);  
 
   // Set request headers.
-  //m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
-  //m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); FIXME
+#ifdef __APPLE__
+  m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
+  m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); FIXME
   m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
   m_http.SetRequestHeader("X-Plex-Client-Capabilities", "protocols=shoutcast,webkit,http-video,spiff");
+#elif defined (_WIN32)
+  m_http.SetRequestHeader("X-Plex-Client-Platform", "Windows");
+  m_http.SetRequestHeader("X-Plex-Client-Capabilities", "protocols=shoutcast,http-video");
+#endif
   
   m_http.SetTimeout(m_timeout);
   if (m_http.Open(url) == false) 

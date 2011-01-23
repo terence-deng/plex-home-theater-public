@@ -29,7 +29,7 @@ class NetworkServiceBase
     ip::udp::endpoint listenEndpoint(ip::address::from_string(bindAddress), port);
     socket->open(listenEndpoint.protocol());
     
-#if 0
+#ifdef _WIN32
     // Bind.
     try { socket->bind(listenEndpoint); }
     catch (std::exception& ex) { eprintf("NetworkService: Couldn't bind to port %d: %s", port, ex.what()); }

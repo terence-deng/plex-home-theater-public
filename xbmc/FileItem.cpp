@@ -3029,7 +3029,7 @@ CStdString CFileItem::GetLocalFanart() const
   return "";
 }
 
-#warning "We need to put back this code"
+#pragma warning "We need to put back this code"
 #if 0
 
 if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)
