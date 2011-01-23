@@ -151,6 +151,7 @@ public:
   bool PlayFile(const CFileItem& item, bool bRestart = false);
   void SaveFileState();
   void UpdateFileState();
+  void UpdateViewOffset();
   void StopPlaying();
   void Restart(bool bSamePosition = true);
   void DelayedPlayerRestart();
