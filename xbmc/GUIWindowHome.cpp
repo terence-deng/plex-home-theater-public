@@ -59,6 +59,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   if (message.GetMessage() ==  GUI_MSG_WINDOW_DEINIT)
   {
     CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(MAIN_MENU);
+    if (control == 0)
+      control = (CGUIBaseContainer* )GetControl(300);
+    
     m_lastSelectedItem = control->GetSelectedItem();
   }
 
@@ -75,6 +78,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     
     // Get the old list.
     CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(MAIN_MENU);
+    if (control == 0)
+      control = (CGUIBaseContainer* )GetControl(300);
+    
     if (control)
     {
       vector<CGUIListItemPtr>& oldList = control->GetStaticItems();
