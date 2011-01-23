@@ -130,7 +130,11 @@ bool CDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items, C
 
     // check our cache for this path
     if (g_directoryCache.GetDirectory(strPath, items, cacheDirectory == DIR_CACHE_ALWAYS))
+    {
       items.m_strPath = strPath;
+      
+      g_directoryCache.ClearSubPaths(strPath);
+    }
     else
     {
       // need to clear the cache (in case the directory fetch fails)
@@ -138,6 +142,8 @@ bool CDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items, C
       if (cacheDirectory != DIR_CACHE_NEVER)
         g_directoryCache.ClearDirectory(strPath);
 
+      g_directoryCache.ClearSubPaths(strPath);
+      
       pDirectory->SetAllowPrompting(allowPrompting);
       pDirectory->SetCacheDirectory(cacheDirectory);
       pDirectory->SetUseFileDirectories(bUseFileDirectories);
