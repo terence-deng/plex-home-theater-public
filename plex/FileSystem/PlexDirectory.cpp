@@ -1494,7 +1494,8 @@ void CPlexDirectory::Process()
   // Set request headers.
 #ifdef __APPLE__
   m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
-  m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); FIXME
+#pragma warning FIX platform specific code.
+  m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); //FIXME
   m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
   m_http.SetRequestHeader("X-Plex-Client-Capabilities", "protocols=shoutcast,webkit,http-video,spiff");
 #elif defined (_WIN32)

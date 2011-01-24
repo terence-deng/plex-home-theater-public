@@ -5,11 +5,12 @@
 //  Created by Enrique Osuna on 10/26/2008.
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
-#include <IOKit/pwr_mgt/IOPMLib.h> 
+#include <IOKit/pwr_mgt/IOPMLib.h>
 #include <IOKit/IOMessage.h>
 
 #include "CocoaUtilsPlus.h"
 #include "Settings.h"
+#include "AdvancedSettings.h"
 #include "Application.h"
 #include "MediaSource.h"
 #include <Cocoa/Cocoa.h>
@@ -56,9 +57,9 @@ struct CachedTime
 {
   CachedTime(int time, const string& strTime)
     : time(time)
-    , strTime(strTime) 
+    , strTime(strTime)
     {}
-  
+
   int time;
   string strTime;
 };
@@ -72,33 +73,33 @@ class CCocoaData
     , lastTimeFormat(-1)
     , lastTime(-1)
     {}
-   
+
   CCocoaData& Get()
   {
     if (g_instance == 0)
       g_instance = new CCocoaData();
-    
+
     return *g_instance;
   }
-   
+
   int lastDateFormat;
   int lastTimeFormat;
   string lastFormatString;
-  
+
   int lastTime;
   string lastFormatFormat;
   string lastTimeString;
-  
+
   map<string, CachedTimePtr> cachedTimeMap;
-  
+
   CCriticalSection formatCriticalSection;
-  
+
  private:
   static CCocoaData* g_instance;
 };
 
 CCocoaData* CCocoaData::g_instance = 0;
-  
+
 
 ///////////////////////////////////////////////////////////////////////////////
 CGEventRef tapEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon)
@@ -106,7 +107,7 @@ CGEventRef tapEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
   // 1051136
   NSEvent* nsEvent = [NSEvent eventWithCGEvent:event];
   NSInteger data = [nsEvent data1];
-  
+
   if(data!=1051136)
     return event;
   else
@@ -117,24 +118,24 @@ CGEventRef tapEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
 void Cocoa_PowerStateNotification(void* x, io_service_t y, natural_t messageType, void* messageArgument)
 {
   switch (messageType)
-  { 
+  {
   case kIOMessageSystemWillSleep:
-    // Handle demand sleep (such as sleep caused by running out of batteries, 
+    // Handle demand sleep (such as sleep caused by running out of batteries,
     // closing the lid of a laptop, or selecting sleep from the Apple menu).
     //
     g_application.getApplicationMessenger().SystemWillSleep();
     IOAllowPowerChange(root_port, (long)messageArgument);
-    break; 
-    
+    break;
+
   case kIOMessageCanSystemSleep:
-    // In this case, the computer has been idle for several minutes 
-    // and will sleep soon so you must either allow or cancel 
-    // this notification. Important: if you don't respond, there will 
+    // In this case, the computer has been idle for several minutes
+    // and will sleep soon so you must either allow or cancel
+    // this notification. Important: if you don't respond, there will
     // be a 30-second timeout before the computer sleeps.
-    // 
+    //
     IOAllowPowerChange(root_port, (long)messageArgument);
     break;
-    
+
   case kIOMessageSystemHasPoweredOn:
     // Handle wake-up.
     g_application.getApplicationMessenger().SystemWokeUp();
@@ -348,27 +349,27 @@ void CocoaPlus_Initialize()
   g_isoLangMap["zho"] = "zh";
   g_isoLangMap["chi"] = "zh"; // Alternate.
   g_isoLangMap["zul"] = "zu";
-  
+
 #if 0
   // kCGHeadInsertEventTap - can't use this because stopping in debugger/hang means nobody gets it!
   CFMachPortRef eventPort = CGEventTapCreate(kCGSessionEventTap, kCGTailAppendEventTap, kCGEventTapOptionDefault, CGEventMaskBit(NX_SYSDEFINED), tapEventCallback, NULL);
   if (eventPort == 0)
     NSLog(@"No event port available.");
-      
+
   CFRunLoopSourceRef eventSrc = CFMachPortCreateRunLoopSource(NULL, eventPort, 0);
   if (eventSrc == 0)
     NSLog(@"No event run loop ");
-      
+
   CFRunLoopRef runLoop = CFRunLoopGetCurrent();
   if ( runLoop == NULL)
     NSLog(@"No run loop for tap callback.");
-      
+
   CFRunLoopAddSource(runLoop,  eventSrc, kCFRunLoopDefaultMode);
 #endif
-  
+
   // Add notification for power events.
   IONotificationPortRef notify; io_object_t anIterator;
-  root_port = IORegisterForSystemPower (0, &notify, Cocoa_PowerStateNotification, &anIterator); 
+  root_port = IORegisterForSystemPower (0, &notify, Cocoa_PowerStateNotification, &anIterator);
   if (root_port == 0)
     printf("IORegisterForSystemPower failed\n");
 
@@ -443,14 +444,14 @@ vector<in_addr_t> Cocoa_AddressesForHost(const string& hostname)
 vector<in_addr_t> Cocoa_GetLocalAddresses()
 {
   vector<in_addr_t> ret;
-  
+
   static struct ifreq ifreqs[128];
   struct ifconf ifconf;
   memset(&ifconf, 0, sizeof(ifconf));
   memset(&ifreqs, 0, sizeof(ifreqs));
   ifconf.ifc_req = ifreqs;
   ifconf.ifc_len = sizeof(ifreqs);
-  
+
   int sd = socket(PF_INET, SOCK_STREAM, 0);
   if (ioctl(sd, SIOCGIFCONF, (char *)&ifconf) == 0)
   {
@@ -470,7 +471,7 @@ vector<in_addr_t> Cocoa_GetLocalAddresses()
       }
      }
    }
-  
+
   close(sd);
   return ret;
 }
@@ -481,7 +482,7 @@ bool Cocoa_IsHostLocal(const string& host)
   hostent* pHost = ::gethostbyname(host.c_str());
   vector<in_addr_t> localAddresses = Cocoa_GetLocalAddresses();
   bool ret = false;
-  
+
   if (pHost)
   {
     BOOST_FOREACH(in_addr_t localAddr, localAddresses)
@@ -497,8 +498,8 @@ bool Cocoa_IsHostLocal(const string& host)
       }
     }
   }
-  
-  CLog::Log(LOGINFO, "Asked to check whether [%s] is local => %d", host.c_str(), ret);  
+
+  CLog::Log(LOGINFO, "Asked to check whether [%s] is local => %d", host.c_str(), ret);
   return ret;
 }
 
@@ -517,7 +518,7 @@ bool Cocoa_AreHostsEqual(const string& host1, const string& host2)
 ///////////////////////////////////////////////////////////////////////////////
 bool Cocoa_IsLocalPlexMediaServerRunning()
 {
-  bool isRunning = PlexMediaServerHelper::Get().IsRunning(); 
+  bool isRunning = PlexMediaServerHelper::Get().IsRunning();
   return isRunning;
 }
 
@@ -537,6 +538,7 @@ vector<CStdString> Cocoa_Proxy_ExceptionList()
   }
   return ret;
 }
+#endif // WORKING
 
 ///////////////////////////////////////////////////////////////////////////////
 string Cocoa_GetLanguage()
@@ -544,23 +546,24 @@ string Cocoa_GetLanguage()
   // See if we're overriden.
   if (g_advancedSettings.m_language.size() > 0)
     return g_advancedSettings.m_language;
-  
+
   // Otherwise, use the OS X default.
   NSArray* languages = [NSLocale preferredLanguages];
   NSString* language = [languages objectAtIndex:0];
-  
+
   return [language UTF8String];
 }
 
+#ifdef _WORKING
 ///////////////////////////////////////////////////////////////////////////////
 string Cocoa_GetSimpleLanguage()
 {
   string lang = Cocoa_GetLanguage();
   int    dash = lang.find("-");
-  
+
   if (dash != -1)
     lang = lang.substr(0, dash);
-  
+
   return lang;
 }
 
@@ -569,8 +572,8 @@ string Cocoa_ConvertIso6392ToIso6391(const string& lang)
 {
   if (g_isoLangMap.find(lang) != g_isoLangMap.end())
     return g_isoLangMap[lang];
-  
-  return ""; 
+
+  return "";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -584,11 +587,11 @@ bool Cocoa_IsMetricSystem()
     else
       return false;
   }
-   
+
   // Otherwise, use the OS X default.
   NSLocale* locale = [NSLocale currentLocale];
   NSNumber* isMetric = [locale objectForKey:NSLocaleUsesMetricSystem];
-  
+
   return [isMetric boolValue] == YES;
 }
 
@@ -596,18 +599,18 @@ bool Cocoa_IsMetricSystem()
 static string Cocoa_GetFormatString(int dateFormat, int timeFormat)
 {
   CSingleLock lock(CCocoaData().Get().formatCriticalSection);
-  
+
   // Quick exit for repeat question.
   if (CCocoaData().Get().lastDateFormat == dateFormat && CCocoaData().Get().lastTimeFormat == timeFormat)
     return CCocoaData().Get().lastFormatString;
-  
+
   id pool = [[NSAutoreleasePool alloc] init];
-  
+
   NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
   [dateFormatter setLocale:[NSLocale currentLocale]];
   [dateFormatter setDateStyle:dateFormat];
   [dateFormatter setTimeStyle:timeFormat];
-  
+
   string ret = [[dateFormatter dateFormat] UTF8String];
   [pool release];
 
@@ -615,7 +618,7 @@ static string Cocoa_GetFormatString(int dateFormat, int timeFormat)
   CCocoaData().Get().lastDateFormat = dateFormat;
   CCocoaData().Get().lastTimeFormat = timeFormat;
   CCocoaData().Get().lastFormatString = ret;
-  
+
   return ret;
 }
 
@@ -635,7 +638,7 @@ string Cocoa_GetShortDateFormat()
 string Cocoa_GetTimeFormat(bool withMeridian)
 {
   string ret = Cocoa_GetFormatString(kCFDateFormatterNoStyle, kCFDateFormatterShortStyle);
-  
+
   // Optionally remove meridian.
   if (withMeridian == false)
     boost::replace_all(ret, "a", "");
@@ -643,10 +646,10 @@ string Cocoa_GetTimeFormat(bool withMeridian)
   // Remove timezone.
   boost::replace_all(ret, "z", "");
   boost::replace_all(ret, "Z", "");
-  
+
   // Remove extra spaces.
   boost::replace_all(ret, "  ", "");
-  
+
   boost::trim(ret);
   return ret;
 }
@@ -658,14 +661,14 @@ string Cocoa_GetMeridianSymbol(int i)
   id pool = [[NSAutoreleasePool alloc] init];
   NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
   [dateFormatter setLocale:[NSLocale currentLocale]];
-  
+
   if (i == 0)
     ret = [[dateFormatter PMSymbol] UTF8String];
   else if (i == 1)
     ret = [[dateFormatter AMSymbol] UTF8String];
-  
+
   [pool release];
-  
+
   return ret;
 }
 
@@ -675,7 +678,7 @@ string Cocoa_GetCountryCode()
   id pool = [[NSAutoreleasePool alloc] init];
   NSLocale* myLocale = [NSLocale currentLocale];
   NSString* countryCode = [myLocale objectForKey:NSLocaleCountryCode];
-  
+
   string ret = [countryCode UTF8String];
   [pool release];
 
@@ -688,19 +691,19 @@ string Cocoa_GetDateString(time_t time, bool longDate)
   id pool = [[NSAutoreleasePool alloc] init];
   NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
   [dateFormatter setLocale:[NSLocale currentLocale]];
-  
+
   if (longDate)
     [dateFormatter setDateStyle:kCFDateFormatterLongStyle];
   else
     [dateFormatter setDateStyle:kCFDateFormatterShortStyle];
-  
+
   [dateFormatter setTimeStyle:kCFDateFormatterNoStyle];
-  
+
   NSDate* date = [NSDate dateWithTimeIntervalSince1970:time];
   NSString* formattedDateString = [dateFormatter stringFromDate:date];
-  
+
   string ret = [formattedDateString UTF8String];
-  
+
   [pool release];
   return ret;
 }
@@ -713,12 +716,12 @@ string Cocoa_GetTimeString(time_t time)
   [dateFormatter setLocale:[NSLocale currentLocale]];
   [dateFormatter setDateStyle:kCFDateFormatterNoStyle];
   [dateFormatter setTimeStyle:kCFDateFormatterShortStyle];
-   
+
   NSDate* date = [NSDate dateWithTimeIntervalSince1970:time];
   NSString* formattedDateString = [dateFormatter stringFromDate:date];
-   
+
   string ret = [formattedDateString UTF8String];
-   
+
   [pool release];
   return ret;
 }
@@ -727,7 +730,7 @@ string Cocoa_GetTimeString(time_t time)
 string Cocoa_GetTimeString(const string& format, time_t time)
 {
   CSingleLock lock(CCocoaData().Get().formatCriticalSection);
-  
+
   // If we're requesting the same time, return it.
   if (CCocoaData().Get().cachedTimeMap.find(format) != CCocoaData().Get().cachedTimeMap.end())
   {
@@ -735,7 +738,7 @@ string Cocoa_GetTimeString(const string& format, time_t time)
     if (cachedTime->time == time)
       return cachedTime->strTime;
   }
-  
+
   id pool = [[NSAutoreleasePool alloc] init];
   NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
   [dateFormatter setLocale:[NSLocale currentLocale]];
@@ -743,11 +746,11 @@ string Cocoa_GetTimeString(const string& format, time_t time)
 
   NSDate* date = [NSDate dateWithTimeIntervalSince1970:time];
   NSString* formattedDateString = [dateFormatter stringFromDate:date];
-   
+
   string ret = [formattedDateString UTF8String];
-   
+
   [pool release];
-  
+
   CCocoaData().Get().cachedTimeMap[format] = CachedTimePtr(new CachedTime(time, ret));
   return ret;
 }
@@ -830,7 +833,7 @@ string Cocoa_GetMachineSerialNumber()
     result = [(NSString*)serialNumber autorelease];
   else
     result = @"";
-  
+
   return [result UTF8String];
 }
 
@@ -838,11 +841,11 @@ string Cocoa_GetMachineSerialNumber()
 // releasing the iterator after the caller is done with it.
 static kern_return_t FindEthernetInterfaces(io_iterator_t *matchingServices)
 {
-    kern_return_t    kernResult; 
+    kern_return_t    kernResult;
     mach_port_t      masterPort;
     CFMutableDictionaryRef  matchingDict;
     CFMutableDictionaryRef  propertyMatchDict;
-    
+
     // Retrieve the Mach port used to initiate communication with I/O Kit
     kernResult = IOMasterPort(MACH_PORT_NULL, &masterPort);
     if (KERN_SUCCESS != kernResult)
@@ -850,15 +853,15 @@ static kern_return_t FindEthernetInterfaces(io_iterator_t *matchingServices)
         printf("IOMasterPort returned %d\n", kernResult);
         return kernResult;
     }
-    
-    // Ethernet interfaces are instances of class kIOEthernetInterfaceClass. 
-    // IOServiceMatching is a convenience function to create a dictionary with the key kIOProviderClassKey and 
+
+    // Ethernet interfaces are instances of class kIOEthernetInterfaceClass.
+    // IOServiceMatching is a convenience function to create a dictionary with the key kIOProviderClassKey and
     // the specified value.
     matchingDict = IOServiceMatching(kIOEthernetInterfaceClass);
 
     // Note that another option here would be:
     // matchingDict = IOBSDMatching("en0");
-        
+
     if (NULL == matchingDict)
     {
         printf("IOServiceMatching returned a NULL dictionary.\n");
@@ -866,9 +869,9 @@ static kern_return_t FindEthernetInterfaces(io_iterator_t *matchingServices)
     else {
         // Each IONetworkInterface object has a Boolean property with the key kIOPrimaryInterface. Only the
         // primary (built-in) interface has this property set to TRUE.
-        
+
         // IOServiceGetMatchingServices uses the default matching criteria defined by IOService. This considers
-        // only the following properties plus any family-specific matching in this order of precedence 
+        // only the following properties plus any family-specific matching in this order of precedence
         // (see IOService::passiveMatch):
         //
         // kIOProviderClassKey (IOServiceMatching)
@@ -879,45 +882,45 @@ static kern_return_t FindEthernetInterfaces(io_iterator_t *matchingServices)
         // family-specific matching
         // kIOBSDNameKey (IOBSDNameMatching)
         // kIOLocationMatchKey
-        
-        // The IONetworkingFamily does not define any family-specific matching. This means that in            
+
+        // The IONetworkingFamily does not define any family-specific matching. This means that in
         // order to have IOServiceGetMatchingServices consider the kIOPrimaryInterface property, we must
         // add that property to a separate dictionary and then add that to our matching dictionary
         // specifying kIOPropertyMatchKey.
-            
+
         propertyMatchDict = CFDictionaryCreateMutable( kCFAllocatorDefault, 0,
                                                        &kCFTypeDictionaryKeyCallBacks,
                                                        &kCFTypeDictionaryValueCallBacks);
-    
+
         if (NULL == propertyMatchDict)
         {
             printf("CFDictionaryCreateMutable returned a NULL dictionary.\n");
         }
         else {
-            // Set the value in the dictionary of the property with the given key, or add the key 
+            // Set the value in the dictionary of the property with the given key, or add the key
             // to the dictionary if it doesn't exist. This call retains the value object passed in.
-            CFDictionarySetValue(propertyMatchDict, CFSTR(kIOPrimaryInterface), kCFBooleanTrue); 
-            
+            CFDictionarySetValue(propertyMatchDict, CFSTR(kIOPrimaryInterface), kCFBooleanTrue);
+
             // Now add the dictionary containing the matching value for kIOPrimaryInterface to our main
-            // matching dictionary. This call will retain propertyMatchDict, so we can release our reference 
+            // matching dictionary. This call will retain propertyMatchDict, so we can release our reference
             // on propertyMatchDict after adding it to matchingDict.
             CFDictionarySetValue(matchingDict, CFSTR(kIOPropertyMatchKey), propertyMatchDict);
             CFRelease(propertyMatchDict);
         }
     }
-    
+
     // IOServiceGetMatchingServices retains the returned iterator, so release the iterator when we're done with it.
     // IOServiceGetMatchingServices also consumes a reference on the matching dictionary so we don't need to release
     // the dictionary explicitly.
-    kernResult = IOServiceGetMatchingServices(masterPort, matchingDict, matchingServices);    
+    kernResult = IOServiceGetMatchingServices(masterPort, matchingDict, matchingServices);
     if (KERN_SUCCESS != kernResult)
     {
         printf("IOServiceGetMatchingServices returned %d\n", kernResult);
     }
-        
+
     return kernResult;
 }
-    
+
 // Given an iterator across a set of Ethernet interfaces, return the MAC address of the last one.
 // If no interfaces are found the MAC address is set to an empty string.
 // In this sample the iterator should contain just the primary interface.
@@ -926,20 +929,20 @@ static kern_return_t GetMACAddress(io_iterator_t intfIterator, UInt8 *MACAddress
     io_object_t    intfService;
     io_object_t    controllerService;
     kern_return_t  kernResult = KERN_FAILURE;
-    
+
     // Initialize the returned address
     bzero(MACAddress, kIOEthernetAddressSize);
-    
+
     // IOIteratorNext retains the returned object, so release it when we're done with it.
     while (intfService = IOIteratorNext(intfIterator))
     {
-        CFTypeRef  MACAddressAsCFData;        
+        CFTypeRef  MACAddressAsCFData;
 
-        // IONetworkControllers can't be found directly by the IOServiceGetMatchingServices call, 
+        // IONetworkControllers can't be found directly by the IOServiceGetMatchingServices call,
         // since they are hardware nubs and do not participate in driver matching. In other words,
-        // registerService() is never called on them. So we've found the IONetworkInterface and will 
+        // registerService() is never called on them. So we've found the IONetworkInterface and will
         // get its parent controller by asking for it specifically.
-        
+
         // IORegistryEntryGetParentEntry retains the returned object, so release it when we're done with it.
         kernResult = IORegistryEntryGetParentEntry( intfService,
                                                     kIOServicePlane,
@@ -949,7 +952,7 @@ static kern_return_t GetMACAddress(io_iterator_t intfIterator, UInt8 *MACAddress
         {
             printf("IORegistryEntryGetParentEntry returned 0x%08x\n", kernResult);
         }
-        else 
+        else
         {
             // Retrieve the MAC address property from the I/O Registry in the form of a CFData
             MACAddressAsCFData = IORegistryEntryCreateCFProperty( controllerService,
@@ -966,15 +969,15 @@ static kern_return_t GetMACAddress(io_iterator_t intfIterator, UInt8 *MACAddress
             {
               printf("Error obtaining MAC Address.\n");
             }
-                
+
             // Done with the parent Ethernet controller object so we release it.
             IOObjectRelease(controllerService);
         }
-        
+
         // Done with the Ethernet interface object so we release it.
         IOObjectRelease(intfService);
     }
-        
+
     return kernResult;
 }
 
@@ -986,15 +989,15 @@ string Cocoa_GetPrimaryMacAddress()
   UInt8          MACAddress[kIOEthernetAddressSize];
   kern_return_t  kernResult = KERN_SUCCESS;
   string         ret;
-  
+
   memset(MACAddress, 0, sizeof(MACAddress));
   kernResult = FindEthernetInterfaces(&intfIterator);
-      
+
   if (KERN_SUCCESS != kernResult)
   {
     printf("FindEthernetInterfaces returned 0x%08x\n", kernResult);
   }
-  else 
+  else
   {
     kernResult = GetMACAddress(intfIterator, MACAddress);
     if (KERN_SUCCESS == kernResult)
@@ -1007,7 +1010,7 @@ string Cocoa_GetPrimaryMacAddress()
       }
     }
   }
-      
+
   IOObjectRelease(intfIterator);
   return ret;
 }
