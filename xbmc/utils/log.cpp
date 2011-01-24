@@ -175,8 +175,8 @@ bool CLog::Init(const char* path)
     g_charsetConverter.utf8ToW(path, pathW, false);
     CStdStringW strLogFile, strLogFileOld;
 
-    strLogFile.Format(L"%sxbmc.log", pathW);
-    strLogFileOld.Format(L"%sxbmc.old.log", pathW);
+    strLogFile.Format(L"%sPlex.log", pathW);
+    strLogFileOld.Format(L"%sPlex.old.log", pathW);
 
     struct __stat64 info;
     if (_wstat64(strLogFileOld.c_str(),&info) == 0 &&
@@ -190,8 +190,8 @@ bool CLog::Init(const char* path)
 #else
     CStdString strLogFile, strLogFileOld;
 
-    strLogFile.Format("%sxbmc.log", path);
-    strLogFileOld.Format("%sxbmc.old.log", path);
+    strLogFile.Format("%sPlex.log", path);
+    strLogFileOld.Format("%sPlex.old.log", path);
 
     struct stat64 info;
     if (stat64(strLogFileOld.c_str(),&info) == 0 &&
