@@ -442,7 +442,7 @@ void CApplication::Preflight()
   CStdString install_path;
 
   CUtil::GetHomePath(install_path);
-  setenv("XBMC_HOME", install_path.c_str(), 0);
+  setenv("PLEX_HOME", install_path.c_str(), 0);
   install_path += "/tools/osx/preflight";
   system(install_path.c_str());
 #endif
@@ -764,7 +764,7 @@ bool CApplication::InitDirectoriesLinux()
 
   CStdString xbmcBinPath, xbmcPath;
   CUtil::GetHomePath(xbmcBinPath, "XBMC_BIN_HOME");
-  xbmcPath = getenv("XBMC_HOME");
+  xbmcPath = getenv("PLEX_HOME");
 
   if (xbmcPath.IsEmpty())
   {
@@ -784,7 +784,7 @@ bool CApplication::InitDirectoriesLinux()
 
   /* Set some environment variables */
   setenv("XBMC_BIN_HOME", xbmcBinPath.c_str(), 0);
-  setenv("XBMC_HOME", xbmcPath.c_str(), 0);
+  setenv("PLEX_HOME", xbmcPath.c_str(), 0);
 
   if (m_bPlatformDirectories)
   {
@@ -844,7 +844,7 @@ bool CApplication::InitDirectoriesOSX()
 
   CStdString xbmcPath;
   CUtil::GetHomePath(xbmcPath);
-  setenv("XBMC_HOME", xbmcPath.c_str(), 0);
+  setenv("PLEX_HOME", xbmcPath.c_str(), 0);
 
   // OSX always runs with m_bPlatformDirectories == true
   if (m_bPlatformDirectories)
@@ -900,7 +900,7 @@ bool CApplication::InitDirectoriesWin32()
   CStdString xbmcPath;
 
   CUtil::GetHomePath(xbmcPath);
-  SetEnvironmentVariable("XBMC_HOME", xbmcPath.c_str());
+  SetEnvironmentVariable("PLEX_HOME", xbmcPath.c_str());
   CSpecialProtocol::SetXBMCBinPath(xbmcPath);
   CSpecialProtocol::SetXBMCPath(xbmcPath);
 

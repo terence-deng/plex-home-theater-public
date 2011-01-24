@@ -740,12 +740,12 @@ void CUtil::GetHomePath(CStdString& strPath, const CStdString& strTarget)
   }
 
 #if defined(_LINUX) && !defined(__APPLE__)
-  /* Change strPath accordingly when target is XBMC_HOME and when INSTALL_PATH
+  /* Change strPath accordingly when target is PLEX_HOME and when INSTALL_PATH
    * and BIN_INSTALL_PATH differ
    */
   CStdString installPath = INSTALL_PATH;
   CStdString binInstallPath = BIN_INSTALL_PATH;
-  if (!strTarget.compare("XBMC_HOME") && installPath.compare(binInstallPath))
+  if (!strTarget.compare("PLEX_HOME") && installPath.compare(binInstallPath))
   {
     int pos = strPath.length() - binInstallPath.length();
     CStdString tmp = strPath;
