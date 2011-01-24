@@ -32,13 +32,13 @@ class bcolors:
     ENDC = '\033[0m'
 
 
-def run_cmd(args, message = None, stderr = False):
+def run_cmd(args, message = None, stderr = False, **kwargs):
     '''Run a command and capture the output iteratively'''
     if isinstance(args, str):
         args = [args]
     if message:
         print bcolors.OKBLUE + ("-> %s" % message) + bcolors.ENDC
-    env = get_exe_environ()
+    env = get_exe_environ() if "env" not in kwargs else kwargs["env"]
     cmd = subprocess.Popen(
         args, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, env = env)
     output = ''
@@ -107,7 +107,7 @@ def install_formula(formula):
 def update_submodules():
     '''Update the registered git submodules'''
     args = ['git', 'submodule', 'update', '--init']
-    run_cmd(args, "Updating submodules")
+    run_cmd(args, "Updating submodules", env = None)
 
 
 def configure_internal_libs(debug):
