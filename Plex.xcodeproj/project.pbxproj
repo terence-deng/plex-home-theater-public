@@ -905,7 +905,7 @@
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
-			remoteInfo = XBMC;
+			remoteInfo = Plex;
 		};
 /* End PBXContainerItemProxy section */
 
