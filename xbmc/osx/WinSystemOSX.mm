@@ -29,7 +29,7 @@
 #include "GUISettings.h"
 #include "KeyboardStat.h"
 #include "utils/log.h"
-#include "XBMCHelper.h"
+#include "PlexHelper.h"
 #include "SystemInfo.h"
 #undef BOOL
 

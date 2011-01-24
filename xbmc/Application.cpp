@@ -240,7 +240,7 @@
 #endif
 #ifdef __APPLE__
 #include "CocoaInterface.h"
-#include "XBMCHelper.h"
+#include "PlexHelper.h"
 #endif
 
 #ifdef HAS_DVD_DRIVE
@@ -655,7 +655,7 @@ bool CApplication::Create()
 
 #ifdef __APPLE__
   // Configure and possible manually start the helper.
-  XBMCHelper::GetInstance().Configure();
+  PlexHelper::GetInstance().Configure();
 #endif
 
   // update the window resolution
@@ -1153,7 +1153,7 @@ bool CApplication::Initialize()
   m_slowTimer.StartZero();
 
 #ifdef __APPLE__
-  XBMCHelper::GetInstance().CaptureAllInput();
+  PlexHelper::GetInstance().CaptureAllInput();
 #endif
 #if defined(HAVE_LIBCRYSTALHD)
   CCrystalHD::GetInstance();
@@ -3299,7 +3299,7 @@ void CApplication::Stop()
     //Sleep(5000);
 
 #ifdef __APPLE__
-    XBMCHelper::GetInstance().ReleaseAllInput();
+    PlexHelper::GetInstance().ReleaseAllInput();
 #endif
 
     if (m_pPlayer)
@@ -3339,8 +3339,8 @@ void CApplication::Stop()
     UnloadSkin();
 
 #ifdef __APPLE__
-    if (XBMCHelper::GetInstance().IsAlwaysOn() == false)
-      XBMCHelper::GetInstance().Stop();
+    if (PlexHelper::GetInstance().IsAlwaysOn() == false)
+      PlexHelper::GetInstance().Stop();
 #endif
     
     PlexMediaServerQueue::Get().StopThread();

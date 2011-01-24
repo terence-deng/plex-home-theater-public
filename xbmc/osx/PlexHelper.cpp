@@ -24,7 +24,7 @@
 #include <Carbon/Carbon.h>
 #include <mach-o/dyld.h>
 
-#include "XBMCHelper.h"
+#include "PlexHelper.h"
 #include "PlatformDefs.h"
 #include "Util.h"
 
@@ -36,76 +36,76 @@
 #include "Atomics.h"
 
 static long sg_singleton_lock_variable = 0;
-XBMCHelper* XBMCHelper::smp_instance = 0;
+PlexHelper* PlexHelper::smp_instance = 0;
 
-#define XBMC_HELPER_PROGRAM "XBMCHelper"
+#define PLEX_HELPER_PROGRAM "PlexHelper"
 #define SOFA_CONTROL_PROGRAM "Sofa Control"
-#define XBMC_LAUNCH_PLIST "org.xbmc.helper.plist"
+#define PLEX_LAUNCH_PLIST "org.plex.helper.plist"
 
 static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount);
 
-XBMCHelper&
-XBMCHelper::GetInstance()
+PlexHelper&
+PlexHelper::GetInstance()
 {
   CAtomicSpinLock lock(sg_singleton_lock_variable);
   if( ! smp_instance )
   {
-    smp_instance = new XBMCHelper();
+    smp_instance = new PlexHelper();
   }
   return *smp_instance;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-XBMCHelper::XBMCHelper()
+PlexHelper::PlexHelper()
   : m_alwaysOn(false)
   , m_mode(APPLE_REMOTE_DISABLED)
   , m_sequenceDelay(0)
   , m_port(0)
   , m_errorStarting(false)
 {
-  // Compute the XBMC_HOME path.
+  // Compute the PLEX_HOME path.
   CStdString homePath;
   CUtil::GetHomePath(homePath);
   m_homepath = homePath;
 
   // Compute the helper filename.
   m_helperFile = m_homepath + "/tools/osx/";
-  m_helperFile += XBMC_HELPER_PROGRAM;
-  
+  m_helperFile += PLEX_HELPER_PROGRAM;
+
   // Compute the local (pristine) launch agent filename.
   m_launchAgentLocalFile = m_homepath + "/tools/osx/";
-  m_launchAgentLocalFile += XBMC_LAUNCH_PLIST;
+  m_launchAgentLocalFile += PLEX_LAUNCH_PLIST;
 
   // Compute the install path for the launch agent.
   // not to be confused with app home, this is user home
   m_launchAgentInstallFile = getenv("HOME");
   m_launchAgentInstallFile += "/Library/LaunchAgents/";
-  m_launchAgentInstallFile += XBMC_LAUNCH_PLIST;
+  m_launchAgentInstallFile += PLEX_LAUNCH_PLIST;
 
   // Compute the configuration file name.
   m_configFile = getenv("HOME");
-  m_configFile += "/Library/Application Support/XBMC/XBMCHelper.conf";
+  m_configFile += "/Library/Application Support/Plex/PlexHelper.conf";
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::Start()
+void PlexHelper::Start()
 {
-  int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
+  int pid = GetProcessPid(PLEX_HELPER_PROGRAM);
   if (pid == -1)
   {
     printf("Asking helper to start.\n");
-    // use -x to have XBMCHelper read its configure file
+    // use -x to have PlexHelper read its configure file
     std::string cmd = "\"" + m_helperFile + "\" -x &";
     system(cmd.c_str());
   }
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::Stop()
+void PlexHelper::Stop()
 {
 
   // Kill the process.
-  int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
+  int pid = GetProcessPid(PLEX_HELPER_PROGRAM);
   if (pid != -1)
   {
     printf("Asked to stop\n");
@@ -114,7 +114,7 @@ void XBMCHelper::Stop()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::Configure()
+void PlexHelper::Configure()
 {
   int oldMode = m_mode;
   int oldDelay = m_sequenceDelay;
@@ -191,7 +191,7 @@ void XBMCHelper::Configure()
     WriteFile(m_configFile.c_str(), strConfig);
 
     // If process is running, kill -HUP to have it reload settings.
-    int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
+    int pid = GetProcessPid(PLEX_HELPER_PROGRAM);
     if (pid != -1)
       kill(pid, SIGHUP);
   }
@@ -215,7 +215,7 @@ void XBMCHelper::Configure()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::Install()
+void PlexHelper::Install()
 {
   // Make sure directory exists.
   std::string strDir = getenv("HOME");
@@ -225,7 +225,7 @@ void XBMCHelper::Install()
   // Load template.
   std::string plistData = ReadFile(m_launchAgentLocalFile.c_str());
 
-  if (plistData != "") 
+  if (plistData != "")
   {
       std::string launchd_args;
 
@@ -233,7 +233,7 @@ void XBMCHelper::Install()
       int start = plistData.find("${PATH}");
       plistData.replace(start, 7, m_helperFile.c_str(), m_helperFile.length());
 
-      // Replace ARG1 with a single argument, additional args 
+      // Replace ARG1 with a single argument, additional args
       // will need ARG2, ARG3 added to plist.
       launchd_args = "-x";
       start = plistData.find("${ARG1}");
@@ -243,7 +243,7 @@ void XBMCHelper::Install()
       WriteFile(m_launchAgentInstallFile.c_str(), plistData);
 
       // Load it if not running already.
-      int pid = GetProcessPid(XBMC_HELPER_PROGRAM);
+      int pid = GetProcessPid(PLEX_HELPER_PROGRAM);
       if (pid == -1)
       {
           std::string cmd = "/bin/launchctl load ";
@@ -254,13 +254,13 @@ void XBMCHelper::Install()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::Uninstall()
+void PlexHelper::Uninstall()
 {
   // Call the unloader.
   std::string cmd = "/bin/launchctl unload ";
   cmd += m_launchAgentInstallFile;
   system(cmd.c_str());
-  
+
   //this also stops the helper, so restart it here again, if not disabled
   if(m_mode != APPLE_REMOTE_DISABLED)
     Start();
@@ -270,26 +270,26 @@ void XBMCHelper::Uninstall()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool XBMCHelper::IsRunning()
+bool PlexHelper::IsRunning()
 {
-  return (GetProcessPid(XBMC_HELPER_PROGRAM)!=-1);
+  return (GetProcessPid(PLEX_HELPER_PROGRAM)!=-1);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::CaptureAllInput()
+void PlexHelper::CaptureAllInput()
 {
   // Take keyboard focus away from FrontRow and native screen saver
   if (g_sysinfo.IsAppleTV())
   {
     ProcessSerialNumber psn = {0, kCurrentProcess};
-       
+
     SetFrontProcess(&psn);
     EnableSecureEventInput();
   }
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::ReleaseAllInput()
+void PlexHelper::ReleaseAllInput()
 {
   // Give keyboard focus back to FrontRow and native screen saver
   if (g_sysinfo.IsAppleTV())
@@ -299,7 +299,7 @@ void XBMCHelper::ReleaseAllInput()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool XBMCHelper::IsRemoteBuddyInstalled()
+bool PlexHelper::IsRemoteBuddyInstalled()
 {
   return false;
   // Check for existence of kext file.
@@ -307,7 +307,7 @@ bool XBMCHelper::IsRemoteBuddyInstalled()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool XBMCHelper::IsSofaControlRunning()
+bool PlexHelper::IsSofaControlRunning()
 {
   return false;
   // Check for a "Sofa Control" process running.
@@ -315,11 +315,11 @@ bool XBMCHelper::IsSofaControlRunning()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-std::string XBMCHelper::ReadFile(const char* fileName)
+std::string PlexHelper::ReadFile(const char* fileName)
 {
   std::string ret = "";
   std::ifstream is;
-  
+
   is.open(fileName);
   if( is.good() )
   {
@@ -343,12 +343,12 @@ std::string XBMCHelper::ReadFile(const char* fileName)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void XBMCHelper::WriteFile(const char* fileName, const std::string& data)
+void PlexHelper::WriteFile(const char* fileName, const std::string& data)
 {
   std::ofstream out(fileName);
   if (!out)
   {
-    CLog::Log(LOGERROR, "XBMCHelper: Unable to open file '%s'", fileName);
+    CLog::Log(LOGERROR, "PlexHelper: Unable to open file '%s'", fileName);
   }
   else
   {
@@ -360,7 +360,7 @@ void XBMCHelper::WriteFile(const char* fileName, const std::string& data)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-int XBMCHelper::GetProcessPid(const char* strProgram)
+int PlexHelper::GetProcessPid(const char* strProgram)
 {
   kinfo_proc* mylist = 0;
   size_t mycount = 0;
@@ -451,7 +451,7 @@ static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount)
 
       if (err == -1)
         err = errno;
-        
+
       if (err == 0)
       {
         done = true;

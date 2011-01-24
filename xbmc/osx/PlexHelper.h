@@ -1,5 +1,5 @@
-#ifndef __XBMCHELPER_H__
-#define __XBMCHELPER_H__
+#ifndef __PLEXHELPER_H__
+#define __PLEXHELPER_H__
 
 /*
  *      Copyright (C) 2005-2008 Team XBMC
@@ -22,11 +22,11 @@
  *
  */
 
-class XBMCHelper
+class PlexHelper
 {
  public:
 
-  static XBMCHelper& GetInstance();
+  static PlexHelper& GetInstance();
 
   void Start();
   void Stop();
@@ -45,9 +45,9 @@ class XBMCHelper
   static void ReleaseAllInput();
 
 private:
-  XBMCHelper();
-  XBMCHelper(XBMCHelper const& );
-  XBMCHelper& operator=(XBMCHelper const&);
+  PlexHelper();
+  PlexHelper(PlexHelper const& );
+  PlexHelper& operator=(PlexHelper const&);
 
   void Install();
   void Uninstall();
@@ -72,7 +72,7 @@ private:
   std::string m_homepath;
   std::string m_helperFile;
 
-  static XBMCHelper* smp_instance;
+  static PlexHelper* smp_instance;
 };
 
 #endif

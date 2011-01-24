@@ -1,5 +1,5 @@
 //
-//  XBMCHelper.h
+//  PlexHelper.h
 //  xbmchelper
 //
 //  Created by Stephan Diederich on 11/12/08.
@@ -10,7 +10,7 @@
 #import "xbmcclientwrapper.h"
 #import "HIDRemote/HIDRemote.h"
 
-@interface XBMCHelper : NSObject<HIDRemoteDelegate> {
+@interface PlexHelper : NSObject<HIDRemoteDelegate> {
   HIDRemote *remote;
   XBMCClientWrapper* mp_wrapper;
   NSString* mp_app_path;
@@ -21,7 +21,7 @@
 - (void) enableVerboseMode:(bool) f_really;
 
 - (void) setApplicationPath:(NSString*) fp_app_path;
-- (void) setApplicationHome:(NSString*) fp_home_path;  
+- (void) setApplicationHome:(NSString*) fp_home_path;
 
 - (void) connectToServer:(NSString*) fp_server onPort:(int) f_port withMode:(eRemoteMode) f_mode withTimeout:(double) f_timeout;
 - (void) disconnect;

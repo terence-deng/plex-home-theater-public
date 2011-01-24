@@ -77,7 +77,7 @@
 #endif
 #ifdef __APPLE__
 #include "CoreAudio.h"
-#include "XBMCHelper.h"
+#include "PlexHelper.h"
 #endif
 #include "GUIDialogAccessPoints.h"
 #include "FileSystem/Directory.h"
@@ -688,29 +688,29 @@ void CGUIWindowSettingsCategory::UpdateSettings()
       }
 
       // if XBMC helper is running, prompt user before effecting change
-      if ( XBMCHelper::GetInstance().IsRunning() && XBMCHelper::GetInstance().GetMode()!=remoteMode )
+      if ( PlexHelper::GetInstance().IsRunning() && PlexHelper::GetInstance().GetMode()!=remoteMode )
       {
         bool cancelled;
         if (!CGUIDialogYesNo::ShowAndGetInput(13144, 13145, 13146, 13147, -1, -1, cancelled, 10000))
         {
           // user declined, restore previous spinner state and appleremote mode
           CGUISpinControlEx *pControl = (CGUISpinControlEx *)GetControl(pSettingControl->GetID());
-          g_guiSettings.SetInt("input.appleremotemode", XBMCHelper::GetInstance().GetMode());
-          pControl->SetValue(XBMCHelper::GetInstance().GetMode());
+          g_guiSettings.SetInt("input.appleremotemode", PlexHelper::GetInstance().GetMode());
+          pControl->SetValue(PlexHelper::GetInstance().GetMode());
         }
         else
         {
           // reload configuration
-          XBMCHelper::GetInstance().Configure();
+          PlexHelper::GetInstance().Configure();
         }
       }
       else
       {
         // set new configuration.
-        XBMCHelper::GetInstance().Configure();
+        PlexHelper::GetInstance().Configure();
       }
 
-      if (XBMCHelper::GetInstance().ErrorStarting() == true)
+      if (PlexHelper::GetInstance().ErrorStarting() == true)
       {
         // inform user about error
         CGUIDialogOK::ShowAndGetInput(13620, 13621, 20022, 20022);
@@ -1690,8 +1690,8 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
     if (g_application.StopEventServer(true, false))
       g_application.StartEventServer();
 #ifdef __APPLE__
-    //reconfigure XBMCHelper for port changes
-    XBMCHelper::GetInstance().Configure();
+    //reconfigure PlexHelper for port changes
+    PlexHelper::GetInstance().Configure();
 #endif
 #endif
   }

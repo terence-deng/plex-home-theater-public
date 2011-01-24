@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E449C9DA1090622500783487 /* HIDRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = E449C9D91090622500783487 /* HIDRemote.m */; };
-		E4E62F370F83DB760066AF9D /* xbmchelper_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = E4E62F340F83DB760066AF9D /* xbmchelper_main.mm */; };
-		E4E62F380F83DB760066AF9D /* XBMCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E62F360F83DB760066AF9D /* XBMCHelper.m */; };
+		E4E62F370F83DB760066AF9D /* PlexHelper_Main.mm in Sources */ = {isa = PBXBuildFile; fileRef = E4E62F340F83DB760066AF9D /* PlexHelper_Main.mm */; };
+		E4E62F380F83DB760066AF9D /* PlexHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E62F360F83DB760066AF9D /* PlexHelper.m */; };
 		E4E62F600F83FB8C0066AF9D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E62F5F0F83FB8C0066AF9D /* IOKit.framework */; };
 		E4E62F690F83FBB40066AF9D /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E62F680F83FBB40066AF9D /* Carbon.framework */; };
 		E4E62FD40F83FD7C0066AF9D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E62FD30F83FD7C0066AF9D /* Cocoa.framework */; };
@@ -30,13 +30,13 @@
 
 /* Begin PBXFileReference section */
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		8DD76F7E0486A8DE00D96B5E /* XBMCHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = XBMCHelper; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DD76F7E0486A8DE00D96B5E /* PlexHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PlexHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		E424E23710877D5400659D45 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
 		E449C9D81090622500783487 /* HIDRemote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HIDRemote.h; path = HIDRemote/HIDRemote.h; sourceTree = "<group>"; };
 		E449C9D91090622500783487 /* HIDRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HIDRemote.m; path = HIDRemote/HIDRemote.m; sourceTree = "<group>"; };
-		E4E62F340F83DB760066AF9D /* xbmchelper_main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = xbmchelper_main.mm; sourceTree = "<group>"; };
-		E4E62F350F83DB760066AF9D /* XBMCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBMCHelper.h; sourceTree = "<group>"; };
-		E4E62F360F83DB760066AF9D /* XBMCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBMCHelper.m; sourceTree = "<group>"; };
+		E4E62F340F83DB760066AF9D /* PlexHelper_Main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlexHelper_Main.mm; sourceTree = "<group>"; };
+		E4E62F350F83DB760066AF9D /* PlexHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlexHelper.h; sourceTree = "<group>"; };
+		E4E62F360F83DB760066AF9D /* PlexHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlexHelper.m; sourceTree = "<group>"; };
 		E4E62F5F0F83FB8C0066AF9D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		E4E62F680F83FBB40066AF9D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		E4E62FD30F83FD7C0066AF9D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -60,7 +60,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		08FB7794FE84155DC02AAC07 /* XBMCHelper */ = {
+		08FB7794FE84155DC02AAC07 /* PlexHelper */ = {
 			isa = PBXGroup;
 			children = (
 				E424E23710877D5400659D45 /* Makefile.in */,
@@ -72,7 +72,7 @@
 				E4E62F680F83FBB40066AF9D /* Carbon.framework */,
 				E4E62FD30F83FD7C0066AF9D /* Cocoa.framework */,
 			);
-			name = XBMCHelper;
+			name = PlexHelper;
 			sourceTree = "<group>";
 		};
 		08FB7795FE84155DC02AAC07 /* Source */ = {
@@ -80,9 +80,9 @@
 			children = (
 				E449C9D71090621100783487 /* HIDRemote */,
 				E4E630030F8406900066AF9D /* xbmcclient.h */,
-				E4E62F340F83DB760066AF9D /* xbmchelper_main.mm */,
-				E4E62F350F83DB760066AF9D /* XBMCHelper.h */,
-				E4E62F360F83DB760066AF9D /* XBMCHelper.m */,
+				E4E62F340F83DB760066AF9D /* PlexHelper_Main.mm */,
+				E4E62F350F83DB760066AF9D /* PlexHelper.h */,
+				E4E62F360F83DB760066AF9D /* PlexHelper.m */,
 				E4E62FE70F83FDD90066AF9D /* XBMCDebugHelpers.h */,
 				E4E62FE50F83FDD90066AF9D /* xbmcclientwrapper.h */,
 				E4E62FE60F83FDD90066AF9D /* xbmcclientwrapper.mm */,
@@ -101,7 +101,7 @@
 		19C28FBDFE9D53C911CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8DD76F7E0486A8DE00D96B5E /* XBMCHelper */,
+				8DD76F7E0486A8DE00D96B5E /* PlexHelper */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,9 +125,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8DD76F740486A8DE00D96B5E /* XBMCHelper */ = {
+		8DD76F740486A8DE00D96B5E /* PlexHelper */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB924708733DCA0010E9CD /* Build configuration list for PBXNativeTarget "XBMCHelper" */;
+			buildConfigurationList = 1DEB924708733DCA0010E9CD /* Build configuration list for PBXNativeTarget "PlexHelper" */;
 			buildPhases = (
 				8DD76F760486A8DE00D96B5E /* Sources */,
 				8DD76F780486A8DE00D96B5E /* Frameworks */,
@@ -137,10 +137,10 @@
 			);
 			dependencies = (
 			);
-			name = XBMCHelper;
+			name = PlexHelper;
 			productInstallPath = "$(HOME)/bin";
-			productName = XBMCHelper;
-			productReference = 8DD76F7E0486A8DE00D96B5E /* XBMCHelper */;
+			productName = PlexHelper;
+			productReference = 8DD76F7E0486A8DE00D96B5E /* PlexHelper */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -148,14 +148,21 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "XBMCHelper" */;
+			buildConfigurationList = 1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "PlexHelper" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
-			mainGroup = 08FB7794FE84155DC02AAC07 /* XBMCHelper */;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* PlexHelper */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8DD76F740486A8DE00D96B5E /* XBMCHelper */,
+				8DD76F740486A8DE00D96B5E /* PlexHelper */,
 			);
 		};
 /* End PBXProject section */
@@ -165,8 +172,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E62F370F83DB760066AF9D /* xbmchelper_main.mm in Sources */,
-				E4E62F380F83DB760066AF9D /* XBMCHelper.m in Sources */,
+				E4E62F370F83DB760066AF9D /* PlexHelper_Main.mm in Sources */,
+				E4E62F380F83DB760066AF9D /* PlexHelper.m in Sources */,
 				E4E62FE80F83FDD90066AF9D /* xbmcclientwrapper.mm in Sources */,
 				E449C9DA1090622500783487 /* HIDRemote.m in Sources */,
 			);
@@ -188,8 +195,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				INSTALL_PATH = /usr/local/bin;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = XBMCHelper;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				PRODUCT_NAME = PlexHelper;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				STRIP_STYLE = debugging;
 			};
 			name = Debug;
@@ -204,8 +211,8 @@
 				GCC_VERSION = 4.0;
 				INSTALL_PATH = /usr/local/bin;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = XBMCHelper;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				PRODUCT_NAME = PlexHelper;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				STRIP_STYLE = debugging;
 			};
 			name = Release;
@@ -221,7 +228,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				VALID_ARCHS = i386;
 			};
 			name = Debug;
 		};
@@ -229,20 +237,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = i386;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				VALID_ARCHS = i386;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB924708733DCA0010E9CD /* Build configuration list for PBXNativeTarget "XBMCHelper" */ = {
+		1DEB924708733DCA0010E9CD /* Build configuration list for PBXNativeTarget "PlexHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB924808733DCA0010E9CD /* Debug */,
@@ -251,7 +260,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "XBMCHelper" */ = {
+		1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "PlexHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB924C08733DCA0010E9CD /* Debug */,

@@ -1,24 +1,24 @@
 //
-//  XBMCHelper.m
+//  PlexHelper.m
 //  xbmchelper
 //
 //  Created by Stephan Diederich on 11/12/08.
 //  Copyright 2008 University Heidelberg. All rights reserved.
 //
 
-#import "XBMCHelper.h"
+#import "PlexHelper.h"
 #import "XBMCDebugHelpers.h"
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-@interface XBMCHelper (private)
+@interface PlexHelper (private)
 
 - (NSString *)buttonNameForButtonCode:(HIDRemoteButtonCode)buttonCode;
 - (void) checkAndLaunchApp;
 
 @end
 
-@implementation XBMCHelper
+@implementation PlexHelper
 - (id) init{
   if( (self = [super init]) ){
     if ((remote = [HIDRemote sharedHIDRemote]))
@@ -27,7 +27,7 @@
       [remote setSimulateHoldEvents:NO];
       //for now, we're using lending of exlusive lock
       //kHIDRemoteModeExclusiveAuto isn't working, as we're a background daemon
-      //one possibility would be to know when XBMC is running. Once we know that,
+      //one possibility would be to know when Plex is running. Once we know that,
       //we could aquire exclusive lock when it's running, and release _exclusive_
       //access once done
       [remote setExclusiveLockLendingEnabled:YES];
@@ -35,8 +35,8 @@
       if ([HIDRemote isCandelairInstallationRequiredForRemoteMode:kHIDRemoteModeExclusive])
       {
         //setup failed. user needs to install CandelaIR driver
-        NSLog(@"Error! Candelair driver installation necessary. XBMCHelper won't function properly!");
-        NSLog(@"Due to an issue in the OS version you are running, an additional driver needs to be installed before XBMC(Helper) can reliably access the remote.");
+        NSLog(@"Error! Candelair driver installation necessary. PlexHelper won't function properly!");
+        NSLog(@"Due to an issue in the OS version you are running, an additional driver needs to be installed before Plex(Helper) can reliably access the remote.");
         NSLog(@"See http://www.candelair.com/download/ for details");
         [super dealloc];
         return nil;
@@ -148,7 +148,7 @@
         [mp_wrapper handleEvent:ATV_BUTTON_RIGHT];
       else
         [mp_wrapper handleEvent:ATV_BUTTON_RIGHT_RELEASE];
-      break;      
+      break;
     case kHIDRemoteButtonCodeCenter:
       if(isPressed) [mp_wrapper handleEvent:ATV_BUTTON_CENTER];
       break;
@@ -183,7 +183,7 @@
       break;
     case kHIDRemoteButtonCodeCenterHold:
       if(isPressed) [mp_wrapper handleEvent:ATV_BUTTON_CENTER_H];
-      break;      
+      break;
     case kHIDRemoteButtonCodeMenuHold:
       if(isPressed) {
         [self checkAndLaunchApp]; //launch mp_app_path if it's not running
@@ -202,13 +202,13 @@
 
 
 // Notification of ID changes
-- (void)hidRemote:(HIDRemote *)hidRemote remoteIDChangedOldID:(SInt32)old 
+- (void)hidRemote:(HIDRemote *)hidRemote remoteIDChangedOldID:(SInt32)old
             newID:(SInt32)newID forHardwareWithAttributes:(NSMutableDictionary *)attributes
 {
   if(m_verbose)
     NSLog(@"Change of remote ID from %d to %d", old, newID);
   [mp_wrapper switchRemote: newID];
-  
+
 }
 
 #pragma mark -
