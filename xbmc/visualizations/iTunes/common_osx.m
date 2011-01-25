@@ -36,7 +36,7 @@ NSArray* get_search_paths()
   return [ [ NSArray alloc ] initWithObjects:
                                @"/Library/iTunes/iTunes Plug-ins",
                                @"~/Library/iTunes/iTunes Plug-ins",
-                               @"~/Library/Application Support/XBMC/visualisations/iTunes",
+                               @"~/Library/Application Support/Plex/visualisations/iTunes",
                                nil ];
 }
 

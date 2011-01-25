@@ -49,7 +49,7 @@
 #include <libsmbclient.h>
 
 #ifdef __APPLE__
-#define XBMC_SMB_MOUNT_PATH "Library/Application Support/XBMC/Mounts/"
+#define XBMC_SMB_MOUNT_PATH "Library/Application Support/Plex/Mounts/"
 #else
 #define XBMC_SMB_MOUNT_PATH "/media/xbmc/smb/"
 #endif

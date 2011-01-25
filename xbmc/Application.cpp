@@ -416,7 +416,7 @@ extern "C" void __stdcall update_emu_environ();
 
 //
 // Utility function used to copy files from the application bundle
-// over to the user data directory in Application Support/XBMC.
+// over to the user data directory in Application Support/Plex.
 //
 static void CopyUserDataIfNeeded(const CStdString &strPath, const CStdString &file)
 {
@@ -852,8 +852,8 @@ bool CApplication::InitDirectoriesOSX()
     // map our special drives
     CSpecialProtocol::SetXBMCBinPath(xbmcPath);
     CSpecialProtocol::SetXBMCPath(xbmcPath);
-    CSpecialProtocol::SetHomePath(userHome + "/Library/Application Support/XBMC");
-    CSpecialProtocol::SetMasterProfilePath(userHome + "/Library/Application Support/XBMC/userdata");
+    CSpecialProtocol::SetHomePath(userHome + "/Library/Application Support/Plex");
+    CSpecialProtocol::SetMasterProfilePath(userHome + "/Library/Application Support/Plex/userdata");
 
 #ifdef __APPLE__
     CStdString strTempPath = CUtil::AddFileToFolder(userHome, ".xbmc/");
@@ -910,7 +910,7 @@ bool CApplication::InitDirectoriesWin32()
     CStdString strWin32UserFolder = CWIN32Util::GetProfilePath();
 
     // create user/app data/XBMC
-    CStdString homePath = CUtil::AddFileToFolder(strWin32UserFolder, "XBMC");
+    CStdString homePath = CUtil::AddFileToFolder(strWin32UserFolder, "Plex");
 
     // move log to platform dirs
     g_settings.m_logFolder = homePath;
