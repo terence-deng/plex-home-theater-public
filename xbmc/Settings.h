@@ -22,7 +22,7 @@
 
 #define PRE_SKIN_VERSION_9_10_COMPATIBILITY 1
 
-#define DEFAULT_SKIN          "skin.confluence"
+#define DEFAULT_SKIN          "skin.mediastream"
 #define DEFAULT_FANART_HEIGHT 0
 #define DEFAULT_WEATHER_ADDON "weather.xbmc.builtin"
 #define DEFAULT_WEB_INTERFACE "webinterface.default"
