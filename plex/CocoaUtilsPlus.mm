@@ -397,6 +397,8 @@ vector<string> Cocoa_GetSystemFonts()
   return result;
 }
 
+#endif // WORKING
+
 ///////////////////////////////////////////////////////////////////////////////
 string Cocoa_GetSystemFontPathFromDisplayName(const string displayName)
 {
@@ -427,6 +429,8 @@ string Cocoa_GetSystemFontPathFromDisplayName(const string displayName)
   }
   return displayName;
 }
+
+#ifdef WORKING
 
 ///////////////////////////////////////////////////////////////////////////////
 vector<in_addr_t> Cocoa_AddressesForHost(const string& hostname)

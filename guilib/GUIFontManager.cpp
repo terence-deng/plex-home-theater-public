@@ -32,6 +32,7 @@
 #include "../xbmc/FileSystem/SpecialProtocol.h"
 #include "utils/log.h"
 #include "WindowingFactory.h"
+#include "CocoaUtilsPlus.h"
 
 using namespace std;
 
@@ -47,6 +48,59 @@ GUIFontManager::GUIFontManager(void)
 GUIFontManager::~GUIFontManager(void)
 {
   Clear();
+}
+
+bool GUIFontManager::FindSystemFontPath(const CStdString& strFilename, CStdString *fontPath)
+{
+  vector<string> systemPaths;
+  vector<string> fontExtensions;
+
+#ifdef __APPLE__
+  // TODO: Add all the sub folders in each of these system paths
+  string home = getenv("HOME");
+  if (*home.rbegin() == '/')
+    home.erase(home.end()-1, home.end());
+
+  systemPaths.push_back(home + "/Library/Fonts/");
+  systemPaths.push_back("/Library/Fonts/");
+  systemPaths.push_back("/System/Library/Fonts/");
+
+  fontExtensions.push_back("");
+#endif
+
+  fontExtensions.push_back(".ttf");
+  fontExtensions.push_back(".dfont");
+  fontExtensions.push_back(".ttc");
+  fontExtensions.push_back(".otf");
+
+  string foundPath;
+  string foundFullPath;
+
+  bool iterateExtensions = (CUtil::GetExtension(strFilename).length() == 0);
+  for (unsigned i = 0; i < systemPaths.size(); i++)
+  {
+    foundPath = systemPaths[i] + strFilename.c_str();
+    for (unsigned j = 0; j < fontExtensions.size(); j++)
+    {
+      foundFullPath = foundPath;
+      if (iterateExtensions && fontExtensions[j].size() != 0)
+        foundFullPath += fontExtensions[j];
+
+#ifdef _LINUX
+      foundFullPath = PTH_IC(foundFullPath);
+#endif
+
+      if (XFILE::CFile::Exists(foundFullPath))
+      {
+        *fontPath = foundFullPath.c_str();
+        return TRUE;
+      }
+
+      if (!iterateExtensions)
+        break;
+    }
+  }
+  return FALSE;
 }
 
 void GUIFontManager::RescaleFontSizeAndAspect(float *size, float *aspect, RESOLUTION sourceRes, bool preserveAspect) const
@@ -111,6 +165,15 @@ CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdStrin
 #ifdef _LINUX
     strPath = PTH_IC(strPath);
 #endif
+  }
+
+  if (!FindSystemFontPath(CUtil::GetFileName(strFilename), &strPath))
+  {
+    #ifdef __APPLE__
+    CStdString fontPath = Cocoa_GetSystemFontPathFromDisplayName(strFilename);
+    if (XFILE::CFile::Exists(fontPath))
+      strPath = fontPath;
+    #endif
   }
 
   // check if we already have this font file loaded (font object could differ only by color or style)
