@@ -26,7 +26,7 @@ void CPlexSourceScanner::Process()
 {
   CStdString path;
   
-  CLog::Log(LOGNOTICE, "Plex Source Scanner starting...", m_host.c_str());
+  CLog::Log(LOGNOTICE, "Plex Source Scanner starting...(%s)", m_host.c_str());
   
   { // Make sure any existing entry is removed.
     CSingleLock lock(g_lock);
