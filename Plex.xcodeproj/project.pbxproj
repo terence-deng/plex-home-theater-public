@@ -6868,6 +6868,8 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = 4.2;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				GENERATE_PROFILING_CODE = NO;
 				HEADER_SEARCH_PATHS = (
 					$SRCROOT,
@@ -6942,6 +6944,11 @@
 				);
 				PRODUCT_NAME = Plex;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
+				WARNING_CFLAGS = (
+					"-Wno-write-strings",
+					"-Wno-multichar",
+					"-Wno-overflow",
+				);
 				ZERO_LINK = NO;
 			};
 			name = Debug;
@@ -6977,6 +6984,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_UNROLL_LOOPS = YES;
 				GCC_VERSION = 4.2;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				HEADER_SEARCH_PATHS = (
 					$SRCROOT,
 					plex,
@@ -7050,6 +7059,11 @@
 				);
 				PRODUCT_NAME = Plex;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
+				WARNING_CFLAGS = (
+					"-Wno-write-strings",
+					"-Wno-multichar",
+					"-Wno-overflow",
+				);
 				ZERO_LINK = NO;
 			};
 			name = Release;
