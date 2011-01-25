@@ -34,7 +34,7 @@ void CPlexSourceScanner::Process()
     g_activeScannerCount++;
   }
   
-  if (m_host.find("members.mac.com") != -1)
+  if (m_host.find("members.mac.com") != std::string::npos)
   {
     CLog::Log(LOGWARNING, "Skipping MobileMe address: %s", m_host.c_str());
   }
