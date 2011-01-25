@@ -1,3 +1,6 @@
 [submodule "vendor/homebrew.git"]
 	path = vendor/homebrew.git
 	url = git://github.com/jkp/homebrew.git
+[submodule "addons/skin.mediastream"]
+	path = addons/skin.mediastream
+	url = git@github.com:plexinc/plex-mediastream.git
