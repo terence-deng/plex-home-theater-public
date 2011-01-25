@@ -273,7 +273,7 @@ CStdString CUtil::GetTitleFromPath(const CStdString& strFileNameAndPath, bool bI
     RemoveExtension(strFilename);
     return strFilename;
   }
-  
+
   // URLDecode since the original path may be an URL
   URLDecode(strFilename);
   return strFilename;
@@ -721,7 +721,7 @@ void CUtil::GetHomePath(CStdString& strPath, const CStdString& strTarget)
         given_path[n] = '\0';
 
       // Assume local path inside application bundle.
-      strcat(given_path, "../Resources/XBMC/");
+      strcat(given_path, "../Resources/Plex/");
 
       // Convert to real path.
       char real_path[2*MAXPATHLEN];
@@ -1051,7 +1051,7 @@ bool CUtil::IsPlexMediaServer(const CStdString& strFile)
   CURL url(strFile);
   if (url.GetProtocol() == "plex" || url.GetPort() == 32400)
     return true;
-  
+
   return false;
 }
 
@@ -1112,16 +1112,16 @@ bool CUtil::IsInternetStream(const CStdString& strFile, bool bStrictCheck /* = f
 {
   CURL url(strFile);
   CStdString strProtocol = url.GetProtocol();
-  
+
   // PMS files always count as streams (needed for
   // thumbnails on LAN, strangely enough).
   //
   if (url.GetPort() == 32400)
     return true;
-  
+
   if (IsOnLAN( strFile ))
     return false;
-  
+
   if (strProtocol.IsEmpty())
     return false;
 
@@ -1683,7 +1683,7 @@ void CUtil::CacheSubtitles(const CStdString& strMovie, CStdString& strExtensionC
   CLog::Log(LOGDEBUG,"%s: END (total time: %i ms)", __FUNCTION__, (int)(CTimeUtils::GetTimeMS() - startTimer));
 }
 
-bool CUtil::CacheRarSubtitles(const CStdString& strRarPath, 
+bool CUtil::CacheRarSubtitles(const CStdString& strRarPath,
                               const CStdString& strCompare)
 {
   bool bFoundSubs = false;
@@ -1999,7 +1999,7 @@ CStdString CUtil::GetNextPathname(const CStdString &path_template, int max)
 {
   if (!path_template.Find("%04d"))
     return "";
-  
+
   for (int i = 0; i <= max; i++)
   {
     CStdString name;
@@ -2425,7 +2425,7 @@ CStdString CUtil::ValidatePath(const CStdString &path, bool bFixDoubleSlashes /*
   // Don't do any stuff on URLs containing %-characters or protocols that embed
   // filenames. NOTE: Don't use IsInZip or IsInRar here since it will infinitely
   // recurse and crash XBMC
-  if (IsURL(path) && 
+  if (IsURL(path) &&
      (path.Find('%') >= 0 ||
       path.Left(4).Equals("zip:") ||
       path.Left(4).Equals("rar:") ||
@@ -3136,7 +3136,7 @@ CStdString CUtil::GetCachedMusicThumb(const CStdString& path)
    root = g_settings.GetMusicThumbFolder();
    }
    */
-  
+
   Crc32 crc;
   CStdString noSlashPath(path);
   RemoveSlashAtEnd(noSlashPath);
@@ -3379,7 +3379,7 @@ int CUtil::LookupRomanDigit(char roman_digit)
 
 int CUtil::TranslateRomanNumeral(const char* roman_numeral)
 {
-  
+
   int decimal = -1;
 
   if (roman_numeral && roman_numeral[0])
@@ -3393,22 +3393,22 @@ int CUtil::TranslateRomanNumeral(const char* roman_numeral)
     {
       int digit = CUtil::LookupRomanDigit(*roman_numeral);
       int test  = last;
-      
+
       // General sanity checks
 
       // numeral not in LUT
       if (!digit)
         return -1;
-      
+
       while (test > 5)
         test /= 10;
-      
+
       // N = 10^n may not precede (N+1) > 10^(N+1)
       if (test == 1 && digit > last * 10)
         return -1;
-      
+
       // N = 5*10^n may not precede (N+1) >= N
-      if (test == 5 && digit >= last) 
+      if (test == 5 && digit >= last)
         return -1;
 
       // End general sanity checks
@@ -3416,11 +3416,11 @@ int CUtil::TranslateRomanNumeral(const char* roman_numeral)
       if (last < digit)
       {
         // smaller numerals may not repeat before a larger one
-        if (repeat) 
+        if (repeat)
           return -1;
 
         temp_sum += digit;
-        
+
         repeat  = 0;
         trend   = 0;
       }
@@ -3436,7 +3436,7 @@ int CUtil::TranslateRomanNumeral(const char* roman_numeral)
           decimal += 2 * last - temp_sum;
         else
           decimal += temp_sum;
-        
+
         temp_sum = digit;
 
         trend   = 1;
