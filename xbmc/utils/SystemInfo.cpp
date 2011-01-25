@@ -311,7 +311,7 @@ bool CSysInfo::IsVistaOrHigher()
   if (GetVersionEx((OSVERSIONINFO *)&osvi))
   {
     if (osvi.dwMajorVersion >= 6)
-      return true; 
+      return true;
   }
 #endif
   return false;
@@ -621,7 +621,7 @@ CStdString CSysInfo::GetLinuxDistro()
                                         NULL };
 
   FILE* pipe = popen("unset PYTHONHOME; unset PYTHONPATH; lsb_release -d | cut -f2", "r");
-  
+
   for (int i = 0; !pipe && release_file[i]; i++)
   {
     CStdString cmd = "cat ";
@@ -667,7 +667,7 @@ CStdString CSysInfo::GetUnameVersion()
 CStdString CSysInfo::GetUserAgent()
 {
   CStdString result;
-  result = "XBMC/" + g_infoManager.GetLabel(SYSTEM_BUILD_VERSION) + " (";
+  result = "Plex/" + g_infoManager.GetLabel(SYSTEM_BUILD_VERSION) + " (";
 #if defined(_WIN32)
   result += "Windows; ";
   result += GetKernelVersion();
@@ -680,7 +680,7 @@ CStdString CSysInfo::GetUserAgent()
   result += "; ";
   result += GetUnameVersion();
 #endif
-  result += "; http://www.xbmc.org)";
+  result += "; http://www.plexapp.com)";
 
   return result;
 }
