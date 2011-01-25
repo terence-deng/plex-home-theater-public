@@ -393,7 +393,7 @@ xcuserdata
 /tools/Linux/xbmc-standalone.sh
 
 # /tools/osx
-/tools/osx/XBMCHelper
+/tools/osx/PlexHelper
 
 # /tools/TexturePacker
 /tools/TexturePacker/TexturePacker
