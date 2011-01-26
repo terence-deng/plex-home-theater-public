@@ -140,8 +140,6 @@ def bootstrap_dependencies():
         {'name': 'lzo1'},
         {'name': 'boost'},
         {'name': 'fontconfig'},
-        {'name': 'jpeg'},
-        {'name': 'libtiff'},
         {'name': 'libpng', 'link': True},
         {'name': 'mad'},
         {'name': 'fribidi'},
