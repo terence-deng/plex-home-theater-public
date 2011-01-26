@@ -129,7 +129,7 @@ void GUIFontManager::RescaleFontSizeAndAspect(float *size, float *aspect, RESOLU
   *size /= g_graphicsContext.GetGUIScaleY();
 }
 
-CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdString& strFilename, color_t textColor, color_t shadowColor, const int iSize, const int iStyle, bool border, float lineSpacing, float aspect, RESOLUTION sourceRes, bool preserveAspect)
+CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdString& strFilename, color_t textColor, color_t shadowColor, const int iSize, const int iStyle, bool border, float lineSpacing, float aspect, RESOLUTION sourceRes, bool preserveAspect, const CStdString& variant)
 {
   float originalAspect = aspect;
 
@@ -178,13 +178,13 @@ CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdStrin
 
   // check if we already have this font file loaded (font object could differ only by color or style)
   CStdString TTFfontName;
-  TTFfontName.Format("%s_%f_%f%s", strFilename, newSize, aspect, border ? "_border" : "");
+  TTFfontName.Format("%s_%f_%f%s_%s", strFilename, newSize, aspect, border ? "_border" : "", variant);
 
   CGUIFontTTFBase* pFontFile = GetFontFile(TTFfontName);
   if (!pFontFile)
   {
     pFontFile = new CGUIFontTTF(TTFfontName);
-    bool bFontLoaded = pFontFile->Load(strPath, newSize, aspect, 1.0f, border);
+    bool bFontLoaded = pFontFile->Load(strPath, newSize, aspect, 1.0f, border, variant);
 
     if (!bFontLoaded)
     {
@@ -426,7 +426,8 @@ void GUIFontManager::LoadFonts(const CStdString& strFontSet)
           if (unicodeAttr != NULL && stricmp(unicodeAttr, "true") == 0)
             m_fontsetUnicode=true;
 
-          if (m_fontsetUnicode)
+          // Don't force it to be unicode.
+          //if (m_fontsetUnicode)
           {
             LoadFonts(pChild->FirstChild());
             break;
@@ -472,7 +473,12 @@ void GUIFontManager::LoadFonts(const TiXmlNode* fontNode)
         if (pNode)
         {
           CStdString strFontFileName = pNode->FirstChild()->Value();
-          if (strFontFileName.Find(".ttf") >= 0)
+          CStdString extension = CUtil::GetExtension(strFontFileName);
+#ifdef __APPLE__
+          if (extension.Equals(".ttf") || extension.Equals(".dfont") || extension.Equals(".otf") || extension.Equals(".ttc") || extension.length() == 0)
+#else
+          if (extension.Equals(".ttf") || extension.Equals(".dfont") || extension.Equals(".otf"))
+#endif
           {
             int iSize = 20;
             int iStyle = FONT_STYLE_NORMAL;
@@ -486,6 +492,7 @@ void GUIFontManager::LoadFonts(const TiXmlNode* fontNode)
             if (pNode)
             {
               CStdString style = pNode->FirstChild()->Value();
+
               iStyle = FONT_STYLE_NORMAL;
               if (style == "bold")
                 iStyle = FONT_STYLE_BOLD;
@@ -495,10 +502,15 @@ void GUIFontManager::LoadFonts(const TiXmlNode* fontNode)
                 iStyle = FONT_STYLE_BOLD_ITALICS;
             }
 
+            CStdString variant;
+            pNode = fontNode->FirstChild("variant");
+            if (pNode)
+              variant = pNode->FirstChild()->Value();
+
             XMLUtils::GetFloat(fontNode, "linespacing", lineSpacing);
             XMLUtils::GetFloat(fontNode, "aspect", aspect);
 
-            LoadTTF(strFontName, strFontFileName, textColor, shadowColor, iSize, iStyle, false, lineSpacing, aspect);
+            LoadTTF(strFontName, strFontFileName, textColor, shadowColor, iSize, iStyle, false, lineSpacing, aspect, RES_INVALID, false, variant);
           }
         }
       }

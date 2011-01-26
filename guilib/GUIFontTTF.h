@@ -72,7 +72,7 @@ public:
 
   void Clear();
 
-  bool Load(const CStdString& strFilename, float height = 20.0f, float aspect = 1.0f, float lineSpacing = 1.0f, bool border = false);
+  bool Load(const CStdString& strFilename, float height = 20.0f, float aspect = 1.0f, float lineSpacing = 1.0f, bool border = false, const CStdString& variant="");
 
   virtual void Begin() = 0;
   virtual void End() = 0;

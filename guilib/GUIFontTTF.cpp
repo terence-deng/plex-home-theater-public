@@ -68,7 +68,7 @@ public:
       FT_Done_FreeType(m_library);
   }
 
-  FT_Face GetFont(const CStdString &filename, float size, float aspect)
+  FT_Face GetFont(const CStdString &filename, float size, float aspect, const CStdString& variant)
   {
     // don't have it yet - create it
     if (!m_library)
@@ -81,9 +81,30 @@ public:
 
     FT_Face face;
 
-    // ok, now load the font face
-    if (FT_New_Face( m_library, _P(filename).c_str(), 0, &face ))
-      return NULL;
+    // Iterate through the available faces if we're requesting a specific variant.
+    if (variant.size() > 0)
+    {
+      bool found = false;
+      for (int i=0; FT_New_Face(m_library, filename, i, &face) == 0 && i < face->num_faces; i++)
+      {
+        if (variant == face->style_name)
+        {
+          found = true;
+          break;
+        }
+
+        FT_Done_Face(face);
+      }
+
+      if (found == false)
+        return 0;
+    }
+    else
+    {
+      // ok, now load the font face
+     if (FT_New_Face( m_library, _P(filename), 0, &face ))
+        return NULL;
+    }
 
     unsigned int ydpi = GetDPI();
     unsigned int xdpi = (unsigned int)MathUtils::round_int(ydpi * aspect);
@@ -100,7 +121,7 @@ public:
 
     return face;
   };
-  
+
   FT_Stroker GetStroker()
   {
     if (!m_library)
@@ -118,7 +139,7 @@ public:
     assert(face);
     FT_Done_Face(face);
   };
-  
+
   void ReleaseStroker(FT_Stroker stroker)
   {
     assert(stroker);
@@ -226,11 +247,11 @@ void CGUIFontTTFBase::Clear()
   m_vertex_count = 0;
 }
 
-bool CGUIFontTTFBase::Load(const CStdString& strFilename, float height, float aspect, float lineSpacing, bool border)
+bool CGUIFontTTFBase::Load(const CStdString& strFile, float height, float aspect, float lineSpacing, bool border, const CStdString& variant)
 {
   // we now know that this object is unique - only the GUIFont objects are non-unique, so no need
   // for reference tracking these fonts
-  m_face = g_freeTypeLibrary.GetFont(strFilename, height, aspect);
+  m_face = g_freeTypeLibrary.GetFont(strFile, height, aspect, variant);
 
   if (!m_face)
     return false;
@@ -284,7 +305,7 @@ bool CGUIFontTTFBase::Load(const CStdString& strFilename, float height, float as
   m_maxChars = 0;
   m_numChars = 0;
 
-  m_strFilename = strFilename;
+  m_strFilename = strFile;
 
   m_textureHeight = 0;
   m_textureWidth = ((m_cellHeight * CHARS_PER_TEXTURE_LINE) & ~63) + 64;
@@ -539,7 +560,7 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
   FT_Glyph glyph = NULL;
   if (FT_Load_Glyph( m_face, glyph_index, FT_LOAD_TARGET_LIGHT ))
   {
-    CLog::Log(LOGDEBUG, "%s Failed to load glyph %x", __FUNCTION__, letter);
+    CLog::Log(LOGDEBUG, "%s Failed to load glyph %x", __FUNCTION__, (unsigned)letter);
     return false;
   }
   // make bold if applicable
@@ -551,7 +572,7 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
   // grab the glyph
   if (FT_Get_Glyph(m_face->glyph, &glyph))
   {
-    CLog::Log(LOGDEBUG, "%s Failed to get glyph %x", __FUNCTION__, letter);
+    CLog::Log(LOGDEBUG, "%s Failed to get glyph %x", __FUNCTION__, (unsigned)letter);
     return false;
   }
   if (m_stroker)
@@ -559,7 +580,7 @@ bool CGUIFontTTFBase::CacheCharacter(wchar_t letter, uint32_t style, Character *
   // render the glyph
   if (FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, NULL, 1))
   {
-    CLog::Log(LOGDEBUG, "%s Failed to render glyph %x to a bitmap", __FUNCTION__, letter);
+    CLog::Log(LOGDEBUG, "%s Failed to render glyph %x to a bitmap", __FUNCTION__, (unsigned)letter);
     return false;
   }
   FT_BitmapGlyph bitGlyph = (FT_BitmapGlyph)glyph;
