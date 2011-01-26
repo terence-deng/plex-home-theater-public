@@ -256,7 +256,7 @@ void CPlayListPlayer::Play(int iSong, bool bAutoPlay /* = false */, bool bPlayPr
         break;
   }
 
-  int iPreviousSong = m_iCurrentSong;
+  //int iPreviousSong = m_iCurrentSong; # commented out to fix compiler warning - not needed?
   m_iCurrentSong = iSong;
   CFileItemPtr item = playlist[m_iCurrentSong];
   playlist.SetPlayed(true);

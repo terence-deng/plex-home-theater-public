@@ -42,7 +42,7 @@ void CPlexSourceScanner::Process()
   {
     // Compute the real host label (empty for local server).
     std::string realHostLabel = m_hostLabel;
-    bool onlyShared = true;
+    //bool onlyShared = true;
 
     // Act a bit differently if we're talking to a local server.
     /*if (Cocoa_IsHostLocal(m_host) == true)
