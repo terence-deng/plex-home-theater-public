@@ -12,7 +12,7 @@ RUBY=@RUBY@
 ifeq ($(findstring osx,$(ARCH)), osx)
 $(SLIB): ../libass/.libs/libass.dylib
 	$(CXX) -bundle -flat_namespace -undefined suppress -fPIC \
-	-mmacosx-version-min=10.5 -o $@ ../libass/.libs/*.o $(LDFLAGS)
+	-mmacosx-version-min=10.4 -o $@ ../libass/.libs/*.o $(LDFLAGS)
 	$(RUBY) $(abs_top_srcdir)/tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@
 

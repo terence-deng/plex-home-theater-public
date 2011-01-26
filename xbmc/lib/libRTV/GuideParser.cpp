@@ -164,9 +164,9 @@ typedef unsigned short WORD;
 #endif
 
 extern int _daylight;
-#if defined(__APPLE__) && (MAC_OS_X_VERSION_MAX_ALLOWED > 1040) 
+/*#if defined(__APPLE__) && (MAC_OS_X_VERSION_MAX_ALLOWED > 1040)
 extern long _timezone;
-#endif
+#endif*/
 #ifndef _WIN32
 extern char *_tzname[2];
 #endif

@@ -11,8 +11,8 @@ SLIBS=CxImage/cximage.a raw/raw.a jbig/jbig.a
 ifeq ($(findstring osx,$(ARCH)), osx)
 	export MACOSX_DEPLOYMENT_TARGET=10.5
 	export ARCH
-	CFLAGS+=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5
-	CXXFLAGS+=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5
+	CFLAGS+=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4
+	CXXFLAGS+=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4
 	DIRS+=jasper jpeg tiff
 	SLIBS+=jasper/jasper.a jpeg/jpeg.a tiff/tiff.a
 endif
@@ -21,8 +21,7 @@ endif
 
 $(SLIB): $(SLIBS)
 ifeq ($(findstring osx,$(ARCH)), osx)
-	$(CXX) -bundle -flat_namespace -undefined suppress -fPIC -lpng \
-		-mmacosx-version-min=10.5 -o $@ \
+	$(CXX) -bundle -flat_namespace -fPIC -lpng -o $@ \
 		CxImage/*.o jasper/*/*.o jbig/*.o jpeg/*.o raw/*.o tiff/*.o $(LDFLAGS)
 	$(RUBY) ../../../tools/Mach5/wrapper.rb $@;mv output.so $@
 	chmod +x $@

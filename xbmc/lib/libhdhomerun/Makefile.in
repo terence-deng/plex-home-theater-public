@@ -12,8 +12,8 @@ OBJS += hdhomerun_device.o
 
 CFLAGS += -Wall -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith -fPIC
 ifeq ($(findstring osx,$(ARCH)), osx)
-	CFLAGS +=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5
-	LDFLAGS +=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5
+	CFLAGS +=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4
+	LDFLAGS +=-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4
 endif
 
 SLIBS += -lws2_32

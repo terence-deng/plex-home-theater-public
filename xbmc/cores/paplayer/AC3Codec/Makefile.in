@@ -3,7 +3,7 @@ RUBY=@RUBY@
 CFLAGS=-D_LINUX -fPIC -Iinclude
 ifeq ($(findstring osx,$(ARCH)), osx)
     export MACOSX_DEPLOYMENT_TARGET=10.5
-    CFLAGS+=-fno-common -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5
+    CFLAGS+=-fno-common -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4
 endif
 ifeq ($(ARCH), powerpc-osx)
 	BUNDLE1_O=-lbundle1.o -L/usr/lib/gcc/powerpc-apple-darwin8/4.0.1/ -lgcc

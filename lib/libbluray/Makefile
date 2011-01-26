@@ -17,9 +17,9 @@ OSTYPE	= $(shell uname)
 
 ifeq ($(OSTYPE),Darwin)
   prefix=/opt/local
-  CFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
-  LDFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -L/opt/local/lib
-  CPPFLAGS=-mmacosx-version-min=10.5 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
+  CFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
+  LDFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.5.sdk -L/opt/local/lib
+  CPPFLAGS=-mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.5.sdk -I /opt/local/include
 else
   prefix=/usr
 endif

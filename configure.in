@@ -337,7 +337,7 @@ use_external_libass="yes"
 ### End of external library options
 DEFAULT_COMPILE_FLAGS="-fPIC -DPIC -D_REENTRANT"
 if test "x$host_vendor" = "xapple"; then
-  DEFAULT_COMPILE_FLAGS="$DEFAULT_COMPILE_FLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5"
+  DEFAULT_COMPILE_FLAGS="$DEFAULT_COMPILE_FLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4"
 else
   DEFAULT_COMPILE_FLAGS="$DEFAULT_COMPILE_FLAGS -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
 fi
@@ -431,7 +431,7 @@ if test "$host_vendor" = "apple" ; then
   # standard xbmc paths
   INCLUDES="$INCLUDES -I\$(abs_top_srcdir)/xbmc/osx"
   LDFLAGS="$LDFLAGS -arch i386"
-  LDFLAGS="$LDFLAGS -mmacosx-version-min=10.5"
+  LDFLAGS="$LDFLAGS -mmacosx-version-min=10.4"
   LDFLAGS="$LDFLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk"
   LDFLAGS="$LDFLAGS -L$PWD/vendor/homebrew.git/lib"
   LDFLAGS="$LDFLAGS -L$PWD/vendor/homebrew.git/lib/mysql"
@@ -1697,7 +1697,7 @@ XB_CONFIG_MODULE([xbmc/cores/dvdplayer/Codecs/ffmpeg], [
 XB_CONFIG_MODULE([xbmc/cores/dvdplayer/Codecs/libdts], [
   if test "$host_vendor" = "apple" ; then
     CFLAGS="$CFLAGS -fno-common"
-    LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5" \
+    LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4" \
     ./configure \
       --disable-oss \
       --disable-solaris-audio \
