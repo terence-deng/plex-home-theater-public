@@ -214,6 +214,7 @@ CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdStrin
   fontInfo.aspect = originalAspect;
   fontInfo.fontFilePath = strPath;
   fontInfo.fileName = strFilename;
+  fontInfo.variant = variant;
   fontInfo.sourceRes = sourceRes;
   fontInfo.preserveAspect = preserveAspect;
   fontInfo.border = border;
@@ -268,6 +269,7 @@ void GUIFontManager::ReloadTTFFonts(void)
     float newSize = (float)fontInfo.size;
     CStdString& strPath = fontInfo.fontFilePath;
     CStdString& strFilename = fontInfo.fileName;
+    CStdString& variant = fontInfo.variant;
 
     RescaleFontSizeAndAspect(&newSize, &aspect, fontInfo.sourceRes, fontInfo.preserveAspect);
 
@@ -277,7 +279,7 @@ void GUIFontManager::ReloadTTFFonts(void)
     if (!pFontFile)
     {
       pFontFile = new CGUIFontTTF(TTFfontName);
-      if (!pFontFile || !pFontFile->Load(strPath, newSize, aspect, 1.0f, fontInfo.border))
+      if (!pFontFile || !pFontFile->Load(strPath, newSize, aspect, 1.0f, fontInfo.border, variant))
       {
         delete pFontFile;
         // font could not be loaded

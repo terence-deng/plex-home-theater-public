@@ -44,6 +44,7 @@ struct OrigFontInfo
    float aspect;
    CStdString fontFilePath;
    CStdString fileName;
+   CStdString variant;
    RESOLUTION sourceRes;
    bool preserveAspect;
    bool border;
