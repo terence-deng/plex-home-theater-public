@@ -120,19 +120,6 @@ extern "C"
   void Cocoa_HW_SetKeyboardBacklightEnabled(bool enabled);
 
   //
-  // Background music control functions
-  //
-  void Cocoa_StartBackgroundMusic();
-  void Cocoa_StopBackgroundMusic(bool withFade);
-  void Cocoa_SetBackgroundMusicEnabled(bool enabled);
-  bool Cocoa_IsBackgroundMusicEnabled();
-  void Cocoa_SetBackgroundMusicThemesEnabled(bool enabled);
-  void Cocoa_SetBackgroundMusicThemeDownloadsEnabled(bool enabled);
-  void Cocoa_SetBackgroundMusicThemeId(const char* tvShowId);
-  void Cocoa_SetBackgroundMusicVolume(float volume);
-  void Cocoa_UpdateGlobalVolume(int globalVolume);
-
-  //
   // Sparkle software update
   //
   void Cocoa_CheckForUpdates();

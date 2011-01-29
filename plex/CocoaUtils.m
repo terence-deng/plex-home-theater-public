@@ -891,56 +891,6 @@ void Cocoa_SetPanelBrightness(float brightness)
   }
 }
 
-/* Background music control functions */
-
-void Cocoa_StartBackgroundMusic()
-{
-  [[BackgroundMusicPlayer sharedInstance] startMusic];
-}
-
-void Cocoa_StopBackgroundMusic(bool withFade) 
-{
-  [[BackgroundMusicPlayer sharedInstance] stopMusic:withFade];
-}
-
-void Cocoa_SetBackgroundMusicEnabled(bool enabled)
-{
-  [[BackgroundMusicPlayer sharedInstance] setEnabled:enabled];
-}
-
-bool Cocoa_IsBackgroundMusicEnabled()
-{
-  return [[BackgroundMusicPlayer sharedInstance] enabled];
-}
-
-void Cocoa_SetBackgroundMusicThemesEnabled(bool enabled)
-{
-  [[BackgroundMusicPlayer sharedInstance] setThemeMusicEnabled:enabled];
-}
-
-void Cocoa_SetBackgroundMusicThemeDownloadsEnabled(bool enabled)
-{
-  [[BackgroundMusicPlayer sharedInstance] setThemeDownloadsEnabled:enabled];
-}
-
-void Cocoa_SetBackgroundMusicThemeId(const char* tvShowId)
-{
-  if (tvShowId == NULL)
-    [[BackgroundMusicPlayer sharedInstance] setThemeMusicId:nil];
-  else
-    [[BackgroundMusicPlayer sharedInstance] setThemeMusicId:[NSString stringWithCString:tvShowId]];
-}
-
-void Cocoa_SetBackgroundMusicVolume(float volume)
-{
-  [[BackgroundMusicPlayer sharedInstance] setVolume:volume];
-}
-
-void Cocoa_UpdateGlobalVolume(int globalVolume)
-{
-  [[BackgroundMusicPlayer sharedInstance] setGlobalVolumeAsPercent:globalVolume];
-}
-
 const char* Cocoa_HW_ModelName()
 { return [[[AppleHardwareInfo sharedInstance] modelName] UTF8String]; }
 
