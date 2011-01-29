@@ -218,6 +218,7 @@
 #endif
 #include "GUIDialogFullScreenInfo.h"
 #include "GUIDialogRating.h"
+#include "GUIDialogTimer.h"
 #include "GUIDialogTeletext.h"
 #include "GUIDialogSlider.h"
 #include "GUIControlFactory.h"
@@ -1071,6 +1072,7 @@ bool CApplication::Initialize()
   g_windowManager.Add(new CGUIDialogContentSettings);        // window id = 132
 
   g_windowManager.Add(new CGUIDialogRating);                 // window id = 200
+  g_windowManager.Add(new CGUIDialogTimer);                 // window id = 201
 
   g_windowManager.Add(new CGUIWindowMusicPlayList);          // window id = 500
   g_windowManager.Add(new CGUIWindowMusicSongs);             // window id = 501

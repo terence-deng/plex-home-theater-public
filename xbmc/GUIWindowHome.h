@@ -31,7 +31,10 @@ public:
   virtual ~CGUIWindowHome(void);
   
 private:
+  virtual bool OnAction(const CAction &action);
   virtual bool OnMessage(CGUIMessage& message);
-  
+  virtual bool OnPopupMenu();
+  virtual bool CheckTimer(const CStdString& strExisting, const CStdString& strNew, int title, int line1, int line2);
+
   int m_lastSelectedItem;
 };
