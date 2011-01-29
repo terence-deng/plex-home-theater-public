@@ -530,8 +530,6 @@ bool CApplication::Create()
     g_settings.m_logFolder = "special://masterprofile/";
   }
 
-  m_plexApp = PlexApplication::Create();
-
 #ifdef HAS_XRANDR
   g_xrandr.LoadCustomModeLinesToAllOutputs();
 #endif
@@ -603,6 +601,10 @@ bool CApplication::Create()
   g_powerManager.SetDefaults();
   if (!g_settings.Load())
     FatalErrorHandler(true, true, true);
+  
+  // Create and initilize the plex application
+  m_plexApp = PlexApplication::Create();
+  m_plexApp->SetGlobalVolume(g_application.GetVolume());
 
   CLog::Log(LOGINFO, "creating subdirectories");
   CLog::Log(LOGINFO, "userdata folder: %s", g_settings.GetProfileUserDataFolder().c_str());
@@ -3103,6 +3105,8 @@ bool CApplication::Cleanup()
 {
   try
   {
+    m_plexApp.reset();
+    
     g_windowManager.Delete(WINDOW_MUSIC_PLAYLIST);
     g_windowManager.Delete(WINDOW_MUSIC_PLAYLIST_EDITOR);
     g_windowManager.Delete(WINDOW_MUSIC_FILES);
@@ -4401,6 +4405,9 @@ void CApplication::CheckShutdown()
 
 bool CApplication::OnMessage(CGUIMessage& message)
 {
+  if (m_plexApp->OnMessage(message))
+    return true;
+  
   switch ( message.GetMessage() )
   {
   case GUI_MSG_NOTIFY_ALL:
@@ -4965,7 +4972,9 @@ void CApplication::SetHardwareVolume(long hardwareVolume)
     if (m_guiDialogMuteBug.IsDialogRunning())
       m_guiDialogMuteBug.Close();
   }
-
+  
+  m_plexApp->SetGlobalVolume(GetVolume());
+  
   // and tell our player to update the volume
   if (m_pPlayer)
   {

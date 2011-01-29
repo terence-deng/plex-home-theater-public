@@ -317,6 +317,11 @@ void CGUISettings::Initialize()
   AddBool(scr, "scrobbler.librefmsubmit", 15217, false);
   AddString(scr, "scrobbler.librefmusername", 15218, "", EDIT_CONTROL_INPUT, false, 15218);
   AddString(scr, "scrobbler.librefmpass", 15219, "", EDIT_CONTROL_MD5_INPUT, false, 15219);
+  
+  CSettingsCategory *bgm = AddCategory(3, "backgroundmusic", 15230);
+  AddBool(bgm, "backgroundmusic.bgmusicenabled", 18104, true);
+  AddBool(bgm, "backgroundmusic.thememusicenabled", 18102, true);
+  AddInt(bgm, "backgroundmusic.bgmusicvolume", 18101, 50, 5, 5, 100, SPIN_CONTROL_INT_PLUS, MASK_PERCENT);
 
   CSettingsCategory* acd = AddCategory(3, "audiocds", 620);
   AddBool(acd, "audiocds.autorun", 14085, false);

@@ -7,20 +7,32 @@
  *
  */
 
-#include <boost/shared_ptr.hpp>
+#pragma once
+
+#include "IMsgTargetCallback.h"
 
 class PlexApplication;
-typedef boost::shared_ptr<PlexApplication> PlexApplicationPtr;
 class PlexServiceListener;
+class BackgroundMusicPlayer;
+
+typedef boost::shared_ptr<PlexApplication> PlexApplicationPtr;
 typedef boost::shared_ptr<PlexServiceListener> PlexServiceListenerPtr;
+typedef boost::shared_ptr<BackgroundMusicPlayer > BackgroundMusicPlayerPtr;
 
 ///
 /// The hub of all Plex goodness.
 ///
-class PlexApplication
+class PlexApplication : public IMsgTargetCallback
 {
 public:
+  /// Create an instance.
   static PlexApplicationPtr Create();
+  
+  /// Handle internal messages.
+  virtual bool OnMessage(CGUIMessage& message);
+  
+  /// Handle global volume changes.
+  void SetGlobalVolume(int volume);
     
 private:
   /// Default constructor.
@@ -28,4 +40,5 @@ private:
   
   /// Members
   PlexServiceListenerPtr m_serviceListener;
+  BackgroundMusicPlayerPtr m_bgMusicPlayer;
 };

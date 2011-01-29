@@ -54,6 +54,7 @@
 #include "MediaManager.h"
 #include "utils/log.h"
 #include "TextureCache.h"
+#include "BackgroundMusicPlayer.h"
 
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
@@ -90,6 +91,9 @@ CGUIWindowVideoNav::~CGUIWindowVideoNav(void)
 
 bool CGUIWindowVideoNav::OnAction(const CAction &action)
 {
+  if (action.GetID() == ACTION_PREVIOUS_MENU)
+    BackgroundMusicPlayer::SendThemeChangeMessage();
+
   if (action.GetID() == ACTION_TOGGLE_WATCHED)
   {
     CFileItemPtr pItem = m_vecItems->Get(m_viewControl.GetSelectedItem());

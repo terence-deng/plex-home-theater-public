@@ -141,3 +141,9 @@
 // Send when the application is deactivating (moving to the background)
 #define GUI_MSG_APP_DEACTIVATED       GUI_MSG_USER + 44
 
+// Sent when the background music settings have changed.
+#define GUI_MSG_BG_MUSIC_SETTINGS_UPDATED  GUI_MSG_USER + 45
+
+// Sent when the current background music them is updated.
+#define GUI_MSG_BG_MUSIC_THEME_UPDATED	GUI_MSG_USER + 46
+

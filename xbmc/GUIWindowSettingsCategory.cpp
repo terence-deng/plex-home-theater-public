@@ -934,6 +934,11 @@ void CGUIWindowSettingsCategory::UpdateSettings()
       CGUIButtonControl *pControl = (CGUIButtonControl *)GetControl(GetSetting(strSetting)->GetID());
       pControl->SetLabel2(CWeather::GetAreaCity(pSetting->GetData()));
     }
+    else if (strSetting.Equals("backgroundmusic.thememusicenabled") || strSetting.Equals("backgroundmusic.bgmusicvolume"))
+    {
+      CGUIControl *pControl = (CGUIControl *)GetControl(GetSetting(strSetting)->GetID());
+      pControl->SetEnabled(g_guiSettings.GetBool("backgroundmusic.bgmusicenabled"));
+    }
     else if (strSetting.Equals("musicfiles.trackformat"))
     {
       if (m_strOldTrackFormat != g_guiSettings.GetString("musicfiles.trackformat"))
@@ -1851,6 +1856,11 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
            strSetting.Equals("videolibrary.removeduplicates"))
   {
     CUtil::DeleteVideoDatabaseDirectoryCache();
+  }
+  else if (strSetting.Equals("backgroundmusic.thememusicenabled") || strSetting.Left(23).Equals("backgroundmusic.bgmusic"))
+  {
+    CGUIMessage msg(GUI_MSG_BG_MUSIC_SETTINGS_UPDATED, 0, 0);
+    g_windowManager.SendMessage(msg); 
   }
 
   UpdateSettings();

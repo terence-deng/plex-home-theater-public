@@ -44,6 +44,7 @@
 #include "GUISettings.h"
 #include "LocalizeStrings.h"
 #include "utils/log.h"
+#include "BackgroundMusicPlayer.h"
 
 using namespace std;
 using namespace XFILE;
@@ -218,6 +219,9 @@ bool CGUIWindowVideoFiles::GetDirectory(const CStdString &strDirectory, CFileIte
 
   items.SetThumbnailImage("");
   items.SetVideoThumb();
+  
+  // Send theme update message
+  BackgroundMusicPlayer::SendThemeChangeMessage(items.GetProperty("theme"));
 
   return true;
 }
