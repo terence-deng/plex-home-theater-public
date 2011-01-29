@@ -57,6 +57,7 @@ void CPlexSourceScanner::Process()
     
     // Scan the server.
     path.Format("%s/music/", m_url);
+#pragma warning sort this out
     /*CUtil::AutodetectPlexSources(path, sources->musicSources, realHostLabel, onlyShared);
     
     path.Format("%s/video/", m_url);
