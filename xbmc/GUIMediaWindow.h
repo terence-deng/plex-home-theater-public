@@ -101,6 +101,7 @@ protected:
 
 protected:
   bool WaitForNetwork() const;
+  void RefreshShares(bool update=false);
 
   /*! \brief Translate the folder to start in from the given quick path
    \param dir the folder the user wants

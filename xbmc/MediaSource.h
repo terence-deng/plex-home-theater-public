@@ -42,7 +42,7 @@ public:
     SOURCE_TYPE_VPATH        = 5,
     SOURCE_TYPE_REMOVABLE    = 6
   };
-  CMediaSource() { m_iDriveType=SOURCE_TYPE_UNKNOWN; m_iLockMode=LOCK_MODE_EVERYONE; m_iBadPwdCount=0; m_iHasLock=0; m_ignore=false; };
+  CMediaSource() { m_iDriveType=SOURCE_TYPE_UNKNOWN; m_iLockMode=LOCK_MODE_EVERYONE; m_iBadPwdCount=0; m_iHasLock=0; m_ignore=false; strPluginIdentifer=""; hasPrefs = false; hasStoreServices = false; m_autoDetected=false;};
   virtual ~CMediaSource() {};
 
   bool operator==(const CMediaSource &right) const;
@@ -52,7 +52,10 @@ public:
   CStdString strName; ///< Name of the share, can be choosen freely.
   CStdString strStatus; ///< Status of the share (eg has disk etc.)
   CStdString strPath; ///< Path of the share, eg. iso9660:// or F:
-
+  CStdString strPluginIdentifer;
+  bool hasPrefs;
+  bool hasStoreServices;
+  
   /*!
   \brief The type of the media source.
 
@@ -95,9 +98,11 @@ public:
   int m_iBadPwdCount; ///< Number of wrong passwords user has entered since share was last unlocked
 
   CStdString m_strThumbnailImage; ///< Path to a thumbnail image for the share, or blank for default
+  CStdString m_strFanartUrl;
 
   std::vector<CStdString> vecPaths;
   bool m_ignore; /// <Do not store in xml
+  bool m_autoDetected;
 };
 
 /*!

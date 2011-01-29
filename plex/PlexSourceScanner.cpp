@@ -7,9 +7,10 @@
  *
  */
 #include "Log.h"
+#include "File.h"
 #include "FileItem.h"
 #include "Key.h"
-//#include "CocoaUtilsPlus.h"
+#include "Picture.h"
 #include "PlexDirectory.h"
 #include "PlexSourceScanner.h"
 #include "Util.h"
@@ -20,7 +21,7 @@ map<std::string, HostSourcesPtr> CPlexSourceScanner::g_hostSourcesMap;
 CCriticalSection CPlexSourceScanner::g_lock;
 int CPlexSourceScanner::g_activeScannerCount = 0;
 
-//using namespace DIRECTORY; 
+using namespace XFILE; 
 
 void CPlexSourceScanner::Process()
 {
@@ -42,8 +43,9 @@ void CPlexSourceScanner::Process()
   {
     // Compute the real host label (empty for local server).
     std::string realHostLabel = m_hostLabel;
-    //bool onlyShared = true;
+    bool onlyShared = false;
 
+#pragma warning cross-platform code needed here
     // Act a bit differently if we're talking to a local server.
     /*if (Cocoa_IsHostLocal(m_host) == true)
     {
@@ -57,14 +59,13 @@ void CPlexSourceScanner::Process()
     
     // Scan the server.
     path.Format("%s/music/", m_url);
-#pragma warning sort this out
-    /*CUtil::AutodetectPlexSources(path, sources->musicSources, realHostLabel, onlyShared);
+    AutodetectPlexSources(path, sources->musicSources, realHostLabel, onlyShared);
     
     path.Format("%s/video/", m_url);
-    CUtil::AutodetectPlexSources(path, sources->videoSources, realHostLabel, onlyShared);
+    AutodetectPlexSources(path, sources->videoSources, realHostLabel, onlyShared);
     
     path.Format("%s/photos/", m_url);
-    CUtil::AutodetectPlexSources(path, sources->pictureSources, realHostLabel, onlyShared);*/
+    AutodetectPlexSources(path, sources->pictureSources, realHostLabel, onlyShared);
 
     // Library sections.
     path.Format("%s/library/sections", m_url);
@@ -177,8 +178,8 @@ void CPlexSourceScanner::CheckForRemovedSources(VECSOURCES& sources, int windowI
   {
     CMediaSource source = *iterSources;
     bool bFound = true;
-    #pragma warning fix this
-    /*if (source.m_autoDetected)
+    
+    if (source.m_autoDetected)
     {
       bool bIsSourceName = true;
       bFound = false;
@@ -203,12 +204,119 @@ void CPlexSourceScanner::CheckForRemovedSources(VECSOURCES& sources, int windowI
         if (CUtil::GetMatchingSource(source.strName, remoteSources, bIsSourceName) >= 0)
           bFound = true;
       }
-    }*/
+    }
     
     if (!bFound)
       sources.erase(iterSources);
     else
       ++iterSources;
   }  
+}
+
+void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCES& dstSources, CStdString strLabel, bool onlyShared)
+{
+  bool bIsSourceName = true;
+  bool bPerformRemove = true;
+  
+  // Auto-add PMS sources
+  VECSOURCES pmsSources;
+  CFileItemList* fileItems = new CFileItemList();
+  CPlexDirectory plexDir;
+  plexDir.SetTimeout(2);
+  
+  CUtil::AddSlashAtEnd(strPlexPath);
+  if (plexDir.GetDirectory(strPlexPath, *fileItems))
+  {
+    // Make sure all items in the PlexDirectory are added as sources
+    for ( int i = 0; i < fileItems->Size(); i++ )
+    {
+      CFileItemPtr item = fileItems->Get(i);
+      if ((!onlyShared) || item->HasProperty("share"))
+      {
+        CMediaSource share;
+        share.strName = item->GetLabel();
+        
+        // Add the label (if provided
+        if (strLabel != "")
+          share.strName.Format("%s (%s)", share.strName, strLabel);
+        
+        // Get special attributes for PMS sources
+        if (item->HasProperty("hasPrefs"))
+          share.hasPrefs = item->GetPropertyBOOL("hasPrefs");
+        
+        if (item->HasProperty("pluginIdentifer"))
+          share.strPluginIdentifer = item->GetProperty("pluginIdentifier");
+        
+        if (item->HasProperty("hasStoreServices"))
+          share.hasStoreServices = item->GetPropertyBOOL("hasStoreServices");
+        
+        share.strPath = item->m_strPath;
+        share.m_strFanartUrl = item->GetQuickFanart();
+        share.m_ignore = true;
+        
+        // Download thumbnail if needed.
+        CStdString cachedThumb(item->GetCachedPlexMediaServerThumb());
+        CStdString thumb(item->GetThumbnailImage());
+        
+        if (CFile::Exists(cachedThumb))
+        {
+          item->SetThumbnailImage(cachedThumb);
+        }
+        else
+        {
+          CPicture pic;
+          if(pic.CreateThumbnail(thumb, cachedThumb))
+            item->SetThumbnailImage(cachedThumb);
+          else
+            item->SetThumbnailImage("");
+        }
+        
+        share.m_strThumbnailImage = cachedThumb;
+        
+        // Fanart.
+        if (!item->HasProperty("fanart_image"))
+        {
+          item->CacheLocalFanart();
+          if (CFile::Exists(item->GetCachedProgramFanart()))
+            item->SetProperty("fanart_image", item->GetCachedProgramFanart());
+        }
+        
+        pmsSources.push_back(share);
+        if (CUtil::GetMatchingSource(share.strName, dstSources, bIsSourceName) < 0)
+          dstSources.push_back(share);
+      }
+    }
+    delete fileItems;
+    
+    // Remove any local PMS sources that don't exist in the PlexDirectory
+    for (int i = dstSources.size() - 1; i >= 0; i--)
+    {
+      CMediaSource share = dstSources.at(i);
+      if ((share.strPath.find(strPlexPath) != string::npos) && (share.strPath.find("/", strPlexPath.length()) == share.strPath.length()-1))
+      {
+        if (CUtil::GetMatchingSource(dstSources.at(i).strName, pmsSources, bIsSourceName) < 0)
+          dstSources.erase(dstSources.begin()+i);
+      }
+    }
+    
+    // Everything ran successfully - don't remove PMS sources
+    bPerformRemove = false;
+  }
+  
+  // If there was a problem connecting to the local PMS, remove local root sources
+  if (bPerformRemove)
+  {
+    RemovePlexSources(strPlexPath, dstSources);
+  }
+}
+
+void CPlexSourceScanner::RemovePlexSources(CStdString strPlexPath, VECSOURCES& dstSources)
+{
+  for ( int i = dstSources.size() - 1; i >= 0; i--)
+  {
+    CMediaSource share = dstSources.at(i);
+    if ((share.strPath.find(strPlexPath) != string::npos) && (share.strPath.find("/", strPlexPath.length()) == share.strPath.length()-1))
+      dstSources.erase(dstSources.begin()+i);
+  }
 }
 

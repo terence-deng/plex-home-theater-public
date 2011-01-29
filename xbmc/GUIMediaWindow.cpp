@@ -63,6 +63,7 @@
 #endif
 #include "utils/Builtins.h"
 #include "PlexMediaServerQueue.h"
+#include "PlexSourceScanner.h"
 
 #define CONTROL_BTNVIEWASICONS     2
 #define CONTROL_BTNSORTBY          3
@@ -208,6 +209,22 @@ bool CGUIMediaWindow::OnAction(const CAction &action)
   return false;
 }
 
+void CGUIMediaWindow::RefreshShares(bool update)
+{
+  if (m_vecItems->IsVirtualDirectoryRoot() && IsActive())
+  {
+    CPlexSourceScanner::MergeSourcesForWindow(GetID());
+    SetupShares();
+    
+    if (update)
+    {
+      int iItem = m_viewControl.GetSelectedItem();
+      Update(m_vecItems->m_strPath);
+      m_viewControl.SetSelectedItem(iItem);
+    }
+  }
+}
+
 bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
 {
   switch ( message.GetMessage() )
@@ -345,13 +362,14 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
         return true;
       }
       else if (message.GetParam1()==GUI_MSG_UPDATE_SOURCES)
-      { // State of the sources changed, so update our view
-        if (m_vecItems->IsVirtualDirectoryRoot() && IsActive())
-        {
-          int iItem = m_viewControl.GetSelectedItem();
-          Update(m_vecItems->m_strPath);
-          m_viewControl.SetSelectedItem(iItem);
-        }
+      { 
+        // State of the sources changed, so update our view
+        RefreshShares(true);
+        return true;
+      }
+      else if (message.GetParam1()==GUI_MSG_UPDATE_REMOTE_SOURCES)
+      {
+        RefreshShares(true);
         return true;
       }
       else if (message.GetParam1()==GUI_MSG_UPDATE && IsActive())
@@ -691,6 +709,8 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
   // TODO: OnInitWindow calls Update() before window path has been set properly.
   if (strDirectory == "?")
     return false;
+  
+  RefreshShares();
 
   // get selected item
   int iItem = m_viewControl.GetSelectedItem();

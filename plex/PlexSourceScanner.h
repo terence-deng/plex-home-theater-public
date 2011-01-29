@@ -49,6 +49,9 @@ public:
 
   static int GetActiveScannerCount() { return g_activeScannerCount; } 
   
+  static void AutodetectPlexSources(CStdString strPlexPath, VECSOURCES& dstSources, CStdString strLabel = "", bool onlyShared = false);
+  static void RemovePlexSources(CStdString strPlexPath, VECSOURCES& dstSources);
+  
 protected:
   
   static void MergeSource(VECSOURCES& sources, VECSOURCES& remoteSources);
