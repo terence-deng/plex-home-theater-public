@@ -24,6 +24,8 @@
 #import "ApplicationMessenger.h"
 #import "DarwinStorageProvider.h"
 #undef BOOL
+#import "GUIUserMessages.h"
+#import "GUIWindowManager.h"
 
 // For some reaon, Apple removed setAppleMenu from the headers in 10.4,
 // but the method still is there and works. To avoid warnings, we declare
@@ -227,10 +229,14 @@ static void setupWindowMenu(void)
 
 - (void) applicationWillResignActive:(NSNotification *) note
 {
+  CGUIMessage msg(GUI_MSG_APP_DEACTIVATED, 0, 0);
+  g_windowManager.SendMessage(msg);
 }
 
 - (void) applicationWillBecomeActive:(NSNotification *) note
 {
+  CGUIMessage msg(GUI_MSG_APP_ACTIVATED, 0, 0);
+  g_windowManager.SendMessage(msg);
 }
 
 // To use Cocoa on secondary POSIX threads, your application must first detach

@@ -134,3 +134,10 @@
 
 // Send when the main menu needs updating.
 #define GUI_MSG_UPDATE_MAIN_MENU      GUI_MSG_USER + 42
+
+// Send when the application is activated (moving to the forground)
+#define GUI_MSG_APP_ACTIVATED         GUI_MSG_USER + 43
+
+// Send when the application is deactivating (moving to the background)
+#define GUI_MSG_APP_DEACTIVATED       GUI_MSG_USER + 44
+
