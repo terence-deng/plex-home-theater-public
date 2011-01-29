@@ -46,6 +46,7 @@
 #include "GUIDialogYesNo.h"
 #include "GUIWindowManager.h"
 #include "GUIDialogOK.h"
+#include "GUIDialogRating.h"
 #include "PlayList.h"
 #include "MediaManager.h"
 #include "Settings.h"
@@ -61,6 +62,7 @@
 #include "lib/libPython/XBPython.h"
 #endif
 #include "utils/Builtins.h"
+#include "PlexMediaServerQueue.h"
 
 #define CONTROL_BTNVIEWASICONS     2
 #define CONTROL_BTNSORTBY          3
@@ -1364,6 +1366,10 @@ void CGUIMediaWindow::GetContextButtons(int itemNumber, CContextButtons &buttons
 
   if (!item)
     return;
+  
+  // add rating options
+  if (item->HasProperty("ratingKey") && item->HasProperty("pluginIdentifier"))
+    buttons.Add(CONTEXT_BUTTON_RATING, item->HasProperty("userRating") ? 40206 : 40205);
 
   // user added buttons
   CStdString label;
@@ -1413,6 +1419,23 @@ bool CGUIMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
           Update(m_vecItems->m_strPath);
       return true;
     }
+  case CONTEXT_BUTTON_RATING:
+  {
+    CFileItemPtr item = m_vecItems->Get(itemNumber);
+    
+    bool hasUserRating = item->HasProperty("userRating");
+    int newRating = CGUIDialogRating::ShowAndGetInput(hasUserRating ? 40208 : 40207,
+                                                      item->GetVideoInfoTag()->m_strTitle,
+                                                      hasUserRating? item->GetPropertyInt("userRating") : (int)item->GetVideoInfoTag()->m_fRating);
+    
+    if (newRating >= 0 && newRating <= 10)
+    {
+      PlexMediaServerQueue::Get().onRate(item, newRating);
+      item->SetProperty("userRating", newRating);
+    }
+    
+    return true;
+  }
   case CONTEXT_BUTTON_USER1:
   case CONTEXT_BUTTON_USER2:
   case CONTEXT_BUTTON_USER3:

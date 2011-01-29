@@ -2114,5 +2114,10 @@
   <string id="40203">Plex Media Server</string>
   <string id="40204">Waiting for response...</string>
 
+  <string id="40205">Rate...</string>
+  <string id="40206">Change Rating...</string>
+  <string id="40207">Set Rating</string>
+  <string id="40208">Change Rating</string>
+
 </strings>
 

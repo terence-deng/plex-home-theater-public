@@ -929,6 +929,7 @@ int CGUIInfoManager::TranslateListItem(const CStdString &info)
   else if (info.Equals("subtitlelanguage")) return LISTITEM_SUBTITLE_LANGUAGE;
   else if (info.Equals("isfolder")) return LISTITEM_IS_FOLDER;
   else if (info.Equals("originaltitle")) return LISTITEM_ORIGINALTITLE;
+  else if (info.Equals("stardiffuse")) return LISTITEM_STAR_DIFFUSE;
   else if (info.Left(9).Equals("property(")) return AddListItemProp(info.Mid(9, info.GetLength() - 10));
   return 0;
 }
@@ -4035,6 +4036,17 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
     if (item->HasVideoInfoTag())
       return item->GetVideoInfoTag()->m_streamDetails.GetSubtitleLanguage();
     break;
+  case LISTITEM_STAR_DIFFUSE:
+    {
+      CStdString communityRatingColor = item->GetProperty("communityRatingColor");
+      if (item->HasProperty("userRating"))
+        return "FFFFCC00";
+      else if (communityRatingColor.size() > 0)
+        return communityRatingColor;
+      else 
+        return "FFFFFFFF";
+    }
+    break;
   }
   return "";
 }
@@ -4056,14 +4068,23 @@ CStdString CGUIInfoManager::GetItemImage(const CFileItem *item, int info) const
   case LISTITEM_STAR_RATING:
     {
       CStdString rating;
-      if (item->HasVideoInfoTag())
-      { // rating for videos is assumed 0..10, so convert to 0..5
-        rating.Format("rating%d.png", (long)((item->GetVideoInfoTag()->m_fRating * 0.5f) + 0.5f));
+      if (item->HasProperty("userRating"))
+      {
+        rating.Format("rating%d.png", (long)(item->GetPropertyDouble("userRating") + 0.5f));
+      }
+      else if (item->HasProperty("rating"))
+      {
+        rating.Format("rating%d.png", (long)(item->GetPropertyDouble("rating") + 0.5f));
+      }
+      else if (item->HasVideoInfoTag())
+      { // rating for videos
+        rating.Format("rating%d.png", (long)(item->GetVideoInfoTag()->m_fRating + 0.5f));
       }
       else if (item->HasMusicInfoTag())
-      { // song rating.
-        rating.Format("rating%c.png", item->GetMusicInfoTag()->GetRating());
+      { // song rating in old library is 0..5, so double it
+        rating.Format("rating%c.png", item->GetMusicInfoTag()->GetRating()*2);
       }
+      
       return rating;
     }
     break;

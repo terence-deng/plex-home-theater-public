@@ -217,6 +217,7 @@
 #include "GUIDialogAccessPoints.h"
 #endif
 #include "GUIDialogFullScreenInfo.h"
+#include "GUIDialogRating.h"
 #include "GUIDialogTeletext.h"
 #include "GUIDialogSlider.h"
 #include "GUIControlFactory.h"
@@ -527,7 +528,7 @@ bool CApplication::Create()
     }
     g_settings.m_logFolder = "special://masterprofile/";
   }
-  
+
   m_plexApp = PlexApplication::Create();
 
 #ifdef HAS_XRANDR
@@ -1068,6 +1069,8 @@ bool CApplication::Initialize()
   g_windowManager.Add(new CGUIDialogLockSettings); // window id = 131
 
   g_windowManager.Add(new CGUIDialogContentSettings);        // window id = 132
+
+  g_windowManager.Add(new CGUIDialogRating);                 // window id = 200
 
   g_windowManager.Add(new CGUIWindowMusicPlayList);          // window id = 500
   g_windowManager.Add(new CGUIWindowMusicSongs);             // window id = 501
@@ -3342,7 +3345,7 @@ void CApplication::Stop()
     if (PlexHelper::GetInstance().IsAlwaysOn() == false)
       PlexHelper::GetInstance().Stop();
 #endif
-    
+
     PlexMediaServerQueue::Get().StopThread();
 
 #if defined(HAVE_LIBCRYSTALHD)
@@ -4039,7 +4042,7 @@ void CApplication::SaveFileState()
       m_progressTrackingVideoResumeBookmark,
       m_progressTrackingPlayCountUpdate);
   CJobManager::GetInstance().AddJob(job, NULL);
-  
+
   UpdateViewOffset();
 }
 
@@ -4097,7 +4100,7 @@ void CApplication::UpdateFileState()
         if (GetTime() > g_advancedSettings.m_videoIgnoreAtStart)
         {
           PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, m_progressTrackingVideoResumeBookmark.timeInSeconds);
-          
+
           // Update the bookmark
           m_progressTrackingVideoResumeBookmark.timeInSeconds = GetTime();
           m_progressTrackingVideoResumeBookmark.totalTimeInSeconds = GetTotalTime();
@@ -4116,7 +4119,7 @@ void CApplication::UpdateViewOffset()
 {
   if (m_progressTrackingVideoResumeBookmark.timeInSeconds < 0.0f)
     m_progressTrackingItem->ClearProperty("viewOffset");
-  
+
   else if (m_progressTrackingVideoResumeBookmark.timeInSeconds > 0.0f)
     m_progressTrackingItem->SetProperty("viewOffset", boost::lexical_cast<string>(m_progressTrackingVideoResumeBookmark.timeInSeconds));
 }
@@ -4510,7 +4513,7 @@ bool CApplication::OnMessage(CGUIMessage& message)
           return true;
         }
       }
-      
+
       // In case playback ended due to user eg. skipping over the end, clear
       // our resume bookmark here
       if (message.GetMessage() == GUI_MSG_PLAYBACK_ENDED && m_progressTrackingPlayCountUpdate && g_advancedSettings.m_videoIgnoreAtEnd > 0)
@@ -4807,7 +4810,7 @@ void CApplication::ProcessSlow()
     g_lcd->Initialize();
   }
 #endif
-  
+
   if (!IsPlayingVideo())
     ADDON::CAddonMgr::Get().UpdateRepos();
 

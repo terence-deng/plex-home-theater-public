@@ -133,6 +133,7 @@
 		7482B27612E8C5E90077A38C /* PlexDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7482B27412E8C5E90077A38C /* PlexDirectory.cpp */; };
 		7482B37A12E8E3510077A38C /* CocoaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7482B37912E8E3510077A38C /* CocoaUtils.m */; };
 		7482B38B12E8E3CA0077A38C /* CocoaUtilsPlus.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7482B38A12E8E3CA0077A38C /* CocoaUtilsPlus.mm */; };
+		74F034C412F2B0A500040736 /* GUIDialogRating.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74F034C312F2B0A500040736 /* GUIDialogRating.cpp */; };
 		74FB20E212ECBC4200876EB5 /* PlexMediaServerQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74FB20E012ECBC4200876EB5 /* PlexMediaServerQueue.cpp */; };
 		7C2D6AE40F35453E00DD2E85 /* SpecialProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */; };
 		7C45DBE910F325C400D4BBF3 /* DAVDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */; };
@@ -1110,6 +1111,8 @@
 		7482B37912E8E3510077A38C /* CocoaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CocoaUtils.m; path = plex/CocoaUtils.m; sourceTree = "<group>"; };
 		7482B38912E8E3CA0077A38C /* CocoaUtilsPlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaUtilsPlus.h; path = plex/CocoaUtilsPlus.h; sourceTree = "<group>"; };
 		7482B38A12E8E3CA0077A38C /* CocoaUtilsPlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CocoaUtilsPlus.mm; path = plex/CocoaUtilsPlus.mm; sourceTree = "<group>"; };
+		74F034C212F2B0A500040736 /* GUIDialogRating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogRating.h; path = plex/GUI/GUIDialogRating.h; sourceTree = "<group>"; };
+		74F034C312F2B0A500040736 /* GUIDialogRating.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogRating.cpp; path = plex/GUI/GUIDialogRating.cpp; sourceTree = "<group>"; };
 		74FB20E012ECBC4200876EB5 /* PlexMediaServerQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexMediaServerQueue.cpp; path = plex/PlexMediaServerQueue.cpp; sourceTree = "<group>"; };
 		74FB20E112ECBC4200876EB5 /* PlexMediaServerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexMediaServerQueue.h; path = plex/PlexMediaServerQueue.h; sourceTree = "<group>"; };
 		7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpecialProtocol.cpp; sourceTree = "<group>"; };
@@ -2967,6 +2970,7 @@
 				7482B38912E8E3CA0077A38C /* CocoaUtilsPlus.h */,
 				7482B38A12E8E3CA0077A38C /* CocoaUtilsPlus.mm */,
 				7482B36B12E8E3220077A38C /* FileSystem */,
+				74F034C112F2B08D00040736 /* GUI */,
 				74646A1812E82E8F00B2FF1E /* Network */,
 				746469F112E82AD700B2FF1E /* PlexApplication.h */,
 				746469F212E82AD700B2FF1E /* PlexApplication.cpp */,
@@ -2999,6 +3003,15 @@
 				7482B27412E8C5E90077A38C /* PlexDirectory.cpp */,
 			);
 			name = FileSystem;
+			sourceTree = "<group>";
+		};
+		74F034C112F2B08D00040736 /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+				74F034C212F2B0A500040736 /* GUIDialogRating.h */,
+				74F034C312F2B0A500040736 /* GUIDialogRating.cpp */,
+			);
+			name = GUI;
 			sourceTree = "<group>";
 		};
 		7C5608C30F1754930056433A /* ExternalPlayer */ = {
@@ -6827,6 +6840,7 @@
 				7482B37A12E8E3510077A38C /* CocoaUtils.m in Sources */,
 				7482B38B12E8E3CA0077A38C /* CocoaUtilsPlus.mm in Sources */,
 				74FB20E212ECBC4200876EB5 /* PlexMediaServerQueue.cpp in Sources */,
+				74F034C412F2B0A500040736 /* GUIDialogRating.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
