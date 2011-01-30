@@ -38,6 +38,8 @@
 #include "../linux/ConvUtils.h"
 #endif
 
+#include "Application.h"
+#include "FileItem.h"
 #include "DllLibCurl.h"
 #include "FileShoutcast.h"
 #include "SpecialProtocol.h"
@@ -519,6 +521,14 @@ void CFileCurl::SetCommonOptions(CReadState* state)
 
   // Set the lowspeed time very low as it seems Curl takes much longer to detect a lowspeed condition
   g_curlInterface.easy_setopt(h, CURLOPT_LOW_SPEED_TIME, m_lowspeedtime);
+  
+  // See if we need to add any options from the FileItem.
+  if (g_application.CurrentFileItem().m_strPath == m_url)
+  {
+    CStdString cookies = g_application.CurrentFileItem().GetProperty("httpCookies");
+    if (cookies.size() > 0)
+      g_curlInterface.easy_setopt(h, CURLOPT_COOKIE, cookies.c_str());
+  }
 }
 
 void CFileCurl::SetRequestHeaders(CReadState* state)
