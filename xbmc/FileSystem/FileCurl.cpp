@@ -59,8 +59,8 @@ extern "C" int debug_callback(CURL_HANDLE *handle, curl_infotype info, char *out
     return 0;
 
   // Only shown cURL debug into with loglevel DEBUG_SAMBA or higher
-  if( g_advancedSettings.m_logLevel < LOG_LEVEL_DEBUG_SAMBA )
-    return 0;
+  //if( g_advancedSettings.m_logLevel < LOG_LEVEL_DEBUG_SAMBA )
+  //  return 0;
 
   CStdString strLine;
   strLine.append(output, size);
