@@ -340,9 +340,6 @@ bool CDVDPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
 
     m_ready.Reset();
     Create();
-    
-    CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-    dialog->Show();
 
     return true;
   }
@@ -355,10 +352,6 @@ bool CDVDPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
 
 void CDVDPlayer::OpenFileComplete()
 {  
-  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-  if (dialog->IsDialogRunning())
-    g_application.getApplicationMessenger().Close(dialog, true, false); // close via messenger to avoid deadlocks
-  
   if (m_bFileOpenComplete == false)
   {
     m_bFileOpenComplete = true;

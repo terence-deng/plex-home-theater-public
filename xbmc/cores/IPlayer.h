@@ -165,6 +165,7 @@ public:
   virtual CStdString GetPlayingTitle() { return ""; };
   
   virtual bool CanOpenAsync() { return false; }
+  virtual void Abort() {};
 
 protected:
   IPlayerCallback& m_callback;

@@ -174,6 +174,8 @@ public:
   void CheckAudioScrobblerStatus();
   void CheckForTitleChange();
   void ActivateScreenSaver(bool forceType = false);
+  void ShowBusyIndicator();
+  void HideBusyIndicator();
 
   virtual void Process();
   void ProcessSlow();

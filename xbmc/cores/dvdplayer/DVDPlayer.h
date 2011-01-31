@@ -228,6 +228,7 @@ public:
   virtual int OnDVDNavResult(void* pData, int iMessage);
   
   virtual bool CanOpenAsync() { return true; }
+  virtual void Abort() { m_bAbortRequest = true; };
   
 protected:
   friend class CSelectionStreams;

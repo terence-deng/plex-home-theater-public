@@ -2386,10 +2386,12 @@ bool CApplication::OnAction(const CAction &action)
       return OnAction(CAction(ACTION_PLAYER_PLAY));
   }
   
-  // Stop the player cleanly
+  // Has the user tried to navigate whilst waiting for playback to start?
   if (action.GetID() == ACTION_PARENT_DIR && m_bPlaybackStarting)
   {
+    HideBusyIndicator();
     StopPlaying();
+    return true;
   }
 
   // in normal case
@@ -3749,12 +3751,16 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
   //
   if (m_pPlayer->CanOpenAsync() == false)
     FinishPlayingFile(bResult);
+  else
+    ShowBusyIndicator();
   
   return bResult;
 }
 
 void CApplication::FinishPlayingFile(bool bResult, const CStdString& error)
 {
+  HideBusyIndicator();
+  
   if(bResult)
   {
     if (m_iPlaySpeed != 1)
@@ -4149,7 +4155,12 @@ void CApplication::StopPlaying()
 #endif
 
     if (m_pPlayer)
-      m_pPlayer->CloseFile();
+    {
+      if (IsStartingPlayback())
+        m_pPlayer->Abort();
+      else
+        m_pPlayer->CloseFile();
+    }
 
     // turn off visualisation window when stopping
     if (iWin == WINDOW_VISUALISATION
@@ -4374,6 +4385,19 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */)
     return;
   else if (!m_screenSaver->ID().IsEmpty())
     g_windowManager.ActivateWindow(WINDOW_SCREENSAVER);
+}
+
+void CApplication::ShowBusyIndicator()
+{
+  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+  dialog->Show(); 
+}
+
+void CApplication::HideBusyIndicator()
+{
+  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+  if (dialog->IsDialogRunning())
+    dialog->Close();
 }
 
 void CApplication::CheckShutdown()
