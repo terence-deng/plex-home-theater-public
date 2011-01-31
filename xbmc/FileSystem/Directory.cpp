@@ -214,13 +214,16 @@ bool CDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items, C
     for (int i = 0; i < items.Size(); ++i)
     {
       CFileItemPtr item = items[i];
-      // TODO: we shouldn't be checking the gui setting here;
-      // callers should use getHidden instead
-      if ((!item->m_bIsFolder && !pDirectory->IsAllowed(item->m_strPath)) ||
-          (item->GetPropertyBOOL("file:hidden") && !getHidden && !g_guiSettings.GetBool("filelists.showhidden")))
+      if (item->IsPlexMediaServer() == false && items.IsPlexMediaServer() == false)
       {
-        items.Remove(i);
-        i--; // don't confuse loop
+        // TODO: we shouldn't be checking the gui setting here;
+        // callers should use getHidden instead
+        if ((!item->m_bIsFolder && !pDirectory->IsAllowed(item->m_strPath)) ||
+            (item->GetPropertyBOOL("file:hidden") && !getHidden && !g_guiSettings.GetBool("filelists.showhidden")))
+        {
+          items.Remove(i);
+          i--; // don't confuse loop
+        }
       }
     }
 
