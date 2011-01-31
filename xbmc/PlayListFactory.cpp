@@ -43,7 +43,7 @@ CPlayList* CPlayListFactory::Create(const CFileItem& item)
 
   if( item.IsInternetStream() )
   {
-    CStdString strMimeType = item.GetMimeType();
+    CStdString strMimeType = item.GetMimeType(); // <--- This causes slow down.
     strMimeType.MakeLower();
 
     if (strMimeType == "video/x-ms-asf"
