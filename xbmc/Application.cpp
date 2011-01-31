@@ -314,6 +314,7 @@ CApplication::CApplication(void) : m_itemCurrentFile(new CFileItem), m_progressT
   m_strPlayListFile = "";
   m_nextPlaylistItem = -1;
   m_bPlaybackStarting = false;
+  m_bPlaybackInFullScreen = false;
 
 #ifdef HAS_GLX
   XInitThreads();
@@ -2384,6 +2385,12 @@ bool CApplication::OnAction(const CAction &action)
     else
       return OnAction(CAction(ACTION_PLAYER_PLAY));
   }
+  
+  // Stop the player cleanly
+  if (action.GetID() == ACTION_PARENT_DIR && m_bPlaybackStarting)
+  {
+    StopPlaying();
+  }
 
   // in normal case
   // just pass the action to the current window and let it handle it
@@ -3736,7 +3743,18 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
     CLog::Log(LOGERROR, "Error creating player for item %s (File doesn't exist?)", item.m_strPath.c_str());
     bResult = false;
   }
+  
+  // If the player is opening asynchronously, we'll finish up with a callback.
+  // Otherwise complete the open synchronously.
+  //
+  if (m_pPlayer->CanOpenAsync() == false)
+    FinishPlayingFile(bResult);
+  
+  return bResult;
+}
 
+void CApplication::FinishPlayingFile(bool bResult, const CStdString& error)
+{
   if(bResult)
   {
     if (m_iPlaySpeed != 1)
@@ -3750,27 +3768,9 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
     if( IsPlayingVideo() )
     {
       // if player didn't manange to switch to fullscreen by itself do it here
-      if( options.fullscreen && g_renderManager.IsStarted()
+      if(m_bPlaybackInFullScreen && g_renderManager.IsStarted()
        && g_windowManager.GetActiveWindow() != WINDOW_FULLSCREEN_VIDEO )
        SwitchToFullScreen();
-
-      // Save information about the stream if we currently have no data
-      if (item.HasVideoInfoTag() && !item.IsDVDImage() && !item.IsDVDFile())
-      {
-        CVideoInfoTag *details = m_itemCurrentFile->GetVideoInfoTag();
-        if (!details->HasStreamDetails() ||
-             details->m_streamDetails.GetVideoDuration() <= 0)
-        {
-          if (m_pPlayer->GetStreamDetails(details->m_streamDetails) && details->HasStreamDetails())
-          {
-            CVideoDatabase dbs;
-            dbs.Open();
-            dbs.SetStreamDetailsForFileId(details->m_streamDetails, details->m_iFileId);
-            dbs.Close();
-            CUtil::DeleteVideoDatabaseDirectoryCache();
-          }
-        }
-      }
     }
 #endif
 
@@ -3789,6 +3789,16 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
   }
   else
   {
+    // Display error message.
+    if (g_playlistPlayer.GetPlaylist(g_playlistPlayer.GetCurrentPlaylist()).size() == 1)
+    {
+      CStdString err = error;
+      if (err.size() == 0)
+        err = g_localizeStrings.Get(42008);
+      
+      CGUIDialogOK::ShowAndGetInput(g_localizeStrings.Get(257), err + ".", "", "");
+    }
+    
     // we send this if it isn't playlistplayer that is doing this
     int next = g_playlistPlayer.GetNextSong();
     int size = g_playlistPlayer.GetPlaylist(g_playlistPlayer.GetCurrentPlaylist()).size();
@@ -3796,8 +3806,6 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
     || next >= size)
       OnPlayBackStopped();
   }
-
-  return bResult;
 }
 
 void CApplication::OnPlayBackEnded()

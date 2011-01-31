@@ -42,6 +42,8 @@ class CGUIDialog;
 #define TMSG_MEDIA_PAUSE          202
 #define TMSG_MEDIA_RESTART        203
 
+#define TMSG_MEDIA_OPEN_COMPLETE  207
+
 #define TMSG_PLAYLISTPLAYER_PLAY  210
 #define TMSG_PLAYLISTPLAYER_NEXT  211
 #define TMSG_PLAYLISTPLAYER_PREV  212
@@ -116,6 +118,7 @@ public:
   void MediaPlay(const CFileItemList &item, int song = 0);
   void MediaStop();
   void MediaPause();
+  void MediaOpenComplete(bool bStatus, const CStdString& error = "");
   void MediaRestart(bool bWait);
 
   void PlayListPlayerPlay();

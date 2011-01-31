@@ -163,6 +163,8 @@ public:
   virtual bool SetPlayerState(CStdString state) { return false;};
   
   virtual CStdString GetPlayingTitle() { return ""; };
+  
+  virtual bool CanOpenAsync() { return false; }
 
 protected:
   IPlayerCallback& m_callback;

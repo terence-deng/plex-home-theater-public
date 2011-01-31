@@ -277,6 +277,7 @@ CDVDPlayer::CDVDPlayer(IPlayerCallback& callback)
       m_CurrentSubtitle(STREAM_SUBTITLE),
       m_CurrentTeletext(STREAM_TELETEXT),
       m_messenger("player"),
+			m_bFileOpenComplete(false),
       m_dvdPlayerVideo(&m_clock, &m_overlayContainer, m_messenger),
       m_dvdPlayerAudio(&m_clock, m_messenger),
       m_dvdPlayerSubtitle(&m_overlayContainer),
@@ -325,6 +326,7 @@ bool CDVDPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
     if(ThreadHandle())
       CloseFile();
 
+    m_bFileOpenComplete = false;
     m_bAbortRequest = false;
     SetPlaySpeed(DVD_PLAYSPEED_NORMAL);
 
@@ -338,18 +340,9 @@ bool CDVDPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
 
     m_ready.Reset();
     Create();
-    if(!m_ready.WaitMSec(100))
-    {
-      CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
-      dialog->Show();
-      while(!m_ready.WaitMSec(1))
-        g_windowManager.Process(true);
-      dialog->Close();
-    }
-
-    // Playback might have been stopped due to some error
-    if (m_bStop || m_bAbortRequest)
-      return false;
+    
+    CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+    dialog->Show();
 
     return true;
   }
@@ -357,6 +350,32 @@ bool CDVDPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
   {
     CLog::Log(LOGERROR, "%s - Exception thrown on open", __FUNCTION__);
     return false;
+  }
+}
+
+void CDVDPlayer::OpenFileComplete()
+{  
+  CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
+  if (dialog->IsDialogRunning())
+    g_application.getApplicationMessenger().Close(dialog, true, false); // close via messenger to avoid deadlocks
+  
+  if (m_bFileOpenComplete == false)
+  {
+    m_bFileOpenComplete = true;
+    
+    bool ret = true;
+    if (m_bStop || m_bAbortRequest)
+      ret = false;
+    
+    CStdString err;
+    if (m_pInputStream && m_pInputStream->GetError().size() > 0)
+      err = m_pInputStream->GetError();
+    else if (m_pDemuxer && m_pDemuxer->GetError().size() > 0)
+      err = m_pDemuxer->GetError();
+    else if (m_strError.size() > 0)
+      err = m_strError;
+    
+    g_application.getApplicationMessenger().MediaOpenComplete(ret, err);
   }
 }
 
@@ -889,6 +908,9 @@ void CDVDPlayer::Process()
   // make sure application know our info
   UpdateApplication(0);
   UpdatePlayState(0);
+  
+  // we are done initializing now.
+  OpenFileComplete();
 
   if(m_PlayerOptions.identify == false)
     m_callback.OnPlayBackStarted();
@@ -1667,6 +1689,9 @@ void CDVDPlayer::OnExit()
   try
   {
     CLog::Log(LOGNOTICE, "CDVDPlayer::OnExit()");
+    
+    // Open file is complete.
+    OpenFileComplete();
 
     // set event to inform openfile something went wrong in case openfile is still waiting for this event
     SetCaching(CACHESTATE_DONE);
@@ -1728,6 +1753,9 @@ void CDVDPlayer::OnExit()
     m_pInputStream = NULL;
     m_pDemuxer = NULL;
   }
+  
+  // Open file is complete.
+  OpenFileComplete();
 
   m_bStop = true;
   // if we didn't stop playing, advance to the next item in xbmc's playlist

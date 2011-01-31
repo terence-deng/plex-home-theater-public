@@ -424,6 +424,10 @@ case TMSG_POWERDOWN:
         g_application.m_pPlayer->Pause();
       }
       break;
+      
+    case TMSG_MEDIA_OPEN_COMPLETE:
+      g_application.FinishPlayingFile(pMsg->dwParam1, pMsg->strParam);
+      break;
 
     case TMSG_SWITCHTOFULLSCREEN:
       if( g_windowManager.GetActiveWindow() != WINDOW_FULLSCREEN_VIDEO )
@@ -771,6 +775,14 @@ void CApplicationMessenger::MediaStop()
 {
   ThreadMessage tMsg = {TMSG_MEDIA_STOP};
   SendMessage(tMsg, true);
+}
+
+void CApplicationMessenger::MediaOpenComplete(bool bStatus, const CStdString& strErrorMsg)
+{
+  ThreadMessage tMsg = {TMSG_MEDIA_OPEN_COMPLETE};
+  tMsg.dwParam1 = bStatus;
+  tMsg.strParam = strErrorMsg;
+  SendMessage(tMsg, false);
 }
 
 void CApplicationMessenger::MediaPause()

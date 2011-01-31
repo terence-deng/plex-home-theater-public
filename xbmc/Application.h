@@ -149,6 +149,7 @@ public:
   bool PlayMediaSync(const CFileItem& item, int iPlaylist = PLAYLIST_MUSIC);
   bool ProcessAndStartPlaylist(const CStdString& strPlayList, PLAYLIST::CPlayList& playlist, int iPlaylist);
   bool PlayFile(const CFileItem& item, bool bRestart = false);
+  void FinishPlayingFile(bool bResult, const CStdString& error=""); 
   void SaveFileState();
   void UpdateFileState();
   void UpdateViewOffset();
@@ -246,6 +247,7 @@ public:
 
   bool m_bIsPaused;
   bool m_bPlaybackStarting;
+  bool m_bPlaybackInFullScreen;
 
   CKaraokeLyricsManager* m_pKaraokeMgr;
 
