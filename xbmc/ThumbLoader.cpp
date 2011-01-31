@@ -42,8 +42,8 @@
 using namespace XFILE;
 using namespace std;
 
-CThumbLoader::CThumbLoader(int nThreads) :
-  CBackgroundInfoLoader(nThreads)
+CThumbLoader::CThumbLoader(int numThreads, int pauseBetweenLoads) :
+  CBackgroundInfoLoader(numThreads, pauseBetweenLoads)
 {
 }
 
@@ -157,8 +157,8 @@ bool CThumbExtractor::DoWork()
   return result;
 }
 
-CVideoThumbLoader::CVideoThumbLoader() :
-  CThumbLoader(1), CJobQueue(true), m_pStreamDetailsObs(NULL)
+CVideoThumbLoader::CVideoThumbLoader(int numThreads, int pauseBetweenLoads) :
+  CThumbLoader(numThreads, pauseBetweenLoads), CJobQueue(true), m_pStreamDetailsObs(NULL)
 {
 }
 
@@ -306,7 +306,8 @@ void CVideoThumbLoader::OnJobComplete(unsigned int jobID, bool success, CJob* jo
   CJobQueue::OnJobComplete(jobID, success, job);
 }
 
-CProgramThumbLoader::CProgramThumbLoader()
+CProgramThumbLoader::CProgramThumbLoader(int numThreads, int pauseBetweenLoads)
+  : CThumbLoader(numThreads, pauseBetweenLoads)
 {
 }
 
@@ -379,7 +380,8 @@ CStdString CProgramThumbLoader::GetLocalThumb(const CFileItem &item)
   return "";
 }
 
-CMusicThumbLoader::CMusicThumbLoader()
+CMusicThumbLoader::CMusicThumbLoader(int numThreads, int pauseBetweenLoads)
+  : CThumbLoader(numThreads, pauseBetweenLoads)
 {
 }
 
@@ -388,12 +390,16 @@ CMusicThumbLoader::~CMusicThumbLoader()
 }
 
 bool CMusicThumbLoader::LoadItem(CFileItem* pItem)
-{
+{ 
   if (pItem->m_bIsShareOrDrive) return true;
   if (!pItem->HasThumbnail())
+  {
     pItem->SetUserMusicThumb();
+  }
   else
+  {
     LoadRemoteThumb(pItem);
+  }
   return true;
 }
 

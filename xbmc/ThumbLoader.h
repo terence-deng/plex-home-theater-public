@@ -64,7 +64,7 @@ public:
 class CThumbLoader : public CBackgroundInfoLoader
 {
 public:
-  CThumbLoader(int nThreads=-1);
+  CThumbLoader(int numThreads=-1, int pauseBetweenLoads=0);
   virtual ~CThumbLoader();
 
   bool LoadRemoteThumb(CFileItem *pItem);
@@ -87,7 +87,7 @@ public:
 class CVideoThumbLoader : public CThumbLoader, public CJobQueue
 {
 public:
-  CVideoThumbLoader();
+  CVideoThumbLoader(int numThreads=1, int pauseBetweenLoads=0);
   virtual ~CVideoThumbLoader();
   virtual bool LoadItem(CFileItem* pItem);
   void SetStreamDetailsObserver(IStreamDetailsObserver *pObs) { m_pStreamDetailsObs = pObs; }
@@ -112,7 +112,7 @@ protected:
 class CProgramThumbLoader : public CThumbLoader
 {
 public:
-  CProgramThumbLoader();
+  CProgramThumbLoader(int numThreads=-1, int pauseBetweenLoads=0);
   virtual ~CProgramThumbLoader();
   virtual bool LoadItem(CFileItem* pItem);
 
@@ -137,7 +137,7 @@ public:
 class CMusicThumbLoader : public CThumbLoader
 {
 public:
-  CMusicThumbLoader();
+  CMusicThumbLoader(int numThreads=-1, int pauseBetweenLoads=0);
   virtual ~CMusicThumbLoader();
   virtual bool LoadItem(CFileItem* pItem);
 };
