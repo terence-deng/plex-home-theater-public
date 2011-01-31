@@ -142,7 +142,9 @@ public:
    \return true if something has been played, false otherwise.
    */
   bool HasPlayedFirstFile() const;
-
+  bool QueuedFirstFile() const { return m_bQueuedFirstFile; }
+  void SetQueuedFirstFile() { m_bQueuedFirstFile = true; }
+  
   void SetRepeat(int iPlaylist, REPEAT_STATE state);
   REPEAT_STATE GetRepeat(int iPlaylist) const;
 
@@ -166,6 +168,7 @@ protected:
 
   void ReShuffle(int iPlaylist, int iPosition);
 
+  bool m_bQueuedFirstFile;
   bool m_bPlayedFirstFile;
   bool m_bPlaybackStarted;
   int m_iFailedSongs;

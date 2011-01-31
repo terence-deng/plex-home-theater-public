@@ -3673,8 +3673,9 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
       eNewCore = CPlayerCoreFactory::GetDefaultPlayer(item);
   }
 
-  // this really aught to be inside !bRestart, but since PlayStack
+  // this really ought to be inside !bRestart, but since PlayStack
   // uses that to init playback, we have to keep it outside
+  //
   int playlist = g_playlistPlayer.GetCurrentPlaylist();
   if (playlist == PLAYLIST_VIDEO && g_playlistPlayer.GetPlaylist(playlist).size() > 1)
   { // playing from a playlist by the looks

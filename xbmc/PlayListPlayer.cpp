@@ -43,6 +43,7 @@ CPlayListPlayer::CPlayListPlayer(void)
   m_PlaylistEmpty = new CPlayList;
   m_iCurrentSong = -1;
   m_bPlayedFirstFile = false;
+  m_bQueuedFirstFile = false;
   m_bPlaybackStarted = false;
   m_iCurrentPlayList = PLAYLIST_NONE;
   for (int i = 0; i < 2; i++)
@@ -412,6 +413,7 @@ void CPlayListPlayer::Reset()
 {
   m_iCurrentSong = -1;
   m_bPlayedFirstFile = false;
+  m_bQueuedFirstFile = false;
   m_bPlaybackStarted = false;
 
   // its likely that the playlist changed
