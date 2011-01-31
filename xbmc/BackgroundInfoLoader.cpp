@@ -29,7 +29,7 @@ using namespace std;
 
 #define ITEMS_PER_THREAD 5
 
-CBackgroundInfoLoader::CBackgroundInfoLoader(int nThreads)
+CBackgroundInfoLoader::CBackgroundInfoLoader(int nThreads, int pauseBetweenLoadsInMS)
 {
   m_bStop = true;
   m_pObserver=NULL;
@@ -38,6 +38,7 @@ CBackgroundInfoLoader::CBackgroundInfoLoader(int nThreads)
   m_nRequestedThreads = nThreads;
   m_bStartCalled = false;
   m_nActiveThreads = 0;
+  m_pauseBetweenLoadsInMS = pauseBetweenLoadsInMS;
 }
 
 CBackgroundInfoLoader::~CBackgroundInfoLoader()
@@ -64,7 +65,7 @@ void CBackgroundInfoLoader::Run()
           m_bStartCalled = true;
         }
       }
-
+      
       while (!m_bStop)
       {
         CSingleLock lock(m_lock);
@@ -86,8 +87,13 @@ void CBackgroundInfoLoader::Run()
         lock.Leave();
         try
         {
+          // Load an item.
           if (LoadItem(pItem.get()) && m_pObserver)
             m_pObserver->OnItemLoaded(pItem.get());
+          
+          // Pause if it was requested.
+          if (m_pauseBetweenLoadsInMS > 0)
+            ::usleep(m_pauseBetweenLoadsInMS*1000);
         }
         catch (...)
         {
