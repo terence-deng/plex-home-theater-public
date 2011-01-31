@@ -484,7 +484,8 @@ bool CDVDPlayer::OpenDemuxStream()
     int attempts = 10;
     while(!m_bStop && attempts-- > 0)
     {
-      m_pDemuxer = CDVDFactoryDemuxer::CreateDemuxer(m_pInputStream);
+      m_strError = "";
+      m_pDemuxer = CDVDFactoryDemuxer::CreateDemuxer(m_pInputStream, m_strError);
       if(!m_pDemuxer && m_pInputStream->NextStream())
       {
         CLog::Log(LOGDEBUG, "%s - New stream available from input, retry open", __FUNCTION__);

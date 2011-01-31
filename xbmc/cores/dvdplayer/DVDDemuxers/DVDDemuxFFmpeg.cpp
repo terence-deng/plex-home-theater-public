@@ -336,6 +336,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
       pd.buf_size = m_dllAvFormat.get_buffer(m_ioContext, pd.buf, m_ioContext->max_packet_size ? m_ioContext->max_packet_size : m_ioContext->buffer_size);
       if (pd.buf_size <= 0)
       {
+        SetError(g_localizeStrings.Get(42000));
         CLog::Log(LOGERROR, "%s - error reading from input stream, %s", __FUNCTION__, strFile.c_str());
         return false;
       }
@@ -419,6 +420,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
       }
       if (!iformat)
       {
+        SetError(g_localizeStrings.Get(42001));
         CLog::Log(LOGERROR, "%s - error probing input format, %s", __FUNCTION__, strFile.c_str());
         return false;
       }
@@ -431,10 +433,11 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
       }
     }
 
-
     // open the demuxer
-    if (m_dllAvFormat.av_open_input_stream(&m_pFormatContext, m_ioContext, strFile.c_str(), iformat, NULL) < 0)
+    int ret;
+    if ((ret = m_dllAvFormat.av_open_input_stream(&m_pFormatContext, m_ioContext, strFile.c_str(), iformat, NULL)) < 0)
     {
+      SetError(GetErrorString(ret));
       CLog::Log(LOGERROR, "%s - Error, could not open file %s", __FUNCTION__, strFile.c_str());
       Dispose();
       return false;

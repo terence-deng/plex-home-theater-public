@@ -343,4 +343,13 @@ public:
    * return a user-presentable codec name of the given stream
    */
   virtual void GetStreamCodecName(int iStreamId, CStdString &strName) {};
+  
+  /*
+   * Error string.
+   */
+  void SetError(const std::string& error) { m_strError = error; }
+  const std::string& GetError() const { return m_strError; }
+  
+private:
+  std::string m_strError;
 };

@@ -21,11 +21,13 @@
  *
  */
 
+#include <string>
+
 class CDVDDemux;
 class CDVDInputStream;
 
 class CDVDFactoryDemuxer
 {
 public:
-  static CDVDDemux* CreateDemuxer(CDVDInputStream* pInputStream);
+  static CDVDDemux* CreateDemuxer(CDVDInputStream* pInputStream, std::string& error);
 };

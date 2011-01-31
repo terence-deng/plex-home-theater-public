@@ -33,7 +33,7 @@
 
 using namespace std;
 
-CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
+CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream, string& error)
 {
   if (pInputStream->IsStreamType(DVDSTREAM_TYPE_HTTP))
   {
@@ -64,8 +64,13 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
 
   auto_ptr<CDVDDemuxFFmpeg> demuxer(new CDVDDemuxFFmpeg());
   if(demuxer->Open(pInputStream))
+  {
     return demuxer.release();
+  }
   else
+  {
+    error = demuxer->GetError();
     return NULL;
+  }
 }
 
