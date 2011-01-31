@@ -400,6 +400,14 @@ bool CMusicThumbLoader::LoadItem(CFileItem* pItem)
   {
     LoadRemoteThumb(pItem);
   }
+
+  if (!pItem->HasProperty("fanart_image"))
+  {
+    pItem->CacheLocalFanart();
+    if (CFile::Exists(pItem->GetCachedProgramFanart()))
+      pItem->SetProperty("fanart_image",pItem->GetCachedProgramFanart());
+  }
+ 
   return true;
 }
 
