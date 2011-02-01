@@ -319,7 +319,11 @@
 #define WINDOW_LOGIN_SCREEN               10029
 #define WINDOW_SETTINGS_PROFILES          10034
 
+
 #define WINDOW_ADDON_BROWSER              10040
+
+// New Plex windows
+#define WINDOW_NOW_PLAYING                10050
 
 #define WINDOW_DIALOG_YES_NO              10100
 #define WINDOW_DIALOG_PROGRESS            10101

@@ -63,7 +63,7 @@ using namespace ADDON;
 
 CGUISettings& g_guiSettings = g_SystemGlobals.m_guiSettings;
 
-#ifdef _LINUX
+/*#ifdef _LINUX
 #define DEFAULT_VISUALISATION "visualization.glspectrum"
 #elif defined(_WIN32)
 #ifdef HAS_DX
@@ -71,7 +71,8 @@ CGUISettings& g_guiSettings = g_SystemGlobals.m_guiSettings;
 #else
 #define DEFAULT_VISUALISATION "visualization.glspectrum"
 #endif
-#endif
+#endif*/
+#define DEFAULT_VISUALISATION "visualization.nowplaying"
 
 struct sortsettings
 {

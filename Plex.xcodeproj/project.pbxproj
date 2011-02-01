@@ -91,6 +91,7 @@
 		43BF09A21080D1E900E25290 /* AVTransportSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF099E1080D1E900E25290 /* AVTransportSCPD.cpp */; };
 		43BF09A31080D1E900E25290 /* RenderingControlSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF099F1080D1E900E25290 /* RenderingControlSCPD.cpp */; };
 		43BF09AB1080D2ED00E25290 /* RdrConnectionManagerSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF09A81080D2ED00E25290 /* RdrConnectionManagerSCPD.cpp */; };
+		743A74F012F8BFCD00040C63 /* GUIWindowNowPlaying.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */; };
 		74462EE712E37BF600C8B41F /* libwavpack.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EE612E37BF600C8B41F /* libwavpack.a */; };
 		74462EEB12E37C3600C8B41F /* libcdio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EEA12E37C3600C8B41F /* libcdio.a */; };
 		74462EF212E37D7900C8B41F /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EF112E37D7900C8B41F /* libpcre.a */; };
@@ -1067,6 +1068,9 @@
 		6E97BDC10DA2B620003A2A89 /* EventServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventServer.h; sourceTree = "<group>"; };
 		6E97BDC30DA2B620003A2A89 /* Fanart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fanart.h; sourceTree = "<group>"; };
 		6E97BDC40DA2B620003A2A89 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
+		7417EDDC12F9ACF200DA5B18 /* addon.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = addon.xml; path = addons/visualization.nowplaying/addon.xml; sourceTree = "<group>"; };
+		743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIWindowNowPlaying.cpp; path = plex/GUI/GUIWindowNowPlaying.cpp; sourceTree = "<group>"; };
+		743A74EF12F8BFCD00040C63 /* GUIWindowNowPlaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIWindowNowPlaying.h; path = plex/GUI/GUIWindowNowPlaying.h; sourceTree = "<group>"; };
 		74462EE612E37BF600C8B41F /* libwavpack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwavpack.a; path = vendor/homebrew.git/lib/libwavpack.a; sourceTree = "<group>"; };
 		74462EEA12E37C3600C8B41F /* libcdio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcdio.a; path = vendor/homebrew.git/lib/libcdio.a; sourceTree = "<group>"; };
 		74462EF112E37D7900C8B41F /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = vendor/homebrew.git/lib/libpcre.a; sourceTree = "<group>"; };
@@ -2971,6 +2975,7 @@
 		746469DE12E827B500B2FF1E /* plex */ = {
 			isa = PBXGroup;
 			children = (
+				74A4E98E12F7FFB40021FEDB /* AddOns */,
 				7482B37812E8E3510077A38C /* CocoaUtils.h */,
 				7482B37912E8E3510077A38C /* CocoaUtils.m */,
 				7482B38912E8E3CA0077A38C /* CocoaUtilsPlus.h */,
@@ -3021,6 +3026,22 @@
 			name = FileSystem;
 			sourceTree = "<group>";
 		};
+		74A4E98E12F7FFB40021FEDB /* AddOns */ = {
+			isa = PBXGroup;
+			children = (
+				74A4E98F12F7FFC10021FEDB /* NowPlaying */,
+			);
+			name = AddOns;
+			sourceTree = "<group>";
+		};
+		74A4E98F12F7FFC10021FEDB /* NowPlaying */ = {
+			isa = PBXGroup;
+			children = (
+				7417EDDC12F9ACF200DA5B18 /* addon.xml */,
+			);
+			name = NowPlaying;
+			sourceTree = "<group>";
+		};
 		74F034C112F2B08D00040736 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -3028,6 +3049,8 @@
 				74F034C312F2B0A500040736 /* GUIDialogRating.cpp */,
 				74756A9912F450DF0001203D /* GUIDialogTimer.h */,
 				74756A9A12F450DF0001203D /* GUIDialogTimer.cpp */,
+				743A74EF12F8BFCD00040C63 /* GUIWindowNowPlaying.h */,
+				743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */,
 			);
 			name = GUI;
 			sourceTree = "<group>";
@@ -6861,6 +6884,7 @@
 				74F034C412F2B0A500040736 /* GUIDialogRating.cpp in Sources */,
 				74756A9B12F450DF0001203D /* GUIDialogTimer.cpp in Sources */,
 				74756AA612F4668D0001203D /* BackgroundMusicPlayer.cpp in Sources */,
+				743A74F012F8BFCD00040C63 /* GUIWindowNowPlaying.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6920,6 +6944,7 @@
 					lib/cpluff/libcpluff,
 					lib/libmicrohttpd/src/include,
 					/System/Library/Frameworks/Python.framework/Versions/2.5/include,
+					plex/GUI,
 				);
 				INFOPLIST_FILE = $SRCROOT/xbmc/osx/Info.plist;
 				INSTALL_PATH = /usr/local/bin;
@@ -7035,6 +7060,7 @@
 					lib/cpluff/libcpluff,
 					lib/libmicrohttpd/src/include,
 					/System/Library/Frameworks/Python.framework/Versions/2.5/include,
+					plex/GUI,
 				);
 				INFOPLIST_FILE = $SRCROOT/xbmc/osx/Info.plist;
 				INSTALL_PATH = /usr/local/bin;

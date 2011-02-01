@@ -191,6 +191,8 @@ public:
   // Wakes up from the screensaver and / or DPMS. Returns true if woken up.
   bool WakeUpScreenSaverAndDPMS();
   bool WakeUpScreenSaver();
+  bool IsVisualizerActive();
+  void ActivateVisualizer();
   double GetTotalTime() const;
   double GetTime() const;
   float GetPercentage() const;

@@ -178,6 +178,7 @@
 #include "GUIWindowOSD.h"
 #include "GUIWindowMusicOverlay.h"
 #include "GUIWindowVideoOverlay.h"
+#include "GUIWindowNowPlaying.h"
 
 // Dialog includes
 #include "GUIDialogMusicOSD.h"
@@ -1030,6 +1031,7 @@ bool CApplication::Initialize()
   g_windowManager.Add(new CGUIWindowLoginScreen);            // window id = 29
   g_windowManager.Add(new CGUIWindowSettingsProfile);          // window id = 34
   g_windowManager.Add(new CGUIWindowAddonBrowser);          // window id = 40
+  g_windowManager.Add(new CGUIWindowNowPlaying);         // window id = 50
   g_windowManager.Add(new CGUIDialogYesNo);              // window id = 100
   g_windowManager.Add(new CGUIDialogProgress);           // window id = 101
   g_windowManager.Add(new CGUIDialogKeyboard);           // window id = 103
@@ -3184,6 +3186,7 @@ bool CApplication::Cleanup()
     g_windowManager.Delete(WINDOW_MUSIC_OVERLAY);
     g_windowManager.Delete(WINDOW_VIDEO_OVERLAY);
     g_windowManager.Delete(WINDOW_SLIDESHOW);
+    g_windowManager.Delete(WINDOW_NOW_PLAYING);
 
     g_windowManager.Delete(WINDOW_HOME);
     g_windowManager.Delete(WINDOW_PROGRAMS);
@@ -4307,7 +4310,7 @@ void CApplication::CheckScreenSaverAndDPMS()
   // * Are we playing a video and it is not paused?
   if ((IsPlayingVideo() && !m_pPlayer->IsPaused())
       // * Are we playing some music in fullscreen vis?
-      || (IsPlayingAudio() && g_windowManager.GetActiveWindow() == WINDOW_VISUALISATION))
+      || (IsPlayingAudio() && IsVisualizerActive()))
   {
     ResetScreenSaverTimer();
     return;
@@ -4361,7 +4364,7 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */)
     else if (IsPlayingAudio() && g_guiSettings.GetBool("screensaver.usemusicvisinstead") && !g_guiSettings.GetString("musicplayer.visualisation").IsEmpty())
     { // activate the visualisation
       m_screenSaver.reset(new CScreenSaver("visualization"));
-      g_windowManager.ActivateWindow(WINDOW_VISUALISATION);
+      ActivateVisualizer();
       return;
     }
   }
@@ -4386,6 +4389,21 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */)
     return;
   else if (!m_screenSaver->ID().IsEmpty())
     g_windowManager.ActivateWindow(WINDOW_SCREENSAVER);
+}
+
+bool CApplication::IsVisualizerActive()
+{
+  return (g_windowManager.GetActiveWindow() == WINDOW_VISUALISATION || 
+          g_windowManager.GetActiveWindow() == WINDOW_NOW_PLAYING);
+}
+
+void CApplication::ActivateVisualizer()
+{
+  // See which visualizer to activate.
+  if (g_guiSettings.GetString("musicplayer.visualisation") == "visualization.nowplaying")
+    g_windowManager.ActivateWindow(WINDOW_NOW_PLAYING);
+  else
+    g_windowManager.ActivateWindow(WINDOW_VISUALISATION);
 }
 
 void CApplication::ShowBusyIndicator()
@@ -4597,7 +4615,7 @@ bool CApplication::OnMessage(CGUIMessage& message)
         g_windowManager.PreviousWindow();
       }
 
-      if (!IsPlayingAudio() && g_playlistPlayer.GetCurrentPlaylist() == PLAYLIST_NONE && g_windowManager.GetActiveWindow() == WINDOW_VISUALISATION)
+      if (!IsPlayingAudio() && g_playlistPlayer.GetCurrentPlaylist() == PLAYLIST_NONE && IsVisualizerActive())
       {
         g_settings.Save();  // save vis settings
         WakeUpScreenSaverAndDPMS();
@@ -4605,7 +4623,7 @@ bool CApplication::OnMessage(CGUIMessage& message)
       }
 
       // DVD ejected while playing in vis ?
-      if (!IsPlayingAudio() && (m_itemCurrentFile->IsCDDA() || m_itemCurrentFile->IsOnDVD()) && !g_mediaManager.IsDiscInDrive() && g_windowManager.GetActiveWindow() == WINDOW_VISUALISATION)
+      if (!IsPlayingAudio() && (m_itemCurrentFile->IsCDDA() || m_itemCurrentFile->IsOnDVD()) && !g_mediaManager.IsDiscInDrive() && IsVisualizerActive())
       {
         // yes, disable vis
         g_settings.Save();    // save vis settings
@@ -5235,9 +5253,9 @@ bool CApplication::SwitchToFullScreen()
     return true;
   }
   // special case for switching between GUI & visualisation mode. (only if we're playing an audio song)
-  if (IsPlayingAudio() && g_windowManager.GetActiveWindow() != WINDOW_VISUALISATION)
+  if (IsPlayingAudio() && !IsVisualizerActive())
   { // then switch to visualisation
-    g_windowManager.ActivateWindow(WINDOW_VISUALISATION);
+    ActivateVisualizer();
     return true;
   }
   return false;

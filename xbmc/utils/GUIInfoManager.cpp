@@ -68,11 +68,13 @@
 #include "GUIUserMessages.h"
 #include "GUIWindowVideoInfo.h"
 #include "GUIWindowMusicInfo.h"
+#include "GUIWindowNowPlaying.h"
 #include "addons/Skin.h"
 #include "MediaManager.h"
 #include "TimeUtils.h"
 #include "SingleLock.h"
 #include "log.h"
+#include "PlayList.h"
 
 #include "addons/AddonManager.h"
 
@@ -82,6 +84,7 @@ using namespace std;
 using namespace XFILE;
 using namespace MUSIC_INFO;
 using namespace ADDON;
+using namespace PLAYLIST;
 
 CGUIInfoManager g_infoManager;
 
@@ -960,6 +963,10 @@ int CGUIInfoManager::TranslateMusicPlayerString(const CStdString &info) const
   else if (info.Equals("exists")) return MUSICPLAYER_EXISTS;
   else if (info.Equals("hasprevious")) return MUSICPLAYER_HASPREVIOUS;
   else if (info.Equals("hasnext")) return MUSICPLAYER_HASNEXT;
+  else if (info.Equals("hasnewcovernext")) return MUSICPLAYER_HAS_NEW_COVER_NEXT;
+  else if (info.Equals("nextnewcover")) return MUSICPLAYER_NEXT_NEW_COVER;
+  else if (info.Equals("nowplayingflipped")) return MUSICPLAYER_NOW_PLAYING_FLIPPED;
+  else if (info.Equals("fanart")) return MUSICPLAYER_FANART;
   return 0;
 }
 
@@ -1108,6 +1115,7 @@ CStdString CGUIInfoManager::GetLabel(int info, int contextWindow)
   case MUSICPLAYER_RATING:
   case MUSICPLAYER_COMMENT:
   case MUSICPLAYER_LYRICS:
+  case MUSICPLAYER_FANART:
     strLabel = GetMusicLabel(info);
   break;
   case VIDEOPLAYER_TITLE:
@@ -1979,6 +1987,26 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
           bReturn = true;
       }
       break;
+      
+    case MUSICPLAYER_NOW_PLAYING_FLIPPED:
+      {
+        CGUIWindowNowPlaying *nowPlayingWindow = (CGUIWindowNowPlaying*)g_windowManager.GetWindow(WINDOW_NOW_PLAYING);
+        bReturn = (nowPlayingWindow != NULL ? nowPlayingWindow->IsFlipped() : false);
+        break;
+      }
+    case MUSICPLAYER_HAS_NEW_COVER_NEXT:
+      {
+        bReturn = false;
+        if (g_playlistPlayer.GetCurrentPlaylist() == PLAYLIST_MUSIC)
+        {
+          if (g_playlistPlayer.GetCurrentSong() < (g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC).size() - 1))
+          {
+            CPlayList playlist = g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC);
+            bReturn = !playlist[g_playlistPlayer.GetCurrentSong()]->GetThumbnailImage().Equals(playlist[g_playlistPlayer.GetNextSong()]->GetThumbnailImage());
+          }
+        }
+        break;
+      }
     case VIDEOPLAYER_USING_OVERLAYS:
       bReturn = (g_guiSettings.GetInt("videoplayer.rendermethod") == RENDER_OVERLAYS);
     break;
@@ -2633,6 +2661,22 @@ CStdString CGUIInfoManager::GetImage(int info, int contextWindow)
     if (!g_application.IsPlayingAudio()) return "";
     return m_currentFile->HasThumbnail() ? m_currentFile->GetThumbnailImage() : "DefaultAlbumCover.png";
   }
+  else if (info == MUSICPLAYER_NEXT_NEW_COVER)
+  {
+    if (g_playlistPlayer.GetCurrentPlaylist() == PLAYLIST_MUSIC)
+    {
+      if (g_playlistPlayer.GetCurrentSong() < (g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC).size() - 1))
+      {
+        CPlayList playlist = g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC);
+        for (int i=g_playlistPlayer.GetCurrentSong()+1; i < g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC).size(); i++)
+        {
+          if (!playlist[g_playlistPlayer.GetCurrentSong()]->GetThumbnailImage().Equals(playlist[i]->GetThumbnailImage()))
+            return playlist[i]->GetThumbnailImage();
+        }
+      }
+    }
+    return "";
+  }
   else if (info == MUSICPLAYER_RATING)
   {
     if (!g_application.IsPlayingAudio()) return "";
@@ -3053,13 +3097,10 @@ CStdString CGUIInfoManager::GetMusicTagLabel(int info, const CFileItem *item) co
       }
     }
     break;
-#pragma warning "Enable me"
-#if 0
   case MUSICPLAYER_FANART:
     if (item->HasProperty("fanart_fallback") == false)
       return item->GetProperty("fanart_image");
     break;
-#endif
   case MUSICPLAYER_RATING:
     return GetItemLabel(item, LISTITEM_RATING);
   case MUSICPLAYER_COMMENT:

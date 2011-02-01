@@ -251,6 +251,8 @@ void CAdvancedSettings::Initialize()
   m_sleepBeforeFlip = 0;
   m_bVirtualShares = true;
 
+  m_nowPlayingFlipTime = 120;
+  
 //caused lots of jerks
 //#ifdef _WIN32
 //  m_ForcedSwapTime = 2.0;
@@ -562,6 +564,8 @@ bool CAdvancedSettings::Load()
   XMLUtils::GetUInt(pRootElement,"restrictcapsmask", m_RestrictCapsMask);
   XMLUtils::GetFloat(pRootElement,"sleepbeforeflip", m_sleepBeforeFlip, 0.0f, 1.0f);
   XMLUtils::GetBoolean(pRootElement,"virtualshares", m_bVirtualShares);
+  
+  XMLUtils::GetInt(pRootElement, "nowplayingfliptime", m_nowPlayingFlipTime, 10, 6000);
 
   //Tuxbox
   pElement = pRootElement->FirstChildElement("tuxbox");
