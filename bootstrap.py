@@ -89,6 +89,8 @@ def brew(args, message = None):
 def brew_install(name, options):
     '''Install a forumula using homebrew'''
     args = ['install', '--32bit', name] + options
+    if VERBOSE:
+      args.insert(1, '--verbose')
     brew(args, "Installing %s" % name)
 
 
