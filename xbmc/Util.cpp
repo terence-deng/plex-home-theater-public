@@ -2516,7 +2516,7 @@ void CUtil::SplitExecFunction(const CStdString &execString, CStdString &function
 
   // remove any whitespace, and the standard prefix (if it exists)
   function.Trim();
-  if(function.Left(5).Equals("plex.", false) || function.Left(5).Equals("xbmc", false))
+  if(function.Left(5).Equals("plex.", false) || function.Left(5).Equals("xbmc.", false))
     function.Delete(0, 5);
 
   // now split up our parameters - we may have quotes to deal with as well as brackets and whitespace
