@@ -1528,6 +1528,7 @@ bool CFileItemList::Copy(const CFileItemList& items)
 
   // assign the rest of the CFileItemList properties
   m_replaceListing = items.m_replaceListing;
+  m_saveInHistory  = items.m_saveInHistory;
   m_content        = items.m_content;
   m_mapProperties  = items.m_mapProperties;
   m_cacheToDisc    = items.m_cacheToDisc;
@@ -1535,6 +1536,16 @@ bool CFileItemList::Copy(const CFileItemList& items)
   m_sortMethod     = items.m_sortMethod;
   m_sortOrder      = items.m_sortOrder;
 
+  m_firstTitle = items.m_firstTitle;
+  m_secondTitle = items.m_secondTitle;
+  m_defaultViewMode = items.m_defaultViewMode;
+  m_disabledViewModes = items.m_disabledViewModes;
+  m_wasListingCancelled = items.m_wasListingCancelled;
+  m_displayMessage = items.m_displayMessage;
+  m_displayMessageTitle = items.m_displayMessageTitle;
+  m_displayMessageContents = items.m_displayMessageContents;
+  m_autoRefresh = items.m_autoRefresh;
+  
   // make a copy of each item
   for (int i = 0; i < items.Size(); i++)
   {
