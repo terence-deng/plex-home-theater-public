@@ -91,6 +91,7 @@
 		43BF09A21080D1E900E25290 /* AVTransportSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF099E1080D1E900E25290 /* AVTransportSCPD.cpp */; };
 		43BF09A31080D1E900E25290 /* RenderingControlSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF099F1080D1E900E25290 /* RenderingControlSCPD.cpp */; };
 		43BF09AB1080D2ED00E25290 /* RdrConnectionManagerSCPD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BF09A81080D2ED00E25290 /* RdrConnectionManagerSCPD.cpp */; };
+		74332DA412FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74332DA212FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp */; };
 		743A74F012F8BFCD00040C63 /* GUIWindowNowPlaying.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */; };
 		74462EE712E37BF600C8B41F /* libwavpack.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EE612E37BF600C8B41F /* libwavpack.a */; };
 		74462EEB12E37C3600C8B41F /* libcdio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EEA12E37C3600C8B41F /* libcdio.a */; };
@@ -1069,6 +1070,8 @@
 		6E97BDC30DA2B620003A2A89 /* Fanart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fanart.h; sourceTree = "<group>"; };
 		6E97BDC40DA2B620003A2A89 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 		7417EDDC12F9ACF200DA5B18 /* addon.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = addon.xml; path = addons/visualization.nowplaying/addon.xml; sourceTree = "<group>"; };
+		74332DA212FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogPlexPluginSettings.cpp; path = plex/GUI/GUIDialogPlexPluginSettings.cpp; sourceTree = "<group>"; };
+		74332DA312FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogPlexPluginSettings.h; path = plex/GUI/GUIDialogPlexPluginSettings.h; sourceTree = "<group>"; };
 		743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIWindowNowPlaying.cpp; path = plex/GUI/GUIWindowNowPlaying.cpp; sourceTree = "<group>"; };
 		743A74EF12F8BFCD00040C63 /* GUIWindowNowPlaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIWindowNowPlaying.h; path = plex/GUI/GUIWindowNowPlaying.h; sourceTree = "<group>"; };
 		74462EE612E37BF600C8B41F /* libwavpack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwavpack.a; path = vendor/homebrew.git/lib/libwavpack.a; sourceTree = "<group>"; };
@@ -3051,6 +3054,8 @@
 				74756A9A12F450DF0001203D /* GUIDialogTimer.cpp */,
 				743A74EF12F8BFCD00040C63 /* GUIWindowNowPlaying.h */,
 				743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */,
+				74332DA312FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.h */,
+				74332DA212FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp */,
 			);
 			name = GUI;
 			sourceTree = "<group>";
@@ -6885,6 +6890,7 @@
 				74756A9B12F450DF0001203D /* GUIDialogTimer.cpp in Sources */,
 				74756AA612F4668D0001203D /* BackgroundMusicPlayer.cpp in Sources */,
 				743A74F012F8BFCD00040C63 /* GUIWindowNowPlaying.cpp in Sources */,
+				74332DA412FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

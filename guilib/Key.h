@@ -324,6 +324,7 @@
 
 // New Plex windows
 #define WINDOW_NOW_PLAYING                10050
+#define WINDOW_PLUGIN_SETTINGS            10051
 
 #define WINDOW_DIALOG_YES_NO              10100
 #define WINDOW_DIALOG_PROGRESS            10101

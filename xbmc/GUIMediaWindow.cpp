@@ -58,6 +58,7 @@
 #include "utils/FileUtils.h"
 #include "GUIEditControl.h"
 #include "GUIDialogKeyboard.h"
+#include "GUIDialogPlexPluginSettings.h"
 #ifdef HAS_PYTHON
 #include "lib/libPython/XBPython.h"
 #endif
@@ -984,6 +985,20 @@ bool CGUIMediaWindow::OnClick(int iItem)
         // If no query was entered or the user dismissed the keyboard, do nothing
         return true;
       }
+    }
+    
+    // Show preferences.
+    if (pItem->m_bIsSettingsDir)
+    {
+      CFileItemList fileItems;
+      vector<CStdString> items;
+      CPlexDirectory plexDir(false);
+      
+      plexDir.GetDirectory(directory.m_strPath, fileItems);
+      CGUIDialogPlexPluginSettings::ShowAndGetInput(pItem->m_strPath, plexDir.GetData());
+      
+      Update(m_vecItems->m_strPath);
+      return true;
     }
 
     if (!Update(directory.m_strPath))
