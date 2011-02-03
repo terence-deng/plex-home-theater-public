@@ -252,6 +252,7 @@ void CAdvancedSettings::Initialize()
   m_bVirtualShares = true;
 
   m_nowPlayingFlipTime = 120;
+  m_bEnableViewRestrictions = true;
   
 //caused lots of jerks
 //#ifdef _WIN32
@@ -566,6 +567,7 @@ bool CAdvancedSettings::Load()
   XMLUtils::GetBoolean(pRootElement,"virtualshares", m_bVirtualShares);
   
   XMLUtils::GetInt(pRootElement, "nowplayingfliptime", m_nowPlayingFlipTime, 10, 6000);
+  XMLUtils::GetBoolean(pRootElement, "enableviewrestrictions", m_bEnableViewRestrictions);
 
   //Tuxbox
   pElement = pRootElement->FirstChildElement("tuxbox");
