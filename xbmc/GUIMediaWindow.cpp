@@ -839,6 +839,10 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
   m_history.AddPath(m_vecItems->m_strPath);
 
   //m_history.DumpPathHistory();
+  
+  // Make sure root directories end up with a content type of "plugins".
+  if (m_vecItems->IsVirtualDirectoryRoot())
+    m_vecItems->SetContent("plugins");
 
   return true;
 }
