@@ -27,6 +27,8 @@ CGUILabel::CGUILabel(float posX, float posY, float width, float height, const CL
     : m_textLayout(labelInfo.font, overflow == OVER_FLOW_WRAP, height)
     , m_scrollInfo(50, 0, labelInfo.scrollSpeed, labelInfo.scrollSuffix)
     , m_maxRect(posX, posY, posX + width, posY + height)
+    , m_bHidden(false)
+    , m_length(0)
 {
   m_selected = false;
   m_overflowType = overflow;
@@ -94,6 +96,12 @@ void CGUILabel::Render()
     }
     else
       align |= XBFONT_TRUNCATED;
+    
+    if (m_bHidden)
+    {
+      CStdString stringToRender(m_length, '*');
+      SetText(stringToRender);
+    }
     m_textLayout.Render(posX, posY, m_label.angle, color, m_label.shadowColor, align, m_renderRect.Width(), renderSolid);
   }
 }
@@ -122,6 +130,7 @@ void CGUILabel::SetAlign(uint32_t align)
 
 void CGUILabel::SetText(const CStdString &label)
 {
+  m_length = label.length();
   if (m_textLayout.Update(label, m_maxRect.Width(), m_invalid))
   { // needed an update - reset scrolling and update our text layout
     m_scrollInfo.Reset();
@@ -132,6 +141,7 @@ void CGUILabel::SetText(const CStdString &label)
 
 void CGUILabel::SetTextW(const CStdStringW &label)
 {
+  m_length = label.length();
   m_textLayout.SetText(label);
   m_scrollInfo.Reset();
   UpdateRenderRect();

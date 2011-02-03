@@ -194,6 +194,10 @@ public:
    */
   static void CheckAndCorrectOverlap(CGUILabel &label1, CGUILabel &label2);
   
+  /* \brief Set the control to mask text for sensitive fields using placeholders (*)
+   */
+  void SetHidden(bool hidden) { m_bHidden = hidden; }
+  
 protected:
   color_t GetColor() const;
   
@@ -207,7 +211,8 @@ protected:
 private:
   CLabelInfo     m_label;
   CGUITextLayout m_textLayout;
-
+  int            m_length;
+  bool           m_bHidden;
   bool           m_scrolling;
   OVER_FLOW      m_overflowType;
   bool           m_selected;

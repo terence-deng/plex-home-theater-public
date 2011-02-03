@@ -76,8 +76,8 @@ public:
 
   virtual void OnClick();
   bool HasClickActions() { return m_clickActions.size() > 0; };
-
   virtual void UpdateColors();
+  void SetHidden(bool hidden) { m_label2.SetHidden(hidden); }
 protected:
   friend class CGUISpinControlEx;
   virtual EVENT_RESULT OnMouseEvent(const CPoint &point, const CMouseEvent &event);
