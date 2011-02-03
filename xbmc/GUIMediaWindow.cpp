@@ -961,9 +961,34 @@ bool CGUIMediaWindow::OnClick(int iItem)
       items.RemoveDiscCache(GetID());
 
     CFileItem directory(*pItem);
+
+    // Show on-screen keyboard for PMS search queries
+    if (pItem->m_bIsSearchDir)
+    {
+      CStdString strSearchTerm = "";
+      if (CGUIDialogKeyboard::ShowAndGetInput(strSearchTerm, pItem->m_strSearchPrompt, false))
+      {
+        // Encode the query.
+        CUtil::URLEncode(strSearchTerm);
+        
+        // Find the ? if there is one.
+        CStdString newURL = directory.m_strPath;
+        CUtil::RemoveSlashAtEnd(newURL);
+        
+        newURL += (newURL.Find("?") > 0) ? "&" : "?";
+        newURL += "query=" + strSearchTerm;
+        directory.m_strPath = newURL;
+      }
+      else
+      {
+        // If no query was entered or the user dismissed the keyboard, do nothing
+        return true;
+      }
+    }
+
     if (!Update(directory.m_strPath))
       ShowShareErrorMessage(&directory);
-
+    
     return true;
   }
   else if (pItem->IsPlugin() && pItem->GetProperty("isplayable") != "true")
