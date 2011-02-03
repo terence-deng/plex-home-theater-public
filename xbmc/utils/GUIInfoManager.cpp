@@ -3781,7 +3781,7 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
       return item->GetVideoInfoTag()->m_strTitle;
     if (item->HasMusicInfoTag())
       return item->GetMusicInfoTag()->GetTitle();
-    break;
+    return item->GetLabel();
   case LISTITEM_ORIGINALTITLE:
     if (item->HasVideoInfoTag())
       return item->GetVideoInfoTag()->m_strOriginalTitle;
