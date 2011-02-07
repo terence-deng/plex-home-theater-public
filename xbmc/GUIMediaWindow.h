@@ -26,8 +26,10 @@
 #include "FileSystem/DirectoryHistory.h"
 #include "GUIViewControl.h"
 #include "GUIDialogContextMenu.h"
+#include "BackgroundInfoLoader.h"
 
 class CFileItemList;
+class MediaRefresher;
 
 // base class for all media windows
 class CGUIMediaWindow : public CGUIWindow
@@ -98,8 +100,12 @@ protected:
   void UpdateFileList();
   virtual void OnDeleteItem(int iItem);
   void OnRenameItem(int iItem);
+  
+  virtual void Render();
 
 protected:
+  virtual CBackgroundInfoLoader* GetBackgroundLoader() { return 0; }
+  
   bool WaitForNetwork() const;
   void RefreshShares(bool update=false);
 
@@ -116,6 +122,9 @@ protected:
   CFileItemList* m_unfilteredItems;        ///< \brief items prior to filtering using FilterItems()
   CDirectoryHistory m_history;
   std::auto_ptr<CGUIViewState> m_guiState;
+  
+  MediaRefresher* m_mediaRefresher;
+  CStopWatch m_refreshTimer;
 
   // save control state on window exit
   int m_iLastControl;

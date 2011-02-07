@@ -78,6 +78,42 @@
 using namespace std;
 using namespace ADDON;
 
+class MediaRefresher : public CThread
+{
+public:
+  
+  MediaRefresher(const string& path)
+  : m_path(path)
+  , m_doneLoading(false)
+  , m_canDie(false)
+  {
+    Create(true);
+  }
+  
+  virtual void Process()
+  {
+    // Execute the request.
+    CPlexDirectory plexDir(true, false);
+    plexDir.GetDirectory(m_path, m_itemList);
+    m_doneLoading = true;
+    
+    // Wait until I can die.
+    while (m_canDie == false)
+      Sleep(100);
+  }
+  
+  bool            isDone() const { return m_doneLoading; }
+  CFileItemList&  getItemList()  { return m_itemList;    }
+  void            die()          { m_canDie = true;      }
+  
+private:
+  
+  string        m_path;
+  CFileItemList m_itemList;
+  volatile bool m_doneLoading;
+  volatile bool m_canDie;
+};
+
 CGUIMediaWindow::CGUIMediaWindow(int id, const char *xmlFile)
     : CGUIWindow(id, xmlFile)
 {
@@ -86,12 +122,16 @@ CGUIMediaWindow::CGUIMediaWindow(int id, const char *xmlFile)
   m_vecItems->m_strPath = "?";
   m_iLastControl = -1;
   m_iSelectedItem = -1;
+  m_mediaRefresher = NULL;
 
   m_guiState.reset(CGUIViewState::GetViewState(GetID(), *m_vecItems));
 }
 
 CGUIMediaWindow::~CGUIMediaWindow()
 {
+  if (m_mediaRefresher)
+    m_mediaRefresher->die();
+  
   delete m_vecItems;
   delete m_unfilteredItems;
 }
@@ -236,6 +276,16 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
     {
       m_iSelectedItem = m_viewControl.GetSelectedItem();
       m_iLastControl = GetFocusedControlID();
+      
+      if (m_refreshTimer.IsRunning())
+        m_refreshTimer.Stop();
+      
+      if (m_mediaRefresher)
+      {
+        m_mediaRefresher->die();
+        m_mediaRefresher = NULL;
+      }
+      
       CGUIWindow::OnMessage(message);
       // Call ClearFileItems() after our window has finished doing any WindowClose
       // animations
@@ -881,6 +931,18 @@ void CGUIMediaWindow::OnFinalizeFileItems(CFileItemList &items)
     pItem->m_bIsFolder = true;
     pItem->m_bIsShareOrDrive = false;
     items.AddFront(pItem, 0);
+  }
+  
+  // Check whether the refresh timer is required
+  if (m_vecItems->m_autoRefresh > 0)
+  {
+    if (!m_refreshTimer.IsRunning())
+      m_refreshTimer.StartZero();
+  }
+  else
+  {
+    if (m_refreshTimer.IsRunning())
+      m_refreshTimer.Stop();
   }
 }
 
@@ -1654,4 +1716,45 @@ CStdString CGUIMediaWindow::GetStartFolder(const CStdString &dir)
   if (dir.Equals("$ROOT") || dir.Equals("Root"))
     return "";
   return dir;
+}
+
+void CGUIMediaWindow::Render()
+{
+  if (m_refreshTimer.IsRunning() && m_vecItems->m_autoRefresh > 0 && m_refreshTimer.GetElapsedSeconds() >= m_vecItems->m_autoRefresh)
+  {
+    if (m_mediaRefresher == NULL)
+    {
+      // Start the directory auto-refreshing.
+      m_mediaRefresher = new MediaRefresher(m_vecItems->m_strPath);
+    }
+    else if (m_mediaRefresher->isDone())
+    {
+      // Assign the new stuff over.
+      m_vecItems->ClearItems();
+      m_vecItems->Append(m_mediaRefresher->getItemList());
+      m_vecItems->m_autoRefresh = m_mediaRefresher->getItemList().m_autoRefresh;
+      
+      OnPrepareFileItems(*m_vecItems);
+      m_vecItems->FillInDefaultIcons();
+      FormatAndSort(*m_vecItems);
+      OnFinalizeFileItems(*m_vecItems);
+      m_viewControl.SetItems(*m_vecItems);
+      
+      // Thumbnails.
+      if (GetBackgroundLoader())
+      {
+        if (GetBackgroundLoader()->IsLoading())
+          GetBackgroundLoader()->StopThread();
+        
+        GetBackgroundLoader()->Load(*m_vecItems);
+      }
+      
+      // Whack the timer.
+      m_refreshTimer.Reset();
+      m_mediaRefresher->die();
+      m_mediaRefresher = NULL;
+    }
+  }
+  
+  CGUIWindow::Render();
 }

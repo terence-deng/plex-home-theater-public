@@ -61,5 +61,6 @@ protected:
   CGUIDialogProgress* m_dlgProgress;
   DllImageLib m_ImageLib;
 
+  virtual CBackgroundInfoLoader* GetBackgroundLoader() { return &m_thumbLoader; }
   CPictureThumbLoader m_thumbLoader;
 };
