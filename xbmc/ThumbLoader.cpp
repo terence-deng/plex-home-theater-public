@@ -19,6 +19,8 @@
  *
  */
 
+#include <boost/foreach.hpp>
+
 #include "FileSystem/StackDirectory.h"
 #include "ThumbLoader.h"
 #include "Util.h"
@@ -285,6 +287,30 @@ bool CVideoThumbLoader::LoadItem(CFileItem* pItem)
     CThumbExtractor* extract = new CThumbExtractor(*pItem,pItem->m_strPath,false);
     AddJob(extract);
   }
+  
+  // Walk through properties and see if there are any image resources to be loaded.
+  CGUIListItem::PropertyMap& properties = pItem->GetPropertyDict();
+  typedef pair<CStdString, CStdString> PropertyPair;
+  BOOST_FOREACH(PropertyPair pair, properties)
+  {
+    if (pair.first.substr(0, 6) == "cache$")
+    {
+      string name = pair.first.substr(6);
+      string url = pair.second;
+      
+      string localFile = CFileItem::GetCachedPlexMediaServerThumb(url);
+      if (CFile::Exists(localFile) == false)
+      {
+        if (CPicture::CreateThumbnail(url, localFile))
+          pItem->SetProperty(name, localFile);
+      }
+      else
+      {
+        pItem->SetProperty(name, localFile);
+      }
+    }
+  }
+  
   return true;
 }
 

@@ -134,6 +134,7 @@ protected:
   CGUIListItemLayout *m_focusedLayout;
   bool m_bSelected;     // item is selected or not
 
+public:
   struct icompare
   {
     bool operator()(const CStdString &s1, const CStdString &s2) const
@@ -141,9 +142,14 @@ protected:
       return s1.CompareNoCase(s2) < 0;
     }
   };
-  
   typedef std::map<CStdString, CStdString, icompare> PropertyMap;
+ 
+protected:
   PropertyMap m_mapProperties;
+
+public:
+  PropertyMap& GetPropertyDict() { return m_mapProperties; }
+
 private:
   CStdString m_sortLabel;     // text for sorting
   CStdString m_strLabel;      // text of column1
