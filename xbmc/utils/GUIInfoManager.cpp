@@ -63,6 +63,7 @@
 // stuff for current song
 #include "MusicInfoTagLoaderFactory.h"
 #include "MusicInfoLoader.h"
+#include "ThumbLoader.h"
 #include "LabelFormatter.h"
 
 #include "GUIUserMessages.h"
@@ -112,6 +113,7 @@ CGUIInfoManager::CGUIInfoManager(void)
   m_currentSlide = new CFileItem;
   m_frameCounter = 0;
   m_lastFPSTime = 0;
+  m_musicThumbLoader = new CMusicThumbLoader(1,200);
   ResetLibraryBools();
 }
 
@@ -119,6 +121,7 @@ CGUIInfoManager::~CGUIInfoManager(void)
 {
   delete m_currentFile;
   delete m_currentSlide;
+  delete m_musicThumbLoader;
 }
 
 bool CGUIInfoManager::OnMessage(CGUIMessage &message)
@@ -3361,6 +3364,16 @@ void CGUIInfoManager::SetCurrentSong(CFileItem &item)
       CStdString strThumb = streamingItem.GetThumbnailImage();
       if (CFile::Exists(strThumb))
         m_currentFile->SetThumbnailImage(strThumb);
+    }
+    else
+    {
+      CFileItemList list;
+      list.Add(CFileItemPtr(m_currentFile));
+      
+      if (m_musicThumbLoader->IsLoading())
+        m_musicThumbLoader->StopThread();
+      
+      m_musicThumbLoader->Load(list);
     }
   }
   else

@@ -44,6 +44,7 @@ class CVideoInfoTag;
 class CFileItem;
 class CGUIListItem;
 class CDateTime;
+class CMusicThumbLoader;
 
 // conditions for window retrieval
 #define WINDOW_CONDITION_HAS_LIST_ITEMS  1
@@ -739,6 +740,8 @@ protected:
   int m_libraryHasMusicVideos;
 
   CCriticalSection m_critInfo;
+  
+  CMusicThumbLoader* m_musicThumbLoader;
 };
 
 /*!
