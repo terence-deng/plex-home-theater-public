@@ -416,6 +416,7 @@ class CMusicThumbLoader;
 
 #define SLIDE_INFO_START            900
 #define SLIDE_INFO_END              980
+#define SLIDESHOW_SHOW_DESCRIPTION  990
 
 #define FANART_COLOR1               1000
 #define FANART_COLOR2               1001
@@ -502,6 +503,8 @@ class CMusicThumbLoader;
 #define LISTITEM_ORIGINALTITLE      (LISTITEM_START + 54)
 #define LISTITEM_COUNTRY            (LISTITEM_START + 55)
 #define LISTITEM_STAR_DIFFUSE       (LISTITEM_START + 100)
+#define LISTITEM_BANNER             (LISTITEM_START + 101)
+#define LISTITEM_FIRST_GENRE        (LISTITEM_START + 102)
 
 #define LISTITEM_PROPERTY_START     (LISTITEM_START + 200)
 #define LISTITEM_PROPERTY_END       (LISTITEM_PROPERTY_START + 1000)
@@ -633,6 +636,9 @@ public:
   CStdString GetItemLabel(const CFileItem *item, int info) const;
   CStdString GetItemImage(const CFileItem *item, int info) const;
 
+  bool GetSlideshowShowDescription();
+  void SetSlideshowShowDescription(bool show);
+  
   // Called from tuxbox service thread to update current status
   void UpdateFromTuxBox();
 
@@ -688,6 +694,7 @@ protected:
   unsigned int m_lastMusicBitrateTime;
   unsigned int m_MusicBitrate;
   CFileItem* m_currentSlide;
+  bool m_slideshowShowDescription;
 
   // fan stuff
   unsigned int m_lastSysHeatInfoTime;

@@ -113,6 +113,7 @@ CGUIInfoManager::CGUIInfoManager(void)
   m_currentSlide = new CFileItem;
   m_frameCounter = 0;
   m_lastFPSTime = 0;
+  m_slideshowShowDescription = false;
   m_musicThumbLoader = new CMusicThumbLoader(1,200);
   ResetLibraryBools();
 }
@@ -608,7 +609,10 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
     else if (strTest.Equals("lastfm.canban")) ret = LASTFM_CANBAN;
   }
   else if (strCategory.Equals("slideshow"))
-    ret = CPictureInfoTag::TranslateString(strTest.Mid(strCategory.GetLength() + 1));
+  {
+      if (strTest.Equals("slideshow.showdescription")) ret = SLIDESHOW_SHOW_DESCRIPTION;
+      else ret = CPictureInfoTag::TranslateString(strTest.Mid(strCategory.GetLength() + 1));
+  }
   else if (strCategory.Left(9).Equals("container"))
   {
     int id = atoi(strCategory.Mid(10, strCategory.GetLength() - 11));
@@ -649,8 +653,7 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
     else if (info.Equals("onscrollnext")) ret = CONTAINER_SCROLL_NEXT;
     else if (info.Equals("onscrollprevious")) ret = CONTAINER_SCROLL_PREVIOUS;
     else if (info.Equals("totaltime")) ret = CONTAINER_TOTALTIME;
-    else if (info.Equals("firsttitle")) 
-      ret = CONTAINER_FIRST_TITLE;
+    else if (info.Equals("firsttitle")) ret = CONTAINER_FIRST_TITLE;
     else if (info.Equals("secondtitle")) ret = CONTAINER_SECOND_TITLE;
     else if (info.Equals("scrolling"))
       return AddMultiInfo(GUIInfo(bNegate ? -CONTAINER_SCROLLING : CONTAINER_SCROLLING, id, 0));
@@ -884,6 +887,7 @@ int CGUIInfoManager::TranslateListItem(const CStdString &info)
 {
   if (info.Equals("thumb")) return LISTITEM_THUMB;
   else if (info.Equals("icon")) return LISTITEM_ICON;
+else if (info.Equals("banner")) return LISTITEM_BANNER;
   else if (info.Equals("actualicon")) return LISTITEM_ACTUAL_ICON;
   else if (info.Equals("overlay")) return LISTITEM_OVERLAY;
   else if (info.Equals("label")) return LISTITEM_LABEL;
@@ -894,7 +898,8 @@ int CGUIInfoManager::TranslateListItem(const CStdString &info)
   else if (info.Equals("album")) return LISTITEM_ALBUM;
   else if (info.Equals("albumartist")) return LISTITEM_ALBUM_ARTIST;
   else if (info.Equals("year")) return LISTITEM_YEAR;
-  else if (info.Equals("genre")) return LISTITEM_GENRE;
+  else if (info.Equals("genre")) return LISTITEM_GENRE;  
+  else if (info.Equals("firstgenre")) return LISTITEM_FIRST_GENRE;
   else if (info.Equals("director")) return LISTITEM_DIRECTOR;
   else if (info.Equals("filename")) return LISTITEM_FILENAME;
   else if (info.Equals("filenameandpath")) return LISTITEM_FILENAME_AND_PATH;
@@ -2010,7 +2015,11 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
           bReturn = true;
       }
       break;
-      
+    case SLIDESHOW_SHOW_DESCRIPTION:
+      {
+        bReturn = m_slideshowShowDescription;
+      }
+      break;
     case MUSICPLAYER_NOW_PLAYING_FLIPPED:
       {
         CGUIWindowNowPlaying *nowPlayingWindow = (CGUIWindowNowPlaying*)g_windowManager.GetWindow(WINDOW_NOW_PLAYING);
@@ -3086,9 +3095,15 @@ CStdString CGUIInfoManager::GetMusicTagLabel(int info, const CFileItem *item) co
     if (tag.GetTitle().size()) { return tag.GetTitle(); }
     break;
   case MUSICPLAYER_ALBUM:
+    if (item->HasProperty("album"))
+      return item->GetProperty("album");
+    
     if (tag.GetAlbum().size()) { return tag.GetAlbum(); }
     break;
   case MUSICPLAYER_ARTIST:
+    if (item->HasProperty("artist"))
+      return item->GetProperty("artist");
+    
     if (tag.GetArtist().size()) { return tag.GetArtist(); }
     break;
   case MUSICPLAYER_ALBUM_ARTIST:
@@ -3244,7 +3259,7 @@ CStdString CGUIInfoManager::GetVideoLabel(int item)
     case VIDEOPLAYER_COUNTRY:
       return m_currentFile->GetVideoInfoTag()->m_strCountry;
     case VIDEOPLAYER_MPAA:
-      return m_currentFile->GetVideoInfoTag()->m_strMPAARating;
+      return m_currentFile->GetProperty("contentRating");
     case VIDEOPLAYER_TOP250:
       {
         CStdString strTop250;
@@ -3262,7 +3277,7 @@ CStdString CGUIInfoManager::GetVideoLabel(int item)
     case VIDEOPLAYER_ALBUM:
       return m_currentFile->GetVideoInfoTag()->m_strAlbum;
     case VIDEOPLAYER_WRITER:
-      return m_currentFile->GetVideoInfoTag()->m_strWritingCredits;
+      return m_currentFile->GetProperty("writer");
     case VIDEOPLAYER_TAGLINE:
       return m_currentFile->GetVideoInfoTag()->m_strTagLine;
     }
@@ -3801,6 +3816,9 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
     break;
   case LISTITEM_TRACKNUMBER:
     {
+      if (item->HasProperty("index"))
+        return item->GetProperty("index");
+      
       CStdString track;
       if (item->HasMusicInfoTag())
         track.Format("%i", item->GetMusicInfoTag()->GetTrackNumber());
@@ -3808,6 +3826,8 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
       return track;
     }
   case LISTITEM_ARTIST:
+    if (item->HasProperty("artist"))
+      return item->GetProperty("artist"); 
     if (item->HasVideoInfoTag())
       return item->GetVideoInfoTag()->m_strArtist;
     if (item->HasMusicInfoTag())
@@ -3818,15 +3838,23 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
       return item->GetMusicInfoTag()->GetAlbumArtist();
     break;
   case LISTITEM_DIRECTOR:
-    if (item->HasVideoInfoTag())
-      return item->GetVideoInfoTag()->m_strDirector;
+    return item->GetProperty("director");
   case LISTITEM_ALBUM:
+    if (item->HasProperty("album"))
+      return item->GetProperty("album");
     if (item->HasVideoInfoTag())
       return item->GetVideoInfoTag()->m_strAlbum;
     if (item->HasMusicInfoTag())
       return item->GetMusicInfoTag()->GetAlbum();
     break;
   case LISTITEM_YEAR:
+    if (item->GetProperty("subtitle").size() > 0)
+      return item->GetProperty("subtitle");
+    
+    if (item->HasMusicInfoTag() && item->GetMusicInfoTag()->GetYearString().size() > 0)
+    {
+      return item->GetMusicInfoTag()->GetYearString();
+    }
     if (item->HasVideoInfoTag())
     {
       CStdString strResult;
@@ -3847,11 +3875,9 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
     }
     break;
   case LISTITEM_GENRE:
-    if (item->HasVideoInfoTag())
-      return item->GetVideoInfoTag()->m_strGenre;
-    if (item->HasMusicInfoTag())
-      return item->GetMusicInfoTag()->GetGenre();
-    break;
+    return item->GetProperty("genre");
+  case LISTITEM_FIRST_GENRE:
+      return item->GetProperty("firstGenre");
   case LISTITEM_FILENAME:
     if (item->IsMusicDb() && item->HasMusicInfoTag())
       return CUtil::GetFileName(item->GetMusicInfoTag()->GetURL());
@@ -3861,6 +3887,8 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
   case LISTITEM_DATE:
     if (item->m_dateTime.IsValid())
       return item->m_dateTime.GetAsLocalizedDate();
+    else if (item->HasProperty("originallyAvailableAt"))
+      return item->GetProperty("originallyAvailableAt");
     break;
   case LISTITEM_SIZE:
     if (!item->m_bIsFolder || item->m_dwSize)
@@ -3869,7 +3897,11 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
   case LISTITEM_RATING:
     {
       CStdString rating;
-      if (item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_fRating > 0.f) // movie rating
+      if (item->HasProperty("rating"))
+      {
+        rating.Format("%2.2f", item->GetPropertyDouble("rating"));
+      }
+      else if (item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_fRating > 0.f) // movie rating
         rating.Format("%.1f", item->GetVideoInfoTag()->m_fRating);
       else if (item->HasMusicInfoTag() && item->GetMusicInfoTag()->GetRating() > '0')
       { // song rating.  Images will probably be better than numbers for this in the long run
@@ -3922,10 +3954,16 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
 
       return item->GetVideoInfoTag()->m_strPlot;
     }
+    else
+    {
+      return item->GetProperty("description");
+    }
     break;
   case LISTITEM_PLOT_OUTLINE:
     if (item->HasVideoInfoTag())
       return item->GetVideoInfoTag()->m_strPlotOutline;
+    else
+      return item->GetProperty("description");
     break;
   case LISTITEM_EPISODE:
     if (item->HasVideoInfoTag())
@@ -3973,6 +4011,8 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
       }
       return strThumb;
     }
+  case LISTITEM_BANNER:
+      return item->GetProperty("banner_image");
   case LISTITEM_OVERLAY:
     return item->GetOverlayImage();
   case LISTITEM_THUMB:
@@ -3981,25 +4021,16 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
   case LISTITEM_PATH:
     {
       CStdString path;
-      if (item->IsMusicDb() && item->HasMusicInfoTag())
-        CUtil::GetDirectory(item->GetMusicInfoTag()->GetURL(), path);
-      else if (item->IsVideoDb() && item->HasVideoInfoTag())
+      if (item->HasProperty("localPath"))
       {
-        if( item->m_bIsFolder )
-	  path = item->GetVideoInfoTag()->m_strPath;
-        else
-          CUtil::GetParentPath(item->GetVideoInfoTag()->m_strFileNameAndPath, path);
+        CUtil::GetDirectory(item->GetProperty("localPath"), path);
       }
       else
-        CUtil::GetParentPath(item->m_strPath, path);
-      path = CURL(path).GetWithoutUserDetails();
-      if (info==CONTAINER_FOLDERNAME)
       {
-        CUtil::RemoveSlashAtEnd(path);
-        path=CUtil::GetFileName(path);
+        CUtil::GetDirectory(item->m_strPath, path);
+        path = CURL(path).GetWithoutUserDetails();
+        CUtil::URLDecode(path);
       }
-      CUtil::URLDecode(path);
-      return path;
     }
   case LISTITEM_FILENAME_AND_PATH:
     {
@@ -4035,21 +4066,15 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
       return item->GetVideoInfoTag()->m_strCountry;
     break;
   case LISTITEM_MPAA:
-    if (item->HasVideoInfoTag())
-      return item->GetVideoInfoTag()->m_strMPAARating;
-    break;
+    return item->GetProperty("contentRating");
   case LISTITEM_CAST:
-    if (item->HasVideoInfoTag())
-      return item->GetVideoInfoTag()->GetCast();
-    break;
+    return item->GetProperty("role");
   case LISTITEM_CAST_AND_ROLE:
     if (item->HasVideoInfoTag())
       return item->GetVideoInfoTag()->GetCast(true);
     break;
   case LISTITEM_WRITER:
-    if (item->HasVideoInfoTag())
-      return item->GetVideoInfoTag()->m_strWritingCredits;;
-    break;
+    return item->GetProperty("writer");
   case LISTITEM_TAGLINE:
     if (item->HasVideoInfoTag())
       return item->GetVideoInfoTag()->m_strTagLine;
@@ -4378,6 +4403,16 @@ void CGUIInfoManager::SetCurrentSongTag(const MUSIC_INFO::CMusicInfoTag &tag)
 const CFileItem& CGUIInfoManager::GetCurrentSlide() const
 {
   return *m_currentSlide;
+}
+
+bool CGUIInfoManager::GetSlideshowShowDescription()
+{
+  return m_slideshowShowDescription;
+}
+
+void CGUIInfoManager::SetSlideshowShowDescription(bool show)
+{
+  m_slideshowShowDescription = show;
 }
 
 const MUSIC_INFO::CMusicInfoTag* CGUIInfoManager::GetCurrentSongTag() const
