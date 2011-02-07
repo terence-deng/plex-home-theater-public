@@ -48,6 +48,7 @@
 #include "LocalizeStrings.h"
 #include "GUIUserMessages.h"
 #include "TextureCache.h"
+#include "StackDirectory.h"
 
 using namespace std;
 using namespace XFILE;
@@ -212,6 +213,68 @@ bool CGUIWindowVideoInfo::OnMessage(CGUIMessage& message)
 void CGUIWindowVideoInfo::SetMovie(const CFileItem *item)
 {
   *m_movieItem = *item;
+  
+  ClearCastList();
+  
+  // Set the cast list appropriately.
+  m_castList->SetContent(m_movieItem->GetProperty("mediaType"));
+  
+  if (m_castList->GetContent() == "movies")
+  {
+    // Compute the URL for the movie information.
+    CURL url(item->m_strPath);
+    
+    // Is it a multipart item?
+    if (item->IsStack())
+    {
+      CStackDirectory dir;
+      url = dir.GetFirstStackedFile(item->m_strPath);
+    }
+    
+    url.SetFileName("library/metadata/" + item->GetProperty("ratingKey"));
+    
+    // Download the data.
+    CFileCurl set;
+    CStdString strData;
+    set.Get(url.Get(), strData);
+    
+    // Parse document.
+    TiXmlDocument xmlDoc;
+    if (!xmlDoc.Parse(strData)) return;
+    
+    // The container node.
+    TiXmlElement* root = xmlDoc.RootElement();
+    if (!root) return;
+    
+    // The Video node.
+    TiXmlElement* video = root->FirstChildElement();
+    if (!video) return;
+    
+    // The child nodes.
+    TiXmlElement* role = video->FirstChildElement("Role");
+    if (!role) return;
+    
+    while (role)
+    {
+      const char* strActor = role->Attribute("tag");
+      const char* strRole  = role->Attribute("role");
+      
+      CStdString character;
+      if (strRole == 0 || strlen(strRole) == 0)
+        character = strActor;
+      else
+        character.Format("%s %s %s", strActor, g_localizeStrings.Get(20347).c_str(), strRole);
+      
+      CFileItemPtr item(new CFileItem(strActor));
+      item->SetIconImage("DefaultActor.png");
+      item->SetLabel(character);
+      m_castList->Add(item);
+      
+      role = role->NextSiblingElement();
+    }
+  }
+  
+#if 0
   // setup cast list + determine type.  We need to do this here as it makes
   // sure that content type (among other things) is set correctly for the
   // old fixed id labels that we have floating around (they may be using
@@ -331,6 +394,7 @@ void CGUIWindowVideoInfo::SetMovie(const CFileItem *item)
     }
   }
   m_loader.LoadItem(m_movieItem.get());
+#endif
 }
 
 void CGUIWindowVideoInfo::Update()
