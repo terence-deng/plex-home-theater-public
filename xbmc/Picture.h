@@ -34,9 +34,10 @@ public:
   static bool CacheThumb(const CStdString& sourceUrl, const CStdString& destFile);
   static bool CacheFanart(const CStdString& SourceUrl, const CStdString& destFile);
   static bool CacheBanner(const CStdString& SourceUrl, const CStdString& destFile);
-
+  static bool CacheImage(const CStdString& sourceUrl, const CStdString& destFile, int width = 0, int height = 0);
+  
 private:
-  static bool CacheImage(const CStdString& sourceUrl, const CStdString& destFile, int width, int height);
+  static bool GetMediaFromPlexMediaServerCache(const CStdString& strFileName, const CStdString& strThumbFileName);
 };
 
 //this class calls CreateThumbnailFromSurface in a CJob, so a png file can be written without halting the render thread

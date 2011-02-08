@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7450DF0A1301FE81001AD2D9 /* sha.c in Sources */ = {isa = PBXBuildFile; fileRef = 7450DF091301FE81001AD2D9 /* sha.c */; };
 		74865EE912FBF5A600D8F899 /* AC3CDDACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15D70D25F9FA00618676 /* AC3CDDACodec.cpp */; };
 		74865EEA12FBF5A600D8F899 /* AC3Codec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15D90D25F9FA00618676 /* AC3Codec.cpp */; };
 		74865EEB12FBF5A600D8F899 /* Addon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18B49FF11152BFA5001AF8A6 /* Addon.cpp */; };
@@ -1073,6 +1074,8 @@
 		74462F4812E3847200C8B41F /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		744632D012E3A13F00C8B41F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = vendor/homebrew.git/lib/libssl.a; sourceTree = "<group>"; };
 		744632D512E3A23D00C8B41F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = vendor/homebrew.git/lib/libcrypto.a; sourceTree = "<group>"; };
+		7450DF081301FE81001AD2D9 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = plex/Utility/sha.h; sourceTree = "<group>"; };
+		7450DF091301FE81001AD2D9 /* sha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha.c; path = plex/Utility/sha.c; sourceTree = "<group>"; };
 		7464687112E7592B00B2FF1E /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = lib/jsoncpp/jsoncpp/src/lib_json/libjsoncpp.a; sourceTree = "<group>"; };
 		7464688212E759B300B2FF1E /* libjsonrpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsonrpc.a; path = xbmc/lib/libjsonrpc/libjsonrpc.a; sourceTree = "<group>"; };
 		746469F112E82AD700B2FF1E /* PlexApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexApplication.h; path = plex/PlexApplication.h; sourceTree = "<group>"; };
@@ -2995,6 +2998,8 @@
 		74756A9C12F464050001203D /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				7450DF081301FE81001AD2D9 /* sha.h */,
+				7450DF091301FE81001AD2D9 /* sha.c */,
 				74756AA512F4668D0001203D /* BackgroundMusicPlayer.h */,
 				74756AA412F4668D0001203D /* BackgroundMusicPlayer.cpp */,
 			);
@@ -6888,6 +6893,7 @@
 				7486622112FBF5A600D8F899 /* ZeroconfOSX.cpp in Sources */,
 				7486622212FBF5A600D8F899 /* ZipDirectory.cpp in Sources */,
 				7486622312FBF5A600D8F899 /* ZipManager.cpp in Sources */,
+				7450DF0A1301FE81001AD2D9 /* sha.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

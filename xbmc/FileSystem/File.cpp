@@ -356,6 +356,13 @@ bool CFile::Exists(const CStdString& strFileName, bool bUseCache /* = true */)
   return false;
 }
 
+__int64 CFile::Size(const CStdString& strFileName)
+{
+  struct __stat64 buffer;
+  Stat(strFileName, &buffer);
+  return buffer.st_size;
+}
+
 int CFile::Stat(struct __stat64 *buffer)
 {
   return m_pFile->Stat(buffer);
