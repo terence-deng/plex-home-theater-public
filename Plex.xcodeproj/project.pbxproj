@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7450DF0A1301FE81001AD2D9 /* sha.c in Sources */ = {isa = PBXBuildFile; fileRef = 7450DF091301FE81001AD2D9 /* sha.c */; };
 		74865EE912FBF5A600D8F899 /* AC3CDDACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15D70D25F9FA00618676 /* AC3CDDACodec.cpp */; };
 		74865EEA12FBF5A600D8F899 /* AC3Codec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15D90D25F9FA00618676 /* AC3Codec.cpp */; };
 		74865EEB12FBF5A600D8F899 /* Addon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18B49FF11152BFA5001AF8A6 /* Addon.cpp */; };
@@ -887,6 +886,8 @@
 		7486674412FBF60600D8F899 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B02B12E83A540077A38C /* libboost_system-mt.a */; };
 		7486674512FBF60600D8F899 /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B0EB12E852400077A38C /* libboost_thread-mt.a */; };
 		748667CF12FC07CA00D8F899 /* Plex.icns in Resources */ = {isa = PBXBuildFile; fileRef = 748667CE12FC07CA00D8F899 /* Plex.icns */; };
+		74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74AF1A1713009F1A00923698 /* HTTP.cpp */; };
+		74AF1A1B1300A29400923698 /* sha.c in Sources */ = {isa = PBXBuildFile; fileRef = 74AF1A1A1300A29400923698 /* sha.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1074,8 +1075,6 @@
 		74462F4812E3847200C8B41F /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		744632D012E3A13F00C8B41F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = vendor/homebrew.git/lib/libssl.a; sourceTree = "<group>"; };
 		744632D512E3A23D00C8B41F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = vendor/homebrew.git/lib/libcrypto.a; sourceTree = "<group>"; };
-		7450DF081301FE81001AD2D9 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = plex/Utility/sha.h; sourceTree = "<group>"; };
-		7450DF091301FE81001AD2D9 /* sha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha.c; path = plex/Utility/sha.c; sourceTree = "<group>"; };
 		7464687112E7592B00B2FF1E /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = lib/jsoncpp/jsoncpp/src/lib_json/libjsoncpp.a; sourceTree = "<group>"; };
 		7464688212E759B300B2FF1E /* libjsonrpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsonrpc.a; path = xbmc/lib/libjsonrpc/libjsonrpc.a; sourceTree = "<group>"; };
 		746469F112E82AD700B2FF1E /* PlexApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexApplication.h; path = plex/PlexApplication.h; sourceTree = "<group>"; };
@@ -1107,6 +1106,10 @@
 		749502F812FBF5300039DE17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		749502F912FBF5300039DE17 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		749502FA12FBF5300039DE17 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		74AF1A1613009F1A00923698 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTP.h; path = plex/Utility/HTTP.h; sourceTree = SOURCE_ROOT; };
+		74AF1A1713009F1A00923698 /* HTTP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HTTP.cpp; path = plex/Utility/HTTP.cpp; sourceTree = SOURCE_ROOT; };
+		74AF1A191300A29400923698 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = plex/Utility/sha.h; sourceTree = "<group>"; };
+		74AF1A1A1300A29400923698 /* sha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha.c; path = plex/Utility/sha.c; sourceTree = "<group>"; };
 		74F034C212F2B0A500040736 /* GUIDialogRating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogRating.h; path = plex/GUI/GUIDialogRating.h; sourceTree = "<group>"; };
 		74F034C312F2B0A500040736 /* GUIDialogRating.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogRating.cpp; path = plex/GUI/GUIDialogRating.cpp; sourceTree = "<group>"; };
 		74FB20E012ECBC4200876EB5 /* PlexMediaServerQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexMediaServerQueue.cpp; path = plex/PlexMediaServerQueue.cpp; sourceTree = "<group>"; };
@@ -2998,10 +3001,12 @@
 		74756A9C12F464050001203D /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				7450DF081301FE81001AD2D9 /* sha.h */,
-				7450DF091301FE81001AD2D9 /* sha.c */,
+				74AF1A1613009F1A00923698 /* HTTP.h */,
+				74AF1A1713009F1A00923698 /* HTTP.cpp */,
 				74756AA512F4668D0001203D /* BackgroundMusicPlayer.h */,
 				74756AA412F4668D0001203D /* BackgroundMusicPlayer.cpp */,
+				74AF1A191300A29400923698 /* sha.h */,
+				74AF1A1A1300A29400923698 /* sha.c */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -6893,7 +6898,8 @@
 				7486622112FBF5A600D8F899 /* ZeroconfOSX.cpp in Sources */,
 				7486622212FBF5A600D8F899 /* ZipDirectory.cpp in Sources */,
 				7486622312FBF5A600D8F899 /* ZipManager.cpp in Sources */,
-				7450DF0A1301FE81001AD2D9 /* sha.c in Sources */,
+				74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */,
+				74AF1A1B1300A29400923698 /* sha.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7057,6 +7063,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Plex;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
 				WARNING_CFLAGS = (
 					"-Wno-write-strings",
@@ -7185,6 +7192,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Plex;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
 				WARNING_CFLAGS = (
 					"-Wno-write-strings",

@@ -36,7 +36,7 @@ public:
   CGUIWindowVideoInfo(void);
   virtual ~CGUIWindowVideoInfo(void);
   virtual bool OnMessage(CGUIMessage& message);
-  void SetMovie(const CFileItem *item);
+  void SetMovie(const CFileItemPtr& item);
   bool NeedRefresh() const;
   bool RefreshAll() const;
   bool HasUpdatedThumb() const { return m_hasUpdatedThumb; };
@@ -60,6 +60,9 @@ protected:
   void OnGetThumb();
   void OnGetFanart();
   void PlayTrailer();
+  
+  std::string OnGetMedia(const std::string& mediaType, const std::string& currentCachedMedia, int label);
+  bool AsyncDownloadMedia(const std::string& remoteFile, const std::string& localFile);
 
   CFileItemPtr m_movieItem;
   CFileItemList *m_castList;
@@ -69,4 +72,5 @@ protected:
   bool m_hasUpdatedThumb;
   CGUIDialogProgress* m_dlgProgress;
   CVideoThumbLoader m_loader;
+  std::map<std::string, std::string> m_mediaMap;
 };

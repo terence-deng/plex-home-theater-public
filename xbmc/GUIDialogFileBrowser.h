@@ -48,7 +48,8 @@ public:
   static bool ShowAndGetFile(const CStdString &directory, const CStdString &mask, const CStdString &heading, CStdString &path, bool useThumbs = false, bool useFileDirectories = false, bool singleList = false);
   static bool ShowAndGetSource(CStdString &path, bool allowNetworkShares, VECSOURCES* additionalShare = NULL, const CStdString& strType="");
   static bool ShowAndGetImage(const VECSOURCES &shares, const CStdString &heading, CStdString &path);
-  static bool ShowAndGetImage(const CFileItemList &items, const VECSOURCES &shares, const CStdString &heading, CStdString &path, bool* flip=NULL, int label=21371);
+  static bool ShowAndGetImage(const CFileItemList &items, const VECSOURCES &shares, const CStdString &heading, CStdString &path, bool* flip=NULL, int label=21371, bool addBrowse = true);
+  static bool ShowAndGetImageNoBrowse(const CFileItemList &items, const VECSOURCES &shares, const CStdString &heading, CStdString &path); 
 
   void SetSources(const VECSOURCES &shares);
 

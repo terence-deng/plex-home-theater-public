@@ -245,8 +245,19 @@ void CGUIWindowVideoBase::UpdateButtons()
   CGUIMediaWindow::UpdateButtons();
 }
 
-void CGUIWindowVideoBase::OnInfo(CFileItem* pItem, const ADDON::ScraperPtr& scraper)
+void CGUIWindowVideoBase::OnInfo(const CFileItemPtr& pItem, const ADDON::ScraperPtr& scraper)
 {
+  if (!pItem) 
+    return;
+  
+  bool modified = ShowIMDB(pItem, scraper);
+  if (modified)
+  {
+    int itemNumber = m_viewControl.GetSelectedItem();
+    Update(m_vecItems->m_strPath);
+    m_viewControl.SetSelectedItem(itemNumber);
+  }
+#if 0
   if (!pItem)
     return;
 
@@ -309,6 +320,7 @@ void CGUIWindowVideoBase::OnInfo(CFileItem* pItem, const ADDON::ScraperPtr& scra
     Update(m_vecItems->m_strPath);
     m_viewControl.SetSelectedItem(itemNumber);
   }
+#endif
 }
 
 // ShowIMDB is called as follows:
@@ -332,8 +344,24 @@ void CGUIWindowVideoBase::OnInfo(CFileItem* pItem, const ADDON::ScraperPtr& scra
 //     and show the information.
 // 6.  Check for a refresh, and if so, go to 3.
 
-bool CGUIWindowVideoBase::ShowIMDB(CFileItem *item, const ScraperPtr &info2)
+bool CGUIWindowVideoBase::ShowIMDB(const CFileItemPtr& item, const ScraperPtr &info2)
 {
+  CGUIDialogProgress* pDlgProgress = (CGUIDialogProgress*)g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS);
+  CGUIDialogSelect* pDlgSelect = (CGUIDialogSelect*)g_windowManager.GetWindow(WINDOW_DIALOG_SELECT);
+  CGUIWindowVideoInfo* pDlgInfo = (CGUIWindowVideoInfo*)g_windowManager.GetWindow(WINDOW_VIDEO_INFO);
+  
+  if (!pDlgProgress) return false;
+  if (!pDlgSelect) return false;
+  if (!pDlgInfo) return false;
+
+  pDlgInfo->SetMovie(item);
+  pDlgInfo->DoModal();
+  
+  if (pDlgInfo->NeedRefresh() == false)
+    return false;
+  
+  return true;
+#if 0
   /*
   CLog::Log(LOGDEBUG,"CGUIWindowVideoBase::ShowIMDB");
   CLog::Log(LOGDEBUG,"  strMovie  = [%s]", strMovie.c_str());
@@ -693,6 +721,7 @@ bool CGUIWindowVideoBase::ShowIMDB(CFileItem *item, const ScraperPtr &info2)
   } while (needsRefresh);
   m_database.Close();
   return listNeedsUpdating;
+#endif
 }
 
 void CGUIWindowVideoBase::OnQueueItem(int iItem)
@@ -959,7 +988,7 @@ bool CGUIWindowVideoBase::OnInfo(int iItem)
       return true;
   }
 
-  OnInfo(item.get(), scraper);
+  OnInfo(item, scraper);
 
   return true;
 }
@@ -1210,7 +1239,7 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       VIDEO::SScanSettings settings;
       GetScraperForItem(item.get(), info, settings);
 
-      OnInfo(item.get(),info);
+      OnInfo(item,info);
       return true;
     }
   case CONTEXT_BUTTON_STOP_SCANNING:
@@ -1244,7 +1273,7 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
         OnScan(strPath);
       }
       else
-        OnInfo(item.get(),info);
+        OnInfo(item,info);
 
       return true;
     }

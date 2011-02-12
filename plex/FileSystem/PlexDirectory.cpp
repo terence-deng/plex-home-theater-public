@@ -38,11 +38,7 @@ using namespace XFILE;
 #define MAX_THUMBNAIL_AGE (3600*24*2)
 #define MAX_FANART_AGE    (3600*24*7)
 
-bool Cocoa_IsHostLocal(const string& host)
-{
-  // FIXME.
-  return false;
-}
+bool Cocoa_IsHostLocal(const string& host);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CPlexDirectory::CPlexDirectory(bool parseResults, bool displayDialog)

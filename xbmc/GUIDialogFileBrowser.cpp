@@ -577,7 +577,7 @@ void CGUIDialogFileBrowser::OnWindowUnload()
   m_viewControl.Reset();
 }
 
-bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VECSOURCES &shares, const CStdString &heading, CStdString &result, bool* flip, int label)
+bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VECSOURCES &shares, const CStdString &heading, CStdString &result, bool* flip, int label, bool addBrowse)
 {
   CStdString mask = ".png|.jpg|.bmp|.gif";
   CGUIDialogFileBrowser *browser = new CGUIDialogFileBrowser();
@@ -589,7 +589,7 @@ bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VE
   browser->m_singleList = true;
   browser->m_vecItems->Clear();
   browser->m_vecItems->Append(items);
-  if (true)
+  if (addBrowse)
   {
     CFileItemPtr item(new CFileItem("image://Browse", false));
     item->SetLabel(g_localizeStrings.Get(20153));
@@ -623,6 +623,11 @@ bool CGUIDialogFileBrowser::ShowAndGetImage(const CFileItemList &items, const VE
 bool CGUIDialogFileBrowser::ShowAndGetImage(const VECSOURCES &shares, const CStdString &heading, CStdString &path)
 {
   return ShowAndGetFile(shares, ".png|.jpg|.bmp|.gif|.tbn", heading, path, true); // true for use thumbs
+}
+
+bool CGUIDialogFileBrowser::ShowAndGetImageNoBrowse(const CFileItemList &items, const VECSOURCES &shares, const CStdString &heading, CStdString &path)
+{
+  return ShowAndGetImage(items, shares, heading, path, NULL, 21371, false);
 }
 
 bool CGUIDialogFileBrowser::ShowAndGetDirectory(const VECSOURCES &shares, const CStdString &heading, CStdString &path, bool bWriteOnly)

@@ -569,7 +569,7 @@ void CGUIWindowVideoNav::FrameMove()
   CGUIWindowVideoBase::FrameMove();
 }
 
-void CGUIWindowVideoNav::OnInfo(CFileItem* pItem, ADDON::ScraperPtr& scraper)
+void CGUIWindowVideoNav::OnInfo(const CFileItemPtr& pItem, ADDON::ScraperPtr& scraper)
 {
   m_database.Open(); // since we can be called from the music library without being inited
   if (pItem->IsVideoDb())

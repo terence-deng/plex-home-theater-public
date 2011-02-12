@@ -440,7 +440,10 @@ vector<in_addr_t> Cocoa_AddressesForHost(const string& hostname)
   for (NSString *address in [host addresses])
     ret.push_back(inet_addr([address UTF8String]));
   return ret;
+
 }
+
+#endif // WORKING
 
 #define SIZE(p) MAX((p).sa_len, sizeof(p))
 
@@ -506,7 +509,7 @@ bool Cocoa_IsHostLocal(const string& host)
   CLog::Log(LOGINFO, "Asked to check whether [%s] is local => %d", host.c_str(), ret);
   return ret;
 }
-
+#ifdef WORKING
 
 ///////////////////////////////////////////////////////////////////////////////
 bool Cocoa_AreHostsEqual(const string& host1, const string& host2)

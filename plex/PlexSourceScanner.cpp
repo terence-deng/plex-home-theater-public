@@ -16,6 +16,7 @@
 #include "Util.h"
 #include "GUIWindowManager.h"
 #include "GUIUserMessages.h"
+#include "CocoaUtilsPlus.h"
 
 map<std::string, HostSourcesPtr> CPlexSourceScanner::g_hostSourcesMap;
 CCriticalSection CPlexSourceScanner::g_lock;
@@ -45,13 +46,12 @@ void CPlexSourceScanner::Process()
     std::string realHostLabel = m_hostLabel;
     bool onlyShared = false;
 
-#pragma warning cross-platform code needed here
     // Act a bit differently if we're talking to a local server.
-    /*if (Cocoa_IsHostLocal(m_host) == true)
+    if (Cocoa_IsHostLocal(m_host) == true)
     {
       realHostLabel = "";
       onlyShared = false;
-    }*/
+    }
     
     // Create a new entry.
     HostSourcesPtr sources = HostSourcesPtr(new HostSources());

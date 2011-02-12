@@ -1011,6 +1011,8 @@ bool Cocoa_Proxy_Enabled(const char* protocol)
   return false;
 }
 
+#endif // WORKING
+
 const char* Cocoa_Proxy_Host(const char* protocol)
 {
   NSDictionary* proxyDict = (NSDictionary*)SCDynamicStoreCopyProxies(NULL);
@@ -1052,6 +1054,8 @@ const char* Cocoa_Proxy_Password(const char* protocol)
 {
   return "";
 }
+
+#ifdef WORKING
 
 void Cocoa_LaunchApp(const char* appToLaunch)
 {

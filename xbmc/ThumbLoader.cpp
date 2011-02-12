@@ -430,8 +430,17 @@ bool CMusicThumbLoader::LoadItem(CFileItem* pItem)
   if (!pItem->HasProperty("fanart_image"))
   {
     pItem->CacheLocalFanart();
-    if (CFile::Exists(pItem->GetCachedProgramFanart()))
-      pItem->SetProperty("fanart_image",pItem->GetCachedProgramFanart());
+    
+    if (pItem->GetQuickFanart().size() > 0)
+    {
+      if (CFile::Exists(pItem->GetCachedPlexMediaServerFanart()))
+        pItem->SetProperty("fanart_image", pItem->GetCachedPlexMediaServerFanart());
+    }
+    else
+    {
+      if (CFile::Exists(pItem->GetCachedProgramFanart()))
+        pItem->SetProperty("fanart_image",pItem->GetCachedProgramFanart());
+    }
   }
  
   return true;
