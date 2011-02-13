@@ -326,6 +326,23 @@ bool CGUIBaseContainer::OnMessage(CGUIMessage& message)
       for (unsigned int i = 0; i < m_items.size(); ++i)
         m_items[i]->SetInvalid();
     }
+    else if (message.GetMessage() == GUI_MSG_SETFOCUS)
+    {
+      if (message.GetParam1()) // subfocus item is specified, so set the offset appropriately
+      {
+        int newItem = (int)message.GetParam1() - 1;
+        if (newItem != GetSelectedItem())
+        {
+          SelectItem(newItem);
+          
+          // Send another SETFOCUS message to ensure focused items are displayed correctly. A bit of a hack, but seems to work.
+          CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), GetID(), 0, 0);
+          SendWindowMessage(msg);
+          
+          return true;
+        }
+      }
+    }
     else if (message.GetMessage() == GUI_MSG_MOVE_OFFSET)
     {
       int count = (int)message.GetParam1();
