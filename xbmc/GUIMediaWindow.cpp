@@ -59,6 +59,7 @@
 #include "GUIEditControl.h"
 #include "GUIDialogKeyboard.h"
 #include "GUIDialogPlexPluginSettings.h"
+#include "GUIDialogContextMenu.h"
 #ifdef HAS_PYTHON
 #include "lib/libPython/XBPython.h"
 #endif
@@ -1049,6 +1050,37 @@ bool CGUIMediaWindow::OnClick(int iItem)
       }
     }
     
+    // Show a context menu for PMS popup directories
+    if (pItem->m_bIsPopupMenuItem)
+    {
+      CFileItemList fileItems;
+      CContextButtons buttons;
+      CPlexDirectory plexDir;
+      
+      plexDir.GetDirectory(directory.m_strPath, fileItems);
+      for ( int i = 0; i < fileItems.Size(); i++ )
+      {
+        CFileItemPtr item = fileItems.Get(i);
+        buttons.Add(i, item->GetLabel());
+      }
+      
+      int choice = CGUIDialogContextMenu::ShowAndGetChoice(buttons);
+      if (choice >= 0)
+      {
+        CFileItemPtr selectedItem = fileItems.Get(choice);
+        if (selectedItem->m_bIsFolder)
+        {
+          Update(selectedItem->m_strPath);
+        }
+        else
+        { 
+          selectedItem->SetLabel(pItem->GetLabel() + ": " + selectedItem->GetLabel());
+          OnPlayMedia(selectedItem.get());
+        }
+      }
+      return true;
+    }
+    
     // Show preferences.
     if (pItem->m_bIsSettingsDir)
     {
@@ -1356,21 +1388,25 @@ void CGUIMediaWindow::SetHistoryForPath(const CStdString& strDirectory)
 // This function is called by OnClick()
 bool CGUIMediaWindow::OnPlayMedia(int iItem)
 {
+  return OnPlayMedia(m_vecItems->Get(iItem).get());
+}
+
+bool CGUIMediaWindow::OnPlayMedia(CFileItem* pItem)
+{
   // Reset Playlistplayer, playback started now does
   // not use the playlistplayer.
   g_playlistPlayer.Reset();
   g_playlistPlayer.SetCurrentPlaylist(PLAYLIST_NONE);
-  CFileItemPtr pItem=m_vecItems->Get(iItem);
-
+  
   bool bResult = false;
   if (pItem->IsInternetStream() || pItem->IsPlayList())
     bResult = g_application.PlayMedia(*pItem, m_guiState->GetPlaylist());
   else
     bResult = g_application.PlayFile(*pItem);
-
+  
   if (pItem->m_lStartOffset == STARTOFFSET_RESUME)
     pItem->m_lStartOffset = 0;
-
+  
   return bResult;
 }
 
