@@ -505,6 +505,9 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
         viewMode = m_viewControl.GetViewModeByID(message.GetParam1());
       else if (message.GetParam2())
         viewMode = m_viewControl.GetNextViewMode((int)message.GetParam2());
+      
+      // Notify the media server.
+      PlexMediaServerQueue::Get().onViewModeChanged(m_vecItems->GetProperty("identifier"), m_vecItems->m_strPath, m_vecItems->GetProperty("viewGroup"), viewMode, -1, -1);
 
       if (m_guiState.get())
         m_guiState->SaveViewAsControl(viewMode);
