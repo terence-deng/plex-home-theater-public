@@ -138,6 +138,9 @@ void CBackgroundInfoLoader::Load(CFileItemList& items)
   if (nThreads > g_advancedSettings.m_bgInfoLoaderMaxThreads)
     nThreads = g_advancedSettings.m_bgInfoLoaderMaxThreads;
 
+  if (items.IsPlexMediaServer())
+    nThreads = 2;
+
   m_nActiveThreads = nThreads;
   for (int i=0; i < nThreads; i++)
   {
