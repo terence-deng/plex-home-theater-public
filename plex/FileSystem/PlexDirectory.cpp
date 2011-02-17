@@ -334,14 +334,11 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
   
   // See if we're saving this into the history or not.
   const char* noHistory = root->Attribute("noHistory");
-    if (noHistory && strcmp(noHistory, "1") == 0)
+  if (noHistory && strcmp(noHistory, "1") == 0)
       items.SetSaveInHistory(false);
   
   // See if we're not supposed to cache this directory.
   const char* noCache = root->Attribute("nocache");
-  if (noCache && strcmp(noCache, "1") == 0)
-    m_dirCacheType = DIR_CACHE_NEVER;
-  noCache = root->Attribute("noCache");
   if (noCache && strcmp(noCache, "1") == 0)
     m_dirCacheType = DIR_CACHE_NEVER;
   
