@@ -744,6 +744,15 @@ bool CGUIMediaWindow::GetDirectory(const CStdString &strDirectory, CFileItemList
     if (items.GetReplaceListing())
       m_history.RemoveParentPath();
   }
+  
+  // PLEX: Default to plug-in stream for top-level.
+  if (strDirectory.size() == 0)
+  {
+    int viewMode = 131131;
+    CGUIViewState* viewState = CGUIViewState::GetViewState(0, items);
+    if (viewState->GetViewAsControl() == 0x10000)
+      viewState->SaveViewAsControl(viewMode);
+  }
 
   if (m_guiState.get() && !m_guiState->HideParentDirItems() && !items.m_strPath.IsEmpty())
   {
