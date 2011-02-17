@@ -744,7 +744,7 @@ void CGUISettings::Initialize()
   AddBool(fl, "filelists.showextensions", 497, true);
   AddBool(fl, "filelists.ignorethewhensorting", 13399, true);
   AddBool(fl, "filelists.allowfiledeletion", 14071, false);
-  AddBool(fl, "filelists.showaddsourcebuttons", 21382,  true);
+  AddBool(fl, "filelists.showaddsourcebuttons", 21382,  false);
   AddBool(fl, "filelists.showhidden", 21330, false);
 
   CSettingsCategory* ss = AddCategory(7, "screensaver", 360);
