@@ -340,6 +340,9 @@ public:
   CStdString GetVideoFanartFolder() const;
   CStdString GetProgramFanartFolder() const;
   CStdString GetMusicFanartFolder() const;
+  
+  CStdString GetPlexMediaServerThumbFolder() const;
+  CStdString GetPlexMediaServerFanartFolder() const;
 
   CStdString GetSettingsFile() const;
 

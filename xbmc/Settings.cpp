@@ -1750,6 +1750,29 @@ CStdString CSettings::GetBookmarksThumbFolder() const
   return folder;
 }
 
+CStdString CSettings::GetPlexMediaServerThumbFolder() const
+{
+  CStdString folder;
+  if (GetCurrentProfile().hasDatabases())
+    CUtil::AddFileToFolder(g_settings.GetProfileUserDataFolder(), _P("Thumbnails\\PlexMediaServer"), folder);
+  else
+    CUtil::AddFileToFolder(g_settings.GetUserDataFolder(), _P("Thumbnails\\PlexMediaServer"), folder);
+  
+  return folder;
+  
+}
+
+CStdString CSettings::GetPlexMediaServerFanartFolder() const
+{
+  CStdString folder;
+  if (GetCurrentProfile().hasDatabases())
+    CUtil::AddFileToFolder(g_settings.GetProfileUserDataFolder(), "Thumbnails\\PlexMediaServer\\Fanart", folder);
+  else
+    CUtil::AddFileToFolder(g_settings.GetUserDataFolder(), "Thumbnails\\PlexMediaServer\\Fanart", folder);
+  
+  return folder;
+}
+
 CStdString CSettings::GetSourcesFile() const
 {
   CStdString folder;

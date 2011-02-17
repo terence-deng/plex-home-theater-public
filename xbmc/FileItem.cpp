@@ -2698,18 +2698,10 @@ void CFileItem::SetUserMusicThumb(bool alwaysCheckRemote /* = false */)
 
 CStdString CFileItem::GetCachedVideoThumb() const
 {
-#pragma warning this needs fixing
-  /*
-   if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)
-   {
-   // For Plex Media Server thumbs, use the thumb path, because multiple items can refer to the same thumb.
-   crc.ComputeFromLowerCase(m_strThumbnailImage);
-   root = g_settings.GetPlexMediaServerThumbFolder();
-   }
-   */
-  
-  
-  if (IsStack())
+  CStdString path = m_strPath;
+  if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)
+    path = m_strThumbnailImage;
+  else if (IsStack())
     return GetCachedThumb(CStackDirectory::GetFirstStackedFile(m_strPath),g_settings.GetVideoThumbFolder(),true);
   else if (IsVideoDb() && HasVideoInfoTag())
   {
@@ -2718,7 +2710,7 @@ CStdString CFileItem::GetCachedVideoThumb() const
     else if (!GetVideoInfoTag()->m_strFileNameAndPath.IsEmpty())
       return GetCachedThumb(GetVideoInfoTag()->m_strFileNameAndPath, g_settings.GetVideoThumbFolder(), true);
   }
-  return GetCachedThumb(m_strPath,g_settings.GetVideoThumbFolder(),true);
+  return GetCachedThumb(path,g_settings.GetVideoThumbFolder(),true);
 }
 
 CStdString CFileItem::GetCachedEpisodeThumb() const
@@ -3073,7 +3065,7 @@ CStdString CFileItem::GetCachedPlexMediaServerBanner() const
 
 CStdString CFileItem::GetCachedPlexMediaServerFanart(const CStdString &path)
 {
-  return GetCachedThumb(path, g_settings.GetVideoFanartFolder());
+  return GetCachedThumb(path, g_settings.GetPlexMediaServerThumbFolder());
 }
 
 CStdString CFileItem::GetCachedPlexMediaServerThumb() const
@@ -3083,7 +3075,7 @@ CStdString CFileItem::GetCachedPlexMediaServerThumb() const
 
 CStdString CFileItem::GetCachedPlexMediaServerThumb(const CStdString& path)
 {
-  return GetCachedThumb(path, g_settings.GetVideoThumbFolder());
+  return GetCachedThumb(path, g_settings.GetPlexMediaServerFanartFolder());
 }
 
 CStdString CFileItem::GetCachedFanart() const
