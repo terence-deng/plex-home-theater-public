@@ -320,6 +320,16 @@ bool CFile::OpenForWrite(const CStdString& strFileName, bool bOverWrite)
   return false;
 }
 
+int CFile::Age(const CStdString& strFileName)
+{
+  struct __stat64 stat;
+  
+  if (Stat(strFileName, &stat) == 0)
+    return time(0) - (int)stat.st_mtime;
+  
+  return -1;
+}
+
 bool CFile::Exists(const CStdString& strFileName, bool bUseCache /* = true */)
 {
   try

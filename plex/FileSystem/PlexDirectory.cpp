@@ -149,7 +149,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
 
   // See if the item is too old.
   string cachedFile(CFileItem::GetCachedPlexMediaServerThumb(strFanart));
-  if (false) // FIMXE - if (CFile::Age(cachedFile) > MAX_FANART_AGE)
+  if (CFile::Age(cachedFile) > MAX_FANART_AGE)
     CFile::Delete(cachedFile);
   
   // Walk the parsed tree.
@@ -1576,7 +1576,7 @@ string CPlexDirectory::ProcessMediaElement(const string& parentPath, const char*
     {
       // See if the item is too old.
       string cachedFile(CFileItem::GetCachedPlexMediaServerThumb(strMedia));
-      if (false) // FIXME - if (CFile::Age(cachedFile) > maxAge)
+      if (CFile::Age(cachedFile) > maxAge)
         CFile::Delete(cachedFile);
     }
     
