@@ -1,7 +1,13 @@
+#include <string>
 #include "PlexUtils.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef _WIN32
+
+bool Cocoa_IsHostLocal(const std::string& host)
+{
+  return false;
+}
 
 #if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
   #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64

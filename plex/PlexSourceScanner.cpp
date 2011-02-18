@@ -12,6 +12,7 @@
 #include "Key.h"
 #include "Picture.h"
 #include "PlexDirectory.h"
+#include "PlexUtils.h"
 #include "PlexSourceScanner.h"
 #include "Util.h"
 #include "GUIWindowManager.h"

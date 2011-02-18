@@ -37,6 +37,8 @@
 #include <assert.h>	/* assert() */
 #include "sha.h"
 
+extern "C" {
+
 /* Make sure this is defined, as it's faster and avoids an invalid memory read 
  * with input of size 64-66 (at least). 
  */
@@ -62,6 +64,7 @@
  *
  */
 
+#define BYTE_ORDER LITTLE_ENDIAN 
 
 /*** SHA-224/256/384/512 Machine Architecture Definitions *************/
 /*
@@ -1609,3 +1612,4 @@ char* SHA384_Data(const sha_byte* data, size_t len, char digest[SHA384_DIGEST_ST
 	return SHA384_End(&context, digest);
 }
 
+}

@@ -51,6 +51,7 @@
 #include "StackDirectory.h"
 #include "PlexDirectory.h"
 #include "HTTP.h"
+#include "PlexUtils.h"
 #include "CocoaUtilsPlus.h"
 
 using namespace std;
@@ -939,7 +940,6 @@ void CGUIWindowVideoInfo::OnGetFanart()
   Update();
 }
 
-
 string CGUIWindowVideoInfo::OnGetMedia(const string& mediaType, const string& currentCachedMedia, int label)
 {
   CFileItemList items;
@@ -998,7 +998,7 @@ string CGUIWindowVideoInfo::OnGetMedia(const string& mediaType, const string& cu
   // Compute the new URL.
   finalURL.SetFileName(strData.substr(1));
   finalURL.SetOptions("");
-  
+
   bool local = Cocoa_IsHostLocal(finalURL.GetHostName());
   return CPlexDirectory::BuildImageURL(url, finalURL.Get(), local);
 }

@@ -116,7 +116,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\lib\libSDL-WIN32\include;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include\freetype2;..\..\lib\freetype\include;..\..\plex\Windows\include;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib\libSDL-WIN32\include;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include\freetype2;..\..\lib\freetype\include;..\..\plex\GUI;..\..\plex\Windows\include;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_MSVC;NOMINMAX;_USE_32BIT_TIME_T;HAS_DX;D3D_DEBUG_INFO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>false</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>

@@ -2,6 +2,10 @@
 
 #ifdef _WIN32
 
+#include <string>
+
+bool Cocoa_IsHostLocal(const std::string& host);
+
 struct timezone
 {
   int  tz_minuteswest; /* minutes W of Greenwich */

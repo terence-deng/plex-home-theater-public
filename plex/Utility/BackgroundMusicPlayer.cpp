@@ -12,7 +12,7 @@
 #include "GUIUserMessages.h"
 #include "GUIWindowManager.h"
 #include "Log.h"
-#include "PlayerCoreFactory.h"
+#include "cores/playercorefactory/PlayerCoreFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 BackgroundMusicPlayerPtr BackgroundMusicPlayer::Create()

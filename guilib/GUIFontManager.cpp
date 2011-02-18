@@ -32,7 +32,9 @@
 #include "../xbmc/FileSystem/SpecialProtocol.h"
 #include "utils/log.h"
 #include "WindowingFactory.h"
+#ifdef __APPLE__
 #include "CocoaUtilsPlus.h"
+#endif
 
 using namespace std;
 

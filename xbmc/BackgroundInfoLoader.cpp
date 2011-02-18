@@ -90,10 +90,14 @@ void CBackgroundInfoLoader::Run()
           // Load an item.
           if (LoadItem(pItem.get()) && m_pObserver)
             m_pObserver->OnItemLoaded(pItem.get());
-          
+
           // Pause if it was requested.
           if (m_pauseBetweenLoadsInMS > 0)
+#ifdef __APPLE__
             ::usleep(m_pauseBetweenLoadsInMS*1000);
+#elif defined(_WIN32)
+            Sleep(m_pauseBetweenLoadsInMS);
+#endif
         }
         catch (...)
         {

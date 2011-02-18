@@ -2125,6 +2125,27 @@
     <ClCompile Include="..\..\plex\PlexUtils.cpp">
       <Filter>Source Files\Plex</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\plex\GUI\GUIDialogPlexPluginSettings.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\GUI\GUIDialogRating.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\GUI\GUIDialogTimer.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\GUI\GUIWindowNowPlaying.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\Utility\BackgroundMusicPlayer.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\Utility\HTTP.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\plex\Utility\sha.cpp">
+      <Filter>Source Files\Plex</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\NetworkWin32.h">
@@ -4484,6 +4505,24 @@
       <Filter>Source Files\Plex</Filter>
     </ClInclude>
     <ClInclude Include="..\..\plex\PlexUtils.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\GUI\GUIDialogPlexPluginSettings.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\GUI\GUIDialogRating.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\GUI\GUIDialogTimer.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\GUI\GUIWindowNowPlaying.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Utility\BackgroundMusicPlayer.h">
+      <Filter>Source Files\Plex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\plex\Utility\HTTP.h">
       <Filter>Source Files\Plex</Filter>
     </ClInclude>
   </ItemGroup>

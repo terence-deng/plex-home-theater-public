@@ -146,7 +146,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug (DirectX)|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\xbmc\cores\dvdplayer;..\..\xbmc\win32;..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg\include;..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg;..\..\xbmc\cores;..\..\xbmc\;..\..\xbmc\utils;..\..\lib\libcurl-mingw32\include;..\..\guilib\;..\..\;..\..\xbmc\lib\libUPnP\Platinum\Source\Devices\MediaRenderer;..\..\xbmc\lib\libUPnP\Platinum\Source\Devices\MediaConnect;..\..\xbmc\lib\libUPnP\Platinum\Source\Devices\MediaServer;..\..\xbmc\lib\libUPnP\Platinum\Source\Platinum;..\..\xbmc\lib\libUPnP\Platinum\Source\Core;..\..\xbmc\lib\libUPnP\Neptune\Source\Core;..\..\xbmc\lib\libUPnP\Neptune\Source\System\Win32;..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay;..\..\xbmc\FileSystem;..\..\xbmc\lib\libRTMP;..\..\lib\libSDL-WIN32\include;..\..\xbmc\lib\libPython\Python\PC;..\..\xbmc\lib\libsamplerate\src;..\..\xbmc\lib;..\..\lib\freetype\include;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib;..\..\lib\jsoncpp\jsoncpp\include;..\..\lib\libmicrohttpd_win32\include;..\..\lib\libssh_win32\include;..\..\lib\liblame\include;..\..\lib\libbluray_win32;..\..\plex\Network;..\..\plex\FileSystem;..\..\plex\;..\..\plex\Windows\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\xbmc\cores\dvdplayer;..\..\xbmc\win32;..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg\include;..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg;..\..\xbmc\cores;..\..\xbmc\;..\..\xbmc\utils;..\..\lib\libcurl-mingw32\include;..\..\guilib\;..\..\;..\..\xbmc\lib\libUPnP\Platinum\Source\Devices\MediaRenderer;..\..\xbmc\lib\libUPnP\Platinum\Source\Devices\MediaConnect;..\..\xbmc\lib\libUPnP\Platinum\Source\Devices\MediaServer;..\..\xbmc\lib\libUPnP\Platinum\Source\Platinum;..\..\xbmc\lib\libUPnP\Platinum\Source\Core;..\..\xbmc\lib\libUPnP\Neptune\Source\Core;..\..\xbmc\lib\libUPnP\Neptune\Source\System\Win32;..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay;..\..\xbmc\FileSystem;..\..\xbmc\lib\libRTMP;..\..\lib\libSDL-WIN32\include;..\..\xbmc\lib\libPython\Python\PC;..\..\xbmc\lib\libsamplerate\src;..\..\xbmc\lib;..\..\lib\freetype\include;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib;..\..\lib\jsoncpp\jsoncpp\include;..\..\lib\libmicrohttpd_win32\include;..\..\lib\libssh_win32\include;..\..\lib\liblame\include;..\..\lib\libbluray_win32;..\..\plex\Utility;..\..\plex\GUI;..\..\plex\Network;..\..\plex\FileSystem;..\..\plex\;..\..\plex\Windows\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_MSVC;WIN32;_DEBUG;_WIN32_WINNT=0x0501;WINVER=0x0500;NOMINMAX;_USE_32BIT_TIME_T;HAS_DX;Py_NO_ENABLE_SHARED;D3D_DEBUG_INFO;__STDC_CONSTANT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -278,12 +278,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\plex\FileSystem\PlexDirectory.cpp" />
+    <ClCompile Include="..\..\plex\GUI\GUIDialogPlexPluginSettings.cpp" />
+    <ClCompile Include="..\..\plex\GUI\GUIDialogRating.cpp" />
+    <ClCompile Include="..\..\plex\GUI\GUIDialogTimer.cpp" />
+    <ClCompile Include="..\..\plex\GUI\GUIWindowNowPlaying.cpp" />
     <ClCompile Include="..\..\plex\Network\NetworkInterface.cpp" />
     <ClCompile Include="..\..\plex\Network\NetworkInterfaceWin32.cpp" />
     <ClCompile Include="..\..\plex\PlexApplication.cpp" />
     <ClCompile Include="..\..\plex\PlexMediaServerQueue.cpp" />
     <ClCompile Include="..\..\plex\PlexSourceScanner.cpp" />
     <ClCompile Include="..\..\plex\PlexUtils.cpp" />
+    <ClCompile Include="..\..\plex\Utility\BackgroundMusicPlayer.cpp" />
+    <ClCompile Include="..\..\plex\Utility\HTTP.cpp" />
+    <ClCompile Include="..\..\plex\Utility\sha.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug (DirectX)|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\xbmc\AddonDatabase.cpp" />
     <ClCompile Include="..\..\xbmc\addons\PluginSource.cpp" />
     <ClCompile Include="..\..\xbmc\addons\Repository.cpp" />
@@ -991,6 +1000,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\plex\FileSystem\PlexDirectory.h" />
+    <ClInclude Include="..\..\plex\GUI\GUIDialogPlexPluginSettings.h" />
+    <ClInclude Include="..\..\plex\GUI\GUIDialogRating.h" />
+    <ClInclude Include="..\..\plex\GUI\GUIDialogTimer.h" />
+    <ClInclude Include="..\..\plex\GUI\GUIWindowNowPlaying.h" />
     <ClInclude Include="..\..\plex\Network\NetworkInterface.h" />
     <ClInclude Include="..\..\plex\Network\NetworkService.h" />
     <ClInclude Include="..\..\plex\Network\NetworkServiceAdvertiser.h" />
@@ -1003,6 +1016,8 @@
     <ClInclude Include="..\..\plex\PlexMediaServerQueue.h" />
     <ClInclude Include="..\..\plex\PlexSourceScanner.h" />
     <ClInclude Include="..\..\plex\PlexUtils.h" />
+    <ClInclude Include="..\..\plex\Utility\BackgroundMusicPlayer.h" />
+    <ClInclude Include="..\..\plex\Utility\HTTP.h" />
     <ClInclude Include="..\..\xbmc\AddonDatabase.h" />
     <ClInclude Include="..\..\xbmc\addons\PluginSource.h" />
     <ClInclude Include="..\..\xbmc\addons\Repository.h" />
