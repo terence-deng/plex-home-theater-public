@@ -1040,6 +1040,7 @@
     <ClInclude Include="..\..\xbmc\win32\pch.h" />
     <ClInclude Include="..\..\xbmc\win32\PlatformDefs.h" />
     <ClInclude Include="..\..\xbmc\win32\PlatformInclude.h" />
+    <ClInclude Include="..\..\xbmc\win32\resource.h" />
     <ClInclude Include="..\..\xbmc\win32\Win32PowerSyscall.h" />
     <ClInclude Include="..\..\xbmc\win32\Win32StorageProvider.h" />
     <ClInclude Include="..\..\xbmc\win32\WIN32Util.h" />
@@ -1794,7 +1795,7 @@
     <ClInclude Include="..\..\xbmc\lib\libjsonrpc\XBMCOperations.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\xbmc\win32\XBMC.ico" />
+    <None Include="..\..\xbmc\win32\Plex.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc" />
