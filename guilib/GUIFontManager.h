@@ -87,6 +87,7 @@ protected:
   CGUIFontTTFBase* GetFontFile(const CStdString& strFontFile);
   bool OpenFontFile(TiXmlDocument& xmlDoc);
   bool FindSystemFontPath(const CStdString& strFilename, CStdString *fontPath);
+  bool GetFontAlias(const CStdString& strFontName, const CStdString& strVariant, CStdString& strAlias );
 
   std::vector<CGUIFont*> m_vecFonts;
   std::vector<CGUIFontTTFBase*> m_vecFontFiles;

@@ -68,6 +68,8 @@ bool GUIFontManager::FindSystemFontPath(const CStdString& strFilename, CStdStrin
   systemPaths.push_back("/System/Library/Fonts/");
 
   fontExtensions.push_back("");
+#elif _WIN32
+  systemPaths.push_back("C:\\Windows\\Fonts\\");
 #endif
 
   fontExtensions.push_back(".ttf");
@@ -191,6 +193,10 @@ CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdStrin
     if (!bFontLoaded)
     {
       delete pFontFile;
+
+      CStdString fontAlias;
+      if (GetFontAlias(strFilename, variant, fontAlias)) 
+        return LoadTTF(strFontName, fontAlias, textColor, shadowColor, iSize, iStyle, border, lineSpacing, originalAspect);
 
       // font could not be loaded - try Arial.ttf, which we distribute
       if (strFilename != "arial.ttf")
@@ -395,6 +401,48 @@ void GUIFontManager::Clear()
   m_fontsetUnicode=false;
 }
 
+bool GUIFontManager::GetFontAlias(const CStdString& strFontName, const CStdString& strVariant, CStdString& strAlias )
+{
+  TiXmlDocument xmlDoc;
+  if (!OpenFontFile(xmlDoc))
+    return false;
+
+  TiXmlElement* pRootElement = xmlDoc.RootElement();
+  const TiXmlNode *pChild = pRootElement->FirstChild();
+
+  while (pChild)
+  {
+    if (CStdString(pChild->Value()) == "aliases")
+      break;
+	pChild = pChild->NextSibling();
+  }
+
+  if (!pChild)
+    return false;
+
+  pChild = pChild->FirstChild();
+  while (pChild)
+  {
+	const TiXmlNode *pCheckAlias = pChild;
+    pChild = pChild->NextSibling();
+
+    if (CStdString(pCheckAlias->Value()) == "alias")
+	{
+      if (CStdString(((TiXmlElement*) pCheckAlias)->Attribute("font")) != strFontName )
+        continue;
+ 
+      if (CStdString(((TiXmlElement*) pCheckAlias)->Attribute("variant")) != strVariant )
+        continue;
+
+      strAlias = ((TiXmlElement*) pCheckAlias)->Attribute("alias");
+      if (strAlias.length())
+        return true;
+	}
+  }
+
+  return false;
+}
+
 void GUIFontManager::LoadFonts(const CStdString& strFontSet)
 {
   TiXmlDocument xmlDoc;
@@ -407,7 +455,7 @@ void GUIFontManager::LoadFonts(const CStdString& strFontSet)
   // If there are no fontset's defined in the XML (old skin format) run in backward compatibility
   // and ignore the fontset request
   CStdString strValue = pChild->Value();
-  if (strValue == "fontset")
+  if (strValue == "fontset" || strValue == "aliases")
   {
     CStdString foundTTF;
     while (pChild)
@@ -453,7 +501,7 @@ void GUIFontManager::LoadFonts(const CStdString& strFontSet)
   }
   else
   {
-    CLog::Log(LOGERROR, "file doesnt have <fontset> in <fonts>, but rather %s", strValue.c_str());
+    CLog::Log(LOGERROR, "file doesnt have <fontset> or <aliases> in <fonts>, but rather %s", strValue.c_str());
     return ;
   }
 }
@@ -481,7 +529,7 @@ void GUIFontManager::LoadFonts(const TiXmlNode* fontNode)
 #ifdef __APPLE__
           if (extension.Equals(".ttf") || extension.Equals(".dfont") || extension.Equals(".otf") || extension.Equals(".ttc") || extension.length() == 0)
 #else
-          if (extension.Equals(".ttf") || extension.Equals(".dfont") || extension.Equals(".otf"))
+          if (extension.Equals(".ttf") || extension.Equals(".dfont") || extension.Equals(".otf") || extension.length() == 0)
 #endif
           {
             int iSize = 20;
