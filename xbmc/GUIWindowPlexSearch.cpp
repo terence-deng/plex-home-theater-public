@@ -43,7 +43,7 @@
 #define CTL_BUTTON_CLEAR     10
 #define CTL_BUTTON_SPACE     32
 
-#define SEARCH_DELAY         500
+#define SEARCH_DELAY         750
 
 using namespace boost;
 
