@@ -116,72 +116,75 @@ class NetworkServiceBrowser : public NetworkServiceBase
   /// Handle incoming data.
   void handleRead(const udp_socket_ptr& socket, const boost::system::error_code& error, size_t bytes)
   {
-    if (!error)
-    {
-      // Parse out the parameters.
-      string data = string(m_data, bytes);
-      string cmd;
-      map<string, string> params;
-      parse(data, params, cmd);
+    if (error)
+	{
+      dprintf("Error reading from socket: %s", error.message().c_str());
+      return;	  
+	}	
 
-      m_mutex.lock();
+    // Parse out the parameters.
+    string data = string(m_data, bytes);
+    string cmd;
+    map<string, string> params;
+    parse(data, params, cmd);
+
+    m_mutex.lock();
       
-      // Look up the service.
-      NetworkServicePtr service;
-      if (m_services.find(m_endpoint.address()) != m_services.end())
-        service = m_services[m_endpoint.address()];
+    // Look up the service.
+    NetworkServicePtr service;
+    if (m_services.find(m_endpoint.address()) != m_services.end())
+    service = m_services[m_endpoint.address()];
       
-      bool notifyAdd = false;
-      bool notifyDel = false;
+    bool notifyAdd = false;
+    bool notifyDel = false;
       
-      // See if it's a leave.
-      if (boost::starts_with(cmd, "BYE"))
-      {
-        // Whack it.
-        notifyDel = true;
-        m_services.erase(m_endpoint.address());
-      }
-      else
-      {
-        // Determine if the service is new and save it, and notify.
-        if (service)
-        {
-          // Freshen the service.
-          service->freshen(params);
-        }
-        else
-        {
-          // If we can find it via identifier, remove the old one.
-          NetworkServicePtr oldServer = findServiceByIdentifier(params["Resource-Identifier"]);
-          if (oldServer)
-          {
-            dprintf("Removing older instance of resource at different address %s.", oldServer->address().to_string().c_str());
-            m_services.erase(oldServer->address());
-          }
-          
-          // Notify of the new service.
-          service = NetworkServicePtr(new NetworkService(m_endpoint.address(), params));
-          m_services[m_endpoint.address()] = service;
-          notifyAdd = true;
-        }
-      }
-        
-      m_mutex.unlock();
-      
-      // If we're going to, notify.
-      if (service)
-      {
-        if (notifyAdd)
-          handleServiceArrival(service);
-        else if (notifyDel)
-          handleServiceDeparture(service);
-        else if (boost::starts_with(cmd, "UPDATE"))
-          handleServiceUpdate(service);
-      }
-      
-      // Read the next packet.
-      socket->async_receive_from(buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+    // See if it's a leave.
+    if (boost::starts_with(cmd, "BYE"))
+    {
+    // Whack it.
+    notifyDel = true;
+    m_services.erase(m_endpoint.address());
     }
+    else
+    {
+    // Determine if the service is new and save it, and notify.
+    if (service)
+    {
+        // Freshen the service.
+        service->freshen(params);
+    }
+    else
+    {
+        // If we can find it via identifier, remove the old one.
+        NetworkServicePtr oldServer = findServiceByIdentifier(params["Resource-Identifier"]);
+        if (oldServer)
+        {
+        dprintf("Removing older instance of resource at different address %s.", oldServer->address().to_string().c_str());
+        m_services.erase(oldServer->address());
+        }
+          
+        // Notify of the new service.
+        service = NetworkServicePtr(new NetworkService(m_endpoint.address(), params));
+        m_services[m_endpoint.address()] = service;
+        notifyAdd = true;
+    }
+    }
+        
+    m_mutex.unlock();
+      
+    // If we're going to, notify.
+    if (service)
+    {
+    if (notifyAdd)
+        handleServiceArrival(service);
+    else if (notifyDel)
+        handleServiceDeparture(service);
+    else if (boost::starts_with(cmd, "UPDATE"))
+        handleServiceUpdate(service);
+    }
+      
+    // Read the next packet.
+    socket->async_receive_from(buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
   }
   
   /// Handle the deletion timer.
