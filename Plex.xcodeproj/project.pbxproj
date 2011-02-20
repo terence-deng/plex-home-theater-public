@@ -887,7 +887,7 @@
 		7486674512FBF60600D8F899 /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B0EB12E852400077A38C /* libboost_thread-mt.a */; };
 		748667CF12FC07CA00D8F899 /* Plex.icns in Resources */ = {isa = PBXBuildFile; fileRef = 748667CE12FC07CA00D8F899 /* Plex.icns */; };
 		74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74AF1A1713009F1A00923698 /* HTTP.cpp */; };
-		74AF1A1B1300A29400923698 /* sha.c in Sources */ = {isa = PBXBuildFile; fileRef = 74AF1A1A1300A29400923698 /* sha.c */; };
+		74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D8D37A1311A2DD00DBDBC8 /* sha.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1109,7 +1109,7 @@
 		74AF1A1613009F1A00923698 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTP.h; path = plex/Utility/HTTP.h; sourceTree = SOURCE_ROOT; };
 		74AF1A1713009F1A00923698 /* HTTP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HTTP.cpp; path = plex/Utility/HTTP.cpp; sourceTree = SOURCE_ROOT; };
 		74AF1A191300A29400923698 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = plex/Utility/sha.h; sourceTree = "<group>"; };
-		74AF1A1A1300A29400923698 /* sha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha.c; path = plex/Utility/sha.c; sourceTree = "<group>"; };
+		74D8D37A1311A2DD00DBDBC8 /* sha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sha.cpp; path = plex/Utility/sha.cpp; sourceTree = "<group>"; };
 		74F034C212F2B0A500040736 /* GUIDialogRating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogRating.h; path = plex/GUI/GUIDialogRating.h; sourceTree = "<group>"; };
 		74F034C312F2B0A500040736 /* GUIDialogRating.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogRating.cpp; path = plex/GUI/GUIDialogRating.cpp; sourceTree = "<group>"; };
 		74FB20E012ECBC4200876EB5 /* PlexMediaServerQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexMediaServerQueue.cpp; path = plex/PlexMediaServerQueue.cpp; sourceTree = "<group>"; };
@@ -3006,7 +3006,7 @@
 				74756AA512F4668D0001203D /* BackgroundMusicPlayer.h */,
 				74756AA412F4668D0001203D /* BackgroundMusicPlayer.cpp */,
 				74AF1A191300A29400923698 /* sha.h */,
-				74AF1A1A1300A29400923698 /* sha.c */,
+				74D8D37A1311A2DD00DBDBC8 /* sha.cpp */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -6899,7 +6899,7 @@
 				7486622212FBF5A600D8F899 /* ZipDirectory.cpp in Sources */,
 				7486622312FBF5A600D8F899 /* ZipManager.cpp in Sources */,
 				74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */,
-				74AF1A1B1300A29400923698 /* sha.c in Sources */,
+				74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
