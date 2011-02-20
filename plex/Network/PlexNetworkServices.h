@@ -7,6 +7,8 @@
 
 #pragma once
 
+#define BOOST_ASIO_DISABLE_IOCP 1; // IOCP reactor reads failed using boost 1.44.
+
 #include "Network/NetworkServiceBrowser.h"
 #include "PlexSourceScanner.h"
 
