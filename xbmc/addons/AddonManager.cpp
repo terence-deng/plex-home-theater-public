@@ -508,6 +508,7 @@ AddonPtr CAddonMgr::AddonFromProps(AddonProps& addonProps)
 
 void CAddonMgr::UpdateRepos(bool force)
 {
+#if 0
   CSingleLock lock(m_critSection);
   if (!force && m_watch.IsRunning() && m_watch.GetElapsedSeconds() < 600)
     return;
@@ -524,6 +525,7 @@ void CAddonMgr::UpdateRepos(bool force)
       CJobManager::GetInstance().AddJob(new CRepositoryUpdateJob(repo), NULL);
     }
   }
+#endif
 }
 
 /*
