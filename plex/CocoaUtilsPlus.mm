@@ -375,6 +375,7 @@ void CocoaPlus_Initialize()
 
   CFRunLoopAddSource(CFRunLoopGetCurrent(), IONotificationPortGetRunLoopSource(notify), kCFRunLoopDefaultMode);
 }
+#endif // WORKING
 
 ///////////////////////////////////////////////////////////////////////////////
 vector<string> Cocoa_GetSystemFonts()
@@ -385,7 +386,7 @@ vector<string> Cocoa_GetSystemFonts()
   @try
   {
     NSArray *fonts = [[[NSFontManager sharedFontManager] availableFontFamilies] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    for (int i = 0; i < [fonts count]; i++)
+    for (unsigned i = 0; i < [fonts count]; i++)
     {
       result.push_back([[fonts objectAtIndex:i] cStringUsingEncoding:NSUTF8StringEncoding]);
     }
@@ -397,7 +398,6 @@ vector<string> Cocoa_GetSystemFonts()
   return result;
 }
 
-#endif // WORKING
 
 ///////////////////////////////////////////////////////////////////////////////
 string Cocoa_GetSystemFontPathFromDisplayName(const string displayName)

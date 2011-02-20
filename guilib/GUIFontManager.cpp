@@ -133,6 +133,16 @@ void GUIFontManager::RescaleFontSizeAndAspect(float *size, float *aspect, RESOLU
   *size /= g_graphicsContext.GetGUIScaleY();
 }
 
+std::vector<std::string> GUIFontManager::GetSystemFontNames()
+{
+#ifndef __APPLE__
+#error
+#else
+  // should we add all the fonts found in the skin's path?
+  return Cocoa_GetSystemFonts();
+#endif
+}
+
 CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdString& strFilename, color_t textColor, color_t shadowColor, const int iSize, const int iStyle, bool border, float lineSpacing, float aspect, RESOLUTION sourceRes, bool preserveAspect, const CStdString& variant)
 {
   float originalAspect = aspect;
