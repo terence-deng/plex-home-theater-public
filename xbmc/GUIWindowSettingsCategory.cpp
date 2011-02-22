@@ -2095,6 +2095,7 @@ void CGUIWindowSettingsCategory::FillInSubtitleFonts(CSetting *pSetting)
   int iCurrentFont = 0;
   int iFont = 0;
 
+#if 0
   // find TTF fonts
   {
     CFileItemList items;
@@ -2106,7 +2107,8 @@ void CGUIWindowSettingsCategory::FillInSubtitleFonts(CSetting *pSetting)
 
         if (!pItem->m_bIsFolder)
         {
-
+          CStdString label = pItem->GetLabel();
+          
           if ( !CUtil::GetExtension(pItem->GetLabel()).Equals(".ttf") ) continue;
           if (pItem->GetLabel().Equals(pSettingString->GetData(), false))
             iCurrentFont = iFont;
@@ -2117,6 +2119,25 @@ void CGUIWindowSettingsCategory::FillInSubtitleFonts(CSetting *pSetting)
       }
     }
   }
+#else
+  // find usable fonts
+  {
+    std::vector<std::string> fonts = g_fontManager.GetSystemFontNames();
+    CLog::Log(LOGINFO, "Number of system fonts: %d", fonts.size());
+    for (unsigned i = 0; i < fonts.size(); i++)
+    {
+      CStdString strFont = fonts[i];
+      
+      // See if it's the current one.
+      if (strFont.Equals(pSettingString->GetData(), false))
+        iCurrentFont = iFont;
+      
+      // Add it.
+      pControl->AddLabel(strFont, iFont++);
+    }
+  }
+#endif
+  
   pControl->SetValue(iCurrentFont);
 }
 

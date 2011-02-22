@@ -2475,7 +2475,12 @@ CStdString CUtil::ValidatePath(const CStdString &path, bool bFixDoubleSlashes /*
 
 bool CUtil::IsUsingTTFSubtitles()
 {
+#if 0
   return CUtil::GetExtension(g_guiSettings.GetString("subtitles.font")).Equals(".ttf");
+#else
+  // That's all we use for now, baby.
+  return true;
+#endif
 }
 
 #ifdef UNIT_TESTING
