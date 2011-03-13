@@ -568,12 +568,21 @@ void CGUIWindowPlexSearch::OnClickButton(int iButtonControl)
 
         if (item)
         {
+          CFileItem* file = (CFileItem* )item.get();
+          printf("Playing %s\n", item->GetLabel().c_str());
+
           // Save state.
           m_selectedContainerID = container->GetID();
           m_selectedItem = container->GetSelectedItem();
 
-          printf("Playing %s\n", item->GetLabel().c_str());
-          g_application.PlayFile(*(CFileItem* )item.get());
+          // Now see what to do with it.
+          string type = item->GetProperty("type");
+          if (type == "show")
+            g_windowManager.ActivateWindow(WINDOW_VIDEO_FILES, file->m_strPath + ",return");
+          else if (type == "artist" || type == "album")
+            g_windowManager.ActivateWindow(WINDOW_MUSIC_FILES, file->m_strPath + ",return");
+          else
+            g_application.PlayFile(*(CFileItem* )item.get());
         }
       }
     }
