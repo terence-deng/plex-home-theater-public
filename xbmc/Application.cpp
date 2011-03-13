@@ -2339,6 +2339,10 @@ bool CApplication::OnKey(const CKey& key)
   if (!key.IsAnalogButton())
     CLog::Log(LOGDEBUG, "%s: %i pressed, action is %s", __FUNCTION__, (int) key.GetButtonCode(), action.GetName().c_str());
 
+  // Ensure the unicode keycode is forwarded with the event if there is one
+  if (g_Keyboard.GetUnicode())
+    action.SetUnicode(g_Keyboard.GetUnicode());
+  
   //  Play a sound based on the action
   g_audioManager.PlayActionSound(action);
 

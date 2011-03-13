@@ -455,6 +455,7 @@ public:
    \return unicode value associated with this action, for keyboard input.
    */
   wchar_t GetUnicode() const { return m_unicode; };
+  void SetUnicode( wchar_t unicode ) { m_unicode = unicode; };
 
   /*! \brief Time in ms that the key has been held
    \return time that the key has been held down in ms.
