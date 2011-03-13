@@ -116,6 +116,11 @@ class PlexSearchWorker : public CThread
     return m_id;
   }
 
+  static int PendingWorkers()
+  {
+    return g_pendingWorkers.size();
+  }
+
   static PlexSearchWorkerPtr Construct(const string& url, const string& query)
   {
     mutex::scoped_lock lk(g_mutex);
@@ -215,8 +220,6 @@ CGUIWindowPlexSearch::~CGUIWindowPlexSearch()
 void CGUIWindowPlexSearch::OnInitWindow()
 {
   CGUILabelControl* pEdit = ((CGUILabelControl*)GetControl(CTL_LABEL_EDIT));
-  //if (pEdit)
-  //  pEdit->ShowCursor();
 
   if (m_selectedItem != -1)
   {
@@ -246,6 +249,10 @@ void CGUIWindowPlexSearch::OnInitWindow()
     Reset();
     m_strEdit = "";
     UpdateLabel();
+
+    // Select button.
+    CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), 65);
+    OnMessage(msg);
   }
 }
 
@@ -268,8 +275,7 @@ bool CGUIWindowPlexSearch::OnAction(const CAction &action)
            // action.wID == ACTION_HOME      || action.wID == ACTION_END)
   {
     // Reset search time.
-    DWORD now = CTimeUtils::GetTimeMS();
-    m_lastSearchUpdate = now;
+    m_lastSearchUpdate = 0;
 
     // Allow cursor keys to work.
     return CGUIWindow::OnAction(action);
@@ -355,7 +361,7 @@ bool CGUIWindowPlexSearch::OnMessage(CGUIMessage& message)
           OnMessage(msg);
 
           SET_CONTROL_VISIBLE(controlID);
-          SET_CONTROL_VISIBLE(controlID-1000);
+          SET_CONTROL_VISIBLE(controlID-2000);
         }
       }
 
@@ -462,12 +468,12 @@ void CGUIWindowPlexSearch::Bind()
       OnMessage(msg);
 
       SET_CONTROL_VISIBLE(controlID);
-      SET_CONTROL_VISIBLE(controlID-1000);
+      SET_CONTROL_VISIBLE(controlID-2000);
     }
     else
     {
       SET_CONTROL_HIDDEN(controlID);
-      SET_CONTROL_HIDDEN(controlID-1000);
+      SET_CONTROL_HIDDEN(controlID-2000);
     }
   }
 
@@ -491,7 +497,7 @@ void CGUIWindowPlexSearch::Reset()
       OnMessage(msg);
 
       SET_CONTROL_HIDDEN(controlID);
-      SET_CONTROL_HIDDEN(controlID-1000);
+      SET_CONTROL_HIDDEN(controlID-2000);
     }
   }
 
@@ -620,4 +626,10 @@ void CGUIWindowPlexSearch::OnClickButton(int iButtonControl)
       }
     }
   }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+bool CGUIWindowPlexSearch::InProgress()
+{
+  return (PlexSearchWorker::PendingWorkers() > 0);
 }

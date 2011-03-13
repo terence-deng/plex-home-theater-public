@@ -67,6 +67,8 @@
 #include "LabelFormatter.h"
 
 #include "GUIUserMessages.h"
+#include "GUILabelControl.h"  // for CInfoLabel
+#include "GUIWindowPlexSearch.h"
 #include "GUIWindowVideoInfo.h"
 #include "GUIWindowMusicInfo.h"
 #include "GUIWindowNowPlaying.h"
@@ -362,6 +364,7 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
     else if (strTest.Equals("system.memory(used)")) ret = SYSTEM_USED_MEMORY;
     else if (strTest.Equals("system.memory(used.percent)")) ret = SYSTEM_USED_MEMORY_PERCENT;
     else if (strTest.Equals("system.memory(total)")) ret = SYSTEM_TOTAL_MEMORY;
+    else if (strTest.Equals("system.searchinprogress")) ret = SYSTEM_SEARCH_IN_PROGRESS;
 
     else if (strTest.Equals("system.language")) ret = SYSTEM_LANGUAGE;
     else if (strTest.Equals("system.temperatureunits")) ret = SYSTEM_TEMPERATURE_UNITS;
@@ -1745,6 +1748,14 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
     bReturn = true;
   else if (condition > SYSTEM_IDLE_TIME_START && condition <= SYSTEM_IDLE_TIME_FINISH)
     bReturn = (g_application.GlobalIdleTime() >= condition - SYSTEM_IDLE_TIME_START);
+  else if (condition == SYSTEM_SEARCH_IN_PROGRESS)
+  {
+    CGUIWindowPlexSearch* searchWin = (CGUIWindowPlexSearch* )g_windowManager.GetWindow(WINDOW_PLEX_SEARCH);
+    if (searchWin && searchWin->InProgress())
+      bReturn = true;
+    else
+      bReturn = false;
+  }
   else if (condition == WINDOW_IS_MEDIA)
   { // note: This doesn't return true for dialogs (content, favourites, login, videoinfo)
     CGUIWindow *pWindow = g_windowManager.GetWindow(g_windowManager.GetActiveWindow());
