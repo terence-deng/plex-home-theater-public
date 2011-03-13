@@ -173,12 +173,16 @@
 #include "GUIWindowSystemInfo.h"
 #include "GUIWindowScreensaver.h"
 #include "GUIWindowSlideShow.h"
+#include "GUIWindowNowPlaying.h"
+#include "GUIWindowPlexSearch.h"
+#ifdef HAS_KAI
+#include "GUIWindowBuddies.h"
+#endif
 #include "GUIWindowStartup.h"
 #include "GUIWindowFullScreen.h"
 #include "GUIWindowOSD.h"
 #include "GUIWindowMusicOverlay.h"
 #include "GUIWindowVideoOverlay.h"
-#include "GUIWindowNowPlaying.h"
 
 // Dialog includes
 #include "GUIDialogMusicOSD.h"
@@ -1040,6 +1044,7 @@ bool CApplication::Initialize()
   g_windowManager.Add(new CGUIWindowSettingsProfile);          // window id = 34
   g_windowManager.Add(new CGUIWindowAddonBrowser);          // window id = 40
   g_windowManager.Add(new CGUIWindowNowPlaying);         // window id = 50
+  g_windowManager.Add(new CGUIWindowPlexSearch);         // window id = 51
   g_windowManager.Add(new CGUIDialogYesNo);              // window id = 100
   g_windowManager.Add(new CGUIDialogProgress);           // window id = 101
   g_windowManager.Add(new CGUIDialogKeyboard);           // window id = 103

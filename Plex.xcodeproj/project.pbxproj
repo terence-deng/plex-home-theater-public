@@ -889,6 +889,7 @@
 		74972168132CEC0F0074DD27 /* AddonInstaller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74972166132CEC0F0074DD27 /* AddonInstaller.cpp */; };
 		74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74AF1A1713009F1A00923698 /* HTTP.cpp */; };
 		74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D8D37A1311A2DD00DBDBC8 /* sha.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
+		74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1117,6 +1118,8 @@
 		74F034C312F2B0A500040736 /* GUIDialogRating.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogRating.cpp; path = plex/GUI/GUIDialogRating.cpp; sourceTree = "<group>"; };
 		74FB20E012ECBC4200876EB5 /* PlexMediaServerQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexMediaServerQueue.cpp; path = plex/PlexMediaServerQueue.cpp; sourceTree = "<group>"; };
 		74FB20E112ECBC4200876EB5 /* PlexMediaServerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexMediaServerQueue.h; path = plex/PlexMediaServerQueue.h; sourceTree = "<group>"; };
+		74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIWindowPlexSearch.cpp; path = xbmc/GUIWindowPlexSearch.cpp; sourceTree = "<group>"; };
+		74FEC659132D285100B019CB /* GUIWindowPlexSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIWindowPlexSearch.h; path = xbmc/GUIWindowPlexSearch.h; sourceTree = "<group>"; };
 		7C2D6AE20F35453E00DD2E85 /* SpecialProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpecialProtocol.cpp; sourceTree = "<group>"; };
 		7C2D6AE30F35453E00DD2E85 /* SpecialProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialProtocol.h; sourceTree = "<group>"; };
 		7C45DBE710F325C400D4BBF3 /* DAVDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAVDirectory.cpp; sourceTree = "<group>"; };
@@ -3071,6 +3074,8 @@
 				743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */,
 				74332DA312FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.h */,
 				74332DA212FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp */,
+				74FEC659132D285100B019CB /* GUIWindowPlexSearch.h */,
+				74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */,
 			);
 			name = GUI;
 			sourceTree = "<group>";
@@ -6906,6 +6911,7 @@
 				74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */,
 				74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */,
 				74972168132CEC0F0074DD27 /* AddonInstaller.cpp in Sources */,
+				74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

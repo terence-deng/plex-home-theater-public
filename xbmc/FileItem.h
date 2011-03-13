@@ -56,12 +56,19 @@ class CURL;
 
 class CMediaSource;
 class CFileItem;
+class CFileItemList;
 
 /*!
  \brief A shared pointer to CFileItem
  \sa CFileItem
  */
 typedef boost::shared_ptr<CFileItem> CFileItemPtr;
+
+/*!
+ \brief A shared pointer to CFileItemList
+ \sa CFileItemList
+ */
+typedef boost::shared_ptr<CFileItemList>  CFileItemListPtr;
 
 /*!
   \brief Represents a file on a share

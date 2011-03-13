@@ -147,3 +147,6 @@
 // Sent when the current background music them is updated.
 #define GUI_MSG_BG_MUSIC_THEME_UPDATED	GUI_MSG_USER + 46
 
+// Send when a search helper has finished.
+#define GUI_MSG_SEARCH_HELPER_COMPLETE GUI_MSG_USER + 47
+
