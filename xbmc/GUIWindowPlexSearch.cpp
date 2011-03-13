@@ -44,57 +44,73 @@
 class PlexSearchWorker : public CThread
 {
  public:
-  
+
   PlexSearchWorker(const string& url, const string& query)
     : m_url(url)
     , m_query(query)
     , m_cancelled(false)
+    , m_results(new CFileItemList())
   {
   }
-  
+
   void Process()
   {
-    printf("Running query for [%s]\n", m_query.c_str());
-    
     // Escape the query.
     CStdString query = m_query;
     CUtil::URLEncode(query);
-    
+
     // Get the results.
     CPlexDirectory dir;
-    CStdString path = CStdString(m_url) + "?query=" + query;
-    dir.GetDirectory(path, m_results);
-    
+    CStdString path = CStdString(m_url);
+
+    // Strip tailing slash.
+    if (path[path.size()-1] == '/')
+      path = path.substr(0, path.size()-1);
+
+    // Add the query parameter.
+    if (path.find("?") == string::npos)
+      path = path + "?query=" + query;
+    else
+      path = path + "&query=" + query;
+
+    printf("Running query for %s [%s]\n", path.c_str(), m_query.c_str());
+    dir.GetDirectory(path, *m_results);
+
     // If we haven't been cancelled, send them back.
     if (m_cancelled == false)
     {
       // Notify the main menu.
-      CGUIMessage msg2(GUI_MSG_SEARCH_HELPER_COMPLETE, WINDOW_PLEX_SEARCH, 300);
+      CGUIMessage msg2(GUI_MSG_SEARCH_HELPER_COMPLETE, WINDOW_PLEX_SEARCH, 300, 0, 0, m_results);
       g_windowManager.SendThreadMessage(msg2);
     }
+    else
+    {
+      // Whack it, nobody wants it.
+      delete m_results;
+    }
   }
-  
+
   void Cancel()
   {
     m_cancelled = true;
   }
-  
+
   CFileItemList& GetResults()
   {
-    return m_results;
+    return *m_results;
   }
-  
+
  private:
-  
+
   string m_url;
   string m_query;
   bool   m_cancelled;
-  
-  CFileItemList m_results;
+
+  CFileItemList* m_results;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-CGUIWindowPlexSearch::CGUIWindowPlexSearch() 
+CGUIWindowPlexSearch::CGUIWindowPlexSearch()
   : CGUIWindow(WINDOW_PLEX_SEARCH, "PlexSearch.xml")
   , m_lastSearchUpdate(0)
   , m_resetOnNextResults(false)
@@ -151,14 +167,14 @@ bool CGUIWindowPlexSearch::OnAction(const CAction &action)
     case 27:  // escape
       Close();
       break;
-      
+
     default:
-      if (CGUIWindow::OnAction(action) == false) 
+      if (CGUIWindow::OnAction(action) == false)
         Character(action.GetUnicode());
     }
     return true;
   }
-  
+
   return false;
 }
 
@@ -169,20 +185,34 @@ bool CGUIWindowPlexSearch::OnMessage(CGUIMessage& message)
   {
   case GUI_MSG_SEARCH_HELPER_COMPLETE:
   {
-    printf("Search is complete.\n");
+    CFileItemListPtr results = CFileItemListPtr((CFileItemList* )message.GetPointer());
+
     if (m_resetOnNextResults)
     {
       Reset();
       m_resetOnNextResults = false;
     }
-    
+
+    // If we have any additional providers, run them in parallel.
+    vector<CFileItemPtr>& providers = results->GetProviders();
+    BOOST_FOREACH(CFileItemPtr& provider, providers)
+    {
+      // Convert back to utf8.
+      CStdString search;
+      g_charsetConverter.wToUTF8(m_strEdit, search);
+
+      // Create a new worker.
+      PlexSearchWorker* worker = new PlexSearchWorker(provider->m_strPath.c_str(), search);
+      worker->Create(true);
+    }
+
     // Put the items in the right category.
-    for (int i=0; i<m_searchWorker->GetResults().Size(); i++)
+    for (int i=0; i<results->Size(); i++)
     {
       // Get the item and the type.
-      CFileItemPtr item = m_searchWorker->GetResults().Get(i);
+      CFileItemPtr item = results->Get(i);
       int type = boost::lexical_cast<int>(item->GetProperty("typeNumber"));
-      
+
       // Add it to the correct "bucket".
       if (m_categoryResults.find(type) != m_categoryResults.end())
         m_categoryResults[type].list->Add(item);
@@ -195,15 +225,14 @@ bool CGUIWindowPlexSearch::OnMessage(CGUIMessage& message)
       CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(controlID);
       if (control && pair.second.list->Size() > 0)
       {
-        printf("Setting list of %d items for type %d\n", pair.second.list->Size(), pair.first);
         CGUIMessage msg(GUI_MSG_LABEL_BIND, CTL_LABEL_EDIT, controlID, 0, 0, pair.second.list.get());
         OnMessage(msg);
-        
+
         SET_CONTROL_VISIBLE(controlID);
         SET_CONTROL_VISIBLE(controlID-1000);
       }
     }
-    
+
     // Get thumbs and then reset results.
     BOOST_FOREACH(int_list_pair pair, m_categoryResults)
     {
@@ -212,17 +241,17 @@ bool CGUIWindowPlexSearch::OnMessage(CGUIMessage& message)
     }
   }
   break;
-  
+
   case GUI_MSG_WINDOW_DEINIT:
   {
     if (m_videoThumbLoader.IsLoading())
       m_videoThumbLoader.StopThread();
-    
+
     if (m_musicThumbLoader.IsLoading())
       m_musicThumbLoader.StopThread();
   }
   break;
-  
+
   case GUI_MSG_CLICKED:
   {
     int iControl = message.GetSenderId();
@@ -230,25 +259,25 @@ bool CGUIWindowPlexSearch::OnMessage(CGUIMessage& message)
   }
   break;
   }
-  
+
   return CGUIWindow::OnMessage(message);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void CGUIWindowPlexSearch::Render()
 {
-  if (m_lastSearchUpdate && m_lastSearchUpdate + SEARCH_DELAY < CTimeUtils::GetTimeMS());
+  if (m_lastSearchUpdate && m_lastSearchUpdate + SEARCH_DELAY < CTimeUtils::GetTimeMS())
     UpdateLabel();
-  
+
   CGUIWindow::Render();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void CGUIWindowPlexSearch::Character(WCHAR ch)
 {
-  if (!ch) 
+  if (!ch)
     return;
-  
+
   m_strEdit.Insert(GetCursorPos(), ch);
   UpdateLabel();
   MoveCursor(1);
@@ -276,12 +305,12 @@ void CGUIWindowPlexSearch::UpdateLabel()
     CStdString utf8Edit;
     g_charsetConverter.wToUTF8(m_strEdit, utf8Edit);
     pEdit->SetLabel(utf8Edit);
-    
+
     // Send off a search message if it's been SEARCH_DELAY since last search.
     DWORD now = CTimeUtils::GetTimeMS();
     if (!m_lastSearchUpdate || m_lastSearchUpdate + SEARCH_DELAY >= now)
-      m_lastSearchUpdate = now; // update is called when we haven't passed our search delay, so reset it
-    
+      m_lastSearchUpdate = now;
+
     if (m_lastSearchUpdate + SEARCH_DELAY < now)
     {
       m_lastSearchUpdate = 0;
@@ -302,7 +331,7 @@ void CGUIWindowPlexSearch::Reset()
     {
       CGUIMessage msg(GUI_MSG_LABEL_RESET, CTL_LABEL_EDIT, controlID);
       OnMessage(msg);
-      
+
       SET_CONTROL_HIDDEN(controlID);
       SET_CONTROL_HIDDEN(controlID-1000);
     }
@@ -322,7 +351,7 @@ void CGUIWindowPlexSearch::StartSearch(const string& search)
     // Issue the first canonical search result to the local media server.
     m_searchWorker = new PlexSearchWorker("http://localhost:32400/search", search);
     m_searchWorker->Create(false);
-    m_resetOnNextResults = true; 
+    m_resetOnNextResults = true;
   }
 }
 
@@ -357,7 +386,7 @@ char CGUIWindowPlexSearch::GetCharacter(int iButton)
     // It's a number.
     return '0' + (iButton-91);
   }
-  
+
   return 0;
 }
 
