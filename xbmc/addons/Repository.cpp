@@ -28,10 +28,8 @@
 #include "Settings.h"
 #include "FileItem.h"
 #include "utils/JobManager.h"
-#include "utils/FileOperationJob.h"
+#include "addons/AddonInstaller.h"
 #include "utils/log.h"
-#include "GUIWindowManager.h"
-#include "GUIWindowAddonBrowser.h"
 #include "GUIDialogYesNo.h"
 #include "StringUtils.h"
 
@@ -195,10 +193,11 @@ bool CRepositoryUpdateJob::DoWork()
     {
       if (g_settings.m_bAddonAutoUpdate || addon->Type() >= ADDON_VIZ_LIBRARY)
       {
-        CGUIWindowAddonBrowser* window = (CGUIWindowAddonBrowser*)g_windowManager.GetWindow(WINDOW_ADDON_BROWSER);
-        if (!window)
-          return false;
-        window->AddJob(addons[i]->Path());
+        CStdString referer;
+        if (CUtil::IsInternetStream(addons[i]->Path()))
+          referer.Format("Referer=%s-%s.zip",addon->ID().c_str(),addon->Version().str.c_str());
+
+        CAddonInstaller::Get().Install(addon->ID(), true, referer);
       }
       else if (g_settings.m_bAddonNotifications)
       {

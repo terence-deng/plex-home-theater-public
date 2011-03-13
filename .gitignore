@@ -70,7 +70,7 @@ xcuserdata
 /stamp-h1
 /xbmc.bin
 /xbmc-xrandr
-/svn_revision.h
+/git_revision.h
 
 # /addons/
 /addons/com.nullsoft.milkdrop.xbmc/*.vis
@@ -1212,7 +1212,7 @@ xcuserdata
 /xbmc/visualizations/XBMCProjectM/libprojectM/cmake_install.cmake
 /xbmc/visualizations/XBMCProjectM/libprojectM/config.inp
 
-/xbmc/win32/svn_rev.h
+/xbmc/win32/git_rev.h
 
 build/
 lib/libass/m4/libtool.m4

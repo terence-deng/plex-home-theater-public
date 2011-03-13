@@ -33,7 +33,9 @@
 #include "ViewDatabase.h"
 #include "AutoSwitch.h"
 #include "GUIWindowManager.h"
+#include "addons/Addon.h"
 #include "addons/AddonManager.h"
+#include "addons/PluginSource.h"
 #include "ViewState.h"
 #include "GUISettings.h"
 #include "AdvancedSettings.h"
@@ -44,6 +46,7 @@
 #include "TextureManager.h"
 
 using namespace std;
+using namespace ADDON;
 
 CStdString CGUIViewState::m_strPlaylistDirectory;
 VECSOURCES CGUIViewState::m_sources;
@@ -121,7 +124,7 @@ CGUIViewState* CGUIViewState::GetViewState(int windowId, const CFileItemList& it
 
   if (windowId==WINDOW_PROGRAMS)
     return new CGUIViewStateWindowPrograms(items);
-  
+
   if (windowId==WINDOW_ADDON_BROWSER)
     return new CGUIViewStateAddonBrowser(items);
 
@@ -133,6 +136,7 @@ CGUIViewState::CGUIViewState(const CFileItemList& items) : m_items(items)
 {
   m_currentViewAsControl=0;
   m_currentSortMethod=0;
+  m_playlist = PLAYLIST_NONE;
   m_sortOrder=SORT_ORDER_ASC;
 }
 
@@ -304,8 +308,8 @@ int CGUIViewState::GetPlaylist()
     if (m_items.m_strPath.Find("/music/") != -1);
     return PLAYLIST_MUSIC;
   }
-  
-  return PLAYLIST_NONE;
+
+  return m_playlist;
 }
 
 const CStdString& CGUIViewState::GetPlaylistDirectory()
@@ -335,7 +339,7 @@ bool CGUIViewState::AutoPlayNextItem()
 {
   if (m_items.IsPlexMediaServer() == true)
     return true;
-    
+
   return false;
 }
 
@@ -363,7 +367,7 @@ void CGUIViewState::AddAddonsSource(const CStdString &content, const CStdString 
   if (XFILE::CAddonsDirectory::GetScriptsAndPlugins(content, items))
   { // add the plugin source
     CMediaSource source;
-    source.strPath = "addons://sources/" + content + "/";    
+    source.strPath = "addons://sources/" + content + "/";
     source.strName = label;
     if (!thumb.IsEmpty() && g_TextureManager.HasTexture(thumb))
       source.m_strThumbnailImage = thumb;
@@ -436,6 +440,19 @@ CGUIViewStateFromItems::CGUIViewStateFromItems(const CFileItemList &items) : CGU
   SetViewAsControl(DEFAULT_VIEW_LIST);
 
   SetSortOrder(SORT_ORDER_ASC);
+  if (items.IsPlugin())
+  {
+    CURL url(items.m_strPath);
+    AddonPtr addon;
+    if (CAddonMgr::Get().GetAddon(url.GetHostName(),addon) && addon)
+    {
+      PluginPtr plugin = boost::static_pointer_cast<CPluginSource>(addon);
+      if (plugin->Provides(CPluginSource::AUDIO))
+        m_playlist = PLAYLIST_MUSIC;
+      if (plugin->Provides(CPluginSource::VIDEO))
+        m_playlist = PLAYLIST_VIDEO;
+    }
+  }
   LoadViewState(items.m_strPath, g_windowManager.GetActiveWindow());
 }
 

@@ -70,7 +70,7 @@ public:
   {
   }
 
-  AddonProps(cp_plugin_info_t *props);
+  AddonProps(const cp_extension_t *ext);
 
   bool operator==(const AddonProps &rhs)
   { 
@@ -223,6 +223,7 @@ private:
   virtual void ClearStrings();
   bool m_hasStrings;
   bool m_checkedStrings;
+  bool m_hasSettings;
 
   CStdString  m_profile;
   bool        m_enabled;

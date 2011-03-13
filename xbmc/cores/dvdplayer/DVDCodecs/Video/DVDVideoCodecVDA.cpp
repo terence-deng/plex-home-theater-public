@@ -514,6 +514,7 @@ bool CDVDVideoCodecVDA::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
       return false;
     }
 
+    // setup the decoder configuration dict
     CFMutableDictionaryRef decoderConfiguration = CFDictionaryCreateMutable(
       kCFAllocatorDefault, 4, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
@@ -526,17 +527,25 @@ bool CDVDVideoCodecVDA::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
     CFDictionarySetValue(decoderConfiguration, m_dll->Get_kVDADecoderConfiguration_SourceFormat(), avcFormat);
     CFDictionarySetValue(decoderConfiguration, m_dll->Get_kVDADecoderConfiguration_avcCData(), avcCData);
 
-    // release our retained object refs
+    // release the retained object refs, decoderConfiguration owns them now
     CFRelease(avcWidth);
     CFRelease(avcHeight);
     CFRelease(avcFormat);
     CFRelease(avcCData);
 
-    // create the VDADecoder object using defaulted '2vuy' video format buffers.
+    // setup the destination image buffer dict, vda will output this pict format
+    CFMutableDictionaryRef destinationImageBufferAttributes = CFDictionaryCreateMutable(
+      kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+    OSType cvPixelFormatType = kCVPixelFormatType_422YpCbCr8;
+    CFNumberRef pixelFormat  = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &cvPixelFormatType);
+    CFDictionarySetValue(destinationImageBufferAttributes, kCVPixelBufferPixelFormatTypeKey, pixelFormat);
+
+    // create the VDADecoder object
     OSStatus status;
     try
     {
-      status = m_dll->VDADecoderCreate(decoderConfiguration, NULL,
+      status = m_dll->VDADecoderCreate(decoderConfiguration, destinationImageBufferAttributes,
         (VDADecoderOutputCallback *)VDADecoderCallback, this, (VDADecoder*)&m_vda_decoder);
     }
     catch (...)
@@ -545,6 +554,7 @@ bool CDVDVideoCodecVDA::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options)
       status = kVDADecoderDecoderFailedErr;
     }
     CFRelease(decoderConfiguration);
+    CFRelease(destinationImageBufferAttributes);
     if (status != kVDADecoderNoErr)
     {
       CLog::Log(LOGNOTICE, "%s - VDADecoder Codec failed to open, status(%d), profile(%d), level(%d)",
@@ -679,7 +689,7 @@ int CDVDVideoCodecVDA::Decode(BYTE* pData, int iSize, double dts, double pts)
 
   // TODO: queue depth is related to the number of reference frames in encoded h.264.
   // so we need to buffer until we get N ref frames + 1.
-  if (m_queue_depth < 16)
+  if (m_queue_depth < 4)
   {
     return VC_BUFFER;
   }
@@ -748,7 +758,7 @@ void CDVDVideoCodecVDA::UYVY422_to_YUV420P(uint8_t *yuv422_ptr, int yuv422_strid
   struct SwsContext *swcontext = m_dllSwScale->sws_getContext(
     m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_UYVY422, 
     m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_YUV420P, 
-    SWS_FAST_BILINEAR, NULL, NULL, NULL);
+    SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
   if (swcontext)
   {
     uint8_t  *src[] = { yuv422_ptr, 0, 0, 0 };
@@ -768,7 +778,7 @@ void CDVDVideoCodecVDA::BGRA_to_YUV420P(uint8_t *bgra_ptr, int bgra_stride, DVDV
   struct SwsContext *swcontext = m_dllSwScale->sws_getContext(
     m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_BGRA, 
     m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_YUV420P, 
-    SWS_FAST_BILINEAR, NULL, NULL, NULL);
+    SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
   if (swcontext)
   {
     uint8_t  *src[] = { bgra_ptr, 0, 0, 0 };

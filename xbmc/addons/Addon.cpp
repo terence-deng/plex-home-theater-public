@@ -242,23 +242,22 @@ CStdString AddonVersion::Print() const
       y.Empty(); \
   }
 
-AddonProps::AddonProps(cp_plugin_info_t *props)
-  : id(props->identifier)
-  , version(props->version)
-  , name(props->name)
-  , path(props->plugin_path)
-  , author(props->provider_name)
+AddonProps::AddonProps(const cp_extension_t *ext)
+  : id(ext->plugin->identifier)
+  , version(ext->plugin->version)
+  , name(ext->plugin->name)
+  , path(ext->plugin->plugin_path)
+  , author(ext->plugin->provider_name)
   , stars(0)
 {
-  //FIXME only considers the first registered extension for each addon
-  if (props->extensions->ext_point_id)
-    type = TranslateType(props->extensions->ext_point_id);
+  if (ext->ext_point_id)
+    type = TranslateType(ext->ext_point_id);
 
   icon = "icon.png";
   fanart = CUtil::AddFileToFolder(path, "fanart.jpg");
   changelog = CUtil::AddFileToFolder(path, "changelog.txt");
   // Grab more detail from the props...
-  const cp_extension_t *metadata = CAddonMgr::Get().GetExtension(props, "xbmc.addon.metadata");
+  const cp_extension_t *metadata = CAddonMgr::Get().GetExtension(ext->plugin, "xbmc.addon.metadata");
   if (metadata)
   {
     summary = CAddonMgr::Get().GetTranslatedString(metadata->configuration, "summary");
@@ -278,13 +277,14 @@ AddonProps::AddonProps(cp_plugin_info_t *props)
  */
 
 CAddon::CAddon(const cp_extension_t *ext)
-  : m_props(ext ? ext->plugin : NULL)
+  : m_props(ext)
   , m_parent(AddonPtr())
 {
   BuildLibName(ext);
   BuildProfilePath();
   CUtil::AddFileToFolder(Profile(), "settings.xml", m_userSettingsPath);
   m_enabled = true;
+  m_hasSettings = true;
   m_hasStrings = false;
   m_checkedStrings = false;
   m_settingsLoaded = false;
@@ -300,6 +300,7 @@ CAddon::CAddon(const AddonProps &props)
   BuildProfilePath();
   CUtil::AddFileToFolder(Profile(), "settings.xml", m_userSettingsPath);
   m_enabled = true;
+  m_hasSettings = true;
   m_hasStrings = false;
   m_checkedStrings = false;
   m_settingsLoaded = false;
@@ -314,6 +315,7 @@ CAddon::CAddon(const CAddon &rhs, const AddonPtr &parent)
   m_addonXmlDoc = rhs.m_addonXmlDoc;
   m_settingsLoaded = rhs.m_settingsLoaded;
   m_userSettingsLoaded = rhs.m_userSettingsLoaded;
+  m_hasSettings = rhs.m_hasSettings;
   BuildProfilePath();
   CUtil::AddFileToFolder(Profile(), "settings.xml", m_userSettingsPath);
   m_strLibName  = rhs.m_strLibName;
@@ -448,13 +450,15 @@ bool CAddon::LoadSettings()
 {
   if (m_settingsLoaded)
     return true;
-
+  if (!m_hasSettings)
+    return false;
   CStdString addonFileName = CUtil::AddFileToFolder(m_props.path, "resources/settings.xml");
 
   if (!m_addonXmlDoc.LoadFile(addonFileName))
   {
     if (CFile::Exists(addonFileName))
       CLog::Log(LOGERROR, "Unable to load: %s, Line %d\n%s", addonFileName.c_str(), m_addonXmlDoc.ErrorRow(), m_addonXmlDoc.ErrorDesc());
+    m_hasSettings = false;
     return false;
   }
 
