@@ -632,6 +632,10 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         newItem->m_strPath = pItem->m_strPath;
         pItem = newItem;
 
+        // Check for indirect.
+        if (media->Attribute("indirect") && strcmp(media->Attribute("indirect"), "1") == 0)
+          pItem->SetProperty("indirect", 1);
+
         const char* bitrate = el.Attribute("bitrate");
         if (bitrate && strlen(bitrate) > 0)
         {
@@ -725,6 +729,13 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         // Create the file item.
         CFileItemPtr theMediaItem(new CFileItem(theVideoInfo));
 
+        // Check for indirect.
+        if (media->Attribute("indirect") && strcmp(media->Attribute("indirect"), "1") == 0)
+        {
+          pItem->SetProperty("indirect", 1);
+          theMediaItem->SetProperty("indirect", 1);
+        }
+
         // If it's not an STRM file then save the local path.
         if (CUtil::GetExtension(localPath) != ".strm")
           theMediaItem->SetProperty("localPath", localPath);
@@ -811,6 +822,38 @@ class PlexMediaDirectory : public PlexMediaNode
     newItem->m_strPath = pItem->m_strPath;
     newItem->SetProperty("description", pItem->GetProperty("description"));
     pItem = newItem;
+
+    // Watch/unwatched.
+    if (el.Attribute("leafCount") && el.Attribute("viewedLeafCount"))
+    {
+      int count = boost::lexical_cast<int>(el.Attribute("leafCount"));
+      int watchedCount = boost::lexical_cast<int>(el.Attribute("viewedLeafCount"));
+      pItem->SetEpisodeData(count, watchedCount);
+
+      pItem->GetVideoInfoTag()->m_iEpisode = count;
+      pItem->GetVideoInfoTag()->m_playCount = (count == watchedCount) ? 1 : 0;
+      pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, pItem->GetVideoInfoTag()->m_playCount > 0);
+    }
+
+    // Music.
+    if (type == "artist")
+    {
+      pItem->SetProperty("artist", pItem->GetLabel());
+    }
+    else if (type == "album")
+    {
+      if (el.Attribute("parentTitle"))
+        pItem->SetProperty("artist", el.Attribute("parentTitle"));
+
+      pItem->SetProperty("album", pItem->GetLabel());
+      if (el.Attribute("year"))
+        pItem->SetLabel2(el.Attribute("year"));
+    }
+    else if (type == "track")
+    {
+      if (el.Attribute("index"))
+        pItem->SetProperty("index", el.Attribute("index"));
+    }
 
     // Check for special directories.
     const char* search = el.Attribute("search");
