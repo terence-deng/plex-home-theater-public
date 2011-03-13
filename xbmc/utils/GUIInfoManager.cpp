@@ -711,6 +711,12 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
   }
   else if (strCategory.Left(8).Equals("listitem"))
   {
+    CStdString info = strTest.Mid(strCategory.GetLength() + 1);
+    if (info.Left(5).Equals("type("))
+    {
+      return AddMultiInfo(GUIInfo(bNegate ? -LISTITEM_TYPE : LISTITEM_TYPE, ConditionalStringParameter(info.Mid(5,info.GetLength()-6)), 0));
+    }
+
     int offset = atoi(strCategory.Mid(9, strCategory.GetLength() - 10));
     ret = TranslateListItem(strTest.Mid(strCategory.GetLength() + 1));
     if (offset || ret == LISTITEM_ISSELECTED || ret == LISTITEM_ISPLAYING || ret == LISTITEM_IS_FOLDER)
@@ -2493,6 +2499,11 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
           if (index >= 0 && index < g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC).size())
             return true;
           return false;
+        }
+        break;
+      case LISTITEM_TYPE:
+        {
+          return item->GetProperty("type").Equals(m_stringParameters[info.GetData1()]);
         }
         break;
     }
