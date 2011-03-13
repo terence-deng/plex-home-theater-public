@@ -25,6 +25,8 @@
 #include "FileItem.h"
 #include "GUIViewState.h"
 #include "GUIDialogOK.h"
+#include "Picture.h"
+#include "XBAudioConfig.h"
 
 using namespace std;
 using namespace XFILE;
@@ -1267,6 +1269,18 @@ void CPlexDirectory::Process()
   // Set request headers.
   m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
   m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage());
+  m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
+
+  // Build an audio codecs description.
+  CStdString protocols = "protocols=shoutcast,webkit,http-video;audioDecoders=mp3,aac";
+
+  if (g_audioConfig.GetDTSEnabled())
+    protocols += ",dts{bitrate=800000&channels:8}";
+
+  if (g_audioConfig.GetAC3Enabled())
+    protocols += ",ac3{bitrate:800000&channels:8}";
+
+  m_http.SetRequestHeader("X-Plex-Client-Capabilities", protocols);
 
   m_http.SetTimeout(m_timeout);
   if (m_http.Open(url, false) == false)
