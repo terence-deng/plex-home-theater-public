@@ -136,6 +136,22 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
   
   Parse(m_url, root, items, strFileLabel, strSecondFileLabel, strDirLabel, strSecondDirLabel);
   
+  // Check if any restrictions should be applied
+  bool disableFanart = false;
+  
+  if (g_advancedSettings.m_bEnableViewRestrictions)
+  {
+    // Disable fanart
+    const char* strDisableFanart = root->Attribute("disableFanart");
+    if (strDisableFanart && strcmp(strDisableFanart, "1") == 0)
+      disableFanart = true;
+    
+    // Disabled view modes
+    const char* disabledViewModes = root->Attribute("disabledViewModes");
+    if (disabledViewModes && strlen(disabledViewModes) > 0)
+      items.SetDisabledViewModes(disabledViewModes);
+  }
+  
   // Set the window titles
   const char* title1 = root->Attribute("title1");
   const char* title2 = root->Attribute("title2");
@@ -144,17 +160,47 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
     items.SetFirstTitle(title1);
   if (title2 && strlen(title2) > 0)
     items.SetSecondTitle(title2);
+  
+  // Get container summary.
+  const char* summary = root->Attribute("summary");
+  if (summary)
+    items.SetProperty("description", summary);
+  
+  // Get color values
+  const char* communityRatingColor = root->Attribute("ratingColor");
 
   const char* httpCookies = root->Attribute("httpCookies");
   const char* userAgent = root->Attribute("userAgent");
+  
+  const char* pluginIdentifier = root->Attribute("identifier");
+  if (pluginIdentifier)
+    items.SetProperty("identifier", pluginIdentifier);
   
   // Set fanart on items if they don't have their own, or if individual item fanart is disabled
   for (int i=0; i<items.Size(); i++)
   {
     CFileItemPtr pItem = items[i];
     
-    if (strFanart.size() > 0 && pItem->GetQuickFanart().size() == 0)
+    // Fall back to directory fanart?
+    if ((strFanart.size() > 0 && pItem->GetQuickFanart().size() == 0) || disableFanart)
+    {
       pItem->SetQuickFanart(strFanart);
+      
+      if (strFanart.find("32400/:/resources") != -1)
+        pItem->SetProperty("fanart_fallback", "1");
+    }
+    
+    // Save the fallback fanart in case we need it while loading the real one.
+    if (strFanart.size() > 0)
+    {
+      // Only do this if we have it cached already.
+      if (CFile::Exists(CFileItem::GetCachedPlexMediaServerFanart(strFanart)))
+        pItem->SetProperty("fanart_image_fallback", CFileItem::GetCachedPlexMediaServerFanart(strFanart));
+    }
+    
+    // Fall back to directory thumb?
+    if (strThumb.size() > 0 && pItem->GetThumbnailImage().size() == 0)
+      pItem->SetThumbnailImage(strThumb);
       
     // Make sure sort label is lower case.
     string sortLabel = pItem->GetLabel();
@@ -167,6 +213,12 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
     
     if (userAgent)
       pItem->SetProperty("userAgent", userAgent);
+    
+    if (communityRatingColor)
+      pItem->SetProperty("communityRatingColor", communityRatingColor);
+    
+    if (pluginIdentifier)
+      pItem->SetProperty("pluginIdentifier", pluginIdentifier);
   }
   
   // Set fanart on directory.
