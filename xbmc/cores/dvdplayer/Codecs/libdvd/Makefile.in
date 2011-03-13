@@ -9,10 +9,10 @@ WRAPPER=../../../DllLoader/exports/wrapper.o
 WRAPPER_OSX=$(RUBY) ../../../../../tools/Mach5/wrapper.rb
 
 LDFLAGS += -shared -fPIC -rdynamic
-ifeq ($(ARCH), powerpc-osx)
-	# Add -lbundle1.o for powerpc-osx
+#ifeq ($(ARCH), powerpc-osx)
+#	# Add -lbundle1.o for powerpc-osx
 	BUNDLE1_O = -lbundle1.o
-endif
+#endif
 
 # Allows us to optionally build xbmc with DVDCSS support
 ifeq (@BUILD_DVDCSS@,1)
