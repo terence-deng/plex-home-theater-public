@@ -25,18 +25,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE
+2 TEXTINCLUDE 
 BEGIN
     "#include ""windows.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -51,8 +51,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 10,0,0,0
- PRODUCTVERSION 10,0,0,0
+ FILEVERSION 0,9,5,0
+ PRODUCTVERSION 0,9,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -67,14 +67,14 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "Team XBMC"
-            VALUE "FileDescription", "XBMC"
-            VALUE "FileVersion", "10.0"
+            VALUE "CompanyName", "Plex, Inc"
+            VALUE "FileDescription", "Plex"
+            VALUE "FileVersion", "0.9.5.0"
             VALUE "InternalName", "XBMC.exe"
-            VALUE "LegalCopyright", "Copyright (c) Team XBMC.  All rights reserved."
-            VALUE "OriginalFilename", "XBMC.exe"
-            VALUE "ProductName", "XBMC for Windows"
-            VALUE "ProductVersion", "10.0"
+            VALUE "LegalCopyright", "Copyright (c) Plex, Inc.  All rights reserved."
+            VALUE "OriginalFilename", "Plex.exe"
+            VALUE "ProductName", "Plex for Windows"
+            VALUE "ProductVersion", "0.9.5.0"
         END
     END
     BLOCK "VarFileInfo"
