@@ -136,7 +136,8 @@ void GUIFontManager::RescaleFontSizeAndAspect(float *size, float *aspect, RESOLU
 std::vector<std::string> GUIFontManager::GetSystemFontNames()
 {
 #ifndef __APPLE__
-#error
+#pragma message("TODO: IMPLEMENT ME")
+  return std::vector<std::string>();
 #else
   // should we add all the fonts found in the skin's path?
   return Cocoa_GetSystemFonts();
