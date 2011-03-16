@@ -179,8 +179,7 @@ set EXE= "..\VS2010Express\Plex\%buildconfig%\Plex.exe"
   call genNsisIncludes.bat
   ECHO ------------------------------------------------------------
   CALL extract_git_rev.bat
-  SET GIT_REV=_%GIT_REV%
-  SET PLEX_SETUPFILE=PlexSetup-Rev%GIT_REV%-%target%.exe
+  SET PLEX_SETUPFILE=Plex-Media-Center-v%GIT_REV%-en-US.exe
   ECHO Creating installer %PLEX_SETUPFILE%...
   IF EXIST %PLEX_SETUPFILE% del %PLEX_SETUPFILE% > NUL
   rem get path to makensis.exe from registry, first try tab delim

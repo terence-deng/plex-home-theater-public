@@ -14,16 +14,16 @@
 ;General
 
   ;Name and file
-  Name "Plex"
-  OutFile "PlexSetup-Rev${plex_revision}-${plex_target}.exe"
+  Name "Plex Media Center"
+  OutFile "Plex-Media-Center-v${plex_revision}-en-US.exe"
 
   XPStyle on
   
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\Plex"
+  InstallDir "$PROGRAMFILES\Plex\Plex Media Center"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\Plex" ""
+  InstallDirRegKey HKCU "Software\Plex\Plex Media Center" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
