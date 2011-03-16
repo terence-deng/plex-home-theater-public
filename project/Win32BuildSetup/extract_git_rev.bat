@@ -1,4 +1,4 @@
-@echo off
+rem @echo off
 
 rem Batch file output: %GIT_REV% variable, containing the git revision
 
@@ -11,7 +11,7 @@ GOTO :extract
 :notgit
 
 rem Fallback on msysgit - must be in the path
-SET GITEXE="git.exe"
+SET GITEXE=git.exe
 %GITEXE% --help > NUL 2>&1
 if errorlevel 1 goto :nogit
 GOTO :extract
