@@ -40,7 +40,7 @@ LONG WINAPI CreateMiniDump( EXCEPTION_POINTERS* pEp )
   CStdString errorMsg;
   CStdString dumpFile;
   CDateTime now(CDateTime::GetCurrentDateTime());
-  dumpFile.Format("%s\\XBMC\\xbmc_crashlog-%04i%02i%02i-%02i%02i%02i.dmp", CWIN32Util::GetProfilePath().c_str(), now.GetYear(), now.GetMonth(), now.GetDay(), now.GetHour(), now.GetMinute(), now.GetSecond());
+  dumpFile.Format("%s\\Plex\\plex_crashlog-%04i%02i%02i-%02i%02i%02i.dmp", CWIN32Util::GetProfilePath().c_str(), now.GetYear(), now.GetMonth(), now.GetDay(), now.GetHour(), now.GetMinute(), now.GetSecond());
   HANDLE hFile = CreateFile(dumpFile.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ); 
 
   // Call MiniDumpWriteDump api with the dump file
@@ -66,13 +66,13 @@ LONG WINAPI CreateMiniDump( EXCEPTION_POINTERS* pEp )
         if( !rv ) 
         {
           errorMsg.Format("MiniDumpWriteDump failed with error id %d", GetLastError());
-          MessageBox(NULL, errorMsg.c_str(), "XBMC: Error", MB_OK|MB_ICONERROR); 
+          MessageBox(NULL, errorMsg.c_str(), "Plex: Error", MB_OK|MB_ICONERROR); 
         } 
       }
       else
       {
         errorMsg.Format("MiniDumpWriteDump failed to load with error id %d", GetLastError());
-        MessageBox(NULL, errorMsg.c_str(), "XBMC: Error", MB_OK|MB_ICONERROR);
+        MessageBox(NULL, errorMsg.c_str(), "Plex: Error", MB_OK|MB_ICONERROR);
       }
       
       // Close the DLL
@@ -81,7 +81,7 @@ LONG WINAPI CreateMiniDump( EXCEPTION_POINTERS* pEp )
     else
     {
       errorMsg.Format("LoadLibrary 'DBGHELP.DLL' failed with error id %d", GetLastError());
-      MessageBox(NULL, errorMsg.c_str(), "XBMC: Error", MB_OK|MB_ICONERROR);
+      MessageBox(NULL, errorMsg.c_str(), "Plex: Error", MB_OK|MB_ICONERROR);
     }
 
     // Close the file 
@@ -90,7 +90,7 @@ LONG WINAPI CreateMiniDump( EXCEPTION_POINTERS* pEp )
   else 
   {
     errorMsg.Format("CreateFile '%s' failed with error id %d", dumpFile.c_str(), GetLastError());
-    MessageBox(NULL, errorMsg.c_str(), "XBMC: Error", MB_OK|MB_ICONERROR); 
+    MessageBox(NULL, errorMsg.c_str(), "Plex: Error", MB_OK|MB_ICONERROR); 
   }
 
   return pEp->ExceptionRecord->ExceptionCode;;
@@ -116,10 +116,10 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
   SetUnhandledExceptionFilter( CreateMiniDump );
 
   // check if XBMC is already running
-  CreateMutex(NULL, FALSE, "XBMC Media Center");
+  CreateMutex(NULL, FALSE, "Plex Media Center");
   if(GetLastError() == ERROR_ALREADY_EXISTS)
   {
-    HWND m_hwnd = FindWindow("XBMC","XBMC");
+    HWND m_hwnd = FindWindow("XBMC","Plex");
     if(m_hwnd != NULL)
     {
       // switch to the running instance
@@ -186,7 +186,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
   {
     CStdString errorMsg;
     errorMsg.Format("CApplication::Create() failed - check log file and that it is writable");
-    MessageBox(NULL, errorMsg.c_str(), "XBMC: Error", MB_OK|MB_ICONERROR);
+    MessageBox(NULL, errorMsg.c_str(), "Plex: Error", MB_OK|MB_ICONERROR);
     return 0;
   }
 
