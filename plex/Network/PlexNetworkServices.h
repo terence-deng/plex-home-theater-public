@@ -14,6 +14,7 @@
 
 class PlexServiceListener;
 typedef boost::shared_ptr < PlexServiceListener > PlexServiceListenerPtr;
+typedef boost::shared_ptr < boost::thread > ThreadPtr;
 
 ///
 /// Plex specific service browser.
@@ -82,13 +83,17 @@ public:
     NetworkInterface::WatchForChanges();
        
     // Start the I/O service in its own thread.
-    boost::thread t(boost::bind(&boost::asio::io_service::run, &m_ioService));
-    t.detach();
+    m_ptrThread = ThreadPtr(new boost::thread(boost::bind(&boost::asio::io_service::run, &m_ioService)));
   }
 
   void stop()
   {
     m_ioService.stop();
+    if (m_ptrThread)
+	{
+		m_ptrThread->join();
+        m_ptrThread.reset();
+	}
   }
 
 private:
@@ -100,5 +105,6 @@ private:
 
   boost::asio::io_service     m_ioService;
   PlexNetworkServiceBrowser   m_pmsBrowser;
+  ThreadPtr                   m_ptrThread;
 };
 
