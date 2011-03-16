@@ -9,13 +9,18 @@
 
 #include "PlexNetworkServices.h"
 #include "PlexApplication.h"
+#include "PlexApplicationWin.h"
 #include "BackgroundMusicPlayer.h"
 #include "GUIUserMessages.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 PlexApplicationPtr PlexApplication::Create()
 {
+#ifdef _WIN32
+  return PlexApplicationPtr( new PlexApplicationWin() );
+#else
   return PlexApplicationPtr( new PlexApplication() );
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -23,6 +28,11 @@ PlexApplication::PlexApplication()
 {
   m_serviceListener = PlexServiceListener::Create();
   m_bgMusicPlayer = BackgroundMusicPlayer::Create();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+PlexApplication::~PlexApplication()
+{
 }
 
 ////////////////////////////////////////////////////////////////////////////////

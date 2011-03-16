@@ -27,6 +27,9 @@ class PlexApplication : public IMsgTargetCallback
 public:
   /// Create an instance.
   static PlexApplicationPtr Create();
+
+  /// Destructor
+  virtual ~PlexApplication();
   
   /// Handle internal messages.
   virtual bool OnMessage(CGUIMessage& message);
@@ -34,10 +37,11 @@ public:
   /// Handle global volume changes.
   void SetGlobalVolume(int volume);
     
-private:
+protected:
   /// Default constructor.
   PlexApplication();
   
+private:
   /// Members
   PlexServiceListenerPtr m_serviceListener;
   BackgroundMusicPlayerPtr m_bgMusicPlayer;
