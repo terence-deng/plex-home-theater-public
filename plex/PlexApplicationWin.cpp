@@ -13,7 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 PlexApplicationWin::PlexApplicationWin()
 {	
-  win_sparkle_set_appcast_url("http://www.plexapp.com/appcast/win/plex.xml");
+  win_sparkle_set_appcast_url("www.plexapp.com/appcast/win/plex.xml");
   win_sparkle_init();	// calling this hangs everything some way down the line!!!!
 }
 
