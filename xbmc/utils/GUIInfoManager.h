@@ -45,6 +45,7 @@ class CFileItem;
 class CGUIListItem;
 class CDateTime;
 class CMusicThumbLoader;
+typedef boost::shared_ptr < CFileItem > CFileItemPtr;
 
 // conditions for window retrieval
 #define WINDOW_CONDITION_HAS_LIST_ITEMS  1
@@ -692,7 +693,7 @@ protected:
   CStdString m_currentMovieDuration;
 
   // Current playing stuff
-  CFileItem* m_currentFile;
+  CFileItemPtr m_currentFile;
   CStdString m_currentMovieThumb;
   unsigned int m_lastMusicBitrateTime;
   unsigned int m_MusicBitrate;

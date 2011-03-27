@@ -111,7 +111,7 @@ CGUIInfoManager::CGUIInfoManager(void)
   m_nextWindowID = WINDOW_INVALID;
   m_prevWindowID = WINDOW_INVALID;
   m_stringParameters.push_back("__ZZZZ__");   // to offset the string parameters by 1 to assure that all entries are non-zero
-  m_currentFile = new CFileItem;
+  m_currentFile = CFileItemPtr(new CFileItem);
   m_currentSlide = new CFileItem;
   m_frameCounter = 0;
   m_lastFPSTime = 0;
@@ -122,7 +122,6 @@ CGUIInfoManager::CGUIInfoManager(void)
 
 CGUIInfoManager::~CGUIInfoManager(void)
 {
-  delete m_currentFile;
   delete m_currentSlide;
   delete m_musicThumbLoader;
 }
@@ -2737,12 +2736,12 @@ CStdString CGUIInfoManager::GetImage(int info, int contextWindow)
   else if (info == MUSICPLAYER_RATING)
   {
     if (!g_application.IsPlayingAudio()) return "";
-    return GetItemImage(m_currentFile, LISTITEM_RATING);
+    return GetItemImage(m_currentFile.get(), LISTITEM_RATING);
   }
   else if (info == PLAYER_STAR_RATING)
   {
     if (!g_application.IsPlaying()) return "";
-    return GetItemImage(m_currentFile, LISTITEM_STAR_RATING);
+    return GetItemImage(m_currentFile.get(), LISTITEM_STAR_RATING);
   }
   else if (info == VIDEOPLAYER_COVER)
   {
@@ -3105,9 +3104,9 @@ CStdString CGUIInfoManager::GetMusicLabel(int item)
     }
     break;
   case MUSICPLAYER_LYRICS:
-    return GetItemLabel(m_currentFile, AddListItemProp("lyrics"));
+    return GetItemLabel(m_currentFile.get(), AddListItemProp("lyrics"));
   }
-  return GetMusicTagLabel(item, m_currentFile);
+  return GetMusicTagLabel(item, m_currentFile.get());
 }
 
 CStdString CGUIInfoManager::GetMusicTagLabel(int info, const CFileItem *item) const
@@ -3408,7 +3407,7 @@ void CGUIInfoManager::SetCurrentSong(CFileItem &item)
     else
     {
       CFileItemList list;
-      list.Add(CFileItemPtr(m_currentFile));
+      list.Add(m_currentFile);
       
       if (m_musicThumbLoader->IsLoading())
         m_musicThumbLoader->StopThread();
@@ -3420,7 +3419,7 @@ void CGUIInfoManager::SetCurrentSong(CFileItem &item)
     m_currentFile->SetMusicThumb();
   m_currentFile->FillInDefaultIcon();
 
-  CMusicInfoLoader::LoadAdditionalTagInfo(m_currentFile);
+  CMusicInfoLoader::LoadAdditionalTagInfo(m_currentFile.get());
 }
 
 void CGUIInfoManager::SetCurrentMovie(CFileItem &item)
