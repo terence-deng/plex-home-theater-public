@@ -550,15 +550,18 @@ vector<CStdString> Cocoa_Proxy_ExceptionList()
 ///////////////////////////////////////////////////////////////////////////////
 string Cocoa_GetLanguage()
 {
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
+    
   // See if we're overriden.
   if (g_advancedSettings.m_language.size() > 0)
     return g_advancedSettings.m_language;
 
   // Otherwise, use the OS X default.
   NSArray* languages = [NSLocale preferredLanguages];
-  NSString* language = [languages objectAtIndex:0];
-
-  return [language UTF8String];
+  std::string language = [[languages objectAtIndex:0] UTF8String];
+  
+  [pool release];
+  return language;
 }
 
 #ifdef _WORKING
