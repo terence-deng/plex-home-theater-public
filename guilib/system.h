@@ -45,7 +45,7 @@
 #define HAS_VISUALISATION
 
 #ifdef HAVE_LIBMICROHTTPD
-//#define HAS_WEB_SERVER
+#define HAS_WEB_SERVER
 #define HAS_WEB_INTERFACE
 #endif
 

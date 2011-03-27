@@ -271,11 +271,11 @@ AC_ARG_ENABLE([asap-codec],
   [use_asap=$enableval],
   [use_asap=no])
 
-dnl AC_ARG_ENABLE([webserver],
-dnl   [AS_HELP_STRING([--disable-webserver],
-dnl   [disable webserver])],
-dnl   [use_webserver=$enableval],
-dnl   [use_webserver=yes])
+AC_ARG_ENABLE([webserver],
+  [AS_HELP_STRING([--disable-webserver],
+  [disable webserver])],
+  [use_webserver=$enableval],
+  [use_webserver=yes])
 
 AC_ARG_ENABLE([libdts],
   [AS_HELP_STRING([--enable-libdts],

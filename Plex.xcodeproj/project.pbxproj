@@ -888,6 +888,8 @@
 		748667CF12FC07CA00D8F899 /* Plex.icns in Resources */ = {isa = PBXBuildFile; fileRef = 748667CE12FC07CA00D8F899 /* Plex.icns */; };
 		74972168132CEC0F0074DD27 /* AddonInstaller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74972166132CEC0F0074DD27 /* AddonInstaller.cpp */; };
 		74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74AF1A1713009F1A00923698 /* HTTP.cpp */; };
+		74D7F387133F88A900DCE15F /* WebServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D7F385133F88A900DCE15F /* WebServer.cpp */; };
+		74D7F389133F8A2F00DCE15F /* libmicrohttpd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */; };
 		74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D8D37A1311A2DD00DBDBC8 /* sha.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */; };
 /* End PBXBuildFile section */
@@ -1090,6 +1092,7 @@
 		74756A9A12F450DF0001203D /* GUIDialogTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogTimer.cpp; path = plex/GUI/GUIDialogTimer.cpp; sourceTree = "<group>"; };
 		74756AA412F4668D0001203D /* BackgroundMusicPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BackgroundMusicPlayer.cpp; path = plex/Utility/BackgroundMusicPlayer.cpp; sourceTree = "<group>"; };
 		74756AA512F4668D0001203D /* BackgroundMusicPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackgroundMusicPlayer.h; path = plex/Utility/BackgroundMusicPlayer.h; sourceTree = "<group>"; };
+		747573F2132EA57D002387F7 /* NetworkServiceAdvertiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkServiceAdvertiser.h; sourceTree = "<group>"; };
 		7482B02512E838440077A38C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7482B02B12E83A540077A38C /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "vendor/homebrew.git/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
 		7482B0EB12E852400077A38C /* libboost_thread-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_thread-mt.a"; path = "vendor/homebrew.git/lib/libboost_thread-mt.a"; sourceTree = "<group>"; };
@@ -1113,6 +1116,9 @@
 		74AF1A1613009F1A00923698 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTP.h; path = plex/Utility/HTTP.h; sourceTree = SOURCE_ROOT; };
 		74AF1A1713009F1A00923698 /* HTTP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HTTP.cpp; path = plex/Utility/HTTP.cpp; sourceTree = SOURCE_ROOT; };
 		74AF1A191300A29400923698 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = plex/Utility/sha.h; sourceTree = "<group>"; };
+		74D7F385133F88A900DCE15F /* WebServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebServer.cpp; sourceTree = "<group>"; };
+		74D7F386133F88A900DCE15F /* WebServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServer.h; sourceTree = "<group>"; };
+		74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmicrohttpd.a; path = lib/libmicrohttpd/src/daemon/.libs/libmicrohttpd.a; sourceTree = "<group>"; };
 		74D8D37A1311A2DD00DBDBC8 /* sha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sha.cpp; path = plex/Utility/sha.cpp; sourceTree = "<group>"; };
 		74F034C212F2B0A500040736 /* GUIDialogRating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogRating.h; path = plex/GUI/GUIDialogRating.h; sourceTree = "<group>"; };
 		74F034C312F2B0A500040736 /* GUIDialogRating.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogRating.cpp; path = plex/GUI/GUIDialogRating.cpp; sourceTree = "<group>"; };
@@ -2861,6 +2867,7 @@
 				7486674312FBF60600D8F899 /* SystemConfiguration.framework in Frameworks */,
 				7486674412FBF60600D8F899 /* libboost_system-mt.a in Frameworks */,
 				7486674512FBF60600D8F899 /* libboost_thread-mt.a in Frameworks */,
+				74D7F389133F8A2F00DCE15F /* libmicrohttpd.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2998,6 +3005,7 @@
 				74646A1912E82E8F00B2FF1E /* NetworkInterface.cpp */,
 				74646A1A12E82E8F00B2FF1E /* NetworkInterface.h */,
 				74646A1C12E82E8F00B2FF1E /* NetworkService.h */,
+				747573F2132EA57D002387F7 /* NetworkServiceAdvertiser.h */,
 				74646A1F12E82E8F00B2FF1E /* NetworkServiceBase.h */,
 				74646A2012E82E8F00B2FF1E /* NetworkServiceBrowser.h */,
 				7482B37712E8E33E0077A38C /* PlexNetworkServices.h */,
@@ -5715,6 +5723,8 @@
 				7CF1FD68123E049300B2CBCB /* Variant.h */,
 				E38E1E8D0D25F9FD00618676 /* Weather.cpp */,
 				E38E1E8E0D25F9FD00618676 /* Weather.h */,
+				74D7F386133F88A900DCE15F /* WebServer.h */,
+				74D7F385133F88A900DCE15F /* WebServer.cpp */,
 				E38E1E8F0D25F9FD00618676 /* Win32Exception.cpp */,
 				E38E1E900D25F9FD00618676 /* Win32Exception.h */,
 				E38E1E920D25F9FD00618676 /* WindowsShortcut.h */,
@@ -5817,6 +5827,7 @@
 				744632D512E3A23D00C8B41F /* libcrypto.a */,
 				74462F2812E3822000C8B41F /* libfribidi.a */,
 				74462EFD12E37F4000C8B41F /* libGLEW.a */,
+				74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */,
 				74462F0512E37FD300C8B41F /* libiconv.dylib */,
 				744632D012E3A13F00C8B41F /* libssl.a */,
 				74462F4012E3840D00C8B41F /* libmad.a */,
@@ -6912,6 +6923,7 @@
 				74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */,
 				74972168132CEC0F0074DD27 /* AddonInstaller.cpp in Sources */,
 				74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */,
+				74D7F387133F88A900DCE15F /* WebServer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7044,6 +7056,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7062,6 +7075,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25 = "\"$(SRCROOT)/lib/libmicrohttpd/src/daemon/.libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
@@ -7173,6 +7187,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7191,6 +7206,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25 = "\"$(SRCROOT)/lib/libmicrohttpd/src/daemon/.libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";

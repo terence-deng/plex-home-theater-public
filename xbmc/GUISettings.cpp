@@ -653,12 +653,8 @@ void CGUISettings::Initialize()
   AddBool(srv, "services.upnprenderer", 21881, false);
   AddSeparator(srv,"services.sep3");
 #ifdef HAS_WEB_SERVER
-  AddBool(srv,  "services.webserver",        263, false);
-#ifdef _LINUX
-  AddString(srv,"services.webserverport",    730, (geteuid()==0)?"80":"8080", EDIT_CONTROL_NUMBER_INPUT, false, 730);
-#else
-  AddString(srv,"services.webserverport",    730, "80", EDIT_CONTROL_NUMBER_INPUT, false, 730);
-#endif
+  AddBool(srv,  "services.webserver",        263, true);
+  AddString(srv,"services.webserverport",    730, "3000", EDIT_CONTROL_NUMBER_INPUT, false, 730);
   AddString(srv,"services.webserverusername",1048, "xbmc", EDIT_CONTROL_INPUT);
   AddString(srv,"services.webserverpassword",733, "", EDIT_CONTROL_HIDDEN_INPUT, true, 733);
   AddDefaultAddon(srv, "services.webskin",199, DEFAULT_WEB_INTERFACE, ADDON_WEB_INTERFACE);
