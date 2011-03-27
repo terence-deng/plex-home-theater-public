@@ -41,6 +41,7 @@ public:
   int xbmcAddToPlayList(int numParas, CStdString paras[]);
   int xbmcAddToPlayListFromDB(int numParas, CStdString paras[]);
   int xbmcPlayerPlayFile(int numParas, CStdString paras[]); 
+  int xbmcPlayerPlayMedia(int numParas, CStdString paras[]);
   int xbmcClearPlayList(int numParas, CStdString paras[]); 
   int xbmcGetCurrentlyPlaying(int numParas, CStdString paras[]); 
   int xbmcGetXBEID(int numParas, CStdString paras[]); 
