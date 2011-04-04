@@ -3840,6 +3840,15 @@ void CApplication::FinishPlayingFile(bool bResult, const CStdString& error)
     || next >= size)
       OnPlayBackStopped();
   }
+  
+  // If we're supposed to activate the visualizer when playing audio, do so now.
+  if (IsPlayingAudio() && 
+      g_advancedSettings.m_bVisualizerOnPlay &&
+      !g_playlistPlayer.HasPlayedFirstFile() && 
+      !g_playlistPlayer.QueuedFirstFile())
+  {
+    ActivateVisualizer();
+  }
 }
 
 void CApplication::OnPlayBackEnded()
@@ -4427,7 +4436,8 @@ bool CApplication::IsVisualizerActive()
 void CApplication::ActivateVisualizer()
 {
   // See which visualizer to activate.
-  if (g_guiSettings.GetString("musicplayer.visualisation") == "visualization.nowplaying")
+  CStdString name = g_guiSettings.GetString("musicplayer.visualisation");
+  if (name == "Now Playing.vis" || name == "visualization.nowplaying")
     g_windowManager.ActivateWindow(WINDOW_NOW_PLAYING);
   else
     g_windowManager.ActivateWindow(WINDOW_VISUALISATION);
