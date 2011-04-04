@@ -272,7 +272,6 @@ class CAdvancedSettings
 
     unsigned int m_cacheMemBufferSize;
   
-#pragma warning IMPLEMENT THESE
     int m_secondsToVisualizer;
     bool m_bVisualizerOnPlay;
     int m_nowPlayingFlipTime;

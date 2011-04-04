@@ -250,9 +250,17 @@ void CAdvancedSettings::Initialize()
   m_RestrictCapsMask = 0;
   m_sleepBeforeFlip = 0;
   m_bVirtualShares = true;
-
+  
+  m_secondsToVisualizer = 10;
+  m_bVisualizerOnPlay = true;
   m_nowPlayingFlipTime = 120;
+  m_bBackgroundMusicOnlyWhenFocused = true;
+  
+  m_bAutoShuffle = true;
+  m_bUseAnamorphicZoom = false;
+  
   m_bEnableViewRestrictions = true;
+  m_bEnableKeyboardBacklightControl = false;
   
 //caused lots of jerks
 //#ifdef _WIN32
@@ -553,6 +561,17 @@ bool CAdvancedSettings::Load()
   XMLUtils::GetInt(pRootElement, "busydialogdelay", m_busyDialogDelay, 0, 5000);
   XMLUtils::GetInt(pRootElement, "playlistretries", m_playlistRetries, -1, 5000);
   XMLUtils::GetInt(pRootElement, "playlisttimeout", m_playlistTimeout, 0, 5000);
+  
+  XMLUtils::GetInt(pRootElement, "secondstovisualizer", m_secondsToVisualizer, 0, 6000);
+  XMLUtils::GetInt(pRootElement, "nowplayingfliptime", m_nowPlayingFlipTime, 10, 6000);
+  XMLUtils::GetBoolean(pRootElement, "visualizeronplay", m_bVisualizerOnPlay);
+  XMLUtils::GetBoolean(pRootElement, "backgroundmusiconlywhenfocused", m_bBackgroundMusicOnlyWhenFocused);
+  
+  XMLUtils::GetBoolean(pRootElement, "autoshuffle", m_bAutoShuffle);
+  XMLUtils::GetBoolean(pRootElement, "anamorphiczoom", m_bUseAnamorphicZoom);
+  
+  XMLUtils::GetBoolean(pRootElement, "enableviewrestrictions", m_bEnableViewRestrictions);
+  XMLUtils::GetBoolean(pRootElement, "enablekeyboardbacklightcontrol", m_bEnableKeyboardBacklightControl);
 
   XMLUtils::GetBoolean(pRootElement,"rootovershoot",m_bUseEvilB);
   XMLUtils::GetBoolean(pRootElement,"glrectanglehack", m_GLRectangleHack);
