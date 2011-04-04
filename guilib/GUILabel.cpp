@@ -151,11 +151,10 @@ void CGUILabel::SetTextW(const CStdStringW &label)
 void CGUILabel::UpdateRenderRect()
 {
   // recalculate our text layout
-  float width, height;
+  float width, height;  
   m_textLayout.GetTextExtent(width, height);
-  // question: why is this here? it completely breaks right alignment in some
-  // places (eg labels in Plex info list view...): only took three hours to find!
-  // width = std::min(width, GetMaxWidth());
+  
+  width = std::min(width, GetMaxWidth());
   if (m_label.align & XBFONT_CENTER_Y)
     m_renderRect.y1 = m_maxRect.y1 + (m_maxRect.Height() - height) * 0.5f;
   else
