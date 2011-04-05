@@ -875,6 +875,7 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
   bool bOkay = (iWindow == WINDOW_MUSIC_FILES || iWindow == WINDOW_VIDEO_FILES || iWindow == WINDOW_FILES || iWindow == WINDOW_PICTURES || iWindow == WINDOW_PROGRAMS);
   if (strDirectory.IsEmpty() && bOkay && (m_vecItems->Size() == 0 || !m_guiState->DisableAddSourceButtons())) // add 'add source button'
   {
+#if 0
     CStdString strLabel = g_localizeStrings.Get(1026);
     CFileItemPtr pItem(new CFileItem(strLabel));
     pItem->m_strPath = "add";
@@ -882,6 +883,7 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
     pItem->SetLabel(strLabel);
     pItem->SetLabelPreformated(true);
     m_vecItems->Add(pItem);
+#endif
   }
   m_iLastControl = GetFocusedControlID();
 
