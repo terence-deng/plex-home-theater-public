@@ -509,7 +509,9 @@ void CGUISettings::Initialize()
   // hidden masterlock settings
   AddInt(NULL,"masterlock.maxretries", 12364, 3, 3, 1, 100, SPIN_CONTROL_TEXT);
 
-  //AddCategory(4, "cache", 439);
+  CSettingsCategory* cache = AddCategory(4, "cache", 439);
+  AddInt(cache, "cache.seconds", 14029, 5, 3, 1, 20, SPIN_CONTROL_INT_PLUS, MASK_SECS);
+  /*
   AddInt(NULL, "cache.harddisk", 14025, 256, 0, 256, 4096, SPIN_CONTROL_INT_PLUS, MASK_KB, TEXT_OFF);
   AddSeparator(NULL, "cache.sep1");
   AddInt(NULL, "cachevideo.dvdrom", 14026, 2048, 0, 256, 16384, SPIN_CONTROL_INT_PLUS, MASK_KB, TEXT_OFF);
@@ -524,6 +526,7 @@ void CGUISettings::Initialize()
   AddInt(NULL, "cachedvd.lan", 14035, 2048, 0, 256, 16384, SPIN_CONTROL_INT_PLUS, MASK_KB, TEXT_OFF);
   AddSeparator(NULL, "cache.sep4");
   AddInt(NULL, "cacheunknown.internet", 14060, 4096, 0, 256, 16384, SPIN_CONTROL_INT_PLUS, MASK_KB, TEXT_OFF);
+  */
 
   // video settings
   AddGroup(5, 3);
@@ -717,7 +720,7 @@ void CGUISettings::Initialize()
   AddInt(NULL, "lookandfeel.startupwindow",512,1, WINDOW_HOME, 1, WINDOW_PYTHON_END, SPIN_CONTROL_TEXT);
   AddString(laf, "lookandfeel.soundskin",15108,"SKINDEFAULT", SPIN_CONTROL_TEXT);
   AddSeparator(NULL, "lookandfeel.sep2");
-  //AddBool(NULL, "lookandfeel.enablerssfeeds",13305,  true);
+  AddBool(NULL, "lookandfeel.enablerssfeeds",13305,  true);
   AddString(NULL, "lookandfeel.rssedit", 21450, "", BUTTON_CONTROL_STANDARD);
 
   CSettingsCategory* loc = AddCategory(7, "locale", 20026);
@@ -747,14 +750,14 @@ void CGUISettings::Initialize()
 	AddBool(rss, "rss.enablerssfeeds",13305,  true);
 	AddBool(rss, "rss.rssfeedsrtl",13412,  false);
 
-  /*CSettingsCategory* ss = AddCategory(7, "screensaver", 360);
-  AddInt(ss, "screensaver.time", 355, 3, 1, 1, 60, SPIN_CONTROL_INT_PLUS, MASK_MINS);
-  AddDefaultAddon(ss, "screensaver.mode", 356, "screensaver.xbmc.builtin.dim", ADDON_SCREENSAVER);
-  AddString(ss, "screensaver.settings", 21417, "", BUTTON_CONTROL_STANDARD);
-  AddString(ss, "screensaver.preview", 1000, "", BUTTON_CONTROL_STANDARD);
-  AddSeparator(ss, "screensaver.sep1");
-  AddBool(ss, "screensaver.usemusicvisinstead", 13392, true);
-  AddBool(ss, "screensaver.usedimonpause", 22014, true);*/
+  //CSettingsCategory* ss = AddCategory(7, "screensaver", 360);
+  AddInt(NULL, "screensaver.time", 355, 3, 1, 1, 60, SPIN_CONTROL_INT_PLUS, MASK_MINS);
+  AddDefaultAddon(NULL, "screensaver.mode", 356, "screensaver.xbmc.builtin.dim", ADDON_SCREENSAVER);
+  AddString(NULL, "screensaver.settings", 21417, "", BUTTON_CONTROL_STANDARD);
+  AddString(NULL, "screensaver.preview", 1000, "", BUTTON_CONTROL_STANDARD);
+  AddSeparator(NULL, "screensaver.sep1");
+  AddBool(NULL, "screensaver.usemusicvisinstead", 13392, true);
+  AddBool(NULL, "screensaver.usedimonpause", 22014, true);
 
   AddCategory(7, "window", 0);
   AddInt(NULL, "window.width",  0, 1280, 10, 1, INT_MAX, SPIN_CONTROL_INT);
