@@ -249,7 +249,7 @@ void CAdvancedSettings::Initialize()
   m_AllowDynamicTextures = true;
   m_RestrictCapsMask = 0;
   m_sleepBeforeFlip = 0;
-  m_bVirtualShares = true;
+  m_bVirtualShares = false;
   
   m_secondsToVisualizer = 10;
   m_bVisualizerOnPlay = true;
