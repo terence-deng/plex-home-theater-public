@@ -81,6 +81,7 @@ public:
     codec_fourcc = 0;
     type = STREAM_NONE;
     source = STREAM_SOURCE_NONE;
+    iBitRate = 0;
     iDuration = 0;
     pPrivate = NULL;
     ExtraData = NULL;
@@ -108,7 +109,8 @@ public:
   unsigned int codec_fourcc; // if available
   StreamType type;
   int source;
-
+  
+  int iBitRate;
   int iDuration; // in mseconds
   void* pPrivate; // private pointer for the demuxer
   void* ExtraData; // extra data for codec to use
@@ -167,7 +169,6 @@ public:
     iChannels = 0;
     iSampleRate = 0;
     iBlockAlign = 0;
-    iBitRate = 0;
     iBitsPerSample = 0;
     type = STREAM_AUDIO;
   }
@@ -179,7 +180,6 @@ public:
   int iChannels;
   int iSampleRate;
   int iBlockAlign;
-  int iBitRate;
   int iBitsPerSample;
 };
 
@@ -284,6 +284,11 @@ public:
    * returns the total time in msec
    */
   virtual int GetStreamLength() = 0;
+  
+  /*
+   * Get the total bitrate of the entire stream.
+   */
+  virtual int GetStreamBitrate() = 0;
 
   /*
    * returns the stream or NULL on error, starting from 0

@@ -123,7 +123,7 @@ CDVDPlayerVideo::CDVDPlayerVideo( CDVDClock* pClock
   m_iSubtitleDelay = 0;
   m_fForcedAspectRatio = 0;
   m_iNrOfPicturesNotToSkip = 0;
-  m_messageQueue.SetMaxDataSize(40 * 1024 * 1024);
+  m_messageQueue.SetMaxDataSize(2*1024*1024); 
   m_messageQueue.SetMaxTimeSize(8.0);
   g_dvdPerformanceCounter.EnableVideoQueue(&m_messageQueue);
 

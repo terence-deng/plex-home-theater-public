@@ -143,7 +143,7 @@ CDVDPlayerAudio::CDVDPlayerAudio(CDVDClock* pClock, CDVDMessageQueue& parent)
 
   m_freq = CurrentHostFrequency();
 
-  m_messageQueue.SetMaxDataSize(6 * 1024 * 1024);
+  m_messageQueue.SetMaxDataSize(1024 * 1024);
   m_messageQueue.SetMaxTimeSize(8.0);
   g_dvdPerformanceCounter.EnableAudioQueue(&m_messageQueue);
 }

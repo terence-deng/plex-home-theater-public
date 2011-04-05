@@ -546,6 +546,38 @@ bool CDVDPlayer::OpenDemuxStream()
   m_SelectionStreams.Clear(STREAM_NONE, STREAM_SOURCE_DEMUX);
   m_SelectionStreams.Clear(STREAM_NONE, STREAM_SOURCE_NAV);
   m_SelectionStreams.Update(m_pInputStream, m_pDemuxer);
+  
+  // Compute the bitrate, letting the item override.
+  CFileItem file = g_application.CurrentFileItem();
+  int bitrate = m_pDemuxer->GetStreamBitrate();
+  
+  if (file.IsPlexMediaServerLibrary() && bitrate > file.m_iBitrate)
+    ; // Take computed bitrate.
+  else if (file.m_iBitrate > 0)
+    bitrate = file.m_iBitrate * 1000;
+  
+  // Set the cache size based on the bitrate.
+  if (bitrate > 0)
+  {
+    int numSeconds = g_guiSettings.GetInt("cache.seconds");
+    int totalData = (bitrate / 8) * numSeconds;
+    
+    // At least 256 KB as a floor.
+    if (totalData/1024 < 256)
+      totalData = 1024 * 256;
+    
+    // At most 15MB as a ceiling.
+    if (totalData/1024 > 15*1024)
+      totalData = 1024 * 15 * 1024;
+    
+    int audioCacheSize = totalData/2;
+    if (audioCacheSize < 1024*1024)
+      audioCacheSize = 1024*1024;
+    
+    CLog::Log(LOGNOTICE, "Setting cache size to %dKB (bitrate of %d, numSeconds = %d)", totalData/1024, bitrate, numSeconds);
+    m_dvdPlayerVideo.SetMaxDataSize(totalData);
+    m_dvdPlayerAudio.SetMaxDataSize(audioCacheSize);
+  }
 
   return true;
 }

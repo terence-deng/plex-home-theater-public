@@ -98,6 +98,7 @@ public:
   int GetStreamLength();
   CDemuxStream* GetStream(int iStreamId);
   int GetNrOfStreams();
+  int GetStreamBitrate();
 
   bool SeekChapter(int chapter, double* startpts = NULL);
   int GetChapterCount();

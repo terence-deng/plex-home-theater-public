@@ -951,6 +951,45 @@ int CDVDDemuxFFmpeg::GetStreamLength()
   return (int)(m_pFormatContext->duration / (AV_TIME_BASE / 1000));
 }
 
+int CDVDDemuxFFmpeg::GetStreamBitrate()
+{
+  if (!m_pFormatContext)
+    return 0;
+  
+  // Get the bitrate of the file.
+  int overallBitrate = m_pFormatContext->bit_rate; 
+  
+  // Get the aggregate bitrate of the streams.
+  int  aggregateBitrate = 0;
+  int  numStreams = GetNrOfStreams();
+  bool missingStreamInfo = false;
+  
+  for (int i=0; i<numStreams; i++)
+  {
+    CDemuxStream* stream = GetStream(i);
+    aggregateBitrate += stream->iBitRate;
+    
+    if (stream->iBitRate == 0)
+      missingStreamInfo = true;
+  }
+  
+  if (overallBitrate == 0 && aggregateBitrate == 0 && m_pFormatContext->file_size > 0 && m_pFormatContext->duration != (uint32_t)AV_NOPTS_VALUE) 
+  {
+    int64_t seconds = m_pFormatContext->duration / AV_TIME_BASE;
+    int bitsPerSecond = (int)(m_pFormatContext->file_size / seconds * 8);
+    
+    CLog::Log(LOGNOTICE, "Using file computed bitrate = %d", bitsPerSecond);
+    return (int)bitsPerSecond;
+  }
+  
+  CLog::Log(LOGNOTICE, "Aggregate bitrate = %d, file bitrate = %d.", aggregateBitrate, overallBitrate);
+  
+  if (missingStreamInfo)
+    return overallBitrate;
+  else
+    return aggregateBitrate;
+}
+
 CDemuxStream* CDVDDemuxFFmpeg::GetStream(int iStreamId)
 {
   if (iStreamId < 0 || iStreamId >= MAX_STREAMS) return NULL;
@@ -1023,6 +1062,7 @@ void CDVDDemuxFFmpeg::AddStream(int iId)
           st->fAspect = 0.0;
         else
           st->fAspect = av_q2d(pStream->sample_aspect_ratio) * pStream->codec->width / pStream->codec->height;
+        st->iBitRate = pStream->codec->bit_rate;
         st->iLevel = pStream->codec->level;
         st->iProfile = pStream->codec->profile;
 

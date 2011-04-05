@@ -36,6 +36,7 @@ CDVDMessageQueue::CDVDMessageQueue(const string &owner)
   m_bInitialized  = false;
   m_bCaching      = false;
   m_bEmptied      = true;
+  m_iMaxDataSize  = 0;
 
   m_TimeBack      = DVD_NOPTS_VALUE;
   m_TimeFront     = DVD_NOPTS_VALUE;

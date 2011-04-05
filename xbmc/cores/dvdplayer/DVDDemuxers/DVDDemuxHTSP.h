@@ -48,6 +48,7 @@ public:
 
   CDemuxStream* GetStream(int iStreamId);
   int           GetNrOfStreams();
+  int           GetStreamBitrate()   { return 0; };
 
 protected:
   friend class CDemuxStreamVideoHTSP;
