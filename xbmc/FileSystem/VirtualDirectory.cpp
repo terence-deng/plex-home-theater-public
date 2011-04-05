@@ -45,7 +45,7 @@ CVirtualDirectory::CVirtualDirectory(void)
 {
   m_allowPrompting = true;  // by default, prompting is allowed.
   m_cacheDirectory = DIR_CACHE_ONCE;  // by default, caching is done.
-  m_allowNonLocalSources = true;
+  m_allowNonLocalSources = false; // we're not interested
   m_allowThreads = true;
 }
 
