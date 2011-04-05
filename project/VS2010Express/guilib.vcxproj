@@ -85,7 +85,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include;..\..\lib\freetype\include\freetype2;..\..\xbmc\lib\boost;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\xbmc\lib\libglew\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Plex\Windows\boost\include;..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include;..\..\lib\freetype\include\freetype2;..\..\xbmc\lib\boost;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\xbmc\lib\libglew\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_MSVC;NOMINMAX;_USE_32BIT_TIME_T;HAS_GL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -116,7 +116,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\lib\libSDL-WIN32\include;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include\freetype2;..\..\lib\freetype\include;..\..\plex\GUI;..\..\plex\Windows\include;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Plex\Windows\boost\include;..\..\lib\libSDL-WIN32\include;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include\freetype2;..\..\lib\freetype\include;..\..\plex\GUI;..\..\plex\Windows\include;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_MSVC;NOMINMAX;_USE_32BIT_TIME_T;HAS_DX;D3D_DEBUG_INFO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>false</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
@@ -143,7 +143,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\lib\libSDL-WIN32\include;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include;..\..\lib\freetype\include\freetype2;..\..\xbmc\lib\boost;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Plex\Windows\boost\include;..\..\lib\libSDL-WIN32\include;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include;..\..\lib\freetype\include\freetype2;..\..\xbmc\lib\boost;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_MSVC;NOMINMAX;_USE_32BIT_TIME_T;HAS_DX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -174,7 +174,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include;..\..\lib\freetype\include\freetype2;..\..\xbmc\lib\boost;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\xbmc\lib\libglew\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Plex\Windows\boost\include;..\..\xbmc\cores\dvdplayer\Codecs\ffmpeg;..\..\xbmc\Win32;..\..\xbmc\;..\..\lib\freetype\include;..\..\lib\freetype\include\freetype2;..\..\xbmc\lib\boost;..\..\guilib;..\..\xbmc\utils;..\..\guilib\common\;..\..\xbmc\lib\libglew\;..\..\lib\libiconv\include;..\..\lib\libcdio\include;..\..\lib\libmicrohttpd_win32\include;..\..\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_MSVC;NOMINMAX;_USE_32BIT_TIME_T;HAS_GL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>false</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
