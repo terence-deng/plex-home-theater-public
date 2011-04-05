@@ -1339,6 +1339,7 @@ void CSettings::LoadSources()
   else if (CFile::Exists(strSourcesFile))
     CLog::Log(LOGERROR, "%s Error loading %s: Line %d, %s", __FUNCTION__, strSourcesFile.c_str(), xmlDoc.ErrorRow(), xmlDoc.ErrorDesc());
 
+#if 0
   // parse sources
   if (pRootElement)
   {
@@ -1348,6 +1349,7 @@ void CSettings::LoadSources()
     GetSources(pRootElement, "music", m_musicSources, m_defaultMusicSource);
     GetSources(pRootElement, "video", m_videoSources, m_defaultVideoSource);
   }
+#endif
 }
 
 void CSettings::LoadSkinSettings(const TiXmlElement* pRootElement)
