@@ -147,6 +147,7 @@ set EXE= "..\VS2010Express\Plex\%buildconfig%\Plex.exe"
   copy ..\..\copying.txt BUILD_WIN32\Plex > NUL
   copy ..\..\LICENSE.GPL BUILD_WIN32\Plex > NUL
   copy ..\..\known_issues.txt BUILD_WIN32\Plex > NUL
+  copy ..\..\Plex\Windows\winsparkle\WinSparkle-0.3\WinSparkle.dll  BUILD_WIN32\Plex > NUL
   xcopy dependencies\*.* BUILD_WIN32\Plex /Q /I /Y /EXCLUDE:exclude.txt  > NUL
   xcopy vs_redistributable\vs2010\vcredist_x86.exe BUILD_WIN32\Plex /Q /I /Y /EXCLUDE:exclude.txt  > NUL
   copy sources.xml BUILD_WIN32\Plex\userdata > NUL
