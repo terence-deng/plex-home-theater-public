@@ -48,11 +48,11 @@ class NetworkInterface
     g_mutex.unlock();
 
     // Call with the initial list.
-    observer(g_interfaces);
+    NotifyOfNetworkChange(true);
   }
   
   /// Called when a network change occurs.
-  static void NotifyOfNetworkChange()
+  static void NotifyOfNetworkChange(bool forceNotify=false)
   {
     // Get current list.
     vector<NetworkInterface> interfaces;
@@ -66,15 +66,18 @@ class NetworkInterface
       changed = !(interfaces[i] == g_interfaces[i]); 
     
     // Notify observers if we're actually changed.
-    if (changed)
+    if (changed || forceNotify)
     {
-      dprintf("Network interfaces:");
-      BOOST_FOREACH(NetworkInterface& xface, interfaces)
-        dprintf(" * %d %s (%s) (loopback: %d)", xface.index(), xface.name().c_str(), xface.address().c_str(), xface.loopback());
+      if (changed)
+      {
+        dprintf("Network interfaces:");
+        BOOST_FOREACH(NetworkInterface& xface, interfaces)
+          dprintf(" * %d %s (%s) (loopback: %d)", xface.index(), xface.name().c_str(), xface.address().c_str(), xface.loopback());
+      }
 
-      // Call the observer.
+      // Call the observers.
       BOOST_FOREACH(callback_function func, g_observers)
-       func(interfaces);
+        func(interfaces);
       
       // Save the new list.
       g_interfaces.assign(interfaces.begin(), interfaces.end());

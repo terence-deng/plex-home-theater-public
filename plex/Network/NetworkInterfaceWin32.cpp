@@ -19,6 +19,8 @@
 
 #define kIPv6IfIndexBase (10000000L)
 
+using namespace boost;
+
 // The events.
 static HANDLE cancelEvent;
 static HANDLE interfaceListChangedEvent;
@@ -158,7 +160,7 @@ void NetworkInterface::WatchForChanges()
   SetupNotifications();
 
   // Start the thread.
-  boost::thread t = boost::thread(boost::bind(&RunWatchingForChanges));
+  thread t = thread(boost::bind(&RunWatchingForChanges));
   t.detach();
 }
 

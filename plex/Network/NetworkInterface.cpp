@@ -1,5 +1,3 @@
-#ifdef __APPLE__
-
 /*
  *  Copyright (C) 2010 Plex, Inc.   
  *
@@ -10,6 +8,7 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
+#ifdef __APPLE__
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <ifaddrs.h>
@@ -17,11 +16,14 @@
 #include <arpa/inet.h>
 
 #include <SystemConfiguration/SystemConfiguration.h>
+#endif
 
 #include "Log.h"
 #include "NetworkInterface.h"
 
 using namespace boost;
+
+#ifdef __APPLE__
 
 vector<NetworkInterface::callback_function> NetworkInterface::g_observers;
 vector<NetworkInterface> NetworkInterface::g_interfaces;
@@ -52,18 +54,6 @@ void NetworkInterface::GetAll(vector<NetworkInterface>& interfaces)
       interfaces.push_back(NetworkInterface(index, pInterface->ifa_name, str, pInterface->ifa_flags & IFF_LOOPBACK));
     }
   }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-bool NetworkInterface::IsLocalAddress(const string& address)
-{
-  boost::mutex::scoped_lock lk(g_mutex);
-  
-  BOOST_FOREACH(const NetworkInterface& xface, g_interfaces)
-    if (xface.address() == address)
-      return true;
-  
-  return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,3 +116,15 @@ void NetworkInterface::WatchForChanges()
 }
 
 #endif
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool NetworkInterface::IsLocalAddress(const string& address)
+{
+  boost::mutex::scoped_lock lk(g_mutex);
+  
+  BOOST_FOREACH(const NetworkInterface& xface, g_interfaces)
+    if (xface.address() == address)
+      return true;
+  
+  return false;
+}

@@ -7,7 +7,10 @@
 
 #pragma once
 
+#include "BonjourRequestHandler.h"
+#include "Common.h"
 #include "Database.h"
+#include "LibrarySection.h"
 #include "LibraryUpdater.h"
 #include "NetworkServiceAdvertiser.h"
 #include "Preferences.h"
@@ -15,6 +18,7 @@
 
 #ifdef _WIN32
 string Cocoa_GetAppVersion();
+extern int getUpdatedAt();
 #else
 const char* Cocoa_GetAppVersion();
 #endif
@@ -52,7 +56,7 @@ class NetworkServiceAdvertiserPMS : public NetworkServiceAdvertiser
  public:
   
   /// Constructor.
-  NetworkServiceAdvertiserPMS(io_service& ioService)
+  NetworkServiceAdvertiserPMS(boost::asio::io_service& ioService)
     : NetworkServiceAdvertiser(ioService, NS_PLEX_MEDIA_SERVER_PORT) {}
   
  protected:
@@ -60,15 +64,7 @@ class NetworkServiceAdvertiserPMS : public NetworkServiceAdvertiser
   /// For subclasses to fill in.
   virtual void createReply(map<string, string>& headers) 
   {
-    string friendlyName = Preferences::Get()->getStringValue(PREF_FRIENDLY_NAME);
-    if (friendlyName.size() == 0)
-    {
-      char hostname[256];
-      gethostname(hostname, 256);
-      friendlyName = hostname;
-    }
-    
-    headers["Name"] = friendlyName;
+    headers["Name"] = GetMachineName();
     headers["Port"] = "32400";
     headers["Version"] = Cocoa_GetAppVersion();
     headers["Updated-At"] = lexical_cast<string>(getUpdatedAt());
