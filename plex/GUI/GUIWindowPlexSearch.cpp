@@ -270,7 +270,8 @@ bool CGUIWindowPlexSearch::OnAction(const CAction &action)
   {
     return true;
   }
-  else if (action.GetID() == ACTION_PREVIOUS_MENU)
+  else if (action.GetID() == ACTION_PREVIOUS_MENU ||
+           (action.GetID() == ACTION_PARENT_DIR && m_strEdit.size() == 0))
   {
     g_windowManager.PreviousWindow();
     return true;
