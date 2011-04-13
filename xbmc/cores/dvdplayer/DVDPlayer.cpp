@@ -286,7 +286,8 @@ CDVDPlayer::CDVDPlayer(IPlayerCallback& callback)
       m_dvdPlayerAudio(&m_clock, m_messenger),
       m_dvdPlayerSubtitle(&m_overlayContainer),
       m_dvdPlayerTeletext(),
-      m_ready(true)
+      m_ready(true),
+      m_hidingSub(false)
 {
   m_pDemuxer = NULL;
   m_pSubtitleDemuxer = NULL;
@@ -742,7 +743,9 @@ void CDVDPlayer::OpenDefaultStreams()
     // We don't have subtitles to show, close.
     if (valid == false)
     {
+      m_hidingSub = true;
       SetSubtitleVisible(false);
+      m_hidingSub = false;
     }
   }
 }
@@ -2479,7 +2482,10 @@ void CDVDPlayer::SetSubtitleVisible(bool bVisible)
   CFileItemPtr item = g_application.CurrentFileItemPtr();
   int partID = GetPlexMediaPartID();
   int subtitleStreamID = GetSubtitlePlexID();
-  PlexMediaServerQueue::Get().onStreamSelected(item, partID, g_settings.m_currentVideoSettings.m_SubtitleOn ? subtitleStreamID : 0, -1);
+  
+  // Don't send the message over if we're just hiding the initial sub.
+  if (m_hidingSub == false)  
+    PlexMediaServerQueue::Get().onStreamSelected(item, partID, g_settings.m_currentVideoSettings.m_SubtitleOn ? subtitleStreamID : 0, -1);
 }
 
 int CDVDPlayer::GetAudioStreamCount()
