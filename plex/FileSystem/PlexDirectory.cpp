@@ -25,6 +25,7 @@
 #include "MusicInfoTag.h"
 #include "GUIWindowManager.h"
 #include "GUIDialogProgress.h"
+#include "GUISettings.h"
 #include "URL.h"
 #include "FileItem.h"
 #include "GUIViewState.h"
@@ -1518,12 +1519,28 @@ void CPlexDirectory::Process()
 #pragma warning FIX platform specific code.
   m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); //FIXME
   m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
-  m_http.SetRequestHeader("X-Plex-Client-Capabilities", "protocols=shoutcast,webkit,http-video,spiff");
 #elif defined (_WIN32)
   m_http.SetRequestHeader("X-Plex-Client-Platform", "Windows");
-  m_http.SetRequestHeader("X-Plex-Client-Capabilities", "protocols=shoutcast,http-video");
 #endif
   
+  // Build an audio codecs description.
+#ifdef _WIN32
+  CStdString protocols = "protocols=shoutcast,http-video;audioDecoders=mp3,aac";
+#else
+  CStdString protocols = "protocols=shoutcast,webkit,http-video;audioDecoders=mp3,aac";  
+#endif
+  
+  if (AUDIO_IS_BITSTREAM(g_guiSettings.GetInt("audiooutput.mode")))
+  {
+    if (g_guiSettings.GetBool("audiooutput.dtspassthrough"))
+      protocols += ",dts{bitrate:800000&channels:8}";
+    
+    if (g_guiSettings.GetBool("audiooutput.ac3passthrough"))
+      protocols += ",ac3{bitrate:800000&channels:8}";
+  }
+  
+  m_http.SetRequestHeader("X-Plex-Client-Capabilities", protocols);
+    
   m_http.SetTimeout(m_timeout);
   if (m_http.Open(url) == false) 
   {
