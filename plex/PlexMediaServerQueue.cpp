@@ -1,8 +1,6 @@
 #include "log.h"
+#include "HTTP.h"
 #include "PlexMediaServerQueue.h"
-#include "FileSystem/FileCurl.h"
-
-using namespace XFILE;
 
 PlexMediaServerQueue PlexMediaServerQueue::g_plexMediaServerQueue;
 
@@ -26,13 +24,12 @@ void PlexMediaServerQueue::Process()
     while (m_queue.size() > 0)
     {
       // Get a URL.
-      string url = m_queue.front();
+      pair<string, string> pair = m_queue.front();
       
       // Hit the Plex Media Server.
-      CFileCurl http;
-      CStdString reply;
-      http.Get(url, reply);
-      CLog::Log(LOGNOTICE, "Plex Media Server Queue: %s", url.c_str());
+      CHTTP http;
+      http.Open(pair.second, pair.first.c_str(), 0);
+      CLog::Log(LOGNOTICE, "Plex Media Server Queue: %s", pair.second.c_str());
       
       // That's it, pop it off the queue.
       m_queue.pop();
