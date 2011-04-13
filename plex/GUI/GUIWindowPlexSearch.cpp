@@ -271,8 +271,9 @@ bool CGUIWindowPlexSearch::OnAction(const CAction &action)
   }
   else if (action.GetID() == ACTION_MOVE_LEFT || action.GetID() == ACTION_MOVE_RIGHT ||
            action.GetID() == ACTION_MOVE_UP   || action.GetID() == ACTION_MOVE_DOWN  ||
-           action.GetID() == ACTION_PAGE_UP   || action.GetID() == ACTION_PAGE_DOWN )
+           action.GetID() == ACTION_PAGE_UP   || action.GetID() == ACTION_PAGE_DOWN ||
            // action.wID == ACTION_HOME      || action.wID == ACTION_END)
+           action.GetID() == ACTION_SELECT_ITEM)
   {
     // Reset search time.
     m_lastSearchUpdate = 0;
