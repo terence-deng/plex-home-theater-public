@@ -3506,11 +3506,20 @@ bool CApplication::PlayStack(const CFileItem& item, bool bRestart)
     haveTimes = dbs.GetStackTimes(item.m_strPath, times);
     dbs.Close();
   }
-
-
+  
   // calculate the total time of the stack
   CStackDirectory dir;
   dir.GetDirectory(item.m_strPath, *m_currentStack);
+  
+  // Move local paths in.
+  if (item.HasProperty("localPath"))
+  {
+    CFileItemList stackedItems;
+    dir.GetDirectory(item.GetProperty("localPath"), stackedItems);
+    for (int i=0; i<stackedItems.Size(); i++)
+      (*m_currentStack)[i]->SetProperty("localPath", stackedItems[i]->m_strPath);
+  }
+
   long totalTime = 0;
   for (int i = 0; i < m_currentStack->Size(); i++)
   {
@@ -3532,26 +3541,16 @@ bool CApplication::PlayStack(const CFileItem& item, bool bRestart)
     }
   }
 
+  
   double seconds = item.m_lStartOffset / 75.0;
-
-  if (!haveTimes || item.m_lStartOffset == STARTOFFSET_RESUME )
-  {  // have our times now, so update the dB
-    if (dbs.Open())
-    {
-      if( !haveTimes )
-        dbs.SetStackTimes(item.m_strPath, times);
-
-      if( item.m_lStartOffset == STARTOFFSET_RESUME )
-      {
-        // can only resume seek here, not dvdstate
-        CBookmark bookmark;
-        if( dbs.GetResumeBookMark(item.m_strPath, bookmark) )
-          seconds = bookmark.timeInSeconds;
-        else
-          seconds = 0.0f;
-      }
-      dbs.Close();
-    }
+  
+  if (!haveTimes || item.m_lStartOffset == STARTOFFSET_RESUME)
+  { 
+    // See if we have a view offset.
+    if (item.HasProperty("viewOffset") && item.GetProperty("viewOffset").empty() == false)
+      seconds = boost::lexical_cast<int>(item.GetProperty("viewOffset"))/1000.0;
+    else
+      seconds = 0.0f;
   }
 
   *m_itemCurrentFile = item;
