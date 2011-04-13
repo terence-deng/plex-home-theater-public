@@ -7,6 +7,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string.hpp>
+#include "boost/foreach.hpp"
 #include <tinyXML/tinyxml.h>
 
 #include "log.h"
@@ -426,6 +427,13 @@ class PlexMediaNode
      // Set the key.
      pItem->SetProperty("unprocessedKey", key);
      pItem->SetProperty("key", CPlexDirectory::ProcessUrl(parentPath, key, false));
+     
+     // Make sure it's set on all "media item" children.
+     BOOST_FOREACH(CFileItemPtr mediaItem, pItem->m_mediaItems)
+     {
+       mediaItem->SetProperty("unprocessedKey", pItem->GetProperty("unprocessedKey"));
+       mediaItem->SetProperty("key", pItem->GetProperty("key"));
+     }
      
      // Date.
      SetProperty(pItem, el, "subtitle");
