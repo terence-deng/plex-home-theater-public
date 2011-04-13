@@ -29,6 +29,7 @@
 #include "TimeUtils.h"
 #include "FileItem.h"
 #include "GUIBaseContainer.h"
+#include "GUIDialogContextMenu.h"
 #include "GUIWindowManager.h"
 #include "GUIInfoManager.h"
 #include "GUILabelControl.h"
@@ -37,6 +38,8 @@
 #include "PlexDirectory.h"
 #include "Settings.h"
 #include "Util.h"
+#include "LocalizeStrings.h"
+#include "StringUtils.h"
 
 #define CTL_LABEL_EDIT       310
 #define CTL_BUTTON_BACKSPACE 8
@@ -653,9 +656,13 @@ void CGUIWindowPlexSearch::OnClickButton(int iButtonControl)
           // Now see what to do with it.
           string type = item->GetProperty("type");
           if (type == "show" || type == "person")
+          {
             g_windowManager.ActivateWindow(WINDOW_VIDEO_FILES, file->m_strPath + ",return");
+          }
           else if (type == "artist" || type == "album")
+          {
             g_windowManager.ActivateWindow(WINDOW_MUSIC_FILES, file->m_strPath + ",return");
+          }
           else if (type == "track")
           {
             // Get album.
@@ -681,7 +688,36 @@ void CGUIWindowPlexSearch::OnClickButton(int iButtonControl)
             g_playlistPlayer.Play(itemIndex);
           }
           else
+          {
+            bool resumeItem = false;
+            
+            if (!item->m_bIsFolder && item->HasProperty("viewOffset")) 
+            {
+              // Oh my god. Copy and paste code. We need a superclass which manages media.
+              float seconds = boost::lexical_cast<int>(item->GetProperty("viewOffset")) / 1000.0f;
+              
+              CContextButtons choices;
+              CStdString resumeString;
+              CStdString time = StringUtils::SecondsToTimeString(seconds);
+              resumeString.Format(g_localizeStrings.Get(12022).c_str(), time.c_str());
+              choices.Add(1, resumeString);
+              choices.Add(2, g_localizeStrings.Get(12021));
+              int retVal = CGUIDialogContextMenu::ShowAndGetChoice(choices);
+              if (!retVal)
+                return;
+              
+              resumeItem = (retVal == 1);
+              printf("RESUME ITEM: %d\n", resumeItem);
+            }
+            
+            CFileItem* file = (CFileItem* )item.get();
+            if (resumeItem)
+              file->m_lStartOffset = STARTOFFSET_RESUME;
+            else
+              file->m_lStartOffset = 0;
+            
             g_application.PlayFile(*(CFileItem* )item.get());
+          }
         }
       }
     }
