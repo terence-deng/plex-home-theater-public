@@ -98,7 +98,7 @@ void CGUIDialogAudioSubtitleSettings::CreateSettings()
   AddSlider(SUBTITLE_SETTINGS_DELAY, 22006, &g_settings.m_currentVideoSettings.m_SubtitleDelay, -g_advancedSettings.m_videoSubsDelayRange, 0.1f, g_advancedSettings.m_videoSubsDelayRange, FormatDelay);
   AddSubtitleStreams(SUBTITLE_SETTINGS_STREAM);
   AddButton(SUBTITLE_SETTINGS_BROWSER,13250);
-  AddButton(AUDIO_SETTINGS_MAKE_DEFAULT, 12376);
+  //AddButton(AUDIO_SETTINGS_MAKE_DEFAULT, 12376);
 }
 
 void CGUIDialogAudioSubtitleSettings::AddAudioStreams(unsigned int id)
