@@ -262,7 +262,15 @@ void CGUIWindowPlexSearch::OnInitWindow()
 ///////////////////////////////////////////////////////////////////////////////
 bool CGUIWindowPlexSearch::OnAction(const CAction &action)
 {
-  if (action.GetID() == ACTION_PREVIOUS_MENU)
+  CStdString strAction = action.GetName();
+  strAction = strAction.ToLower();
+  
+  // Eat returns.
+  if (action.GetUnicode() == 13 && GetFocusedControlID() < 9000)
+  {
+    return true;
+  }
+  else if (action.GetID() == ACTION_PREVIOUS_MENU)
   {
     g_windowManager.PreviousWindow();
     return true;
