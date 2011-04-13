@@ -1,6 +1,6 @@
 #include "log.h"
-#include "HTTP.h"
 #include "PlexMediaServerQueue.h"
+#include "HTTP.h"
 
 PlexMediaServerQueue PlexMediaServerQueue::g_plexMediaServerQueue;
 

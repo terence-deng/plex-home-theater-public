@@ -19,6 +19,8 @@
  *
  */
 
+#include "PlexMediaServerQueue.h"
+
 #include "system.h"
 #include "DVDPlayer.h"
 
@@ -2442,6 +2444,16 @@ void CDVDPlayer::GetSubtitleName(int iStream, CStdString &strStreamName)
 void CDVDPlayer::SetSubtitle(int iStream)
 {
   m_messenger.Put(new CDVDMsgPlayerSetSubtitleStream(iStream));
+  
+  // Return the ID of the selected stream.
+  LockStreams();
+  SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, iStream);
+  
+  // Send the change to the Media Server.
+  CFileItemPtr item = g_application.CurrentFileItemPtr();
+  PlexMediaServerQueue::Get().onStreamSelected(item, GetPlexMediaPartID(), g_settings.m_currentVideoSettings.m_SubtitleOn ? s.plexID : 0, -1);
+  
+  UnlockStreams();
 }
 
 bool CDVDPlayer::GetSubtitleVisible()
@@ -2462,6 +2474,12 @@ void CDVDPlayer::SetSubtitleVisible(bool bVisible)
 {
   g_settings.m_currentVideoSettings.m_SubtitleOn = bVisible;
   m_messenger.Put(new CDVDMsgBool(CDVDMsg::PLAYER_SET_SUBTITLESTREAM_VISIBLE, bVisible));
+  
+  // Send the change to the Media Server.
+  CFileItemPtr item = g_application.CurrentFileItemPtr();
+  int partID = GetPlexMediaPartID();
+  int subtitleStreamID = GetSubtitlePlexID();
+  PlexMediaServerQueue::Get().onStreamSelected(item, partID, g_settings.m_currentVideoSettings.m_SubtitleOn ? subtitleStreamID : 0, -1);
 }
 
 int CDVDPlayer::GetAudioStreamCount()
@@ -2500,6 +2518,14 @@ void CDVDPlayer::SetAudioStream(int iStream)
 {
   m_messenger.Put(new CDVDMsgPlayerSetAudioStream(iStream));
   SynchronizeDemuxer(100);
+  
+  LockStreams();
+  SelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, iStream);
+  
+  // Notify the Plex Media Server.
+  CFileItemPtr item = g_application.CurrentFileItemPtr();
+  PlexMediaServerQueue::Get().onStreamSelected(item, GetPlexMediaPartID(), -1, GetAudioStreamPlexID());
+  UnlockStreams();
 }
 
 TextCacheStruct_t* CDVDPlayer::GetTeletextCache()

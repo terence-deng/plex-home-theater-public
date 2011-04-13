@@ -178,26 +178,6 @@ void CGUIDialogAudioSubtitleSettings::AddSubtitleStreams(unsigned int id)
   m_settings.push_back(setting);
 }
 
-void CGUIDialogAudioSubtitleSettings::UpdatePlexSubtitle()
-{
-  // Notify the Plex Media Server.
-  CFileItemPtr item = g_application.CurrentFileItemPtr();
-  int partID = g_application.m_pPlayer->GetPlexMediaPartID();
-  int subtitleStreamID = g_application.m_pPlayer->GetSubtitlePlexID();
-  
-  PlexMediaServerQueue::Get().onStreamSelected(item, partID, m_subtitleVisible ? subtitleStreamID : 0, -1);
-}
-
-void CGUIDialogAudioSubtitleSettings::UpdatePlexAudioStream()
-{
-  // Notify the Plex Media Server.
-  CFileItemPtr item = g_application.CurrentFileItemPtr();
-  int partID = g_application.m_pPlayer->GetPlexMediaPartID();
-  int audioStreamID = g_application.m_pPlayer->GetAudioStreamPlexID();
-  
-  PlexMediaServerQueue::Get().onStreamSelected(item, partID, -1, audioStreamID);
-}
-
 void CGUIDialogAudioSubtitleSettings::OnSettingChanged(SettingInfo &setting)
 {
   // check and update anything that needs it
@@ -237,8 +217,6 @@ void CGUIDialogAudioSubtitleSettings::OnSettingChanged(SettingInfo &setting)
       g_application.m_pPlayer->SetAudioStream(m_audioStream);    // Set the audio stream to the one selected
       EnableSettings(AUDIO_SETTINGS_VOLUME, !g_application.m_pPlayer->IsPassthrough());
     }
-    
-    UpdatePlexAudioStream();
   }
   else if (setting.id == AUDIO_SETTINGS_OUTPUT_TO_ALL_SPEAKERS)
   {
@@ -263,8 +241,6 @@ void CGUIDialogAudioSubtitleSettings::OnSettingChanged(SettingInfo &setting)
   {
     g_settings.m_currentVideoSettings.m_SubtitleOn = m_subtitleVisible;
     g_application.m_pPlayer->SetSubtitleVisible(g_settings.m_currentVideoSettings.m_SubtitleOn);
-    
-    UpdatePlexSubtitle();
   }
   else if (setting.id == SUBTITLE_SETTINGS_DELAY)
   {
@@ -274,8 +250,6 @@ void CGUIDialogAudioSubtitleSettings::OnSettingChanged(SettingInfo &setting)
   {
     g_settings.m_currentVideoSettings.m_SubtitleStream = m_subtitleStream;
     g_application.m_pPlayer->SetSubtitle(m_subtitleStream);
-    
-    UpdatePlexSubtitle();
   }
   else if (setting.id == SUBTITLE_SETTINGS_BROWSER)
   {

@@ -93,8 +93,32 @@ public:
   }
 };
 
-typedef struct
+struct SelectionStream
 {
+  SelectionStream()
+    : plexID(-1)
+  {}
+  
+  SelectionStream& operator=(const SelectionStream& other)
+  {
+    // Preserve Plex ID by *not* copying over plexID member
+    type = other.type;
+    filename = other.filename;
+    
+    // Stream language from Plex stream.
+    if (type != STREAM_SUBTITLE)
+      name = other.name;
+    else if (language.size() != 3)
+      name = language;
+    
+    language = other.language;
+    id = other.id;
+    flags = other.flags;
+    source = other.source;
+    
+    return *this;
+  }
+  
   StreamType   type;
   std::string  filename;
   std::string  language;
@@ -103,7 +127,7 @@ typedef struct
   int          source;
   int          id;
   int          plexID;  
-} SelectionStream;
+};
 
 class CSelectionStreams
 {
