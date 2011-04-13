@@ -2526,7 +2526,6 @@ void CDVDPlayer::SetAudioStream(int iStream)
   SynchronizeDemuxer(100);
   
   LockStreams();
-  SelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, iStream);
   
   // Notify the Plex Media Server.
   CFileItemPtr item = g_application.CurrentFileItemPtr();
