@@ -67,6 +67,7 @@
 #include "MediaManager.h"
 #include "GUIDialogBusy.h"
 #include "PlexDirectory.h"
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -484,19 +485,34 @@ bool CDVDPlayer::OpenInputStream()
   &&  !m_pInputStream->IsStreamType(DVDSTREAM_TYPE_TV)
   &&  !m_pInputStream->IsStreamType(DVDSTREAM_TYPE_HTSP))
   {
-    // find any available external subtitles
-    std::vector<std::string> filenames;
-    CDVDFactorySubtitle::GetSubtitles(filenames, m_filename);
-
-    // find any upnp subtitles
-    CStdString key("upnp:subtitle:1");
-    for(unsigned s = 1; m_item.HasProperty(key); key.Format("upnp:subtitle:%u", ++s))
-      filenames.push_back(m_item.GetProperty(key));
-
-    for(unsigned int i=0;i<filenames.size();i++)
-      AddSubtitleFile(filenames[i], i == 0 ? CDemuxStream::FLAG_DEFAULT : CDemuxStream::FLAG_NONE);
-
-    g_settings.m_currentVideoSettings.m_SubtitleCached = true;
+    MediaPartPtr part = GetMediaPart();
+    if (part)
+    {          
+      BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
+      {
+        if (stream->streamType == PLEX_STREAM_SUBTITLE && stream->index == -1)
+        {
+          SelectionStream s;
+          s.source   = m_SelectionStreams.Source(STREAM_SOURCE_TEXT, stream->key);
+          s.type     = STREAM_SUBTITLE;
+          s.id       = stream->id;
+          s.plexID   = stream->id; 
+          s.language = stream->language;
+          s.filename = stream->key;
+          s.name     = stream->language;
+          
+          // Cache the subtitle locally.
+          CStdString path = "z:\\subtitle.plex." + boost::lexical_cast<string>(stream->id) + "." + stream->codec;
+          if (CFile::Cache(stream->key, path))
+          {
+            s.filename = path;
+            m_SelectionStreams.Update(s);  
+          }
+        }
+      }
+      
+      g_settings.m_currentVideoSettings.m_SubtitleCached = true;
+    }
   }
 
   SetAVDelay(g_settings.m_currentVideoSettings.m_AudioDelay);
@@ -578,6 +594,39 @@ bool CDVDPlayer::OpenDemuxStream()
     m_dvdPlayerVideo.SetMaxDataSize(totalData);
     m_dvdPlayerAudio.SetMaxDataSize(audioCacheSize);
   }
+  
+  // Update Plex streams from the demuxer.
+  MediaPartPtr part = GetMediaPart();
+  if (part)
+  {          
+    BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
+    {
+      StreamType type = STREAM_NONE;
+      
+      if (stream->streamType == PLEX_STREAM_SUBTITLE)
+        type = STREAM_SUBTITLE;
+      else if (stream->streamType == PLEX_STREAM_AUDIO)
+        type = STREAM_AUDIO;
+      
+      if (type != STREAM_NONE)
+      {
+        // Look for the right index and set the Plex stream ID.
+        int count = m_SelectionStreams.Count(type);
+        for (int i=0; i<count; i++)
+        {
+          SelectionStream& s = m_SelectionStreams.Get(type, i);
+          if (s.id == stream->index)
+          {
+            s.plexID = stream->id;
+            s.language = stream->language;
+            
+            if (stream->streamType == PLEX_STREAM_SUBTITLE)
+              s.name = stream->language;
+          }
+        }
+      }
+    }
+  }
 
   return true;
 }
@@ -586,7 +635,6 @@ void CDVDPlayer::OpenDefaultStreams()
 {
   int  count;
   bool valid;
-  bool force = false;
   SelectionStream st;
 
   // open video stream
@@ -616,100 +664,85 @@ void CDVDPlayer::OpenDefaultStreams()
     // open audio stream
     count = m_SelectionStreams.Count(STREAM_AUDIO);
     valid = false;
-    if(g_settings.m_currentVideoSettings.m_AudioStream >= 0
-    && g_settings.m_currentVideoSettings.m_AudioStream < count)
+
+    // Pick selected audio stream.
+    MediaPartPtr part = GetMediaPart();
+    if (part)
     {
-      SelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, g_settings.m_currentVideoSettings.m_AudioStream);
-      if(OpenAudioStream(s.id, s.source))
-        valid = true;
-      else
-        CLog::Log(LOGWARNING, "%s - failed to restore selected audio stream (%d)", __FUNCTION__, g_settings.m_currentVideoSettings.m_AudioStream);
+      BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
+      {
+        // If we've found the selected audio stream...
+        if (stream->streamType == PLEX_STREAM_AUDIO && stream->selected)
+        {
+          // ...see if we can match it up with our stream.
+          count = m_SelectionStreams.Count(STREAM_AUDIO);
+          for (int i=0; i<count && !valid; i++)
+          {
+            SelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
+            if (s.id == stream->index && OpenAudioStream(s.id, s.source))
+              valid = true;
+          }
+        }
+        
+        if (valid) break;
+      }
     }
 
-    if(!valid
-    && m_SelectionStreams.Get(STREAM_AUDIO, CDemuxStream::FLAG_DEFAULT, st))
-    {
-      if(OpenAudioStream(st.id, st.source))
-        valid = true;
-      else
-        CLog::Log(LOGWARNING, "%s - failed to open default stream (%d)", __FUNCTION__, st.id);
-    }
-
+    // If that didn't work, just pick the first valid stream.
     for(int i = 0; i<count && !valid; i++)
     {
       SelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
       if(OpenAudioStream(s.id, s.source))
         valid = true;
     }
+    
+    // If we don't have an audio stream, close it.
     if(!valid)
       CloseAudioStream(true);
   }
 
   // open subtitle stream
-  count = m_SelectionStreams.Count(STREAM_SUBTITLE);
   valid = false;
-
-  // if subs are disabled, check for forced
-  if(!valid && !g_settings.m_currentVideoSettings.m_SubtitleOn 
-  && m_SelectionStreams.Get(STREAM_SUBTITLE, CDemuxStream::FLAG_FORCED, st))
+  m_dvdPlayerVideo.EnableSubtitle(true);
+  
+  // Open subtitle stream.
+  MediaPartPtr part = GetMediaPart();
+  if (part)
   {
-    if(OpenSubtitleStream(st.id, st.source))
+    BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
     {
-      valid = true;
-      force = true;
+      // If we've found the selected subtitle stream...
+      if (stream->streamType == PLEX_STREAM_SUBTITLE && stream->selected)
+      {
+        count = m_SelectionStreams.Count(STREAM_SUBTITLE);
+        
+        for (int i = 0; i<count && !valid; i++)
+        {
+          SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
+          if (s.plexID == stream->id && OpenSubtitleStream(s.id, s.source))
+            valid = true;
+        }
+      }
+      
+      if (valid) break;
     }
-    else
-      CLog::Log(LOGWARNING, "%s - failed to open default/forced stream (%d)", __FUNCTION__, st.id);
+    
+    // If that didn't pick one, just open the first stream and make it invisible.
+    if (valid == false && count > 0)
+    {
+      SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, 0);
+      OpenSubtitleStream(s.id, s.source);
+    }
+    
+    // Set them on/off based on whether we found one.
+    g_settings.m_currentVideoSettings.m_SubtitleOn = valid;
+    
+    // We don't have subtitles to show, close.
+    if (valid == false)
+    {
+      SetSubtitleVisible(false);
+    }
   }
-
-  // restore selected
-  if(!valid
-  && g_settings.m_currentVideoSettings.m_SubtitleStream >= 0
-  && g_settings.m_currentVideoSettings.m_SubtitleStream < count)
-  {
-    SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, g_settings.m_currentVideoSettings.m_SubtitleStream);
-    if(OpenSubtitleStream(s.id, s.source))
-      valid = true;
-    else
-      CLog::Log(LOGWARNING, "%s - failed to restore selected subtitle stream (%d)", __FUNCTION__, g_settings.m_currentVideoSettings.m_SubtitleStream);
-  }
-
-  // select default
-  if(!valid
-  && m_SelectionStreams.Get(STREAM_SUBTITLE, CDemuxStream::FLAG_DEFAULT, st))
-  {
-    if(OpenSubtitleStream(st.id, st.source))
-      valid = true;
-    else
-      CLog::Log(LOGWARNING, "%s - failed to open default/forced stream (%d)", __FUNCTION__, st.id);
-  }
-
-  // select first
-  for(int i = 0;i<count && !valid; i++)
-  {
-    SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
-    if(OpenSubtitleStream(s.id, s.source))
-      valid = true;
-  }
-  if(!valid)
-    CloseSubtitleStream(false);
-
-  if((g_settings.m_currentVideoSettings.m_SubtitleOn || force) && !m_PlayerOptions.video_only)
-    m_dvdPlayerVideo.EnableSubtitle(true);
-  else
-    m_dvdPlayerVideo.EnableSubtitle(false);
-
-  // open teletext data stream
-  count = m_SelectionStreams.Count(STREAM_TELETEXT);
-  valid = false;
-  for(int i = 0;i<count && !valid;i++)
-  {
-    SelectionStream& s = m_SelectionStreams.Get(STREAM_TELETEXT, i);
-    if(OpenTeletextStream(s.id, s.source))
-      valid = true;
-  }
-  if(!valid)
-    CloseTeletextStream(true);
 }
 
 bool CDVDPlayer::ReadPacket(DemuxPacket*& packet, CDemuxStream*& stream)
@@ -865,6 +898,20 @@ bool CDVDPlayer::IsBetterStream(CCurrentStream& current, CDemuxStream* stream)
 
 void CDVDPlayer::Process()
 {
+  // Get details on the item we're playing.
+  if (g_application.CurrentFileItem().IsPlexMediaServerLibrary())
+  {
+    CPlexDirectory plex;
+    CFileItemList items;
+    plex.GetDirectory(g_application.CurrentFileItem().GetProperty("key"), items);
+    
+    if (items.Size() == 1)
+    {
+      // Save it.
+      m_itemWithDetails = items[0];
+    }
+  }
+  
   if (!OpenInputStream())
   {
     m_bAbortRequest = true;
@@ -2372,6 +2419,12 @@ int CDVDPlayer::GetSubtitle()
 {
   return m_SelectionStreams.IndexOf(STREAM_SUBTITLE, *this);
 }
+  
+int CDVDPlayer::GetSubtitlePlexID()
+{
+  SelectionStream& stream = m_SelectionStreams.Get(STREAM_SUBTITLE, m_SelectionStreams.IndexOf(STREAM_SUBTITLE, *this));
+  return stream.plexID;
+}
 
 void CDVDPlayer::GetSubtitleName(int iStream, CStdString &strStreamName)
 {
@@ -2422,6 +2475,12 @@ int CDVDPlayer::GetAudioStreamCount()
 int CDVDPlayer::GetAudioStream()
 {
   return m_SelectionStreams.IndexOf(STREAM_AUDIO, *this);
+}
+
+int CDVDPlayer::GetAudioStreamPlexID()
+{
+  SelectionStream& stream = m_SelectionStreams.Get(STREAM_AUDIO, m_SelectionStreams.IndexOf(STREAM_AUDIO, *this));
+  return stream.plexID;
 }
 
 void CDVDPlayer::GetAudioStreamName(int iStream, CStdString& strStreamName)

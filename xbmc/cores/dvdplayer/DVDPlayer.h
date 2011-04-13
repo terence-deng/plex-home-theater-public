@@ -24,6 +24,8 @@
 #include "cores/IPlayer.h"
 #include "utils/Thread.h"
 
+#include <boost/lexical_cast.hpp> 
+
 #include "IDVDPlayer.h"
 
 #include "DVDMessageQueue.h"
@@ -100,6 +102,7 @@ typedef struct
   CDemuxStream::EFlags flags;
   int          source;
   int          id;
+  int          plexID;  
 } SelectionStream;
 
 class CSelectionStreams
@@ -174,6 +177,7 @@ public:
   virtual int GetSubtitle();
   virtual void GetSubtitleName(int iStream, CStdString &strStreamName);
   virtual void SetSubtitle(int iStream);
+  virtual int  GetSubtitlePlexID(); 
   virtual bool GetSubtitleVisible();
   virtual void SetSubtitleVisible(bool bVisible);
   virtual bool GetSubtitleExtension(CStdString &strSubtitleExtension) { return false; }
@@ -181,8 +185,18 @@ public:
 
   virtual int GetAudioStreamCount();
   virtual int GetAudioStream();
+  virtual int  GetAudioStreamPlexID();   
   virtual void GetAudioStreamName(int iStream, CStdString &strStreamName);
   virtual void SetAudioStream(int iStream);
+  
+  virtual int GetPlexMediaPartID() 
+  {
+    MediaPartPtr part = GetMediaPart();
+    if (part)
+      return part->id;
+    
+    return -1;
+  }
 
   virtual TextCacheStruct_t* GetTeletextCache();
   virtual void LoadPage(int p, int sp, unsigned char* buffer);
@@ -301,6 +315,25 @@ protected:
   ECacheState m_caching;
   CFileItem   m_item;
 
+  CFileItemPtr m_itemWithDetails;
+  
+  MediaPartPtr GetMediaPart()
+  {
+    MediaPartPtr part;
+    
+    if (m_itemWithDetails)
+    {
+      // Figure out what part we're on.
+      int partIndex = 0;
+      if (m_item.HasProperty("partIndex"))
+        partIndex = boost::lexical_cast<int>(m_item.GetProperty("partIndex"));
+      
+      part = m_itemWithDetails->m_mediaParts[partIndex];
+    }
+    
+    return part;
+  }
+  
   CCurrentStream m_CurrentAudio;
   CCurrentStream m_CurrentVideo;
   CCurrentStream m_CurrentSubtitle;

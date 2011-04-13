@@ -105,6 +105,7 @@ public:
   virtual float GetSubTitleDelay()    { return 0.0f; }
   virtual int  GetSubtitleCount()     { return 0; }
   virtual int  GetSubtitle()          { return -1; }
+  virtual int  GetSubtitlePlexID()    { return -1; } 
   virtual void GetSubtitleName(int iStream, CStdString &strStreamName){};
   virtual void SetSubtitle(int iStream){};
   virtual bool GetSubtitleVisible(){ return false;};
@@ -114,6 +115,7 @@ public:
 
   virtual int  GetAudioStreamCount()  { return 0; }
   virtual int  GetAudioStream()       { return -1; }
+  virtual int  GetAudioStreamPlexID() { return -1; }
   virtual void GetAudioStreamName(int iStream, CStdString &strStreamName){};
   virtual void SetAudioStream(int iStream){};
 
@@ -125,6 +127,8 @@ public:
   virtual void GetChapterName(CStdString& strChapterName)      { return; }
   virtual int  SeekChapter(int iChapter)                       { return -1; }
 //  virtual bool GetChapterInfo(int chapter, SChapterInfo &info) { return false; }
+  
+  virtual int GetPlexMediaPartID() { return -1; }  
 
   virtual float GetActualFPS() { return 0.0f; };
   virtual void SeekTime(__int64 iTime = 0){};
