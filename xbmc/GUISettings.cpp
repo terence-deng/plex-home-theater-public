@@ -19,6 +19,10 @@
  *
  */
 
+#include <boost/uuid/uuid.hpp>            // uuid class
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/uuid/uuid_io.hpp>
+
 #include "GUISettings.h"
 #include <limits.h>
 #include <float.h>
@@ -764,6 +768,13 @@ void CGUISettings::Initialize()
   AddInt(NULL, "window.height", 0, 720, 10, 1, INT_MAX, SPIN_CONTROL_INT);
 
   AddPath(NULL,"system.playlistspath",20006,"set default",BUTTON_CONTROL_PATH_INPUT,false);
+  
+  // Add the UUID.
+  boost::uuids::uuid uuid = boost::uuids::random_generator()();
+  stringstream s;
+  s << uuid;
+  
+  AddString(NULL, "system.uuid", 99999, s.str().c_str(), SPIN_CONTROL_TEXT);
 }
 
 CGUISettings::~CGUISettings(void)

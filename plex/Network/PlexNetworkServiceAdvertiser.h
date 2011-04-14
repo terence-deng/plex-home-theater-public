@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "GUISettings.h"
 #include "NetworkServiceAdvertiser.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,6 @@ class PlexNetworkServiceAdvertiser : public NetworkServiceAdvertiser
     return "plex/media-player";
   }
   
-  virtual string getResourceIdentifier() { return ""; }
+  virtual string getResourceIdentifier() { return g_guiSettings.GetString("system.uuid");  }
   virtual string getBody() { return ""; }
-  
 };
