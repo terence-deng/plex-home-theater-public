@@ -66,6 +66,8 @@
 #include "addons/Skin.h"
 #include "MediaManager.h"
 
+#include "PlexMediaServerQueue.h"
+
 using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
@@ -1143,11 +1145,8 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
 
 void CGUIWindowVideoBase::GetNonContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (!m_vecItems->m_strPath.IsEmpty())
-    buttons.Add(CONTEXT_BUTTON_GOTO_ROOT, 20128);
   if (g_playlistPlayer.GetPlaylist(PLAYLIST_VIDEO).size() > 0)
     buttons.Add(CONTEXT_BUTTON_NOW_PLAYING, 13350);
-  buttons.Add(CONTEXT_BUTTON_SETTINGS, 5);
 }
 
 bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
@@ -1292,21 +1291,6 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
     }
   case CONTEXT_BUTTON_RENAME:
     OnRenameItem(itemNumber);
-    return true;
-  case CONTEXT_BUTTON_MARK_WATCHED:
-    {
-      int newSelection = m_viewControl.GetSelectedItem() + 1;
-      MarkWatched(item,true);
-      m_viewControl.SetSelectedItem(newSelection);
-
-      CUtil::DeleteVideoDatabaseDirectoryCache();
-      Update(m_vecItems->m_strPath);
-      return true;
-    }
-  case CONTEXT_BUTTON_MARK_UNWATCHED:
-    MarkWatched(item,false);
-    CUtil::DeleteVideoDatabaseDirectoryCache();
-    Update(m_vecItems->m_strPath);
     return true;
   default:
     break;
@@ -1484,61 +1468,41 @@ void CGUIWindowVideoBase::OnDeleteItem(CFileItemPtr item)
   CFileUtils::DeleteItem(item);
 }
 
-void CGUIWindowVideoBase::MarkWatched(const CFileItemPtr &item, bool bMark)
+void CGUIWindowVideoBase::MarkUnWatched(const CFileItemPtr &item)
 {
-#pragma warning port plex functionality
-  if (!g_settings.GetCurrentProfile().canWriteDatabases())
-    return;
-  // dont allow update while scanning
-  CGUIDialogVideoScan* pDialogScan = (CGUIDialogVideoScan*)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_SCAN);
-  if (pDialogScan && pDialogScan->IsScanning())
+  PlexMediaServerQueue::Get().onUnviewed(item);
+  
+  item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED);
+  if (item->GetVideoInfoTag())
+    item->GetVideoInfoTag()->m_playCount = 0;
+  
+  // Fix numbers.
+  if (item->HasProperty("watchedepisodes"))
   {
-    CGUIDialogOK::ShowAndGetInput(257, 0, 14057, 0);
-    return;
-  }
-
-  CVideoDatabase database;
-  if (database.Open())
-  {
-    CFileItemList items;
-    if (item->m_bIsFolder)
-    {
-      CStdString strPath = item->m_strPath;
-      if (g_windowManager.GetActiveWindow() == WINDOW_VIDEO_FILES)
-      {
-        CDirectory::GetDirectory(strPath, items);
-      }
-      else
-      {
-        CVideoDatabaseDirectory dir;
-        if (dir.GetDirectoryChildType(strPath) == NODE_TYPE_SEASONS)
-          strPath += "-1/";
-        dir.GetDirectory(strPath,items);
-      }
-    }
-    else
-      items.Add(item);
-
-    for (int i=0;i<items.Size();++i)
-    {
-      CFileItemPtr pItem=items[i];
-
-      if (pItem->IsVideoDb())
-      {
-        if (pItem->HasVideoInfoTag() &&
-            (( bMark && pItem->GetVideoInfoTag()->m_playCount) ||
-             (!bMark && !(pItem->GetVideoInfoTag()->m_playCount))))
-          continue;
-      }
-
-      // Clear resume bookmark
-      if (bMark)
-        database.ClearBookMarksOfFile(pItem->m_strPath, CBookmark::RESUME);
-
-      database.SetPlayCount(*pItem, bMark ? 1 : 0);
-    }
+    int watched = boost::lexical_cast<int>(item->GetProperty("watchedepisodes"));
+    int unwatched = boost::lexical_cast<int>(item->GetProperty("unwatchedepisodes"));
     
-    database.Close(); 
+    item->SetEpisodeData(watched+unwatched, 0);
+  }
+}
+
+//Add Mark a Title as watched
+void CGUIWindowVideoBase::MarkWatched(const CFileItemPtr &item)
+{
+  PlexMediaServerQueue::Get().onViewed(item, true);
+
+  // Change the item.
+  item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_WATCHED);
+  if (item->GetVideoInfoTag())
+    item->GetVideoInfoTag()->m_playCount++;
+  
+  // Fix numbers.
+  if (item->HasProperty("watchedepisodes"))
+  {
+    int watched = boost::lexical_cast<int>(item->GetProperty("watchedepisodes"));
+    int unwatched = boost::lexical_cast<int>(item->GetProperty("unwatchedepisodes"));
+
+    item->SetEpisodeData(watched+unwatched, watched+unwatched);
   }
 }
 

@@ -444,21 +444,15 @@ bool CGUIWindowVideoFiles::OnContextButton(int itemNumber, CONTEXT_BUTTON button
   }
 
   switch (button)
-  {
-  case CONTEXT_BUTTON_SWITCH_MEDIA:
-    CGUIDialogContextMenu::SwitchMedia("video", m_vecItems->m_strPath);
+  {    
+  case CONTEXT_BUTTON_MARK_WATCHED:
+    // If we're about to hide this item, select the next one
+    m_viewControl.SetSelectedItem((itemNumber+1) % m_vecItems->Size());
+    MarkWatched(item);
     return true;
 
-  case CONTEXT_BUTTON_SET_CONTENT:
-    {
-      SScanSettings settings;
-      ADDON::ScraperPtr info = m_database.GetScraperForPath(item->HasVideoInfoTag() ? item->GetVideoInfoTag()->m_strPath : item->m_strPath, settings);
-      OnAssignContent(item->m_strPath,0, info, settings);
-      return true;
-    }
-
-  case CONTEXT_BUTTON_ADD_TO_LIBRARY:
-    AddToDatabase(itemNumber);
+  case CONTEXT_BUTTON_MARK_UNWATCHED:
+    MarkUnWatched(item);
     return true;
 
   default:
