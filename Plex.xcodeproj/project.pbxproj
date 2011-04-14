@@ -892,6 +892,7 @@
 		74D7F389133F8A2F00DCE15F /* libmicrohttpd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */; };
 		74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D8D37A1311A2DD00DBDBC8 /* sha.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */; };
+		E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E31A8E011357B44800EEB013 /* PlexUtils.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1285,6 +1286,7 @@
 		C85EB761117461830008E5A5 /* GUIViewStateAddonBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIViewStateAddonBrowser.h; sourceTree = "<group>"; };
 		E306D12C0DDF7B590052C2AD /* PlexHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlexHelper.cpp; sourceTree = "<group>"; };
 		E306D12D0DDF7B590052C2AD /* PlexHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlexHelper.h; sourceTree = "<group>"; };
+		E31A8E011357B44800EEB013 /* PlexUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexUtils.cpp; path = plex/PlexUtils.cpp; sourceTree = "<group>"; };
 		E33206370D5070AA00435CE3 /* DVDDemuxVobsub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDDemuxVobsub.cpp; sourceTree = "<group>"; };
 		E33466A50D2E5103005A65EC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E33979940D62FD47004ECDDA /* DVDInputStreamTV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDInputStreamTV.cpp; sourceTree = "<group>"; };
@@ -2980,6 +2982,7 @@
 		746469DE12E827B500B2FF1E /* plex */ = {
 			isa = PBXGroup;
 			children = (
+				E31A8E011357B44800EEB013 /* PlexUtils.cpp */,
 				74A4E98E12F7FFB40021FEDB /* AddOns */,
 				7482B37812E8E3510077A38C /* CocoaUtils.h */,
 				7482B37912E8E3510077A38C /* CocoaUtils.m */,
@@ -6938,6 +6941,7 @@
 				74972168132CEC0F0074DD27 /* AddonInstaller.cpp in Sources */,
 				74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */,
 				74D7F387133F88A900DCE15F /* WebServer.cpp in Sources */,
+				E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
