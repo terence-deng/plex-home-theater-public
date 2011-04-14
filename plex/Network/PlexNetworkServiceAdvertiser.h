@@ -9,6 +9,7 @@
 
 #include "GUISettings.h"
 #include "NetworkServiceAdvertiser.h"
+#include "CocoaUtils.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class PlexNetworkServiceAdvertiser : public NetworkServiceAdvertiser
@@ -25,9 +26,9 @@ class PlexNetworkServiceAdvertiser : public NetworkServiceAdvertiser
   virtual void createReply(map<string, string>& headers) 
   {
     //headers["Name"] = GetMachineName();
-    //headers["Port"] = "32400";
-    //headers["Version"] = Cocoa_GetAppVersion();
-    //headers["Updated-At"] = lexical_cast<string>(getUpdatedAt());
+    headers["Port"] = g_guiSettings.GetString("services.webserverport");
+    headers["Version"] = Cocoa_GetAppVersion();
+    headers["Product"] = "Plex/Nine (dharma)";
   }
   
   /// For subclasses to fill in.
