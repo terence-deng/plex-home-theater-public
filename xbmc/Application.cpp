@@ -3662,37 +3662,11 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
   {
     options.starttime = item.m_lStartOffset / 75.0;
 
-    if (item.IsVideo())
+    if (item.m_lStartOffset == STARTOFFSET_RESUME)
     {
-      // open the d/b and retrieve the bookmarks for the current movie
-      CVideoDatabase dbs;
-      dbs.Open();
-      dbs.GetVideoSettings(item.m_strPath, g_settings.m_currentVideoSettings);
-
-      if( item.m_lStartOffset == STARTOFFSET_RESUME )
-      {
-        options.starttime = 0.0f;
-        CBookmark bookmark;
-        if(dbs.GetResumeBookMark(item.m_strPath, bookmark))
-        {
-          options.starttime = bookmark.timeInSeconds;
-          options.state = bookmark.playerState;
-        }
-      }
-      else if (item.HasVideoInfoTag())
-      {
-        const CVideoInfoTag *tag = item.GetVideoInfoTag();
-
-        if (tag->m_iBookmarkId != -1 && tag->m_iBookmarkId != 0)
-        {
-          CBookmark bookmark;
-          dbs.GetBookMarkForEpisode(*tag, bookmark);
-          options.starttime = bookmark.timeInSeconds;
-          options.state = bookmark.playerState;
-        }
-      }
-
-      dbs.Close();
+      // See if we have a view offset.
+      if (item.HasProperty("viewOffset"))
+        options.starttime = boost::lexical_cast<int>(item.GetProperty("viewOffset"))/1000.0;
     }
 
     if (m_eForcedNextPlayer != EPC_NONE)
@@ -4143,6 +4117,7 @@ void CApplication::UpdateFileState()
           m_progressTrackingItem->GetVideoInfoTag()->m_streamDetails.Reset();
           m_pPlayer->GetStreamDetails(m_progressTrackingItem->GetVideoInfoTag()->m_streamDetails);
         }
+        
         // Update bookmark for save
         m_progressTrackingVideoResumeBookmark.player = CPlayerCoreFactory::GetPlayerName(m_eCurrentPlayer);
         m_progressTrackingVideoResumeBookmark.playerState = m_pPlayer->GetPlayerState();
@@ -4154,10 +4129,10 @@ void CApplication::UpdateFileState()
           // Delete the bookmark
           m_progressTrackingVideoResumeBookmark.timeInSeconds = -1.0f;
         }
-        else
-        if (GetTime() > g_advancedSettings.m_videoIgnoreSecondsAtStart)
+        else if (GetTime() > g_advancedSettings.m_videoIgnoreSecondsAtStart)
         {
-          PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, m_progressTrackingVideoResumeBookmark.timeInSeconds);
+          PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, m_progressTrackingVideoResumeBookmark.timeInSeconds*1000);
+          m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(m_progressTrackingVideoResumeBookmark.timeInSeconds*1000)));
 
           // Update the bookmark
           m_progressTrackingVideoResumeBookmark.timeInSeconds = GetTime();
@@ -4167,6 +4142,12 @@ void CApplication::UpdateFileState()
         {
           // Do nothing
           m_progressTrackingVideoResumeBookmark.timeInSeconds = 0.0f;
+        }
+        
+        CGUIMediaWindow* mediaWindow = (CGUIMediaWindow* )g_windowManager.GetWindow(WINDOW_VIDEO_FILES);
+        if (mediaWindow)
+        {
+          mediaWindow->SetUpdatedItem(m_itemCurrentFile);
         }
       }
     }

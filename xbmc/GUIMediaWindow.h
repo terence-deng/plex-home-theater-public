@@ -27,6 +27,7 @@
 #include "GUIViewControl.h"
 #include "GUIDialogContextMenu.h"
 #include "BackgroundInfoLoader.h"
+#include "FileItem.h"
 
 class CFileItemList;
 class MediaRefresher;
@@ -48,6 +49,14 @@ public:
   virtual bool HasListItems() const { return true; };
   virtual CFileItemPtr GetCurrentListItem(int offset = 0);
   const CGUIViewState *GetViewState() const;
+
+  void SetUpdatedItem(const CFileItemPtr& updatedItem) 
+  { 
+    CFileItem* pItem = new CFileItem();
+    (*pItem) = *(updatedItem.get());
+    
+    m_updatedItem = CFileItemPtr(pItem); 
+  }
 
 protected:
   virtual void LoadAdditionalTags(TiXmlElement *root);
@@ -103,7 +112,7 @@ protected:
   void OnRenameItem(int iItem);
   
   virtual void Render();
-
+  
 protected:
   virtual CBackgroundInfoLoader* GetBackgroundLoader() { return 0; }
   
@@ -123,6 +132,8 @@ protected:
   CFileItemList* m_unfilteredItems;        ///< \brief items prior to filtering using FilterItems()
   CDirectoryHistory m_history;
   std::auto_ptr<CGUIViewState> m_guiState;
+  
+  CFileItemPtr m_updatedItem;
   
   MediaRefresher* m_mediaRefresher;
   CStopWatch m_refreshTimer;
