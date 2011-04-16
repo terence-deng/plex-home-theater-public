@@ -208,8 +208,11 @@ void CURL::Parse(const CStdString& strURL1)
         m_strOptions = strURL.substr(iOptions,iProto-iOptions);
       }
       else
+      {
         m_strOptions = strURL.substr(iOptions);
+      }
       iEnd = iOptions;
+      m_strWithoutOptions = strURL.substr(0,iOptions);
     }
   }
 
@@ -653,6 +656,42 @@ CStdString CURL::GetWithoutFilename() const
   }
 
   return strURL;
+}
+
+const CStdString& CURL::GetUrlWithoutOptions() const
+{
+  return m_strWithoutOptions;
+}
+
+const std::map<CStdString, CStdString> CURL::GetOptionsAsMap() const
+{
+  std::map<CStdString, CStdString> result;
+  CStdString options = m_strOptions;
+  
+  if (m_strOptions.Left(1) == "?")
+  {
+    options = m_strOptions.Right(m_strOptions.size() - 1);
+  }
+  
+  if (options == "")
+  {
+    return result;
+  }
+  
+  int equalPos;
+  std::vector<CStdString> tokens;
+  CUtil::Tokenize(options, tokens, "&");
+  
+  for (size_t i = 0; i < tokens.size(); i++)
+  {
+    equalPos = tokens[i].Find("=");
+    CStdString key = tokens[i].Left(equalPos);
+    CStdString value = tokens[i].Right(tokens[i].size() - equalPos - 1);
+    CUtil::URLDecode(value);
+    result[key] = value;
+  }
+  
+  return result;
 }
 
 bool CURL::IsLocal() const
