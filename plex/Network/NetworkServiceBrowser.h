@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <set>
+
 #include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
 #include <boost/foreach.hpp>
@@ -16,6 +18,8 @@
 #include "NetworkInterface.h"
 #include "NetworkServiceBase.h"
 #include "NetworkService.h"
+
+typedef pair<boost::asio::ip::address, NetworkServicePtr> address_service_pair;
 
 /////////////////////////////////////////////////////////////////////////////
 class NetworkServiceBrowser : public NetworkServiceBase
@@ -52,6 +56,19 @@ class NetworkServiceBrowser : public NetworkServiceBase
     dprintf("NetworkServiceBrowser: SERVICE updated: %s", service->address().to_string().c_str());
   }
   
+  /// Copy out the current service list.
+  map<boost::asio::ip::address, NetworkServicePtr> copyServices()
+  {
+    boost::mutex::scoped_lock lk(m_mutex);
+    
+    map<boost::asio::ip::address, NetworkServicePtr> ret;
+    typedef pair<boost::asio::ip::address, NetworkServicePtr> address_service_pair;
+    BOOST_FOREACH(address_service_pair pair, m_services)
+      ret[pair.first] = pair.second;
+    
+    return ret;
+  }
+  
  private:
 
   /// Handle network change.
@@ -62,25 +79,44 @@ class NetworkServiceBrowser : public NetworkServiceBase
     // Close the old one.
     BOOST_FOREACH(udp_socket_ptr socket, m_sockets)
       socket->close();
+    
     m_sockets.clear();
+    m_ignoredAddresses.clear();
 
+    int  interfaceIndex = 0;
+    bool addInterface = true;
+    
     BOOST_FOREACH(const NetworkInterface& xface, interfaces)
     {
-      // Create the new socket.
-      udp_socket_ptr socket = udp_socket_ptr(new boost::asio::ip::udp::socket(m_ioService));
-      setupMulticastListener(socket, xface.address(), m_port+1, true);
-      m_sockets.push_back(socket);
-    
-      // Wait for data.
-      socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+      // Don't add virtual interfaces.
+      if (addInterface == true && xface.name()[0] != 'v')
+      {
+        dprintf("NetworkService: Browsing on interface %s.", xface.address().c_str());
+        
+        // Create the new socket.
+        udp_socket_ptr socket = udp_socket_ptr(new boost::asio::ip::udp::socket(m_ioService));
+        setupMulticastListener(socket, xface.address(), m_port+1, true);
+        m_sockets.push_back(socket);
+        
+        // Wait for data.
+        socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
+        interfaceIndex++;
+        
+        // Don't add any more if we've added the first non-loopback address. The first one will be the highest priority one.
+        if (xface.loopback() == false)
+          addInterface = false;
+      }
+      else
+      {
+        // Sometimes we get packets from these interfaces, not sure why, but we'll ignore them.
+        m_ignoredAddresses.insert(xface.address());
+      }
     }
   }
   
   /// Send out the search request.
   void sendSearch()
   {
-    //dprintf("NetworkServiceBrowser: Searching for services on port %d.", m_port);
-    
     // Send the search message.
     string msg = NS_SEARCH_MSG;
     boost::asio::ip::udp::endpoint broadcastEndpoint(NS_BROADCAST_ADDR, m_port);
@@ -96,14 +132,13 @@ class NetworkServiceBrowser : public NetworkServiceBase
     }
     catch (std::exception& e)
     {
-      eprintf("NetworkServiceBrowser: Error sending out discover packet: %s", e.what());
+      wprintf("NetworkServiceBrowser: Error sending out discover packet: %s", e.what());
     }
   }
   
-  /// Find a network service by resouce identifier.
+  /// Find a network service by resource identifier.
   NetworkServicePtr findServiceByIdentifier(const string& identifier)
   {
-    typedef pair<boost::asio::ip::address, NetworkServicePtr> address_service_pair;
     BOOST_FOREACH(address_service_pair pair, m_services)
     {
       if (!pair.second)
@@ -117,7 +152,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
   }
   
   /// Handle incoming data.
-  void handleRead(const udp_socket_ptr& socket, const boost::system::error_code& error, size_t bytes)
+  void handleRead(const udp_socket_ptr& socket, const boost::system::error_code& error, size_t bytes, int interfaceIndex)
   {
     if (!error)
     {
@@ -136,9 +171,14 @@ class NetworkServiceBrowser : public NetworkServiceBase
       
       bool notifyAdd = false;
       bool notifyDel = false;
+      bool notifyUpdate = boost::starts_with(cmd, "UPDATE");
       
-      // See if it's a leave.
-      if (boost::starts_with(cmd, "BYE"))
+      if (m_ignoredAddresses.find(m_endpoint.address().to_string()) != m_ignoredAddresses.end())
+      {
+        // Ignore this packet.
+        iprintf("NetworkService: Ignoring a packet from this uninteresting interface %s.", m_endpoint.address().to_string().c_str());
+      }
+      else if (boost::starts_with(cmd, "BYE"))
       {
         // Whack it.
         notifyDel = true;
@@ -154,18 +194,27 @@ class NetworkServiceBrowser : public NetworkServiceBase
         }
         else
         {
-          // If we can find it via identifier, remove the old one.
-          NetworkServicePtr oldServer = findServiceByIdentifier(params["Resource-Identifier"]);
-          if (oldServer)
+          // If we can find it via identifier, replace the old one if it had a larger interface index.
+          // We don't replace interface index 0, which should always be loopback.
+          //
+          NetworkServicePtr oldService = findServiceByIdentifier(params["Resource-Identifier"]);
+          if (oldService)
           {
-            dprintf("Removing older instance of resource at different address %s.", oldServer->address().to_string().c_str());
-            m_services.erase(oldServer->address());
+            dprintf("NetworkService: Have an old server at index %d and address %s (we just got packet from %s, index %d)", oldService->interfaceIndex(), oldService->address().to_string().c_str(), m_endpoint.address().to_string().c_str(), interfaceIndex);
+            
+            // Whack the old one and treat it as an update.
+            m_services.erase(oldService->address());
+            notifyUpdate = true;
+          }
+          else
+          {
+            // It's brand new, we'll treat it as an add.
+            notifyAdd = true;
           }
           
-          // Notify of the new service.
-          service = NetworkServicePtr(new NetworkService(m_endpoint.address(), params));
+          // Add the new mapping.
+          service = NetworkServicePtr(new NetworkService(m_endpoint.address(), interfaceIndex, params));
           m_services[m_endpoint.address()] = service;
-          notifyAdd = true;
         }
       }
         
@@ -178,12 +227,12 @@ class NetworkServiceBrowser : public NetworkServiceBase
           handleServiceArrival(service);
         else if (notifyDel)
           handleServiceDeparture(service);
-        else if (boost::starts_with(cmd, "UPDATE"))
+        else if (notifyUpdate)
           handleServiceUpdate(service);
       }
       
       // Read the next packet.
-      socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+      socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
     }
   }
   
@@ -207,7 +256,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
         m_services.erase(service->address());
     }
 
-    // Now notify, outside the mutex.
+    // Now notify, outside the boost::mutex.
     BOOST_FOREACH(NetworkServicePtr& service, deleteMe)
       handleServiceDeparture(service);
     
@@ -266,13 +315,14 @@ class NetworkServiceBrowser : public NetworkServiceBase
     }
   }
   
-  unsigned short                       m_port;
-  vector<udp_socket_ptr>               m_sockets;
-  boost::mutex                         m_mutex;
-  boost::asio::deadline_timer          m_timer;
-  boost::asio::deadline_timer          m_deletionTimer;
-  int                                  m_refreshTime;
-  boost::asio::ip::udp::endpoint             m_endpoint;
-  char                                 m_data[NS_MAX_PACKET_SIZE];
+  unsigned short                   m_port;
+  vector<udp_socket_ptr>           m_sockets;
+  std::set<std::string>            m_ignoredAddresses;
+  boost::mutex                     m_mutex;
+  boost::asio::deadline_timer      m_timer;
+  boost::asio::deadline_timer      m_deletionTimer;
+  int                              m_refreshTime;
+  boost::asio::ip::udp::endpoint   m_endpoint;
+  char                             m_data[NS_MAX_PACKET_SIZE];
   map<boost::asio::ip::address, NetworkServicePtr>  m_services;
 };

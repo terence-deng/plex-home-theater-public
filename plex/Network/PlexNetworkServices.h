@@ -42,14 +42,14 @@ public:
     
     // Scan the host.
     dprintf("NetworkServiceBrowser: SERVICE arrived: %s", service->address().to_string().c_str());
-    CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
+    CPlexSourceScanner::ScanHost(service->getResourceIdentifier(), service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
   
   /// Notify of a service going away.
   virtual void handleServiceDeparture(NetworkServicePtr& service) 
   {
     dprintf("NetworkServiceBrowser: SERVICE departed after not being seen for %f seconds: %s", service->timeSinceLastSeen(), service->address().to_string().c_str());
-    CPlexSourceScanner::RemoveHost(service->address().to_string());
+    CPlexSourceScanner::RemoveHost(service->getResourceIdentifier());
   }
   
   /// Notify of a service update.
@@ -57,7 +57,7 @@ public:
   {
     // Scan the host.
     dprintf("NetworkServiceBrowser: SERVICE updated: %s", service->address().to_string().c_str());
-    CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
+    CPlexSourceScanner::ScanHost(service->getResourceIdentifier(), service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
 };
 

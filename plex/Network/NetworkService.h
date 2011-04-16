@@ -49,17 +49,20 @@ class NetworkService
 {
  public:
   
-  NetworkService(const boost::asio::ip::address& address, const map<string, string>& params)
+  NetworkService(const boost::asio::ip::address& address, int interfaceIndex, const map<string, string>& params)
     : m_address(address)
-    , m_parameters(params) 
+    , m_parameters(params)
+    , m_interfaceIndex(interfaceIndex)
   {}
   
   bool        hasParam(const string& name) { return m_parameters.find(name) != m_parameters.end(); }
   string      getParam(const string& name) { return m_parameters[name]; }
   map<string, string> getParams() { return m_parameters; }
+  string      getResourceIdentifier() { return getParam("Resource-Identifier"); }
   
   boost::asio::ip::address address() { return m_address; }    
   void        freshen(map<string, string>& params) { m_parameters = params; m_timeSinceLastSeen.restart(); }
+  int         interfaceIndex() const { return m_interfaceIndex; }
   double      timeSinceLastSeen() { return m_timeSinceLastSeen.elapsed(); }
   double      timeSinceCreation() { return m_timeSinceCreation.elapsed(); }
   string      getUrl() { return "http://" + m_address.to_string() + ":" + getParam("Port"); }
@@ -70,6 +73,7 @@ class NetworkService
   WallclockTimer      m_timeSinceCreation;
   boost::asio::ip::address m_address;
   map<string, string> m_parameters;
+  int                 m_interfaceIndex;
 };
 
 typedef boost::shared_ptr<NetworkService> NetworkServicePtr;
