@@ -352,6 +352,13 @@ void CGUIListItem::SetProperty(const CStdString &strKey, int nVal)
   SetProperty(strKey, strVal);
 }
 
+void CGUIListItem::SetProperty(const CStdString &strKey, unsigned long nVal)
+{
+  CStdString strVal;
+  strVal.Format("%lu",nVal);
+  SetProperty(strKey, strVal);
+}
+
 void CGUIListItem::IncrementProperty(const CStdString &strKey, int nVal)
 {
   int i = GetPropertyInt(strKey);
@@ -386,6 +393,11 @@ bool CGUIListItem::GetPropertyBOOL(const CStdString &strKey) const
 int CGUIListItem::GetPropertyInt(const CStdString &strKey) const
 {
   return atoi(GetProperty(strKey).c_str()) ;
+}
+
+unsigned long CGUIListItem::GetPropertyULong(const CStdString &strKey) const
+{
+  return strtoul (GetProperty(strKey).c_str(),NULL,0);
 }
 
 double CGUIListItem::GetPropertyDouble(const CStdString &strKey) const

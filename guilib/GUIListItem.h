@@ -107,6 +107,7 @@ public:
   void SetProperty(const CStdString &strKey, int nVal);
   void SetProperty(const CStdString &strKey, bool bVal);
   void SetProperty(const CStdString &strKey, double dVal);
+  void SetProperty(const CStdString &strKey, unsigned long nVal);
 
   void IncrementProperty(const CStdString &strKey, int nVal);
   void IncrementProperty(const CStdString &strKey, double dVal);
@@ -123,6 +124,7 @@ public:
   bool       GetPropertyBOOL(const CStdString &strKey) const;
   int        GetPropertyInt(const CStdString &strKey) const;
   double     GetPropertyDouble(const CStdString &strKey) const;
+  unsigned long GetPropertyULong(const CStdString &strKey) const;
 
 protected:
   CStdString m_strLabel2;     // text of column2
@@ -143,7 +145,7 @@ public:
     }
   };
   typedef std::map<CStdString, CStdString, icompare> PropertyMap;
- 
+
 protected:
   PropertyMap m_mapProperties;
 
