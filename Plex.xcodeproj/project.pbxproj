@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7485ADBF1359DC2700E663B5 /* FilePlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADBD1359DC2700E663B5 /* FilePlaylist.cpp */; };
+		7485ADC21359E1E700E663B5 /* DVDInputStreamPlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADC01359E1E700E663B5 /* DVDInputStreamPlaylist.cpp */; };
+		7485ADC51359EB8500E663B5 /* Base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADC31359EB8400E663B5 /* Base64.cpp */; };
 		74865EE912FBF5A600D8F899 /* AC3CDDACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15D70D25F9FA00618676 /* AC3CDDACodec.cpp */; };
 		74865EEA12FBF5A600D8F899 /* AC3Codec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15D90D25F9FA00618676 /* AC3Codec.cpp */; };
 		74865EEB12FBF5A600D8F899 /* Addon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18B49FF11152BFA5001AF8A6 /* Addon.cpp */; };
@@ -1105,6 +1108,12 @@
 		7482B37912E8E3510077A38C /* CocoaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CocoaUtils.m; path = plex/CocoaUtils.m; sourceTree = "<group>"; };
 		7482B38912E8E3CA0077A38C /* CocoaUtilsPlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaUtilsPlus.h; path = plex/CocoaUtilsPlus.h; sourceTree = "<group>"; };
 		7482B38A12E8E3CA0077A38C /* CocoaUtilsPlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CocoaUtilsPlus.mm; path = plex/CocoaUtilsPlus.mm; sourceTree = "<group>"; };
+		7485ADBD1359DC2700E663B5 /* FilePlaylist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FilePlaylist.cpp; sourceTree = "<group>"; };
+		7485ADBE1359DC2700E663B5 /* FilePlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilePlaylist.h; sourceTree = "<group>"; };
+		7485ADC01359E1E700E663B5 /* DVDInputStreamPlaylist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDInputStreamPlaylist.cpp; sourceTree = "<group>"; };
+		7485ADC11359E1E700E663B5 /* DVDInputStreamPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDInputStreamPlaylist.h; sourceTree = "<group>"; };
+		7485ADC31359EB8400E663B5 /* Base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Base64.cpp; sourceTree = "<group>"; };
+		7485ADC41359EB8400E663B5 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		74865EE312FBF59700D8F899 /* Plex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Plex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		748667CE12FC07CA00D8F899 /* Plex.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Plex.icns; sourceTree = "<group>"; };
 		749502F512FBF5300039DE17 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -4277,6 +4286,8 @@
 				F5D8F86B104CD1C0004A11AB /* DVDInputStreamMMS.cpp */,
 				E38E15650D25F9FA00618676 /* DVDInputStreamNavigator.cpp */,
 				E38E15660D25F9FA00618676 /* DVDInputStreamNavigator.h */,
+				7485ADC11359E1E700E663B5 /* DVDInputStreamPlaylist.h */,
+				7485ADC01359E1E700E663B5 /* DVDInputStreamPlaylist.cpp */,
 				815EE6330E17F1DC009FBE3C /* DVDInputStreamRTMP.cpp */,
 				815EE6340E17F1DC009FBE3C /* DVDInputStreamRTMP.h */,
 				E33979940D62FD47004ECDDA /* DVDInputStreamTV.cpp */,
@@ -4549,6 +4560,8 @@
 				E38E16CF0D25F9FA00618676 /* FileLastFM.h */,
 				E38E16D20D25F9FA00618676 /* FileMusicDatabase.cpp */,
 				E38E16D30D25F9FA00618676 /* FileMusicDatabase.h */,
+				7485ADBE1359DC2700E663B5 /* FilePlaylist.h */,
+				7485ADBD1359DC2700E663B5 /* FilePlaylist.cpp */,
 				E38E16D40D25F9FA00618676 /* FileRar.cpp */,
 				E38E16D50D25F9FA00618676 /* FileRar.h */,
 				E38E16D60D25F9FA00618676 /* FileRTV.cpp */,
@@ -5602,6 +5615,8 @@
 				F5FDF51B0E7218950005B0A6 /* AsyncFileCopy.h */,
 				83E0B2480F7C95FF0091643F /* Atomics.cpp */,
 				83E0B2470F7C95FF0091643F /* Atomics.h */,
+				7485ADC41359EB8400E663B5 /* Base64.h */,
+				7485ADC31359EB8400E663B5 /* Base64.cpp */,
 				E38E1E270D25F9FD00618676 /* BitstreamStats.cpp */,
 				E38E1E280D25F9FD00618676 /* BitstreamStats.h */,
 				7CCF7F1B1069F3AE00992676 /* Builtins.cpp */,
@@ -6924,6 +6939,9 @@
 				74972168132CEC0F0074DD27 /* AddonInstaller.cpp in Sources */,
 				74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */,
 				74D7F387133F88A900DCE15F /* WebServer.cpp in Sources */,
+				7485ADBF1359DC2700E663B5 /* FilePlaylist.cpp in Sources */,
+				7485ADC21359E1E700E663B5 /* DVDInputStreamPlaylist.cpp in Sources */,
+				7485ADC51359EB8500E663B5 /* Base64.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -63,7 +63,8 @@ CPlayList* CPlayListFactory::Create(const CFileItem& item)
     || strMimeType == "text/html")
       return new CPlayListPLS();
 
-    if (strMimeType == "audio/x-mpegurl")
+    if (strMimeType == "audio/x-mpegurl"
+      || strMimeType == "application/vnd.apple.mpegurl")
       return new CPlayListM3U();
 
     if (strMimeType == "application/vnd.ms-wpl")
@@ -73,7 +74,7 @@ CPlayList* CPlayListFactory::Create(const CFileItem& item)
   CStdString extension = CUtil::GetExtension(item.m_strPath);
   extension.MakeLower();
 
-  if (extension == ".m3u" || extension == ".strm")
+  if (extension == ".m3u" || extension == ".strm" || extension == ".m3u8")
     return new CPlayListM3U();
 
   if (extension == ".pls")

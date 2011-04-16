@@ -28,6 +28,7 @@
 #include "DVDInputStreams/DVDFactoryInputStream.h"
 #include "DVDInputStreams/DVDInputStreamNavigator.h"
 #include "DVDInputStreams/DVDInputStreamTV.h"
+#include "DVDInputStreams/DVDInputStreamPlaylist.h"
 
 #include "DVDDemuxers/DVDDemux.h"
 #include "DVDDemuxers/DVDDemuxUtils.h"
@@ -1150,6 +1151,12 @@ void CDVDPlayer::Process()
         Sleep(100);
         continue;
       }
+      else if (m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PLAYLIST))
+      {
+        CDVDInputStreamPlaylist* pStream = static_cast<CDVDInputStreamPlaylist*>(m_pInputStream);
+        if (!pStream->IsEOF())
+          continue;
+      }
 
       // make sure we tell all players to finish it's data
       if(m_CurrentAudio.inited)
@@ -2219,6 +2226,14 @@ void CDVDPlayer::Seek(bool bPlus, bool bLargeStep)
     return;
   }
 #endif
+  if (m_pInputStream && m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PLAYLIST))
+  {
+    if (bPlus)
+      OnAction(bLargeStep ? ACTION_BIG_STEP_FORWARD : ACTION_STEP_FORWARD);
+    else
+      OnAction(bLargeStep? ACTION_BIG_STEP_BACK : ACTION_STEP_BACK);
+    return ;
+  }
 
   if(((bPlus && GetChapter() < GetChapterCount())
   || (!bPlus && GetChapter() > 1)) && bLargeStep)
@@ -3173,7 +3188,44 @@ bool CDVDPlayer::OnAction(const CAction &action)
     } \
   } while(false)
 
-  if (m_pInputStream && m_pInputStream->IsStreamType(DVDSTREAM_TYPE_DVD))
+  if (m_pInputStream && m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PLAYLIST))
+  {
+    CDVDInputStreamPlaylist* pStream = (CDVDInputStreamPlaylist*)m_pInputStream;
+    bool rc = pStream->OnAction(action);
+    switch(action.GetID())
+    {
+      case ACTION_STEP_FORWARD:
+      case ACTION_STEP_BACK:
+      case ACTION_BIG_STEP_FORWARD:
+      case ACTION_BIG_STEP_BACK:
+        FlushBuffers(false);
+        SynchronizePlayers(SYNCSOURCE_ALL);
+        break;
+      case ACTION_SET_VIDEO_TIME:
+        if (((CDVDInputStreamPlaylist*)m_pInputStream)->GetTotalTime())
+        {
+          m_State.time_total = ((CDVDInputStreamPlaylist*)m_pInputStream)->GetTotalTime()*1000;
+        }
+        m_State.time = ((CDVDInputStreamPlaylist*)m_pInputStream)->GetTime()*1000;
+        break;
+      case ACTION_SYNC_AV:
+      {
+        double apts = m_dvdPlayerAudio.GetCurrentPts();
+        double vpts = m_dvdPlayerVideo.GetCurrentPts();
+        double dDiff = 0.0;
+        if( apts != DVD_NOPTS_VALUE && vpts != DVD_NOPTS_VALUE )
+          dDiff = (apts - vpts) / DVD_TIME_BASE;
+        if (dDiff > 0.3)
+          SynchronizePlayers(SYNCSOURCE_ALL);
+      }
+        break;
+      case ACTION_RESET_DEMUXER:
+        m_messenger.Put(new CDVDMsg(CDVDMsg::DEMUXER_RESET));
+        break;
+    }
+    return rc;
+  }
+  else if (m_pInputStream && m_pInputStream->IsStreamType(DVDSTREAM_TYPE_DVD))
   {
     CDVDInputStreamNavigator* pStream = (CDVDInputStreamNavigator*)m_pInputStream;
 
@@ -3604,6 +3656,11 @@ void CDVDPlayer::UpdatePlayState(double timeout)
         m_State.time_total = ((CDVDInputStreamTV*)m_pInputStream)->GetTotalTime();
       }
     }
+    
+    if (m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PLAYLIST))
+    {
+      m_State.time += ((CDVDInputStreamPlaylist*)m_pInputStream)->StartTime()*1000;
+    }
   }
 
   if (m_Edl.HasCut())
@@ -3752,4 +3809,9 @@ CStdString CDVDPlayer::GetPlayingTitle()
     return ttcache->line30;
 
   return "";
+}
+
+bool CDVDPlayer::IsPlayingStreamPlaylist()
+{
+  return (m_pInputStream && m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PLAYLIST));
 }

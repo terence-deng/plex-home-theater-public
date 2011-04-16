@@ -1130,6 +1130,10 @@ bool CUtil::IsInternetStream(const CStdString& strFile, bool bStrictCheck /* = f
   //
   if (url.GetPort() == 32400)
     return true;
+  
+  // we won't be able to resolve a playlist stream so assume it's always remote (HTS).
+  if (strProtocol == "playlist")
+    return true;
 
   if (IsOnLAN( strFile ))
     return false;
