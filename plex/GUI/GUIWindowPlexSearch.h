@@ -29,6 +29,7 @@
 #include "Stopwatch.h"
 
 typedef boost::shared_ptr<CBackgroundInfoLoader> CBackgroundInfoLoaderPtr;
+
 enum LoaderType { kVIDEO_LOADER, kPHOTO_LOADER, kMUSIC_LOADER };
 
 struct Group
@@ -50,6 +51,8 @@ struct Group
   CFileItemListPtr         list;
   CBackgroundInfoLoaderPtr loader;
 };
+
+typedef std::pair<int, Group> int_list_pair;
 
 class CGUIWindowPlexSearch : public CGUIWindow
 {
@@ -89,6 +92,5 @@ class CGUIWindowPlexSearch : public CGUIWindow
   int                m_selectedContainerID;
   int                m_selectedItem;
   
-  typedef std::pair<int, Group> int_list_pair;
   std::map<int, Group> m_categoryResults;
 };
