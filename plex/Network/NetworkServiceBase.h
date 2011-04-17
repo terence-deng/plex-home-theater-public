@@ -23,11 +23,9 @@ class NetworkServiceBase
     NetworkInterface::RegisterObserver(boost::bind(&NetworkServiceBase::onNetworkChanged, this, _1));
   }
 
-  /// Utility to set up a multicast listener/broadcaster for a single interface.
-  void setupMulticastListener(const udp_socket_ptr& socket, const string& bindAddress, unsigned short port, bool outboundInterface = false)
+  /// Utility to set up a listener.
+  void setupListener(const udp_socket_ptr& socket, const string& bindAddress, unsigned short port)
   {
-    // Create the server socket.
-    dprintf("Setting up multicast listener on %s:%d (outbound: %d)", bindAddress.c_str(), port, outboundInterface);
     boost::asio::ip::udp::endpoint listenEndpoint(boost::asio::ip::address::from_string(bindAddress), port);
     socket->open(listenEndpoint.protocol());
     
@@ -37,7 +35,17 @@ class NetworkServiceBase
     
     // Reuse.
     try { socket->set_option(boost::asio::ip::udp::socket::reuse_address(true)); }
-    catch (std::exception& ex) { eprintf("NetworkService: Couldn't reuse address: %s", ex.what()); }
+    catch (std::exception& ex) { eprintf("NetworkService: Couldn't reuse address: %s", ex.what()); }    
+  }
+  
+  /// Utility to set up a multicast listener/broadcaster for a single interface.
+  void setupMulticastListener(const udp_socket_ptr& socket, const string& bindAddress, unsigned short port, bool outboundInterface = false)
+  {
+    // Create the server socket.
+    dprintf("NetworkService: Setting up multicast listener on %s:%d (outbound: %d)", bindAddress.c_str(), port, outboundInterface);
+    
+    // Bind.
+    setupListener(socket, bindAddress, port);
     
     // Enable loopback.
     socket->set_option(boost::asio::ip::multicast::enable_loopback(true));

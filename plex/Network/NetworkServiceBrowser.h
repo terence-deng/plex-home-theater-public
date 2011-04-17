@@ -80,6 +80,15 @@ class NetworkServiceBrowser : public NetworkServiceBase
     BOOST_FOREACH(udp_socket_ptr socket, m_sockets)
       socket->close();
     
+    // Create the new multicast receiver and bind to the designated port for received broadcast updates.
+    if (m_multicastSocket)
+      m_multicastSocket->close();
+    
+    m_multicastSocket = udp_socket_ptr(new boost::asio::ip::udp::socket(m_ioService));
+    setupMulticastListener(m_multicastSocket, "0.0.0.0", m_port+1);
+    m_multicastSocket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, m_multicastSocket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, 0));
+    
+    // Now create the browse sockets.
     m_sockets.clear();
     m_ignoredAddresses.clear();
 
@@ -93,9 +102,11 @@ class NetworkServiceBrowser : public NetworkServiceBase
       {
         dprintf("NetworkService: Browsing on interface %s.", xface.address().c_str());
         
-        // Create the new socket.
+        // Create the new socket, and bind to any port. It doesn't matter, we just need to be able to receive
+        // a UDP reply packet.
+        //
         udp_socket_ptr socket = udp_socket_ptr(new boost::asio::ip::udp::socket(m_ioService));
-        setupMulticastListener(socket, xface.address(), m_port+1, true);
+        setupMulticastListener(socket, xface.address(), 0, true);
         m_sockets.push_back(socket);
         
         // Wait for data.
@@ -317,6 +328,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
   
   unsigned short                   m_port;
   vector<udp_socket_ptr>           m_sockets;
+  udp_socket_ptr                   m_multicastSocket;
   std::set<std::string>            m_ignoredAddresses;
   boost::mutex                     m_mutex;
   boost::asio::deadline_timer      m_timer;
