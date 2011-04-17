@@ -1,7 +1,7 @@
-#!/usr/bin/python2.5
+#!/usr/bin/env python
 import os, sys, re
 
-version = os.popen4("/opt/local/bin/git rev-parse HEAD")[1].read().strip()
+version = os.popen4("git rev-parse HEAD")[1].read().strip()
 git_rev = version[0:7]
 info = os.environ['BUILT_PRODUCTS_DIR']+"/"+os.environ['WRAPPER_NAME']+"/Contents/Info.plist"
 

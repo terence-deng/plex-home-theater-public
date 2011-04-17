@@ -614,6 +614,16 @@ void CUtil::GetQualifiedFilename(const CStdString &strBasePath, CStdString &strF
   //Make sure you have a full path in the filename, otherwise adds the base path before.
   CURL plItemUrl(strFilename);
   CURL plBaseUrl(strBasePath);
+  
+  if (!plItemUrl.GetProtocol().length())
+  {
+    strFilename = plBaseUrl.GetUrlWithoutOptions() + strFilename;
+    return;
+  }
+  
+  strFilename = plItemUrl.GetUrlWithoutOptions();
+  CStdString strOptions = plItemUrl.GetOptions();
+  
   int iDotDotLoc, iBeginCut, iEndCut;
 
   if (plBaseUrl.IsLocal()) //Base in local directory
@@ -676,6 +686,8 @@ void CUtil::GetQualifiedFilename(const CStdString &strBasePath, CStdString &strF
       strFilename.Delete(iBeginCut, iEndCut - iBeginCut);
     }
   }
+  
+  strFilename = strFilename + strOptions;
 }
 
 void CUtil::RunShortcut(const char* szShortcutPath)
@@ -1117,6 +1129,10 @@ bool CUtil::IsInternetStream(const CStdString& strFile, bool bStrictCheck /* = f
   // thumbnails on LAN, strangely enough).
   //
   if (url.GetPort() == 32400)
+    return true;
+  
+  // we won't be able to resolve a playlist stream so assume it's always remote (HTS).
+  if (strProtocol == "playlist")
     return true;
 
   if (IsOnLAN( strFile ))

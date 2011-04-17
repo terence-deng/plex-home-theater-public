@@ -21,23 +21,21 @@
  *
  */
 
-#include "DVDInputStream.h"
+#include "DVDInputStreamFile.h"
+#include "Key.h"
 
-class CDVDInputStreamFile : public CDVDInputStream
+class CDVDInputStreamPlaylist : public CDVDInputStreamFile
 {
 public:
-  CDVDInputStreamFile(DVDStreamType streamType = DVDSTREAM_TYPE_FILE);
-  virtual ~CDVDInputStreamFile();
-  virtual bool Open(const char* strFile, const std::string &content);
-  virtual void Close();
-  virtual int Read(BYTE* buf, int buf_size);
-  virtual __int64 Seek(__int64 offset, int whence);
-  virtual bool Pause(double dTime) { return false; };
+  CDVDInputStreamPlaylist(DVDStreamType streamType = DVDSTREAM_TYPE_PLAYLIST);
+  virtual ~CDVDInputStreamPlaylist();
+  bool OnAction(const CAction &action);
   virtual bool IsEOF();
-  virtual __int64 GetLength();
-  virtual BitstreamStats GetBitstreamStats() const ;
-  virtual int GetBlockSize();
-protected:
-  XFILE::CFile* m_pFile;
-  bool m_eof;
+  virtual bool NextStream() { return true; }
+  virtual void Abort();
+  virtual unsigned int GetTime();
+  virtual unsigned int GetTotalTime();
+  virtual unsigned int StartTime();
+  virtual bool SeekTime(__int64 millis);
 };
+

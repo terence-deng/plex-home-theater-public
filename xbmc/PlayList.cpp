@@ -48,6 +48,12 @@ CPlayList::~CPlayList(void)
 
 void CPlayList::Add(const CFileItemPtr &item, int iPosition, int iOrder)
 {
+  if (!CanAdd())
+  {
+    CLog::Log(LOGDEBUG,"CPlayList::Add - CFileItemPtr - Can't add to playlist. [iPosition=%d][iOrder=%d]",iPosition,iOrder);
+    return;
+  }
+  
   int iOldSize = size();
   if (iPosition < 0 || iPosition >= iOldSize)
     iPosition = iOldSize;
@@ -82,17 +88,35 @@ void CPlayList::Add(const CFileItemPtr &item, int iPosition, int iOrder)
 
 void CPlayList::Add(const CFileItemPtr &item)
 {
+  if (!CanAdd())
+  {
+    CLog::Log(LOGDEBUG,"CPlayList::Add - CFileItemPtr - Can't add to playlist");
+    return;
+  }
+  
   Add(item, -1, -1);
 }
 
 void CPlayList::Add(CPlayList& playlist)
 {
+  if (!CanAdd())
+  {
+    CLog::Log(LOGDEBUG,"CPlayList::Add - CPlayList - Can't add to playlist");
+    return;
+  }
+  
   for (int i = 0; i < (int)playlist.size(); i++)
     Add(playlist[i], -1, -1);
 }
 
 void CPlayList::Add(CFileItemList& items)
 {
+  if (!CanAdd())
+  {
+    CLog::Log(LOGDEBUG,"CPlayList::Add - CFileItemList - Can't add to playlist");
+    return;
+  }
+  
   for (int i = 0; i < (int)items.Size(); i++)
     Add(items[i]);
 }
@@ -448,4 +472,9 @@ const CStdString& CPlayList::ResolveURL(const CFileItemPtr &item ) const
     return item->GetMusicInfoTag()->GetURL();
   else
     return item->m_strPath;
+}
+
+bool CPlayList::CanAdd()
+{
+  return true;
 }

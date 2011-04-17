@@ -21,6 +21,7 @@
  */
 
 #include "StdString.h"
+#include <map>
 
 #ifdef _WIN32
 #undef SetPort // WIN32INCLUDES this is defined as SetPortA in WinSpool.h which is being included _somewhere_
@@ -57,8 +58,10 @@ public:
   const CStdString& GetFileType() const;
   const CStdString& GetShareName() const;
   const CStdString& GetOptions() const;
+  const std::map<CStdString, CStdString> GetOptionsAsMap() const;
   const CStdString& GetProtocolOptions() const;
   const CStdString GetFileNameWithoutPath() const; /* return the filename excluding path */
+  const CStdString& GetUrlWithoutOptions() const;
 
   char GetDirectorySeparator() const;
 
@@ -80,4 +83,5 @@ protected:
   CStdString m_strFileType;
   CStdString m_strOptions;
   CStdString m_strProtocolOptions;
+  CStdString m_strWithoutOptions;
 };

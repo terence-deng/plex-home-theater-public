@@ -38,6 +38,9 @@ public:
   void Add(CPlayList& playlist);
   void Add(const CFileItemPtr &pItem);
   void Add(CFileItemList& items);
+    
+  virtual bool CanAdd();
+    
 
   // for Party Mode
   void Insert(CPlayList& playlist, int iPosition = -1);

@@ -23,6 +23,7 @@
 
 namespace PLAYLIST
 {
+
 class CPlayListM3U :
       public CPlayList
 {
@@ -31,5 +32,34 @@ public:
   virtual ~CPlayListM3U(void);
   virtual bool Load(const CStdString& strFileName);
   virtual void Save(const CStdString& strFileName) const;
+
+  virtual int64_t GetOverallLength();
+
+  virtual bool CanAdd();
+
+private:
+
+  bool LoadM3uFile(const CStdString& strFileName, unsigned int level);
+  void Reset();
+
+  bool ParseFirstLine(const CStdString& strLine, int lineCounter, bool& hasEXTM3U);
+  bool ParseEXTINF(const CStdString& strLine, CStdString& strInfo, long& lDuration);
+  bool ParseEXTXTARGETDURATION(const CStdString& strLine, CStdString& targetDurationTag, bool hasEXTM3U);
+  bool ParseEXTXMEDIASEQUENCE(const CStdString& strLine, long& playlistSequenceNo, bool hasEXTM3U);
+  bool ParseEXTXSTREAMINF(const CStdString& strLine,CStdString& bandwidth,CStdString& programId,CStdString& codecs,bool& nextUrlIsPlaylist, bool hasEXTM3U);
+  bool ParseEXTXKEY(const CStdString& strLine, CStdString& encryptMethod, CStdString& encryptKeyUri, CStdString& encryptIv, bool hasEXTM3U);
+
+  bool isEncryptionMethodValid(const CStdString& encryptionMethod);
+  void AccumulatePlaylistOverallDuration(int64_t duration);
+
+  void RemoveQuotationMark(CStdString& text);
+
+  bool m_isM3U8;
+  unsigned int m_levels;
+
+  bool m_endListTagWasRead;
+
+  int64_t m_overallLength;
 };
+
 }

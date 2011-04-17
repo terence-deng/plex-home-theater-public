@@ -288,6 +288,11 @@
 
 #define ACTION_PLAYER_PLAYPAUSE       227 // Play/pause. If playing it pauses, if paused it plays.
 
+// Playlist input streams
+#define ACTION_RESET_DEMUXER          312
+#define ACTION_SYNC_AV                313
+#define ACTION_SET_VIDEO_TIME         314
+
 // Window ID defines to make the code a bit more readable
 #define WINDOW_INVALID                     9999
 #define WINDOW_HOME                       10000
