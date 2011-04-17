@@ -672,7 +672,7 @@ void CGUISettings::Initialize()
   AddString(NULL,"services.esport",            792, "9777", EDIT_CONTROL_NUMBER_INPUT, false, 792);
   AddInt(NULL,   "services.esportrange",       793, 10, 1, 1, 100, SPIN_CONTROL_INT);
   AddInt(NULL,   "services.esmaxclients",      797, 20, 1, 1, 100, SPIN_CONTROL_INT);
-  AddBool(srv,  "services.esallinterfaces",   794, false);
+  AddBool(srv,  "services.esallinterfaces",   794, true);
   AddInt(NULL,   "services.esinitialdelay",    795, 750, 5, 5, 10000, SPIN_CONTROL_INT);
   AddInt(NULL,   "services.escontinuousdelay", 796, 25, 5, 5, 10000, SPIN_CONTROL_INT);
 #endif
