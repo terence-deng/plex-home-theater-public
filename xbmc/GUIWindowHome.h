@@ -21,7 +21,16 @@
  *
  */
 
+#include <map>
+#include <string>
+
 #include "GUIWindow.h"
+#include "GUIWindowPlexSearch.h"
+
+// List IDs.
+#define CONTENT_LIST_RECENTLY_ADDED    11000
+#define CONTENT_LIST_ON_DECK           11001
+#define CONTENT_LIST_RECENTLY_ACCESSED 11002
 
 class CGUIWindowHome :
       public CGUIWindow
@@ -35,6 +44,12 @@ private:
   virtual bool OnMessage(CGUIMessage& message);
   virtual bool OnPopupMenu();
   virtual bool CheckTimer(const CStdString& strExisting, const CStdString& strNew, int title, int line1, int line2);
+  virtual void UpdateContentForSelectedItem(int itemID);
 
   int m_lastSelectedItem;
+  int m_lastSelectedID;
+  
+  std::map<int, std::string> m_idToSectionUrlMap;
+  std::map<int, int>         m_idToSectionTypeMap;
+  std::map<int, Group>       m_contentLists;
 };
