@@ -457,12 +457,6 @@ class PlexMediaNode
        pItem->SetLabel2(label2);
        pItem->SetLabelPreformated(true);
      }
-     label2 = el.Attribute("infoLabel");
-     if (label2 && strlen(label2) > 0)
-     {
-       pItem->SetLabel2(label2);
-       pItem->SetLabelPreformated(true);
-     }
 
      // The type of the media.
      if (el.Attribute("type"))
