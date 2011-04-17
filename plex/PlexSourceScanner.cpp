@@ -165,8 +165,7 @@ void CPlexSourceScanner::MergeSource(VECSOURCES& sources, VECSOURCES& remoteSour
     bool bIsSourceName = true;
     if (CUtil::GetMatchingSource(source.strName, sources, bIsSourceName) < 0)
     {
-      #pragma warning fix this
-      //source.m_autoDetected = true;
+      source.m_autoDetected = true;
       sources.push_back(source);
     }
   }
