@@ -21,6 +21,100 @@ public:
   CPlaylistData(PLAYLIST::CPlayList* playList);
   virtual ~CPlaylistData();
   
+  inline bool IsLoaded() const
+  { 
+    return m_playlistLastPos >= 0;
+  }
+  
+  inline bool IsFinished() const
+  {
+    return !HasPendingSegments() && !m_playList->CanAdd();
+  }
+  
+  inline bool HasPendingSegments() const
+  {
+    return m_playlistLastPos < m_playList->size() - 1;
+  }
+  
+  inline bool IsEmpty() const
+  {
+    return m_playList->size() <= 0;
+  }
+  
+  inline bool Load()
+  { 
+    if (IsFinished())
+      return false;
+    
+    if (!m_playList->Load(m_playlistPath))
+      return false;
+  
+    m_playlistLastPos = 0;
+    
+    if (Size())
+    {
+      m_targetDuration = atoi(FirstItem()->GetProperty("m3u8-targetDurationInSec").c_str());
+      m_startDate = atoi(FirstItem()->GetProperty("m3u8-startDate").c_str());
+    }
+    
+    return true;
+  }
+  
+  inline bool SetPosition(unsigned int sequenceNo)
+  {
+    if (sequenceNo > LastSequenceNo())
+      return false;
+    
+    m_playlistLastPos = 0;
+    
+    unsigned long currentSequenceNo = 0;
+    while (m_playlistLastPos < Size())
+    {
+      currentSequenceNo = CurrentItem()->GetPropertyULong("m3u8-playlistSequenceNo");
+      if (currentSequenceNo >= sequenceNo)
+        return true;
+
+      m_playlistLastPos++;
+    }
+    
+    return false;
+  }
+  
+  unsigned int FirstSequenceNo() const
+  {
+    return FirstItem() ? FirstItem()->GetPropertyULong("m3u8-playlistSequenceNo") : 0;
+  }
+  
+  unsigned int LastSequenceNo() const
+  {
+    return LastItem() ? LastItem()->GetPropertyULong("m3u8-playlistSequenceNo") : 0;
+  }
+  
+  unsigned int CurrentSequenceNo() const
+  {
+    return CurrentItem() ? CurrentItem()->GetPropertyULong("m3u8-playlistSequenceNo") : 0;    
+  }
+  
+  CFileItemPtr FirstItem() const
+  {
+    return Size() ? (*m_playList)[0] : CFileItemPtr();
+  }
+  
+  CFileItemPtr LastItem() const
+  {
+    return Size() ? (*m_playList)[Size() - 1] : CFileItemPtr();
+  }
+  
+  CFileItemPtr CurrentItem() const
+  {
+    return m_playlistLastPos < Size() && m_playlistLastPos >= 0 ? (*m_playList)[m_playlistLastPos] :  CFileItemPtr();
+  }
+  
+  int Size() const
+  {
+    return (int)m_playList->size();
+  }
+  
   int m_playlistBandwidth;
   int m_playlistLastPos;
   int m_targetDuration;
