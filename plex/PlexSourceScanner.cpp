@@ -29,11 +29,11 @@ void CPlexSourceScanner::Process()
 {
   CStdString path;
   
-  CLog::Log(LOGNOTICE, "Plex Source Scanner starting...(%s)", m_host.c_str());
+  CLog::Log(LOGNOTICE, "Plex Source Scanner starting...(%s) (uuid: %s)", m_host.c_str(), m_uuid.c_str());
   
   { // Make sure any existing entry is removed.
     CSingleLock lock(g_lock);
-    g_hostSourcesMap.erase(m_host);
+    g_hostSourcesMap.erase(m_uuid);
     g_activeScannerCount++;
   }
   
@@ -85,7 +85,7 @@ void CPlexSourceScanner::Process()
     
     { // Add the entry to the map.
       CSingleLock lock(g_lock);
-      g_hostSourcesMap[m_host] = sources;
+      g_hostSourcesMap[m_uuid] = sources;
     }
     
     // Notify the UI.
@@ -105,20 +105,20 @@ void CPlexSourceScanner::Process()
   CLog::Log(LOGNOTICE, "Plex Source Scanner finished for host %s (%d left)", m_host.c_str(), g_activeScannerCount);
 }
 
-void CPlexSourceScanner::ScanHost(const std::string& host, const std::string& hostLabel, const std::string& url)
+void CPlexSourceScanner::ScanHost(const std::string& uuid, const std::string& host, const std::string& hostLabel, const std::string& url)
 {
-  new CPlexSourceScanner(host, hostLabel, url);
+  new CPlexSourceScanner(uuid, host, hostLabel, url);
 }
 
-void CPlexSourceScanner::RemoveHost(const std::string& host)
+void CPlexSourceScanner::RemoveHost(const std::string& uuid)
 {
   { // Remove the entry from the map in case it was remote.
     CSingleLock lock(g_lock);
-    g_hostSourcesMap.erase(host);
+    g_hostSourcesMap.erase(uuid);
   }
   
   // Notify the UI.
-  CLog::Log(LOGNOTICE, "Notifying remote remove host on %s", host.c_str());
+  CLog::Log(LOGNOTICE, "Notifying remote remove host on %s", uuid.c_str());
   CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE_REMOTE_SOURCES);
   g_windowManager.SendThreadMessage(msg);
   
@@ -165,8 +165,7 @@ void CPlexSourceScanner::MergeSource(VECSOURCES& sources, VECSOURCES& remoteSour
     bool bIsSourceName = true;
     if (CUtil::GetMatchingSource(source.strName, sources, bIsSourceName) < 0)
     {
-      #pragma warning fix this
-      //source.m_autoDetected = true;
+      source.m_autoDetected = true;
       sources.push_back(source);
     }
   }

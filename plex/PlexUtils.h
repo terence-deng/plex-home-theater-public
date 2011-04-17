@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+
+std::string GetHostName();
+
 #ifdef _WIN32
 
 #include <string>

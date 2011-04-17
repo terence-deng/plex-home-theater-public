@@ -40,7 +40,8 @@ public:
   void AddToDatabase(int iItem);
   virtual void OnInfo(const CFileItemPtr& pItem, const ADDON::ScraperPtr& scraper);
   virtual void OnStreamDetails(const CStreamDetails &details, const CStdString &strFileName, long lFileId);
-  static void MarkWatched(const CFileItemPtr &pItem, bool bMark);
+  static void MarkUnWatched(const CFileItemPtr &pItem);
+  static void MarkWatched(const CFileItemPtr &pItem);
   static void UpdateVideoTitle(const CFileItem* pItem);
 
   /*! \brief Show the resume menu for this item (if it has a resume bookmark)

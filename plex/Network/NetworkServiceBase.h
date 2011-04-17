@@ -5,7 +5,7 @@
 #include "Network/NetworkInterface.h"
 #include "Network/NetworkService.h"
 
-typedef boost::shared_ptr<ip::udp::socket> udp_socket_ptr;
+typedef boost::shared_ptr<boost::asio::ip::udp::socket> udp_socket_ptr;
 typedef pair<string, udp_socket_ptr> address_socket_pair;
 
 class NetworkServiceBase
@@ -19,40 +19,48 @@ class NetworkServiceBase
     , m_firstChange(true)
   {
     // Register for network changes.
+    dprintf("%p: Creating new Network Service and registering for notifications.", this);
     NetworkInterface::RegisterObserver(boost::bind(&NetworkServiceBase::onNetworkChanged, this, _1));
   }
 
+  /// Utility to set up a listener.
+  void setupListener(const udp_socket_ptr& socket, const string& bindAddress, unsigned short port)
+  {
+    boost::asio::ip::udp::endpoint listenEndpoint(boost::asio::ip::address::from_string(bindAddress), port);
+    socket->open(listenEndpoint.protocol());
+    
+    // Bind.
+    try { socket->bind(listenEndpoint); }
+    catch (std::exception& ex) { eprintf("NetworkService: Couldn't bind to port %d: %s", port, ex.what()); }
+    
+    // Reuse.
+    try { socket->set_option(boost::asio::ip::udp::socket::reuse_address(true)); }
+    catch (std::exception& ex) { eprintf("NetworkService: Couldn't reuse address: %s", ex.what()); }    
+  }
+  
   /// Utility to set up a multicast listener/broadcaster for a single interface.
   void setupMulticastListener(const udp_socket_ptr& socket, const string& bindAddress, unsigned short port, bool outboundInterface = false)
   {
     // Create the server socket.
-    ip::udp::endpoint listenEndpoint(ip::address::from_string(bindAddress), port);
-    socket->open(listenEndpoint.protocol());
+    dprintf("NetworkService: Setting up multicast listener on %s:%d (outbound: %d)", bindAddress.c_str(), port, outboundInterface);
     
-#ifdef _WIN32
     // Bind.
-    try { socket->bind(listenEndpoint); }
-    catch (std::exception& ex) { eprintf("NetworkService: Couldn't bind to port %d: %s", port, ex.what()); }
-#endif
-    
-    // Reuse.
-    try { socket->set_option(ip::udp::socket::reuse_address(true)); }
-    catch (std::exception& ex) { eprintf("NetworkService: Couldn't reuse address: %s", ex.what()); }
+    setupListener(socket, bindAddress, port);
     
     // Enable loopback.
-    socket->set_option(ip::multicast::enable_loopback(true));
+    socket->set_option(boost::asio::ip::multicast::enable_loopback(true));
     
     // Join the multicast group after leaving it (just in case).
-    try { socket->set_option(ip::multicast::leave_group(NS_BROADCAST_ADDR)); } 
+    try { socket->set_option(boost::asio::ip::multicast::leave_group(NS_BROADCAST_ADDR)); } 
     catch (std::exception& ex) { }
-    try { socket->set_option(ip::multicast::join_group(NS_BROADCAST_ADDR)); }
+    try { socket->set_option(boost::asio::ip::multicast::join_group(NS_BROADCAST_ADDR)); }
     catch (std::exception& ex) { eprintf("NetworkService: Couldn't join multicast group: %s", ex.what()); }
     
     if (outboundInterface)
     {
       // Send out multicast packets on the specified interface.
-      ip::address_v4 localInterface = ip::address_v4::from_string(bindAddress);
-      ip::multicast::outbound_interface option(localInterface);
+      boost::asio::ip::address_v4 localInterface = boost::asio::ip::address_v4::from_string(bindAddress);
+      boost::asio::ip::multicast::outbound_interface option(localInterface);
       try { socket->set_option(option); }
       catch (std::exception& ex) { eprintf("NetworkService: Unable to set option on socket."); }
     }
@@ -62,13 +70,18 @@ class NetworkServiceBase
   virtual void handleNetworkChange(const vector<NetworkInterface>& interfaces) = 0;
 
   boost::asio::io_service& m_ioService;
-  deadline_timer m_timer;
+  boost::mutex m_mutex;
+  boost::asio::deadline_timer m_timer;
   bool m_firstChange;
 
  private:
 
   void onNetworkChanged(const vector<NetworkInterface>& interfaces)
   {
+    boost::mutex::scoped_lock lk(m_mutex);
+    
+    dprintf("%p: NetworkService got notification of changed network (first change: %d)", this, m_firstChange);
+    
     if (m_firstChange)
     {
       // Dispatch the notification in an ASIO thread's context.

@@ -1,5 +1,19 @@
-#include <string>
+#include <boost/algorithm/string.hpp>
+
 #include "PlexUtils.h"
+
+using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////
+string GetHostName() 
+{
+  char hostname[256];
+  gethostname(hostname, 256);
+  string friendlyName = hostname;
+  boost::replace_last(friendlyName, ".local", "");
+  
+  return friendlyName;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef _WIN32

@@ -895,6 +895,7 @@
 		74D7F389133F8A2F00DCE15F /* libmicrohttpd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */; };
 		74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D8D37A1311A2DD00DBDBC8 /* sha.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */; };
+		E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E31A8E011357B44800EEB013 /* PlexUtils.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1294,6 +1295,7 @@
 		C85EB761117461830008E5A5 /* GUIViewStateAddonBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIViewStateAddonBrowser.h; sourceTree = "<group>"; };
 		E306D12C0DDF7B590052C2AD /* PlexHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlexHelper.cpp; sourceTree = "<group>"; };
 		E306D12D0DDF7B590052C2AD /* PlexHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlexHelper.h; sourceTree = "<group>"; };
+		E31A8E011357B44800EEB013 /* PlexUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexUtils.cpp; path = plex/PlexUtils.cpp; sourceTree = "<group>"; };
 		E33206370D5070AA00435CE3 /* DVDDemuxVobsub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDDemuxVobsub.cpp; sourceTree = "<group>"; };
 		E33466A50D2E5103005A65EC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E33979940D62FD47004ECDDA /* DVDInputStreamTV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDInputStreamTV.cpp; sourceTree = "<group>"; };
@@ -2989,6 +2991,7 @@
 		746469DE12E827B500B2FF1E /* plex */ = {
 			isa = PBXGroup;
 			children = (
+				E31A8E011357B44800EEB013 /* PlexUtils.cpp */,
 				74A4E98E12F7FFB40021FEDB /* AddOns */,
 				7482B37812E8E3510077A38C /* CocoaUtils.h */,
 				7482B37912E8E3510077A38C /* CocoaUtils.m */,
@@ -6025,6 +6028,7 @@
 				74865EE112FBF59700D8F899 /* Frameworks */,
 				748667A512FC04D800D8F899 /* Copy Root Files */,
 				748667B212FC05DE00D8F899 /* Copy Libraries */,
+				E31A8DE51356DFAF00EEB013 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -6099,6 +6103,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "LIB_REGEX=\"$SRCROOT/vendor/homebrew.git\\|/usr/X11\"\n\n# start clean so we don't keep old dylibs\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/\"\nrm -f \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/*\"\n\n\n# Copy all of Plex's dynamic dependencies and rename their locations to inside the Framework\necho \"Processing dependencies for Plex binary\"\nfor a in $(otool -L \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/Plex\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do \n\techo \"    Copying dependency $a\"\n\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\tinstall_name_tool -change \"$a\" @executable_path/../Frameworks/$(basename $a) \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/Plex\"\ndone\n\nREWIND=\"1\"\n# Copy all the *osx.so dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/system -name \"*.so\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/system/$(basename $b)\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the addon/*.so dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/addons -name \"*.so\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$b\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the addon/*.xbs dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/addons -name \"*.xbs\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$b\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/\"*dylib ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $b)\"\n\t\tdone \n\tdone\ndone\n";
+		};
+		E31A8DE51356DFAF00EEB013 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./build-number.py";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -6942,6 +6959,7 @@
 				7485ADBF1359DC2700E663B5 /* FilePlaylist.cpp in Sources */,
 				7485ADC21359E1E700E663B5 /* DVDInputStreamPlaylist.cpp in Sources */,
 				7485ADC51359EB8500E663B5 /* Base64.cpp in Sources */,
+				E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6992,6 +7010,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				APPLICATION_VERSION = 0.9.5.0;
 				ARCHS = i386;
 				COPY_PHASE_STRIP = NO;
 				GCC_AUTO_VECTORIZATION = YES;
@@ -7122,6 +7141,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				APPLICATION_VERSION = 0.9.5.0;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_AUTO_VECTORIZATION = YES;

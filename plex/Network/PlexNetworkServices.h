@@ -9,8 +9,10 @@
 
 #define BOOST_ASIO_DISABLE_IOCP 1; // IOCP reactor reads failed using boost 1.44.
 
+#include "Plex/PlexUtils.h"
 #include "Network/NetworkServiceBrowser.h"
 #include "PlexSourceScanner.h"
+#include "PlexNetworkServiceAdvertiser.h"
 
 class PlexServiceListener;
 typedef boost::shared_ptr < PlexServiceListener > PlexServiceListenerPtr;
@@ -22,7 +24,7 @@ typedef boost::shared_ptr < boost::thread > ThreadPtr;
 class PlexNetworkServiceBrowser : public NetworkServiceBrowser
 {
 public:
-  PlexNetworkServiceBrowser(io_service& ioService, unsigned short port, int refreshTime=NS_BROWSE_REFRESH_INTERVAL)
+  PlexNetworkServiceBrowser(boost::asio::io_service& ioService, unsigned short port, int refreshTime=NS_BROWSE_REFRESH_INTERVAL)
     : NetworkServiceBrowser(ioService, port, refreshTime)
   {
   }
@@ -40,14 +42,14 @@ public:
     
     // Scan the host.
     dprintf("NetworkServiceBrowser: SERVICE arrived: %s", service->address().to_string().c_str());
-    CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
+    CPlexSourceScanner::ScanHost(service->getResourceIdentifier(), service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
   
   /// Notify of a service going away.
   virtual void handleServiceDeparture(NetworkServicePtr& service) 
   {
     dprintf("NetworkServiceBrowser: SERVICE departed after not being seen for %f seconds: %s", service->timeSinceLastSeen(), service->address().to_string().c_str());
-    CPlexSourceScanner::RemoveHost(service->address().to_string());
+    CPlexSourceScanner::RemoveHost(service->getResourceIdentifier());
   }
   
   /// Notify of a service update.
@@ -55,7 +57,7 @@ public:
   {
     // Scan the host.
     dprintf("NetworkServiceBrowser: SERVICE updated: %s", service->address().to_string().c_str());
-    CPlexSourceScanner::ScanHost(service->address().to_string(), service->getParam("Name"), service->getUrl());
+    CPlexSourceScanner::ScanHost(service->getResourceIdentifier(), service->address().to_string(), service->getParam("Name"), service->getUrl());
   }
 };
 
@@ -90,21 +92,23 @@ public:
   {
     m_ioService.stop();
     if (m_ptrThread)
-	{
-		m_ptrThread->join();
-        m_ptrThread.reset();
-	}
+	  {
+		  m_ptrThread->join();
+      m_ptrThread.reset();
+	  }
   }
 
 private:
   PlexServiceListener()
   : m_pmsBrowser(m_ioService, NS_PLEX_MEDIA_SERVER_PORT) 
+  , m_plexAdvertiser(m_ioService)
   {
     start();
   }
 
-  boost::asio::io_service     m_ioService;
-  PlexNetworkServiceBrowser   m_pmsBrowser;
-  ThreadPtr                   m_ptrThread;
+  boost::asio::io_service      m_ioService;
+  PlexNetworkServiceBrowser    m_pmsBrowser;
+  PlexNetworkServiceAdvertiser m_plexAdvertiser;
+  ThreadPtr                    m_ptrThread;
 };
 

@@ -66,6 +66,8 @@
 #include "addons/Skin.h"
 #include "MediaManager.h"
 
+#include "PlexMediaServerQueue.h"
+
 using namespace std;
 using namespace XFILE;
 using namespace PLAYLIST;
@@ -838,45 +840,10 @@ void CGUIWindowVideoBase::AddItemToPlayList(const CFileItemPtr &pItem, CFileItem
 
 int  CGUIWindowVideoBase::GetResumeItemOffset(const CFileItem *item)
 {
-  // do not resume livetv
-  if (item->IsLiveTV())
-    return 0;
-
-  m_database.Open();
-  long startoffset = 0;
-
-  if (item->IsStack() && (!g_guiSettings.GetBool("myvideos.treatstackasfile") ||
-                          CFileItem(CStackDirectory::GetFirstStackedFile(item->m_strPath),false).IsDVDImage()) )
-  {
-
-    CStdStringArray movies;
-    GetStackedFiles(item->m_strPath, movies);
-
-    /* check if any of the stacked files have a resume bookmark */
-    for (unsigned i = 0; i<movies.size();i++)
-    {
-      CBookmark bookmark;
-      if (m_database.GetResumeBookMark(movies[i], bookmark))
-      {
-        startoffset = (long)(bookmark.timeInSeconds*75);
-        startoffset += 0x10000000 * (i+1); /* store file number in here */
-        break;
-      }
-    }
-  }
-  else if (!item->IsNFO() && !item->IsPlayList())
-  {
-    CBookmark bookmark;
-    CStdString strPath = item->m_strPath;
-    if (item->IsVideoDb() && item->HasVideoInfoTag())
-      strPath = item->GetVideoInfoTag()->m_strFileNameAndPath;
-
-    if (m_database.GetResumeBookMark(strPath, bookmark))
-      startoffset = (long)(bookmark.timeInSeconds*75);
-  }
-  m_database.Close();
-
-  return startoffset;
+  if (item->HasProperty("viewOffset"))
+    return boost::lexical_cast<int>(item->GetProperty("viewOffset")) * 75 / 1000;
+  
+  return 0;
 }
 
 bool CGUIWindowVideoBase::OnClick(int iItem)
@@ -1001,17 +968,14 @@ void CGUIWindowVideoBase::OnRestartItem(int iItem)
 CStdString CGUIWindowVideoBase::GetResumeString(CFileItem item) 
 {
   CStdString resumeString;
-  CVideoDatabase db;
-  if (db.Open())
-  {
-    CBookmark bookmark;
-    CStdString itemPath(item.m_strPath);
-    if (item.IsVideoDb())
-      itemPath = item.GetVideoInfoTag()->m_strFileNameAndPath;
-    if (db.GetResumeBookMark(itemPath, bookmark) )
-      resumeString.Format(g_localizeStrings.Get(12022).c_str(), StringUtils::SecondsToTimeString(lrint(bookmark.timeInSeconds)).c_str());
-    db.Close();
+  
+  // See if we have a view offset.
+  if (item.HasProperty("viewOffset"))
+  { 
+    float seconds = boost::lexical_cast<int>(item.GetProperty("viewOffset")) / 1000.0f;
+    resumeString.Format(g_localizeStrings.Get(12022).c_str(), StringUtils::SecondsToTimeString(lrint(seconds)).c_str());
   }
+
   return resumeString;
 }
 
@@ -1143,11 +1107,8 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
 
 void CGUIWindowVideoBase::GetNonContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (!m_vecItems->m_strPath.IsEmpty())
-    buttons.Add(CONTEXT_BUTTON_GOTO_ROOT, 20128);
   if (g_playlistPlayer.GetPlaylist(PLAYLIST_VIDEO).size() > 0)
     buttons.Add(CONTEXT_BUTTON_NOW_PLAYING, 13350);
-  buttons.Add(CONTEXT_BUTTON_SETTINGS, 5);
 }
 
 bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
@@ -1293,21 +1254,6 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
   case CONTEXT_BUTTON_RENAME:
     OnRenameItem(itemNumber);
     return true;
-  case CONTEXT_BUTTON_MARK_WATCHED:
-    {
-      int newSelection = m_viewControl.GetSelectedItem() + 1;
-      MarkWatched(item,true);
-      m_viewControl.SetSelectedItem(newSelection);
-
-      CUtil::DeleteVideoDatabaseDirectoryCache();
-      Update(m_vecItems->m_strPath);
-      return true;
-    }
-  case CONTEXT_BUTTON_MARK_UNWATCHED:
-    MarkWatched(item,false);
-    CUtil::DeleteVideoDatabaseDirectoryCache();
-    Update(m_vecItems->m_strPath);
-    return true;
   default:
     break;
   }
@@ -1335,18 +1281,60 @@ void CGUIWindowVideoBase::GetStackedFiles(const CStdString &strFilePath1, vector
 
 bool CGUIWindowVideoBase::OnPlayMedia(int iItem)
 {
-  if ( iItem < 0 || iItem >= (int)m_vecItems->Size() )
+  if ( iItem < 0 || iItem >= (int)m_vecItems->Size() ) 
     return false;
-
+  
   CFileItemPtr pItem = m_vecItems->Get(iItem);
-
-  // party mode
-  if (g_partyModeManager.IsEnabled(PARTYMODECONTEXT_VIDEO))
+  
+  // If there is more than one media item, allow picking which one.
+  if (pItem->m_mediaItems.size() > 1 && g_guiSettings.GetBool("videoplayer.alternatemedia") == true)
   {
-    CPlayList playlistTemp;
-    playlistTemp.Add(pItem);
-    g_partyModeManager.AddUserSongs(playlistTemp, true);
-    return true;
+    CFileItemList   fileItems;
+    CContextButtons choices;
+    CPlexDirectory  mediaChoices;
+    
+    for (int i=0; i < pItem->m_mediaItems.size(); i++)
+    {
+      CFileItemPtr item = pItem->m_mediaItems[i];
+      
+      CStdString label;
+      CStdString videoCodec = item->GetProperty("mediaTag-videoCodec").ToUpper();
+      CStdString videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
+      
+      if (videoCodec.size() == 0 && videoRes.size() == 0)
+      {
+        label = "Unknown";
+      }
+      else
+      {
+        if (isnumber(videoRes[0]))
+          videoRes += "p";
+      
+        label += videoRes;
+        label += " " + videoCodec;
+      }
+      
+      choices.Add(i, label);
+    }
+    
+    int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
+    if (choice > 0)
+    {
+      // Steal the resume offset and mode.
+      long offset = pItem->m_lStartOffset;
+      CStdString resumeTime = pItem->GetProperty("viewOffset");
+      
+      // Copy over the selected item.
+      pItem = pItem->m_mediaItems[choice-1];
+      
+      // Store what we need to resume.
+      pItem->m_lStartOffset = offset;
+      pItem->SetProperty("viewOffset", resumeTime);
+    }
+    else
+    {
+      return false;
+    }
   }
 
   // Reset Playlistplayer, playback started now does
@@ -1355,12 +1343,6 @@ bool CGUIWindowVideoBase::OnPlayMedia(int iItem)
   g_playlistPlayer.SetCurrentPlaylist(PLAYLIST_NONE);
 
   CFileItem item(*pItem);
-  if (pItem->IsVideoDb())
-  {
-    item.m_strPath = pItem->GetVideoInfoTag()->m_strFileNameAndPath;
-    item.SetProperty("original_listitem_url", pItem->m_strPath);
-  }
-
   PlayMovie(&item);
 
   return true;
@@ -1484,61 +1466,41 @@ void CGUIWindowVideoBase::OnDeleteItem(CFileItemPtr item)
   CFileUtils::DeleteItem(item);
 }
 
-void CGUIWindowVideoBase::MarkWatched(const CFileItemPtr &item, bool bMark)
+void CGUIWindowVideoBase::MarkUnWatched(const CFileItemPtr &item)
 {
-#pragma warning port plex functionality
-  if (!g_settings.GetCurrentProfile().canWriteDatabases())
-    return;
-  // dont allow update while scanning
-  CGUIDialogVideoScan* pDialogScan = (CGUIDialogVideoScan*)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_SCAN);
-  if (pDialogScan && pDialogScan->IsScanning())
+  PlexMediaServerQueue::Get().onUnviewed(item);
+  
+  item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED);
+  if (item->GetVideoInfoTag())
+    item->GetVideoInfoTag()->m_playCount = 0;
+  
+  // Fix numbers.
+  if (item->HasProperty("watchedepisodes"))
   {
-    CGUIDialogOK::ShowAndGetInput(257, 0, 14057, 0);
-    return;
-  }
-
-  CVideoDatabase database;
-  if (database.Open())
-  {
-    CFileItemList items;
-    if (item->m_bIsFolder)
-    {
-      CStdString strPath = item->m_strPath;
-      if (g_windowManager.GetActiveWindow() == WINDOW_VIDEO_FILES)
-      {
-        CDirectory::GetDirectory(strPath, items);
-      }
-      else
-      {
-        CVideoDatabaseDirectory dir;
-        if (dir.GetDirectoryChildType(strPath) == NODE_TYPE_SEASONS)
-          strPath += "-1/";
-        dir.GetDirectory(strPath,items);
-      }
-    }
-    else
-      items.Add(item);
-
-    for (int i=0;i<items.Size();++i)
-    {
-      CFileItemPtr pItem=items[i];
-
-      if (pItem->IsVideoDb())
-      {
-        if (pItem->HasVideoInfoTag() &&
-            (( bMark && pItem->GetVideoInfoTag()->m_playCount) ||
-             (!bMark && !(pItem->GetVideoInfoTag()->m_playCount))))
-          continue;
-      }
-
-      // Clear resume bookmark
-      if (bMark)
-        database.ClearBookMarksOfFile(pItem->m_strPath, CBookmark::RESUME);
-
-      database.SetPlayCount(*pItem, bMark ? 1 : 0);
-    }
+    int watched = boost::lexical_cast<int>(item->GetProperty("watchedepisodes"));
+    int unwatched = boost::lexical_cast<int>(item->GetProperty("unwatchedepisodes"));
     
-    database.Close(); 
+    item->SetEpisodeData(watched+unwatched, 0);
+  }
+}
+
+//Add Mark a Title as watched
+void CGUIWindowVideoBase::MarkWatched(const CFileItemPtr &item)
+{
+  PlexMediaServerQueue::Get().onViewed(item, true);
+
+  // Change the item.
+  item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_WATCHED);
+  if (item->GetVideoInfoTag())
+    item->GetVideoInfoTag()->m_playCount++;
+  
+  // Fix numbers.
+  if (item->HasProperty("watchedepisodes"))
+  {
+    int watched = boost::lexical_cast<int>(item->GetProperty("watchedepisodes"));
+    int unwatched = boost::lexical_cast<int>(item->GetProperty("unwatchedepisodes"));
+
+    item->SetEpisodeData(watched+unwatched, watched+unwatched);
   }
 }
 

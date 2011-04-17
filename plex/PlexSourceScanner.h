@@ -38,8 +38,8 @@ public:
   
   virtual void Process();
   
-  static void ScanHost(const std::string& host, const std::string& hostLabel, const std::string& url);
-  static void RemoveHost(const std::string& host);
+  static void ScanHost(const std::string& uuid, const std::string& host, const std::string& hostLabel, const std::string& url);
+  static void RemoveHost(const std::string& uuid);
   
   static void MergeSourcesForWindow(int windowId);
   
@@ -57,8 +57,9 @@ protected:
   static void MergeSource(VECSOURCES& sources, VECSOURCES& remoteSources);
   static void CheckForRemovedSources(VECSOURCES& sources, int windowId);
   
-  CPlexSourceScanner(const std::string& host, const std::string& hostLabel, const std::string& url)
-  : m_host(host)
+  CPlexSourceScanner(const std::string& uuid, const std::string& host, const std::string& hostLabel, const std::string& url)
+  : m_uuid(uuid)
+  , m_host(host)
   , m_hostLabel(hostLabel)
   , m_url(url)
   {
@@ -69,6 +70,7 @@ protected:
   
 private:
   
+  std::string m_uuid;
   std::string m_host;
   std::string m_hostLabel;
   std::string m_url;
