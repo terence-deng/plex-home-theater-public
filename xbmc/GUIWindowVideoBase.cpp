@@ -1293,7 +1293,7 @@ bool CGUIWindowVideoBase::OnPlayMedia(int iItem)
     CContextButtons choices;
     CPlexDirectory  mediaChoices;
     
-    for (int i=0; i < pItem->m_mediaItems.size(); i++)
+    for (unsigned int i=0; i < pItem->m_mediaItems.size(); i++)
     {
       CFileItemPtr item = pItem->m_mediaItems[i];
       
