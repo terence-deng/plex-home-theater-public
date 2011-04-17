@@ -1123,6 +1123,7 @@
 		749502FA12FBF5300039DE17 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		74972166132CEC0F0074DD27 /* AddonInstaller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AddonInstaller.cpp; path = addons/AddonInstaller.cpp; sourceTree = "<group>"; };
 		74972167132CEC0F0074DD27 /* AddonInstaller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddonInstaller.h; path = addons/AddonInstaller.h; sourceTree = "<group>"; };
+		74A55E69135AECC900364EF9 /* PlexNetworkServiceAdvertiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlexNetworkServiceAdvertiser.h; sourceTree = "<group>"; };
 		74AF1A1613009F1A00923698 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTP.h; path = plex/Utility/HTTP.h; sourceTree = SOURCE_ROOT; };
 		74AF1A1713009F1A00923698 /* HTTP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HTTP.cpp; path = plex/Utility/HTTP.cpp; sourceTree = SOURCE_ROOT; };
 		74AF1A191300A29400923698 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = plex/Utility/sha.h; sourceTree = "<group>"; };
@@ -3021,6 +3022,7 @@
 				74646A1F12E82E8F00B2FF1E /* NetworkServiceBase.h */,
 				74646A2012E82E8F00B2FF1E /* NetworkServiceBrowser.h */,
 				7482B37712E8E33E0077A38C /* PlexNetworkServices.h */,
+				74A55E69135AECC900364EF9 /* PlexNetworkServiceAdvertiser.h */,
 			);
 			name = Network;
 			path = plex/Network;
