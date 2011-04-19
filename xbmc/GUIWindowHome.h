@@ -45,9 +45,13 @@ private:
   virtual bool OnPopupMenu();
   virtual bool CheckTimer(const CStdString& strExisting, const CStdString& strNew, int title, int line1, int line2);
   virtual void UpdateContentForSelectedItem(int itemID);
+  virtual void Render();
 
   int m_lastSelectedItem;
   int m_lastSelectedID;
+  
+  int m_pendingSelectID;
+  CStopWatch m_contentLoadTimer;
   
   std::map<int, std::string> m_idToSectionUrlMap;
   std::map<int, int>         m_idToSectionTypeMap;

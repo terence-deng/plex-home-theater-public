@@ -164,9 +164,12 @@ map<int, PlexContentWorkerPtr> PlexContentWorker::g_pendingWorkers;
 #define SHUTDOWN_ITEM      113
 #define SLEEP_DISPLAY_ITEM 114
 
+#define SLIDESHOW_MULTIIMAGE 10101
+
 CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
   , m_lastSelectedItem(-1)
   , m_lastSelectedID(-1)
+  , m_pendingSelectID(-1)
 {
 }
 
@@ -197,7 +200,11 @@ bool CGUIWindowHome::OnAction(const CAction &action)
       CGUIListItemPtr pItem = pControl->GetListItem(pControl->GetSelectedItem());
       int itemId = pControl->GetSelectedItemID();
       if (itemId != m_lastSelectedID)
-        UpdateContentForSelectedItem(itemId);
+      {
+        // OK, let's load it after a delay.
+        m_pendingSelectID = itemId;
+        m_contentLoadTimer.StartZero();
+      }
     }
   }
   
@@ -237,6 +244,16 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
       m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
       PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
     }
+    
+    // Send the right slideshow information over to the multiimage.
+    CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), SLIDESHOW_MULTIIMAGE);
+    msg.SetStringParam(sectionUrl + "/arts");
+    OnMessage(msg);
+    SET_CONTROL_VISIBLE(SLIDESHOW_MULTIIMAGE);
+  }
+  else
+  {
+    SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
   }
   
   // Remember what the last one was.
@@ -496,21 +513,24 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       int controlID = message.GetParam2();
 
       // Copy the items across.
-      m_contentLists[controlID].list->Copy(results);
-      
-      CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(controlID);
-      if (control && results.Size() > 0)
+      if (m_contentLists.find(controlID) != m_contentLists.end())
       {
-        // Bind the list.
-        CGUIMessage msg(GUI_MSG_LABEL_BIND, MAIN_MENU, controlID, 0, 0, m_contentLists[controlID].list.get());
-        OnMessage(msg);
+        m_contentLists[controlID].list->Copy(results);
         
-        // Make sure it's visible.
-        SET_CONTROL_VISIBLE(controlID);
-        SET_CONTROL_VISIBLE(controlID-1000);
-        
-        // Load thumbs.
-        m_contentLists[controlID].loader->Load(*m_contentLists[controlID].list.get());
+        CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(controlID);
+        if (control && results.Size() > 0)
+        {
+          // Bind the list.
+          CGUIMessage msg(GUI_MSG_LABEL_BIND, MAIN_MENU, controlID, 0, 0, m_contentLists[controlID].list.get());
+          OnMessage(msg);
+          
+          // Make sure it's visible.
+          SET_CONTROL_VISIBLE(controlID);
+          SET_CONTROL_VISIBLE(controlID-1000);
+          
+          // Load thumbs.
+          m_contentLists[controlID].loader->Load(*m_contentLists[controlID].list.get());
+        }
       }
     }
   }
@@ -518,4 +538,16 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   }
   
   return ret;
+}
+
+void CGUIWindowHome::Render()
+{
+  if (m_pendingSelectID != -1 && m_contentLoadTimer.IsRunning() && m_contentLoadTimer.GetElapsedMilliseconds() > 500)
+  {
+    UpdateContentForSelectedItem(m_pendingSelectID);
+    m_pendingSelectID = -1;
+    m_contentLoadTimer.Stop();
+  }
+  
+  CGUIWindow::Render();
 }
