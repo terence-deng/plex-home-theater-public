@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import os, sys, re
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 version = os.popen4("git rev-parse HEAD")[1].read().strip()
 git_rev = version[0:7]
