@@ -149,6 +149,20 @@ bool CGUIMultiImage::OnMessage(CGUIMessage &message)
       FreeResources();
     return true;
   }
+  else if (message.GetMessage() == GUI_MSG_LABEL_BIND)
+  {
+    if (m_currentPath != message.GetStringParam())
+    {
+      m_currentPath = message.GetStringParam();
+      m_directoryLoaded = false;
+      LoadDirectory();
+      m_imageTimer.StartZero();
+      FreeResources();
+    }
+    
+    return true;
+  }
+  
   return CGUIControl::OnMessage(message);
 }
 
