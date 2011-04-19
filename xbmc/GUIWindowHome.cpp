@@ -230,6 +230,13 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
     // Recently added.
     m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
     PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
+    
+    if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
+    {
+      // On deck.
+      m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
+      PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+    }
   }
   
   // Remember what the last one was.
@@ -372,6 +379,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       control = (CGUIBaseContainer* )GetControl(300);
     
     m_lastSelectedItem = control->GetSelectedItem();
+    
+    // Reset contents of right hand lists.
+    m_contentLists.clear();
   }
 
   bool ret = CGUIWindow::OnMessage(message);
@@ -379,6 +389,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_INIT:
+    if (m_lastSelectedID != -1)
+      UpdateContentForSelectedItem(m_lastSelectedID);
+    
   case GUI_MSG_WINDOW_RESET:
   case GUI_MSG_UPDATE_MAIN_MENU:
   {
