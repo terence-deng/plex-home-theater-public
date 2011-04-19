@@ -943,12 +943,17 @@ class PlexMediaNodeLibrary : public PlexMediaNode
 
     // Show, season.
     SetValue(el, *(TiXmlElement* )el.Parent(), videoInfo.m_strShowTitle, "grandparentTitle");
-
+    
     // Indexes.
     if (type == "episode")
     {
       SetValue(el, videoInfo.m_iEpisode, "index");
       SetValue(el, *((TiXmlElement* )el.Parent()), videoInfo.m_iSeason, "parentIndex");
+    }
+    else if (type == "season")
+    {
+      SetValue(el, *(TiXmlElement* )el.Parent(), videoInfo.m_strShowTitle, "parentTitle");
+      SetValue(el, *((TiXmlElement* )el.Parent()), videoInfo.m_iSeason, "index");
     }
     else if (type == "show")
     {
@@ -1116,6 +1121,10 @@ class PlexMediaDirectory : public PlexMediaNode
       pItem->SetProperty("album", pItem->GetLabel());
       if (el.Attribute("year"))
         pItem->SetLabel2(el.Attribute("year"));
+      
+      CStdString artist;
+      SetValue(el, *(TiXmlElement* )el.Parent(), artist, "parentTitle");
+      pItem->SetProperty("artist", artist);
     }
     else if (type == "track")
     {
