@@ -149,16 +149,29 @@ bool CGUIMultiImage::OnMessage(CGUIMessage &message)
       FreeResources();
     return true;
   }
-  else if (message.GetMessage() == GUI_MSG_LABEL_BIND)
+  else if (message.GetMessage() == GUI_MSG_LABEL_BIND && message.GetPointer())
   {
-    if (m_currentPath != message.GetStringParam())
-    {
-      m_currentPath = message.GetStringParam();
-      m_directoryLoaded = false;
-      LoadDirectory();
-      m_imageTimer.StartZero();
-      FreeResources();
-    }
+    CFileItemList* list = (CFileItemList* )message.GetPointer();
+    m_files.clear();
+    FreeResources();
+    
+    for (int i=0; i<list->Size(); i++)
+      m_files.push_back(list->Get(i)->m_strPath);
+    
+    // Randomize or sort our images if necessary
+    if (m_randomized)
+      random_shuffle(m_files.begin(), m_files.end());
+    else
+      sort(m_files.begin(), m_files.end());
+    
+    m_directoryLoaded = true;
+    m_imageTimer.StartZero();
+    printf("Loaded %d fanarts.\n", m_files.size());
+    
+    // Make sure GUI images are lazily loaded.
+    m_image.FreeResources(true);
+    m_image.SetLazyLoaded();
+    m_image.AllocResources();
     
     return true;
   }
