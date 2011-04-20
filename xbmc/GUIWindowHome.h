@@ -32,6 +32,8 @@
 #define CONTENT_LIST_ON_DECK           11001
 #define CONTENT_LIST_RECENTLY_ACCESSED 11002
 
+#define CONTENT_LIST_FANART            12000
+
 class CGUIWindowHome :
       public CGUIWindow
 {

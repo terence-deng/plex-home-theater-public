@@ -59,7 +59,7 @@ class PlexContentWorker : public CThread
     {
       // Get the results.
       CPlexDirectory dir;
-      dir.GetDirectory(m_url, m_results);
+      dir.GetDirectory(m_url, *m_results.get());
     }
 
     // If we haven't been cancelled, send them back.
@@ -119,7 +119,7 @@ class PlexContentWorker : public CThread
   }
 
   void Cancel() { m_cancelled = true; }
-  CFileItemList& GetResults() { return m_results; }
+  CFileItemListPtr GetResults() { return m_results; }
   int GetID() { return m_id; }
 
  protected:
@@ -128,18 +128,19 @@ class PlexContentWorker : public CThread
     : m_id(g_workerID++)
     , m_targetWindow(targetWindow)
     , m_url(url)
-    , m_contextID(contextID)
     , m_cancelled(false)
+    , m_contextID(contextID)
+    , m_results(new CFileItemList())
   {}
 
  private:
 
-  int           m_id;
-  int           m_targetWindow;
-  string        m_url;
-  bool          m_cancelled;
-  int           m_contextID;
-  CFileItemList m_results;
+  int              m_id;
+  int              m_targetWindow;
+  string           m_url;
+  bool             m_cancelled;
+  int              m_contextID;
+  CFileItemListPtr m_results;
 
   /// Keeps track of the last worker ID.
   static int g_workerID;
@@ -201,8 +202,19 @@ bool CGUIWindowHome::OnAction(const CAction &action)
       int itemId = pControl->GetSelectedItemID();
       if (itemId != m_lastSelectedID)
       {
+        // Hide lists.
+        short lists[] = {CONTENT_LIST_ON_DECK, CONTENT_LIST_RECENTLY_ACCESSED, CONTENT_LIST_RECENTLY_ADDED};
+        BOOST_FOREACH(int id, lists)
+        {
+          SET_CONTROL_HIDDEN(id);
+          SET_CONTROL_HIDDEN(id-1000);
+        }
+        
+        SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
+        
         // OK, let's load it after a delay.
         m_pendingSelectID = itemId;
+        m_lastSelectedID = -1;
         m_contentLoadTimer.StartZero();
       }
     }
@@ -245,11 +257,8 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
       PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
     }
     
-    // Send the right slideshow information over to the multiimage.
-    CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), SLIDESHOW_MULTIIMAGE);
-    msg.SetStringParam(sectionUrl + "/arts");
-    OnMessage(msg);
-    SET_CONTROL_VISIBLE(SLIDESHOW_MULTIIMAGE);
+    // Asynchronously fetch the fanart for the section.
+    PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
   }
   else
   {
@@ -508,17 +517,17 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     PlexContentWorkerPtr worker = PlexContentWorker::Find(message.GetParam1());
     if (worker)
     {
-      printf("Processing results from worker: %d.\n", worker->GetID());
-      CFileItemList& results = worker->GetResults();
+      CFileItemListPtr results = worker->GetResults();
       int controlID = message.GetParam2();
+      printf("Processing results from worker: %d (context: %d).\n", worker->GetID(), controlID);
 
       // Copy the items across.
       if (m_contentLists.find(controlID) != m_contentLists.end())
       {
-        m_contentLists[controlID].list->Copy(results);
+        m_contentLists[controlID].list = results;
         
         CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(controlID);
-        if (control && results.Size() > 0)
+        if (control && results->Size() > 0)
         {
           // Bind the list.
           CGUIMessage msg(GUI_MSG_LABEL_BIND, MAIN_MENU, controlID, 0, 0, m_contentLists[controlID].list.get());
@@ -531,6 +540,15 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           // Load thumbs.
           m_contentLists[controlID].loader->Load(*m_contentLists[controlID].list.get());
         }
+      }
+      else if (controlID == CONTENT_LIST_FANART)
+      {
+        // Send the right slideshow information over to the multiimage.
+        CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), SLIDESHOW_MULTIIMAGE, 0, 0, results.get());
+        OnMessage(msg);
+        
+        // Make it visible.
+        SET_CONTROL_VISIBLE(SLIDESHOW_MULTIIMAGE);
       }
     }
   }
