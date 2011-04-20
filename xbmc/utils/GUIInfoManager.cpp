@@ -725,10 +725,7 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
     int offset = atoi(strCategory.Mid(9, strCategory.GetLength() - 10));
 
     if (info.Left(5).Equals("type("))
-    {
-      return AddMultiInfo(GUIInfo(bNegate ? -LISTITEM_TYPE : LISTITEM_TYPE, 
-                                  ConditionalStringParameter(info.Mid(5,info.GetLength()-6)), offset));
-    }
+      return AddMultiInfo(GUIInfo(bNegate ? -LISTITEM_TYPE : LISTITEM_TYPE, ConditionalStringParameter(info.Mid(5,info.GetLength()-6)), offset));
 
     ret = TranslateListItem(strTest.Mid(strCategory.GetLength() + 1));
     if (offset || ret == LISTITEM_ISSELECTED || ret == LISTITEM_ISPLAYING || ret == LISTITEM_IS_FOLDER)
@@ -2128,7 +2125,7 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
   {
     // TODO: We currently don't use the item that is passed in to here, as these
     //       conditions only come from Container(id).ListItem(offset).* at this point.
-    CGUIListItemPtr item;
+    CGUIListItemPtr itemPtr;
     CGUIWindow *window = NULL;
     int data1 = info.GetData1();
     if (!data1) // No container specified, so we lookup the current view container
@@ -2146,13 +2143,15 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
       // elan
       const CGUIControl *control = window->GetControl(data1);
       if (control && control->IsContainer())
-      {
-        item = ((CGUIBaseContainer *)control)->GetListItem(info.GetData2(), info.GetInfoFlag());
-      }
+        itemPtr = ((CGUIBaseContainer *)control)->GetListItem(info.GetData2(), info.GetInfoFlag());
     }
 
-    if (item) // If we got a valid item, do the lookup
-      bReturn = GetItemBool(item.get(), condition, info.GetSecondCondition()); // Image prioritizes images over labels (in the case of music item ratings for instance)
+    // Simple ListItem.Type(xxx)
+    if (!itemPtr && item && condition == LISTITEM_TYPE)
+      bReturn = GetItemBool(item, condition, info.GetData1());
+    
+    else if (itemPtr) // If we got a valid item, do the lookup
+      bReturn = GetItemBool(itemPtr.get(), condition, info.GetSecondCondition()); // Image prioritizes images over labels (in the case of music item ratings for instance)
   }
   else
   {
