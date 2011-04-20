@@ -20,6 +20,9 @@
  */
 
 #include <boost/foreach.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/lexical_cast.hpp>
+
 #include <list>
 #include <vector>
 
@@ -35,9 +38,124 @@
 #include "AlarmClock.h"
 #include "Key.h"
 #include "PlexSourceScanner.h"
+#include "PlexDirectory.h"
 
 using namespace std;
 using namespace XFILE;
+using namespace boost;
+
+class PlexContentWorker;
+typedef boost::shared_ptr<PlexContentWorker> PlexContentWorkerPtr;
+
+class PlexContentWorker : public CThread
+{
+ public:
+
+  void Process()
+  {
+    printf("Processing content request in thread [%s]\n", m_url.c_str());
+
+    if (m_cancelled == false)
+    {
+      // Get the results.
+      CPlexDirectory dir;
+      dir.GetDirectory(m_url, *m_results.get());
+    }
+
+    // If we haven't been cancelled, send them back.
+    if (m_cancelled == false)
+    {
+      // Notify the main menu.
+      CGUIMessage msg(GUI_MSG_SEARCH_HELPER_COMPLETE, m_targetWindow, 300, m_id, m_contextID);
+      g_windowManager.SendThreadMessage(msg);
+    }
+    else
+    {
+      // Get rid of myself.
+      Delete(m_id);
+    }
+  }
+
+  static int PendingWorkers()
+  {
+    return g_pendingWorkers.size();
+  }
+
+  static PlexContentWorkerPtr Queue(int targetWindow, const string& url, int contextID)
+  {
+    mutex::scoped_lock lk(g_mutex);
+
+    PlexContentWorkerPtr worker = PlexContentWorkerPtr(new PlexContentWorker(targetWindow, url, contextID));
+    g_pendingWorkers[worker->GetID()] = worker;
+    worker->Create(false);
+    return worker;
+  }
+
+  static PlexContentWorkerPtr Find(int id)
+  {
+    mutex::scoped_lock lk(g_mutex);
+
+    if (g_pendingWorkers.find(id) != g_pendingWorkers.end())
+      return g_pendingWorkers[id];
+
+    return PlexContentWorkerPtr();
+  }
+
+  static void Delete(int id)
+  {
+    mutex::scoped_lock lk(g_mutex);
+
+    if (g_pendingWorkers.find(id) != g_pendingWorkers.end())
+      g_pendingWorkers.erase(id);
+  }
+
+  static void CancelPending()
+  {
+    mutex::scoped_lock lk(g_mutex);
+
+    typedef pair<int, PlexContentWorkerPtr> int_worker_pair;
+    BOOST_FOREACH(int_worker_pair pair, g_pendingWorkers)
+      pair.second->Cancel();
+  }
+
+  void Cancel() { m_cancelled = true; }
+  CFileItemListPtr GetResults() { return m_results; }
+  int GetID() { return m_id; }
+
+ protected:
+
+  PlexContentWorker(int targetWindow, const string& url, int contextID)
+    : m_id(g_workerID++)
+    , m_targetWindow(targetWindow)
+    , m_url(url)
+    , m_cancelled(false)
+    , m_contextID(contextID)
+    , m_results(new CFileItemList())
+  {}
+
+ private:
+
+  int              m_id;
+  int              m_targetWindow;
+  string           m_url;
+  bool             m_cancelled;
+  int              m_contextID;
+  CFileItemListPtr m_results;
+
+  /// Keeps track of the last worker ID.
+  static int g_workerID;
+
+  /// Keeps track of pending workers.
+  static map<int, PlexContentWorkerPtr> g_pendingWorkers;
+
+  /// Protects the map.
+  static mutex g_mutex;
+};
+
+// Static initialization.
+int PlexContentWorker::g_workerID = 0;
+mutex PlexContentWorker::g_mutex;
+map<int, PlexContentWorkerPtr> PlexContentWorker::g_pendingWorkers;
 
 #define MAIN_MENU         300 // THIS WAS 300 for Plex skin.
 #define POWER_MENU        407
@@ -47,8 +165,12 @@ using namespace XFILE;
 #define SHUTDOWN_ITEM      113
 #define SLEEP_DISPLAY_ITEM 114
 
+#define SLIDESHOW_MULTIIMAGE 10101
+
 CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
   , m_lastSelectedItem(-1)
+  , m_lastSelectedID(-1)
+  , m_pendingSelectID(-1)
 {
 }
 
@@ -67,7 +189,84 @@ bool CGUIWindowHome::OnAction(const CAction &action)
     CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), 300);
     OnMessage(msg);
   }
-  return CGUIWindow::OnAction(action);
+  
+  bool ret = CGUIWindow::OnAction(action);
+  
+  // See what's focused.
+  if (GetFocusedControl() && GetFocusedControl()->GetID() == MAIN_MENU)
+  {
+    CGUIBaseContainer* pControl = (CGUIBaseContainer*)GetFocusedControl();
+    if (pControl)
+    {
+      CGUIListItemPtr pItem = pControl->GetListItem(pControl->GetSelectedItem());
+      int itemId = pControl->GetSelectedItemID();
+      if (itemId != m_lastSelectedID)
+      {
+        // Hide lists.
+        short lists[] = {CONTENT_LIST_ON_DECK, CONTENT_LIST_RECENTLY_ACCESSED, CONTENT_LIST_RECENTLY_ADDED};
+        BOOST_FOREACH(int id, lists)
+        {
+          SET_CONTROL_HIDDEN(id);
+          SET_CONTROL_HIDDEN(id-1000);
+        }
+        
+        SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
+        
+        // OK, let's load it after a delay.
+        m_pendingSelectID = itemId;
+        m_lastSelectedID = -1;
+        m_contentLoadTimer.StartZero();
+      }
+    }
+  }
+  
+  return ret;
+}
+
+void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
+{
+  // Clear old lists.
+  m_contentLists.clear();
+  
+  // Cancel any pending requests.
+  PlexContentWorker::CancelPending();
+  
+  // Hide lists.
+  short lists[] = {CONTENT_LIST_ON_DECK, CONTENT_LIST_RECENTLY_ACCESSED, CONTENT_LIST_RECENTLY_ADDED};
+  BOOST_FOREACH(int id, lists)
+  {
+    SET_CONTROL_HIDDEN(id);
+    SET_CONTROL_HIDDEN(id-1000);
+  }
+  
+  // Depending on what's selected, get the appropriate content.
+  if (itemID >= 1000)
+  {
+    // A library section.
+    string sectionUrl = m_idToSectionUrlMap[itemID];
+    int typeID = m_idToSectionTypeMap[itemID];
+    
+    // Recently added.
+    m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
+    PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
+    
+    if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
+    {
+      // On deck.
+      m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
+      PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+    }
+    
+    // Asynchronously fetch the fanart for the section.
+    PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
+  }
+  else
+  {
+    SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
+  }
+  
+  // Remember what the last one was.
+  m_lastSelectedID = itemID;
 }
 
 bool CGUIWindowHome::OnPopupMenu()
@@ -206,6 +405,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       control = (CGUIBaseContainer* )GetControl(300);
     
     m_lastSelectedItem = control->GetSelectedItem();
+    
+    // Reset contents of right hand lists.
+    m_contentLists.clear();
   }
 
   bool ret = CGUIWindow::OnMessage(message);
@@ -213,6 +415,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_INIT:
+    if (m_lastSelectedID != -1)
+      UpdateContentForSelectedItem(m_lastSelectedID);
+    
   case GUI_MSG_WINDOW_RESET:
   case GUI_MSG_UPDATE_MAIN_MENU:
   {
@@ -255,6 +460,10 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       
       // Now sort them according to name.
       newItems.sort(compare);
+      
+      // Clear the maps.
+      m_idToSectionUrlMap.clear();
+      m_idToSectionTypeMap.clear();
 
       // Now add the new ones.
       int id = 1000;
@@ -267,7 +476,11 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         CStdString sectionName = item->GetLabel();
         if (nameCounts[sectionName.ToLower()] > 1)
           newItem->SetLabel2(item->GetLabel2());
-       
+
+        // Save the map from ID to library section ID.
+        m_idToSectionUrlMap[id] = item->GetProperty("key");
+        m_idToSectionTypeMap[id] = item->GetPropertyInt("typeNumber");
+        
         if (item->GetProperty("type") == "artist")
           newItem->m_strPath = "XBMC.ActivateWindow(MyMusicFiles," + item->m_strPath + ",return)";
         else
@@ -298,7 +511,61 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     }
   }
   break;
+  
+  case GUI_MSG_SEARCH_HELPER_COMPLETE:
+  {
+    PlexContentWorkerPtr worker = PlexContentWorker::Find(message.GetParam1());
+    if (worker)
+    {
+      CFileItemListPtr results = worker->GetResults();
+      int controlID = message.GetParam2();
+      printf("Processing results from worker: %d (context: %d).\n", worker->GetID(), controlID);
+
+      // Copy the items across.
+      if (m_contentLists.find(controlID) != m_contentLists.end())
+      {
+        m_contentLists[controlID].list = results;
+        
+        CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(controlID);
+        if (control && results->Size() > 0)
+        {
+          // Bind the list.
+          CGUIMessage msg(GUI_MSG_LABEL_BIND, MAIN_MENU, controlID, 0, 0, m_contentLists[controlID].list.get());
+          OnMessage(msg);
+          
+          // Make sure it's visible.
+          SET_CONTROL_VISIBLE(controlID);
+          SET_CONTROL_VISIBLE(controlID-1000);
+          
+          // Load thumbs.
+          m_contentLists[controlID].loader->Load(*m_contentLists[controlID].list.get());
+        }
+      }
+      else if (controlID == CONTENT_LIST_FANART)
+      {
+        // Send the right slideshow information over to the multiimage.
+        CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), SLIDESHOW_MULTIIMAGE, 0, 0, results.get());
+        OnMessage(msg);
+        
+        // Make it visible.
+        SET_CONTROL_VISIBLE(SLIDESHOW_MULTIIMAGE);
+      }
+    }
+  }
+  break;
   }
   
   return ret;
+}
+
+void CGUIWindowHome::Render()
+{
+  if (m_pendingSelectID != -1 && m_contentLoadTimer.IsRunning() && m_contentLoadTimer.GetElapsedMilliseconds() > 500)
+  {
+    UpdateContentForSelectedItem(m_pendingSelectID);
+    m_pendingSelectID = -1;
+    m_contentLoadTimer.Stop();
+  }
+  
+  CGUIWindow::Render();
 }

@@ -626,7 +626,8 @@ bool CFileItem::IsPicture() const
   if (HasPictureInfoTag()) return true;
   if (HasMusicInfoTag()) return false;
   if (HasVideoInfoTag()) return false;
-
+  if (GetProperty("type") == "image" || GetProperty("type") == "photo") return true;
+  
   return CUtil::IsPicture(m_strPath);
 }
 

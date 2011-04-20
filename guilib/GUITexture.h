@@ -114,6 +114,7 @@ public:
   int GetOrientation() const;
   const CRect &GetRenderRect() const { return m_vertex; };
   bool IsLazyLoaded() const { return m_info.useLarge; };
+  void SetLazyLoaded() { m_info.useLarge = true; } 
 
   bool HitTest(const CPoint &point) const { return CRect(m_posX, m_posY, m_posX + m_width, m_posY + m_height).PtInRect(point); };
   bool IsAllocated() const { return m_isAllocated != NO; };

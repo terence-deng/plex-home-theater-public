@@ -76,6 +76,7 @@ public:
   virtual void DynamicResourceAlloc(bool bOnOff);
   virtual bool IsDynamicallyAllocated() { return m_bDynamicResourceAlloc; };
   virtual void SetInvalid();
+  virtual void SetLazyLoaded() { m_texture.SetLazyLoaded(); }
   virtual bool CanFocus() const;
   virtual void UpdateInfo(const CGUIListItem *item = NULL);
 

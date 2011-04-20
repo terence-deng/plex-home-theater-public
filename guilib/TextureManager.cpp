@@ -251,6 +251,9 @@ bool CGUITextureManager::CanLoad(const CStdString &texturePath) const
   if (!CURL::IsFullPath(texturePath))
     return true;  // assume we have it
 
+  if (CUtil::IsPlexMediaServer(texturePath))
+    return true;
+  
   // we can't (or shouldn't) be loading from remote paths, so check these
   return CUtil::IsHD(texturePath);
 }
