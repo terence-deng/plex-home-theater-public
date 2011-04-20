@@ -308,7 +308,6 @@ typedef boost::shared_ptr < CFileItem > CFileItemPtr;
 // Plex Media Server.
 #define CONTAINER_FIRST_TITLE       5000
 #define CONTAINER_SECOND_TITLE      5001
-#define LISTITEM_TYPE               5002
 
 #define MUSICPM_ENABLED             381
 #define MUSICPM_SONGSPLAYED         382
@@ -510,6 +509,8 @@ typedef boost::shared_ptr < CFileItem > CFileItemPtr;
 #define LISTITEM_BANNER             (LISTITEM_START + 101)
 #define LISTITEM_FIRST_GENRE        (LISTITEM_START + 102)
 
+#define LISTITEM_TYPE               (LISTITEM_START + 150)
+
 #define LISTITEM_PROPERTY_START     (LISTITEM_START + 200)
 #define LISTITEM_PROPERTY_END       (LISTITEM_PROPERTY_START + 1000)
 #define LISTITEM_END                (LISTITEM_PROPERTY_END)
@@ -536,26 +537,29 @@ class CGUIWindow;
 class GUIInfo
 {
 public:
-  GUIInfo(int info, uint32_t data1 = 0, int data2 = 0, uint32_t flag = 0)
+  GUIInfo(int info, uint32_t data1 = 0, int data2 = 0, uint32_t flag = 0, int secondCondition = 0)
   {
     m_info = info;
     m_data1 = data1;
     m_data2 = data2;
+    m_secondCondition = secondCondition;
     if (flag)
       SetInfoFlag(flag);
   }
   bool operator ==(const GUIInfo &right) const
   {
-    return (m_info == right.m_info && m_data1 == right.m_data1 && m_data2 == right.m_data2);
+    return (m_info == right.m_info && m_data1 == right.m_data1 && m_data2 == right.m_data2 && m_secondCondition == right.m_secondCondition);
   };
   uint32_t GetInfoFlag() const;
   uint32_t GetData1() const;
   int GetData2() const;
+  int GetSecondCondition() const { return m_secondCondition; };
   int m_info;
 private:
   void SetInfoFlag(uint32_t flag);
   uint32_t m_data1;
   int m_data2;
+  int m_secondCondition;
 };
 
 /*!
@@ -673,7 +677,7 @@ protected:
   int TranslateListItem(const CStdString &info);
   int TranslateMusicPlayerString(const CStdString &info) const;
   TIME_FORMAT TranslateTimeFormat(const CStdString &format);
-  bool GetItemBool(const CGUIListItem *item, int condition) const;
+  bool GetItemBool(const CGUIListItem *item, int condition, int secondCondition=0) const;
 
   // Conditional string parameters for testing are stored in a vector for later retrieval.
   // The offset into the string parameters array is returned.
