@@ -637,6 +637,14 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
     {
       int offset = atoi(info.Mid(9, info.GetLength() - 10));
       ret = TranslateListItem(info.Mid(info.Find(".")+1));
+
+      if (ret == LISTITEM_TYPE)
+      {
+        CStdString param = info.Mid(info.Find(".")+6);
+        param = param.Left(param.size()-1);
+        return AddMultiInfo(GUIInfo(bNegate ? -ret : ret, id, offset, INFOFLAG_LISTITEM_WRAP, ConditionalStringParameter(param)));
+      }
+      
       if (offset || id)
         return AddMultiInfo(GUIInfo(bNegate ? -ret : ret, id, offset, INFOFLAG_LISTITEM_WRAP));
     }
@@ -714,12 +722,14 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
   else if (strCategory.Left(8).Equals("listitem"))
   {
     CStdString info = strTest.Mid(strCategory.GetLength() + 1);
+    int offset = atoi(strCategory.Mid(9, strCategory.GetLength() - 10));
+
     if (info.Left(5).Equals("type("))
     {
-      return AddMultiInfo(GUIInfo(bNegate ? -LISTITEM_TYPE : LISTITEM_TYPE, ConditionalStringParameter(info.Mid(5,info.GetLength()-6)), 0));
+      return AddMultiInfo(GUIInfo(bNegate ? -LISTITEM_TYPE : LISTITEM_TYPE, 
+                                  ConditionalStringParameter(info.Mid(5,info.GetLength()-6)), offset));
     }
 
-    int offset = atoi(strCategory.Mid(9, strCategory.GetLength() - 10));
     ret = TranslateListItem(strTest.Mid(strCategory.GetLength() + 1));
     if (offset || ret == LISTITEM_ISSELECTED || ret == LISTITEM_ISPLAYING || ret == LISTITEM_IS_FOLDER)
       return AddMultiInfo(GUIInfo(bNegate ? -ret : ret, 0, offset, INFOFLAG_LISTITEM_WRAP));
@@ -952,6 +962,7 @@ else if (info.Equals("banner")) return LISTITEM_BANNER;
   else if (info.Equals("isfolder")) return LISTITEM_IS_FOLDER;
   else if (info.Equals("originaltitle")) return LISTITEM_ORIGINALTITLE;
   else if (info.Equals("stardiffuse")) return LISTITEM_STAR_DIFFUSE;
+  else if (info.Left(5).Equals("type(")) return LISTITEM_TYPE;
   else if (info.Left(9).Equals("property(")) return AddListItemProp(info.Mid(9, info.GetLength() - 10));
   return 0;
 }
@@ -2112,7 +2123,7 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
 {
   bool bReturn = false;
   int condition = abs(info.m_info);
-
+  
   if (condition >= LISTITEM_START && condition <= LISTITEM_END)
   {
     // TODO: We currently don't use the item that is passed in to here, as these
@@ -2132,13 +2143,16 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
 
     if (window)
     {
+      // elan
       const CGUIControl *control = window->GetControl(data1);
       if (control && control->IsContainer())
+      {
         item = ((CGUIBaseContainer *)control)->GetListItem(info.GetData2(), info.GetInfoFlag());
+      }
     }
 
     if (item) // If we got a valid item, do the lookup
-      bReturn = GetItemBool(item.get(), condition); // Image prioritizes images over labels (in the case of music item ratings for instance)
+      bReturn = GetItemBool(item.get(), condition, info.GetSecondCondition()); // Image prioritizes images over labels (in the case of music item ratings for instance)
   }
   else
   {
@@ -2508,14 +2522,6 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
           }
           if (index >= 0 && index < g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC).size())
             return true;
-          return false;
-        }
-        break;
-      case LISTITEM_TYPE:
-        {
-          if (item)
-            return item->GetProperty("type").Equals(m_stringParameters[info.GetData1()]);
-          
           return false;
         }
         break;
@@ -4216,7 +4222,7 @@ CStdString CGUIInfoManager::GetItemImage(const CFileItem *item, int info) const
   return GetItemLabel(item, info);
 }
 
-bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition) const
+bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition, int secondCondition) const
 {
   if (!item) return false;
   if (condition >= LISTITEM_PROPERTY_START && condition - LISTITEM_PROPERTY_START < (int)m_listitemProperties.size())
@@ -4236,6 +4242,11 @@ bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition) const
       }
       return m_currentFile->IsSamePath((const CFileItem *)item);
     }
+  }
+  else if (condition == LISTITEM_TYPE)
+  {
+    uint32_t param = secondCondition > 0 ? secondCondition : condition;
+    return item->GetProperty("type").Equals(m_stringParameters[param]);
   }
   else if (condition == LISTITEM_ISSELECTED)
     return item->IsSelected();
