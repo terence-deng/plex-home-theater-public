@@ -20,7 +20,7 @@
  */
 
 #include <boost/foreach.hpp>
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <list>
@@ -78,16 +78,15 @@ class PlexContentWorker : public CThread
 
   static int PendingWorkers()
   {
+    EnsureWorkerMapExists();
     return PendingWorkerMap().size();
   }
 
   static PlexContentWorkerPtr Queue(int targetWindow, const string& url, int contextID)
   {
-    mutex::scoped_lock lk(g_mutex);
+    recursive_mutex::scoped_lock lk(g_mutex);
 
-    if (g_pendingWorkers == 0)
-      g_pendingWorkers = new map<int, PlexContentWorkerPtr>();
-    
+    EnsureWorkerMapExists();
     PlexContentWorkerPtr worker = PlexContentWorkerPtr(new PlexContentWorker(targetWindow, url, contextID));
     PendingWorkerMap()[worker->GetID()] = worker;
     worker->Create(false);
@@ -96,8 +95,9 @@ class PlexContentWorker : public CThread
 
   static PlexContentWorkerPtr Find(int id)
   {
-    mutex::scoped_lock lk(g_mutex);
+    recursive_mutex::scoped_lock lk(g_mutex);
 
+    EnsureWorkerMapExists();
     if (PendingWorkerMap().find(id) != PendingWorkerMap().end())
       return PendingWorkerMap()[id];
 
@@ -106,16 +106,18 @@ class PlexContentWorker : public CThread
 
   static void Delete(int id)
   {
-    mutex::scoped_lock lk(g_mutex);
+    recursive_mutex::scoped_lock lk(g_mutex);
 
+    EnsureWorkerMapExists();
     if (PendingWorkerMap().find(id) != PendingWorkerMap().end())
       PendingWorkerMap().erase(id);
   }
 
   static void CancelPending()
   {
-    mutex::scoped_lock lk(g_mutex);
-
+    recursive_mutex::scoped_lock lk(g_mutex);
+    
+    EnsureWorkerMapExists();
     typedef pair<int, PlexContentWorkerPtr> int_worker_pair;
     BOOST_FOREACH(int_worker_pair pair, PendingWorkerMap())
       pair.second->Cancel();
@@ -138,6 +140,13 @@ class PlexContentWorker : public CThread
 
   static map<int, PlexContentWorkerPtr>& PendingWorkerMap() { return *g_pendingWorkers; }
   
+  static void EnsureWorkerMapExists()
+  {
+    recursive_mutex::scoped_lock lk(g_mutex);
+    if (g_pendingWorkers == 0)
+      g_pendingWorkers = new map<int, PlexContentWorkerPtr>();
+  }
+  
  private:
 
   int              m_id;
@@ -154,12 +163,12 @@ class PlexContentWorker : public CThread
   static map<int, PlexContentWorkerPtr>* g_pendingWorkers;
 
   /// Protects the map.
-  static mutex g_mutex;
+  static recursive_mutex g_mutex;
 };
 
 // Static initialization.
 int PlexContentWorker::g_workerID = 0;
-mutex PlexContentWorker::g_mutex;
+recursive_mutex PlexContentWorker::g_mutex;
 map<int, PlexContentWorkerPtr>* PlexContentWorker::g_pendingWorkers;
 
 #define MAIN_MENU         300 // THIS WAS 300 for Plex skin.
