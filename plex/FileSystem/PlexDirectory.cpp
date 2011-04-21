@@ -205,10 +205,20 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
   // Set fanart on items if they don't have their own, or if individual item fanart
   // is disabled. Also set HTTP & rating info
   //
+  int firstProvider = -1;
   for (int i=0; i<items.Size(); i++)
   {
     CFileItemPtr pItem = items[i];
 
+    // See if this is a provider.
+    if (pItem->GetProperty("provider") == "1")
+    {
+      items.AddProvider(pItem);
+      
+      if (firstProvider == -1)
+        firstProvider = i;
+    }
+    
     // Fall back to directory fanart?
     if ((strFanart.size() > 0 && pItem->GetQuickFanart().size() == 0) || disableFanart)
     {
@@ -249,6 +259,13 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
       pItem->SetProperty("pluginIdentifier", pluginIdentifier);
   }
 
+  // If we had providers, whack them.
+  if (firstProvider != -1)
+  {
+    for (int i=items.Size()-1; i>=firstProvider; i--)
+      items.Remove(i);
+  }
+  
   // Set fanart on directory.
   if (strFanart.size() > 0)
     items.SetQuickFanart(strFanart);
@@ -418,6 +435,10 @@ class PlexMediaNode
      // Let subclass finish.
      DoBuildFileItem(pItem, string(parentPath), el);
 
+     // Parent path.
+     if (el.Attribute("parentKey"))
+       pItem->SetProperty("parentPath", CPlexDirectory::ProcessUrl(parentPath, el.Attribute("parentKey"), true));
+     
      // Sort label.
      if (el.Attribute("titleSort"))
        pItem->SetSortLabel(el.Attribute("titleSort"));
@@ -434,6 +455,9 @@ class PlexMediaNode
        mediaItem->SetProperty("unprocessedKey", pItem->GetProperty("unprocessedKey"));
        mediaItem->SetProperty("key", pItem->GetProperty("key"));
      }
+     
+     // Source title.
+     SetProperty(pItem, el, "sourceTitle");
 
      // Date.
      SetProperty(pItem, el, "subtitle");
@@ -893,6 +917,10 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         newItem->m_strPath = pItem->m_strPath;
         pItem = newItem;
 
+        // Check for indirect.
+        if (media->Attribute("indirect") && strcmp(media->Attribute("indirect"), "1") == 0)
+          pItem->SetProperty("indirect", 1);
+        
         const char* bitrate = el.Attribute("bitrate");
         if (bitrate && strlen(bitrate) > 0)
         {
@@ -994,6 +1022,13 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         CFileItemPtr theMediaItem(new CFileItem(theVideoInfo));
         theMediaItem->m_mediaParts = mediaParts;
 
+        // Check for indirect.
+        if (media->Attribute("indirect") && strcmp(media->Attribute("indirect"), "1") == 0)
+        {
+          pItem->SetProperty("indirect", 1);
+          theMediaItem->SetProperty("indirect", 1);
+        }
+        
         // If it's not an STRM file then save the local path.
         if (CUtil::GetExtension(localPath) != ".strm")
           theMediaItem->SetProperty("localPath", localPath);
@@ -1232,6 +1267,17 @@ class PlexMediaGenre : public PlexMediaNode
   }
 };
 
+class PlexMediaProvider : public PlexMediaNode
+{
+  virtual void DoBuildFileItem(CFileItemPtr& pItem, const string& parentPath, TiXmlElement& el)
+  {
+    pItem->m_strPath = CPlexDirectory::ProcessUrl(parentPath, el.Attribute("key"), false);
+    pItem->SetLabel(el.Attribute("title"));
+    pItem->SetProperty("type", el.Attribute("type"));
+    pItem->SetProperty("provider", "1");
+  }
+};
+
 class PlexMediaVideo : public PlexMediaNode
 {
   virtual void DoBuildFileItem(CFileItemPtr& pItem, const string& parentPath, TiXmlElement& el)
@@ -1459,6 +1505,8 @@ PlexMediaNode* PlexMediaNode::Create(TiXmlElement* element)
     return new PlexMediaPhotoKeyword();
   else if (name == "Video")
     return new PlexMediaVideo();
+  else if (name == "Provider")
+    return new PlexMediaProvider();
   else
     printf("ERROR: Unknown class [%s]\n", name.c_str());
 
