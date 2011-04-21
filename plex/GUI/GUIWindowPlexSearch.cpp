@@ -57,15 +57,8 @@ class PlexSearchWorker : public CThread
 {
  public:
 
-  virtual ~PlexSearchWorker()
-  {
-    printf("Whacking search worker: %d.\n", m_id);
-  }
-
   void Process()
   {
-    printf("Processing search request in thread.\n");
-
     if (m_cancelled == false)
     {
       // Escape the query.
@@ -86,7 +79,7 @@ class PlexSearchWorker : public CThread
       else
         path = path + "&query=" + query;
 
-      printf("Running query for %s [%s]\n", path.c_str(), m_query.c_str());
+      printf("Running query #%d for %s [%s]\n", m_id, path.c_str(), m_query.c_str());
       dir.GetDirectory(path, m_results);
     }
 
