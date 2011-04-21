@@ -78,15 +78,18 @@ class PlexContentWorker : public CThread
 
   static int PendingWorkers()
   {
-    return g_pendingWorkers.size();
+    return PendingWorkerMap().size();
   }
 
   static PlexContentWorkerPtr Queue(int targetWindow, const string& url, int contextID)
   {
     mutex::scoped_lock lk(g_mutex);
 
+    if (g_pendingWorkers == 0)
+      g_pendingWorkers = new map<int, PlexContentWorkerPtr>();
+    
     PlexContentWorkerPtr worker = PlexContentWorkerPtr(new PlexContentWorker(targetWindow, url, contextID));
-    g_pendingWorkers[worker->GetID()] = worker;
+    PendingWorkerMap()[worker->GetID()] = worker;
     worker->Create(false);
     return worker;
   }
@@ -95,8 +98,8 @@ class PlexContentWorker : public CThread
   {
     mutex::scoped_lock lk(g_mutex);
 
-    if (g_pendingWorkers.find(id) != g_pendingWorkers.end())
-      return g_pendingWorkers[id];
+    if (PendingWorkerMap().find(id) != PendingWorkerMap().end())
+      return PendingWorkerMap()[id];
 
     return PlexContentWorkerPtr();
   }
@@ -105,8 +108,8 @@ class PlexContentWorker : public CThread
   {
     mutex::scoped_lock lk(g_mutex);
 
-    if (g_pendingWorkers.find(id) != g_pendingWorkers.end())
-      g_pendingWorkers.erase(id);
+    if (PendingWorkerMap().find(id) != PendingWorkerMap().end())
+      PendingWorkerMap().erase(id);
   }
 
   static void CancelPending()
@@ -114,7 +117,7 @@ class PlexContentWorker : public CThread
     mutex::scoped_lock lk(g_mutex);
 
     typedef pair<int, PlexContentWorkerPtr> int_worker_pair;
-    BOOST_FOREACH(int_worker_pair pair, g_pendingWorkers)
+    BOOST_FOREACH(int_worker_pair pair, PendingWorkerMap())
       pair.second->Cancel();
   }
 
@@ -133,6 +136,8 @@ class PlexContentWorker : public CThread
     , m_results(new CFileItemList())
   {}
 
+  static map<int, PlexContentWorkerPtr>& PendingWorkerMap() { return *g_pendingWorkers; }
+  
  private:
 
   int              m_id;
@@ -146,7 +151,7 @@ class PlexContentWorker : public CThread
   static int g_workerID;
 
   /// Keeps track of pending workers.
-  static map<int, PlexContentWorkerPtr> g_pendingWorkers;
+  static map<int, PlexContentWorkerPtr>* g_pendingWorkers;
 
   /// Protects the map.
   static mutex g_mutex;
@@ -155,7 +160,7 @@ class PlexContentWorker : public CThread
 // Static initialization.
 int PlexContentWorker::g_workerID = 0;
 mutex PlexContentWorker::g_mutex;
-map<int, PlexContentWorkerPtr> PlexContentWorker::g_pendingWorkers;
+map<int, PlexContentWorkerPtr>* PlexContentWorker::g_pendingWorkers;
 
 #define MAIN_MENU         300 // THIS WAS 300 for Plex skin.
 #define POWER_MENU        407
