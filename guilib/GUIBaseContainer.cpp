@@ -134,9 +134,9 @@ void CGUIBaseContainer::Render()
     if (focusedItem)
     {
       if (m_orientation == VERTICAL)
-        RenderItem(origin.x, focusedPos, focusedItem.get(), true);
+        RenderItem(origin.x, focusedPos, focusedItem.get(), m_bHasFocus);
       else
-        RenderItem(focusedPos, origin.y, focusedItem.get(), true);
+        RenderItem(focusedPos, origin.y, focusedItem.get(), m_bHasFocus);
     }
 
     g_graphicsContext.RestoreClipRegion();
