@@ -716,7 +716,6 @@ void CGUIWindowPlexSearch::OnClickButton(int iButtonControl)
                 return;
               
               resumeItem = (retVal == 1);
-              printf("RESUME ITEM: %d\n", resumeItem);
             }
             
             CFileItem* file = (CFileItem* )item.get();
