@@ -25,7 +25,8 @@
 #include <string>
 
 #include "GUIWindow.h"
-#include "GUIWindowPlexSearch.h"
+#include "PlexContentWorker.h"
+#include "PlexContentPlayerMixin.h"
 
 // List IDs.
 #define CONTENT_LIST_RECENTLY_ADDED    11000
@@ -36,8 +37,8 @@
 
 class PlexContentWorkerManager;
 
-class CGUIWindowHome :
-      public CGUIWindow
+class CGUIWindowHome : public CGUIWindow,
+                       public PlexContentPlayerMixin
 {
 public:
   CGUIWindowHome(void);

@@ -448,6 +448,12 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     }
   }
   break;
+  
+  case GUI_MSG_CLICKED:
+  {
+    int iControl = message.GetSenderId();
+    PlayFileFromContainer(GetControl(iControl));
+  }
   }
   
   return ret;

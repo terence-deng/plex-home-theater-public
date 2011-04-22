@@ -23,14 +23,11 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "Application.h"
 #include "CharsetConverter.h"
 #include "Key.h"
 #include "TimeUtils.h"
 #include "FileItem.h"
 #include "GUIBaseContainer.h"
-#include "GUIDialogContextMenu.h"
-#include "GUIWindowManager.h"
 #include "GUIInfoManager.h"
 #include "GUILabelControl.h"
 #include "GUIWindowPlexSearch.h"
@@ -39,8 +36,6 @@
 #include "PlexDirectory.h"
 #include "Settings.h"
 #include "Util.h"
-#include "LocalizeStrings.h"
-#include "StringUtils.h"
 
 #define CTL_LABEL_EDIT       310
 #define CTL_BUTTON_BACKSPACE 8
@@ -505,90 +500,18 @@ void CGUIWindowPlexSearch::OnClickButton(int iButtonControl)
     }
     else
     {
-      // Let's see if we're asked to play something.
-      const CGUIControl* control = GetControl(iButtonControl);
-      if (control->IsContainer())
-      {
-        CGUIBaseContainer* container = (CGUIBaseContainer* )control;
-        CGUIListItemPtr item = container->GetListItem(0);
-
-        if (item)
-        {
-          CFileItem* file = (CFileItem* )item.get();
-          printf("Playing %s\n", item->GetLabel().c_str());
-
-          // Save state.
-          m_selectedContainerID = container->GetID();
-          m_selectedItem = container->GetSelectedItem();
-
-          // Now see what to do with it.
-          string type = item->GetProperty("type");
-          if (type == "show" || type == "person")
-          {
-            g_windowManager.ActivateWindow(WINDOW_VIDEO_FILES, file->m_strPath + ",return");
-          }
-          else if (type == "artist" || type == "album")
-          {
-            g_windowManager.ActivateWindow(WINDOW_MUSIC_FILES, file->m_strPath + ",return");
-          }
-          else if (type == "track")
-          {
-            // Get album.
-            CFileItemList  fileItems;
-            CPlexDirectory plexDir;
-            plexDir.GetDirectory(file->GetProperty("parentPath"), fileItems);
-            int itemIndex = -1;
-
-            for (int i=0; i < fileItems.Size(); ++i)
-            {
-              CFileItemPtr fileItem = fileItems[i];
-              if (fileItem->GetProperty("unprocessedKey") == file->GetProperty("unprocessedKey"))
-              {
-                itemIndex = i;
-                break;
-              }
-            }
-
-            g_playlistPlayer.ClearPlaylist(PLAYLIST_MUSIC);
-            g_playlistPlayer.Reset();
-            g_playlistPlayer.Add(PLAYLIST_MUSIC, fileItems);
-            g_playlistPlayer.SetCurrentPlaylist(PLAYLIST_MUSIC);
-            g_playlistPlayer.Play(itemIndex);
-          }
-          else
-          {
-            bool resumeItem = false;
-            
-            if (!item->m_bIsFolder && item->HasProperty("viewOffset")) 
-            {
-              // Oh my god. Copy and paste code. We need a superclass which manages media.
-              float seconds = boost::lexical_cast<int>(item->GetProperty("viewOffset")) / 1000.0f;
-              
-              CContextButtons choices;
-              CStdString resumeString;
-              CStdString time = StringUtils::SecondsToTimeString(seconds);
-              resumeString.Format(g_localizeStrings.Get(12022).c_str(), time.c_str());
-              choices.Add(1, resumeString);
-              choices.Add(2, g_localizeStrings.Get(12021));
-              int retVal = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-              if (!retVal)
-                return;
-              
-              resumeItem = (retVal == 1);
-            }
-            
-            CFileItem* file = (CFileItem* )item.get();
-            if (resumeItem)
-              file->m_lStartOffset = STARTOFFSET_RESUME;
-            else
-              file->m_lStartOffset = 0;
-            
-            g_application.PlayFile(*(CFileItem* )item.get());
-          }
-        }
-      }
+      // We'll try to play the selected item.
+      PlayFileFromContainer(GetControl(iButtonControl));
     }
   }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void CGUIWindowPlexSearch::SaveStateBeforePlay(CGUIBaseContainer* container)
+{
+  // Save state.
+  m_selectedContainerID = container->GetID();
+  m_selectedItem = container->GetSelectedItem();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

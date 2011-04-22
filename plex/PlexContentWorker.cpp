@@ -5,6 +5,9 @@
 
 #include "PlexContentWorker.h"
 
+using namespace std;
+using namespace boost;
+
 /////////////////////////////////////////////////////////////////////////////////////////
 PlexContentWorkerPtr PlexContentWorkerManager::enqueue(int targetWindow, const string& url, int contextID)
 {

@@ -16,9 +16,8 @@
 #include "GUIUserMessages.h"
 #include "GUIWindowManager.h"
 #include "PlexDirectory.h"
-
-using namespace std;
-using namespace boost;
+#include "PictureThumbLoader.h"
+#include "ThumbLoader.h"
 
 class PlexContentWorker;
 typedef boost::shared_ptr<PlexContentWorker> PlexContentWorkerPtr;
@@ -44,7 +43,7 @@ class PlexContentWorkerManager
   /// Find by ID.
   PlexContentWorkerPtr find(int id)
   {
-    recursive_mutex::scoped_lock lk(m_mutex);
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
 
     if (m_pendingWorkers.find(id) != m_pendingWorkers.end())
       return m_pendingWorkers[id];
@@ -55,7 +54,7 @@ class PlexContentWorkerManager
   /// Destroy by ID.
   void destroy(int id)
   {
-    recursive_mutex::scoped_lock lk(m_mutex);
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
 
     if (m_pendingWorkers.find(id) != m_pendingWorkers.end())
       m_pendingWorkers.erase(id);
@@ -73,7 +72,7 @@ class PlexContentWorkerManager
   map<int, PlexContentWorkerPtr> m_pendingWorkers;
   
   /// Protects the map.
-  recursive_mutex m_mutex;
+  boost::recursive_mutex m_mutex;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -135,3 +134,29 @@ class PlexContentWorker
   int              m_contextID;
   CFileItemListPtr m_results;
 };
+
+typedef boost::shared_ptr<CBackgroundInfoLoader> CBackgroundInfoLoaderPtr;
+
+enum LoaderType { kVIDEO_LOADER, kPHOTO_LOADER, kMUSIC_LOADER };
+
+struct Group
+{
+  Group() {}
+  
+  Group(LoaderType loaderType)
+  {
+    if (loaderType == kVIDEO_LOADER)
+      loader = CBackgroundInfoLoaderPtr(new CVideoThumbLoader());
+    else if (loaderType == kMUSIC_LOADER)
+      loader = CBackgroundInfoLoaderPtr(new CMusicThumbLoader());
+    else if (loaderType == kPHOTO_LOADER)
+      loader = CBackgroundInfoLoaderPtr(new CPictureThumbLoader());
+    
+    list = CFileItemListPtr(new CFileItemList());
+  }
+  
+  CFileItemListPtr         list;
+  CBackgroundInfoLoaderPtr loader;
+};
+
+typedef std::pair<int, Group> int_list_pair;
