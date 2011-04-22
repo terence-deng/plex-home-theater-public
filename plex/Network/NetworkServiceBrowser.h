@@ -245,6 +245,14 @@ class NetworkServiceBrowser : public NetworkServiceBase
       // Read the next packet.
       socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
     }
+    else
+    {
+#ifdef _WIN32
+      // If we got a packet that was too big, keep reading, otherwise we'll miss all subsequent packets.
+      if (error.value() == 10040)
+        socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
+#endif
+    }
   }
   
   /// Handle the deletion timer.
