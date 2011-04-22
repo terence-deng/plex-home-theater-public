@@ -134,9 +134,9 @@ void CGUIBaseContainer::Render()
     if (focusedItem)
     {
       if (m_orientation == VERTICAL)
-        RenderItem(origin.x, focusedPos, focusedItem.get(), true);
+        RenderItem(origin.x, focusedPos, focusedItem.get(), m_bHasFocus);
       else
-        RenderItem(focusedPos, origin.y, focusedItem.get(), true);
+        RenderItem(focusedPos, origin.y, focusedItem.get(), m_bHasFocus);
     }
 
     g_graphicsContext.RestoreClipRegion();
@@ -454,7 +454,7 @@ void CGUIBaseContainer::OnJumpLetter(char letter)
   for (unsigned int i = (offset + 1) % m_items.size(); i != offset; i = (i+1) % m_items.size())
   {
     CGUIListItemPtr item = m_items[i];
-    if (0 == strnicmp(SSortFileItem::RemoveArticles(item->GetLabel()).c_str(), m_match.c_str(), m_match.size()))
+    if (0 == strnicmp(item->GetSortLabel().c_str(), m_match.c_str(), m_match.size()))
     {
       SelectItem(i);
       return;

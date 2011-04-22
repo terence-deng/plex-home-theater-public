@@ -896,6 +896,7 @@
 		74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D8D37A1311A2DD00DBDBC8 /* sha.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */; };
 		E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E31A8E011357B44800EEB013 /* PlexUtils.cpp */; };
+		E3D01F381361779300EBD00D /* PlexContentWorker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3D01F361361779300EBD00D /* PlexContentWorker.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -2573,6 +2574,8 @@
 		E3B53E7A0D97B08100021A96 /* DVDSubtitleParserMicroDVD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDSubtitleParserMicroDVD.cpp; sourceTree = "<group>"; };
 		E3B53E7B0D97B08100021A96 /* DVDSubtitleParserMicroDVD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDSubtitleParserMicroDVD.h; sourceTree = "<group>"; };
 		E3BBB7980D7EA78A00CAAFD3 /* MythSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MythSession.cpp; sourceTree = "<group>"; };
+		E3D01F361361779300EBD00D /* PlexContentWorker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexContentWorker.cpp; path = plex/PlexContentWorker.cpp; sourceTree = "<group>"; };
+		E3D01F371361779300EBD00D /* PlexContentWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexContentWorker.h; path = plex/PlexContentWorker.h; sourceTree = "<group>"; };
 		E3D87AE90D3182F4000CF031 /* XCriticalSection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XCriticalSection.cpp; sourceTree = "<group>"; };
 		E3D87AEA0D3182F4000CF031 /* XCriticalSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCriticalSection.h; sourceTree = "<group>"; };
 		E3DAAF8A0D6E1B0500F17647 /* FileSmb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSmb.cpp; sourceTree = "<group>"; };
@@ -2992,6 +2995,8 @@
 		746469DE12E827B500B2FF1E /* plex */ = {
 			isa = PBXGroup;
 			children = (
+				E3D01F361361779300EBD00D /* PlexContentWorker.cpp */,
+				E3D01F371361779300EBD00D /* PlexContentWorker.h */,
 				E31A8E011357B44800EEB013 /* PlexUtils.cpp */,
 				74A4E98E12F7FFB40021FEDB /* AddOns */,
 				7482B37812E8E3510077A38C /* CocoaUtils.h */,
@@ -6962,6 +6967,7 @@
 				7485ADC21359E1E700E663B5 /* DVDInputStreamPlaylist.cpp in Sources */,
 				7485ADC51359EB8500E663B5 /* Base64.cpp in Sources */,
 				E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */,
+				E3D01F381361779300EBD00D /* PlexContentWorker.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

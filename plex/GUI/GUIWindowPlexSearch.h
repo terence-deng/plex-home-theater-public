@@ -24,37 +24,16 @@
 
 #include "FileItem.h"
 #include "GUIWindow.h"
-#include "ThumbLoader.h"
 #include "PictureThumbLoader.h"
+#include "PlexContentPlayerMixin.h"
+#include "PlexContentWorker.h"
 #include "Stopwatch.h"
+#include "ThumbLoader.h"
 
-typedef boost::shared_ptr<CBackgroundInfoLoader> CBackgroundInfoLoaderPtr;
+class PlexContentWorkerManager;
 
-enum LoaderType { kVIDEO_LOADER, kPHOTO_LOADER, kMUSIC_LOADER };
-
-struct Group
-{
-  Group() {}
-  
-  Group(LoaderType loaderType)
-  {
-    if (loaderType == kVIDEO_LOADER)
-      loader = CBackgroundInfoLoaderPtr(new CVideoThumbLoader());
-    else if (loaderType == kMUSIC_LOADER)
-      loader = CBackgroundInfoLoaderPtr(new CMusicThumbLoader());
-    else if (loaderType == kPHOTO_LOADER)
-      loader = CBackgroundInfoLoaderPtr(new CPictureThumbLoader());
-    
-    list = CFileItemListPtr(new CFileItemList());
-  }
-  
-  CFileItemListPtr         list;
-  CBackgroundInfoLoaderPtr loader;
-};
-
-typedef std::pair<int, Group> int_list_pair;
-
-class CGUIWindowPlexSearch : public CGUIWindow
+class CGUIWindowPlexSearch : public CGUIWindow, 
+                             public PlexContentPlayerMixin
 {
  public:
   
@@ -83,6 +62,9 @@ class CGUIWindowPlexSearch : public CGUIWindow
   
  private:
   
+  std::string BuildSearchUrl(const std::string& theUrl, const std::string& theQuery);
+  virtual void SaveStateBeforePlay(CGUIBaseContainer* container);
+  
   CVideoThumbLoader  m_videoThumbLoader;
   CMusicThumbLoader  m_musicThumbLoader;
   CStdStringW        m_strEdit;
@@ -93,4 +75,6 @@ class CGUIWindowPlexSearch : public CGUIWindow
   int                m_selectedItem;
   
   std::map<int, Group> m_categoryResults;
+  
+  PlexContentWorkerManager* m_workerManager;
 };

@@ -125,13 +125,11 @@
   </global>
   <LoginScreen>
     <keyboard>
-      <end>XBMC.ShutDown()</end>
     </keyboard>
   </LoginScreen>
   <Home>
     <keyboard>
       <i>info</i>
-      <end>XBMC.ShutDown()</end>
     </keyboard>
   </Home>
   <VirtualKeyboard>

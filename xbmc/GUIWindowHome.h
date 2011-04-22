@@ -25,7 +25,8 @@
 #include <string>
 
 #include "GUIWindow.h"
-#include "GUIWindowPlexSearch.h"
+#include "PlexContentWorker.h"
+#include "PlexContentPlayerMixin.h"
 
 // List IDs.
 #define CONTENT_LIST_RECENTLY_ADDED    11000
@@ -34,8 +35,10 @@
 
 #define CONTENT_LIST_FANART            12000
 
-class CGUIWindowHome :
-      public CGUIWindow
+class PlexContentWorkerManager;
+
+class CGUIWindowHome : public CGUIWindow,
+                       public PlexContentPlayerMixin
 {
 public:
   CGUIWindowHome(void);
@@ -58,4 +61,6 @@ private:
   std::map<int, std::string> m_idToSectionUrlMap;
   std::map<int, int>         m_idToSectionTypeMap;
   std::map<int, Group>       m_contentLists;
+  
+  PlexContentWorkerManager*  m_workerManager;
 };
