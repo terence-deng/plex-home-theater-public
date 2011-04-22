@@ -80,8 +80,10 @@ bool CPicture::CacheImage(const CStdString& sourceUrl, const CStdString& destFil
       }
       return true;
     }
-    else
-      CacheImage(sourceUrl, tmpFile);
+
+    // FIXME: This was a recursive call into ourselves.
+    //else
+    //  CacheImage(sourceUrl, tmpFile);
   }
   
   // Atomically rename.
@@ -99,6 +101,9 @@ bool CPicture::CacheThumb(const CStdString& sourceUrl, const CStdString& destFil
 bool CPicture::CacheFanart(const CStdString& sourceUrl, const CStdString& destFile)
 {
   int height = g_advancedSettings.m_fanartHeight;
+  if (height == 0)
+    height = 720;
+
   // Assume 16:9 size
   int width = height * 16 / 9;
 
