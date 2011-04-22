@@ -312,6 +312,7 @@
     <ClCompile Include="..\..\plex\Network\NetworkInterfaceWin32.cpp" />
     <ClCompile Include="..\..\plex\PlexApplication.cpp" />
     <ClCompile Include="..\..\plex\PlexApplicationWin.cpp" />
+    <ClCompile Include="..\..\plex\PlexContentWorker.cpp" />
     <ClCompile Include="..\..\plex\PlexMediaServerQueue.cpp" />
     <ClCompile Include="..\..\plex\PlexSourceScanner.cpp" />
     <ClCompile Include="..\..\plex\PlexUtils.cpp" />
@@ -1046,6 +1047,8 @@
     <ClInclude Include="..\..\plex\Network\PlexNetworkServices.h" />
     <ClInclude Include="..\..\plex\PlexApplication.h" />
     <ClInclude Include="..\..\plex\PlexApplicationWin.h" />
+    <ClInclude Include="..\..\plex\PlexContentPlayerMixin.h" />
+    <ClInclude Include="..\..\plex\PlexContentWorker.h" />
     <ClInclude Include="..\..\plex\PlexMediaServerQueue.h" />
     <ClInclude Include="..\..\plex\PlexSourceScanner.h" />
     <ClInclude Include="..\..\plex\PlexUtils.h" />
