@@ -20,6 +20,7 @@
  */
 
 #include <boost/foreach.hpp>
+#include <boost/thread.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -37,139 +38,14 @@
 #include "GUIUserMessages.h"
 #include "AlarmClock.h"
 #include "Key.h"
-#include "PlexSourceScanner.h"
+
+#include "PlexContentWorker.h"
 #include "PlexDirectory.h"
+#include "PlexSourceScanner.h"
 
 using namespace std;
 using namespace XFILE;
 using namespace boost;
-
-class PlexContentWorker;
-typedef boost::shared_ptr<PlexContentWorker> PlexContentWorkerPtr;
-
-class PlexContentWorker : public CThread
-{
- public:
-
-  void Process()
-  {
-    printf("Processing content request in thread [%s]\n", m_url.c_str());
-
-    if (m_cancelled == false)
-    {
-      // Get the results.
-      CPlexDirectory dir;
-      dir.GetDirectory(m_url, *m_results.get());
-    }
-
-    // If we haven't been cancelled, send them back.
-    if (m_cancelled == false)
-    {
-      // Notify the main menu.
-      CGUIMessage msg(GUI_MSG_SEARCH_HELPER_COMPLETE, m_targetWindow, 300, m_id, m_contextID);
-      g_windowManager.SendThreadMessage(msg);
-    }
-    else
-    {
-      // Get rid of myself.
-      Delete(m_id);
-    }
-  }
-
-  static int PendingWorkers()
-  {
-    EnsureWorkerMapExists();
-    return PendingWorkerMap().size();
-  }
-
-  static PlexContentWorkerPtr Queue(int targetWindow, const string& url, int contextID)
-  {
-    recursive_mutex::scoped_lock lk(g_mutex);
-
-    EnsureWorkerMapExists();
-    PlexContentWorkerPtr worker = PlexContentWorkerPtr(new PlexContentWorker(targetWindow, url, contextID));
-    PendingWorkerMap()[worker->GetID()] = worker;
-    worker->Create(false);
-    return worker;
-  }
-
-  static PlexContentWorkerPtr Find(int id)
-  {
-    recursive_mutex::scoped_lock lk(g_mutex);
-
-    EnsureWorkerMapExists();
-    if (PendingWorkerMap().find(id) != PendingWorkerMap().end())
-      return PendingWorkerMap()[id];
-
-    return PlexContentWorkerPtr();
-  }
-
-  static void Delete(int id)
-  {
-    recursive_mutex::scoped_lock lk(g_mutex);
-
-    EnsureWorkerMapExists();
-    if (PendingWorkerMap().find(id) != PendingWorkerMap().end())
-      PendingWorkerMap().erase(id);
-  }
-
-  static void CancelPending()
-  {
-    recursive_mutex::scoped_lock lk(g_mutex);
-    
-    EnsureWorkerMapExists();
-    typedef pair<int, PlexContentWorkerPtr> int_worker_pair;
-    BOOST_FOREACH(int_worker_pair pair, PendingWorkerMap())
-      pair.second->Cancel();
-  }
-
-  void Cancel() { m_cancelled = true; }
-  CFileItemListPtr GetResults() { return m_results; }
-  int GetID() { return m_id; }
-
- protected:
-
-  PlexContentWorker(int targetWindow, const string& url, int contextID)
-    : m_id(g_workerID++)
-    , m_targetWindow(targetWindow)
-    , m_url(url)
-    , m_cancelled(false)
-    , m_contextID(contextID)
-    , m_results(new CFileItemList())
-  {}
-
-  static map<int, PlexContentWorkerPtr>& PendingWorkerMap() { return *g_pendingWorkers; }
-  
-  static void EnsureWorkerMapExists()
-  {
-    recursive_mutex::scoped_lock lk(g_mutex);
-    if (g_pendingWorkers == 0)
-      g_pendingWorkers = new map<int, PlexContentWorkerPtr>();
-  }
-  
- private:
-
-  int              m_id;
-  int              m_targetWindow;
-  string           m_url;
-  bool             m_cancelled;
-  int              m_contextID;
-  CFileItemListPtr m_results;
-
-  /// Keeps track of the last worker ID.
-  static int g_workerID;
-
-  /// Keeps track of pending workers.
-  static map<int, PlexContentWorkerPtr>* g_pendingWorkers;
-
-  /// Protects the map.
-  static recursive_mutex g_mutex;
-};
-
-// Static initialization.
-int PlexContentWorker::g_workerID = 0;
-recursive_mutex PlexContentWorker::g_mutex;
-map<int, PlexContentWorkerPtr>* PlexContentWorker::g_pendingWorkers;
 
 #define MAIN_MENU         300 // THIS WAS 300 for Plex skin.
 #define POWER_MENU        407
@@ -186,6 +62,8 @@ CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
   , m_lastSelectedID(-1)
   , m_pendingSelectID(-1)
 {
+  // Create the worker. We're not going to destroy it because whacking it on exit can cause problems.
+  m_workerManager = new PlexContentWorkerManager();
 }
 
 CGUIWindowHome::~CGUIWindowHome(void)
@@ -243,7 +121,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
   m_contentLists.clear();
   
   // Cancel any pending requests.
-  PlexContentWorker::CancelPending();
+  m_workerManager->cancelPending();
   
   // Hide lists.
   short lists[] = {CONTENT_LIST_ON_DECK, CONTENT_LIST_RECENTLY_ACCESSED, CONTENT_LIST_RECENTLY_ADDED};
@@ -262,17 +140,17 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
     
     // Recently added.
     m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
-    PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
+    m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
     
     if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
     {
       // On deck.
       m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
-      PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+      m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
     }
     
     // Asynchronously fetch the fanart for the section.
-    PlexContentWorker::Queue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
+    m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
   }
   else
   {
@@ -420,7 +298,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     
     m_lastSelectedItem = control->GetSelectedItem();
     
-    // Reset contents of right hand lists.
+    // Cancel pending tasks and reset contents of right hand lists.
+    m_workerManager->cancelPending();
     m_contentLists.clear();
   }
 
@@ -528,12 +407,12 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   
   case GUI_MSG_SEARCH_HELPER_COMPLETE:
   {
-    PlexContentWorkerPtr worker = PlexContentWorker::Find(message.GetParam1());
+    PlexContentWorkerPtr worker = m_workerManager->find(message.GetParam1());
     if (worker)
     {
-      CFileItemListPtr results = worker->GetResults();
+      CFileItemListPtr results = worker->getResults();
       int controlID = message.GetParam2();
-      printf("Processing results from worker: %d (context: %d).\n", worker->GetID(), controlID);
+      printf("Processing results from worker: %d (context: %d).\n", worker->getID(), controlID);
 
       // Copy the items across.
       if (m_contentLists.find(controlID) != m_contentLists.end())
@@ -564,6 +443,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         // Make it visible.
         SET_CONTROL_VISIBLE(SLIDESHOW_MULTIIMAGE);
       }
+      
+      m_workerManager->destroy(worker->getID());
     }
   }
   break;

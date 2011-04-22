@@ -54,6 +54,8 @@ struct Group
 
 typedef std::pair<int, Group> int_list_pair;
 
+class PlexContentWorkerManager;
+
 class CGUIWindowPlexSearch : public CGUIWindow
 {
  public:
@@ -83,6 +85,8 @@ class CGUIWindowPlexSearch : public CGUIWindow
   
  private:
   
+  std::string BuildSearchUrl(const std::string& theUrl, const std::string& theQuery);
+  
   CVideoThumbLoader  m_videoThumbLoader;
   CMusicThumbLoader  m_musicThumbLoader;
   CStdStringW        m_strEdit;
@@ -93,4 +97,6 @@ class CGUIWindowPlexSearch : public CGUIWindow
   int                m_selectedItem;
   
   std::map<int, Group> m_categoryResults;
+  
+  PlexContentWorkerManager* m_workerManager;
 };

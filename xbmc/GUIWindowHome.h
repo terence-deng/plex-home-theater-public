@@ -34,6 +34,8 @@
 
 #define CONTENT_LIST_FANART            12000
 
+class PlexContentWorkerManager;
+
 class CGUIWindowHome :
       public CGUIWindow
 {
@@ -58,4 +60,6 @@ private:
   std::map<int, std::string> m_idToSectionUrlMap;
   std::map<int, int>         m_idToSectionTypeMap;
   std::map<int, Group>       m_contentLists;
+  
+  PlexContentWorkerManager*  m_workerManager;
 };
