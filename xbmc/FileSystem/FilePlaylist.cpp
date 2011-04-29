@@ -125,56 +125,25 @@ bool CFilePlaylist::IsEOF()
   return m_eof;
 }
 
+
 bool CFilePlaylist::ValidatePlaylist(CPlaylistData *pl)
 {
-  if (!pl)
-    return false;
-  
-  if (pl->m_playlistLastPos == -1 && !pl->m_playList->Load(pl->m_playlistPath))
-    return false;
-  
-  if (pl->m_playlistLastPos == -1 || pl->m_playlistLastPos >= pl->m_playList->size())
-    pl->m_playlistLastPos = 0;
-  
-  if (pl->m_playList->size() <= 0 && ( !pl->m_playList->Load(pl->m_playlistPath) || pl->m_playList->size() <= 0) )
+  if (!pl || (!pl->IsLoaded() && !pl->Load()) || pl->IsEmpty())
     return false;
 
-  if (pl->m_playlistLastPos >= pl->m_playList->size())
-    pl->m_playlistLastPos = 0; // reset after load (might been truncated)
-
-  CFileItemPtr firstItem = (*pl->m_playList)[0];
-  pl->m_targetDuration = atoi(firstItem->GetProperty("m3u8-targetDurationInSec").c_str());
-  pl->m_startDate = atoi(firstItem->GetProperty("m3u8-startDate").c_str());
-  
-  CFileItemPtr lastItem = (*pl->m_playList)[pl->m_playList->size() - 1];
-  unsigned int nLastSeq = lastItem->GetPropertyULong("m3u8-playlistSequenceNo");
-  if (nLastSeq <= m_nLastLoadedSeq && pl->m_playList->CanAdd() && !pl->m_playList->Load(pl->m_playlistPath))
-    return false;
-  
-  if (nLastSeq <= m_nLastLoadedSeq && !pl->m_playList->CanAdd())
+  if (pl->IsFinished())
   {
     m_eof = true;
     return true;
   }
   
-  bool bFoundSeq = false;
-  while (pl->m_playlistLastPos < pl->m_playList->size())
-  {
-    lastItem = (*pl->m_playList)[pl->m_playlistLastPos];
-    nLastSeq = lastItem->GetPropertyULong("m3u8-playlistSequenceNo");
-    if (nLastSeq >= m_nLastLoadedSeq)
-    {
-      bFoundSeq = true;
-      break;
-    }
-    pl->m_playlistLastPos++;
-  }
-  
-  if (!bFoundSeq)
+  if (!pl->HasPendingSegments() && !pl->Load())
     return false;
   
-  // we are now on the last seq loaded. we should load the next item (if available)
-  return (pl->m_playlistLastPos < pl->m_playList->size() - 1);
+  if (m_nLastLoadedSeq && !pl->SetPosition(m_nLastLoadedSeq))
+    return false;
+  
+  return pl->HasPendingSegments();
 }
 
 void CFilePlaylist::ReadAhead()
@@ -186,7 +155,7 @@ void CFilePlaylist::ReadAhead()
   int nCurrPlaylist = m_nCurrPlaylist;
   CPlaylistData* pl = m_playlists[m_nCurrPlaylist];
   pl->m_playlistLastPos++;
-  CFileItemPtr item = (*pl->m_playList)[pl->m_playlistLastPos];
+  CFileItemPtr item = pl->CurrentItem();
   m_nLastLoadedSeq = item->GetPropertyULong("m3u8-playlistSequenceNo");
   unsigned int workingOnSeq = m_nLastLoadedSeq; // if m_nLastLoadedSeq changes - it means there was a skip and need to terminate this transfer (block irrelevant)
   unsigned int nBufferTime = pl->m_playlistLastPos * pl->m_targetDuration;
@@ -502,7 +471,7 @@ bool CFilePlaylist::Open(const CURL& url)
   {
     if (ValidatePlaylist(pl))
     {
-      if (pl->m_playList->size() == 0)
+      if (pl->Size() == 0)
       {
         CLog::Log(LOGERROR,"invalid playlist (empty)");
         return false;
@@ -512,12 +481,12 @@ bool CFilePlaylist::Open(const CURL& url)
       int nItemsToSkip = 5;
       if (nItemDuration > 0)
         nItemsToSkip = 30 / nItemDuration; // 30 seconds behind
-      int nItem = (int)(pl->m_playList->size()) - 1 - nItemsToSkip;
+      int nItem = (int)(pl->Size()) - 1 - nItemsToSkip;
       if (nItem < 0)
         nItem = 0;
       pl->m_playlistLastPos = nItem;
-      CFileItemPtr item = (*pl->m_playList)[nItem];
-      m_nLastLoadedSeq = item->GetPropertyULong("m3u8-playlistSequenceNo");
+      
+      m_nLastLoadedSeq = pl->CurrentSequenceNo();
       m_lastReportedTime = pl->m_playlistLastPos * pl->m_targetDuration;
       m_nStartTime = pl->m_playlistLastPos * pl->m_targetDuration;
     }

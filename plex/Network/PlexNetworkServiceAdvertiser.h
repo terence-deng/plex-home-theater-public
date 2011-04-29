@@ -28,7 +28,9 @@ class PlexNetworkServiceAdvertiser : public NetworkServiceAdvertiser
   {
     headers["Name"] = GetHostName();
     headers["Port"] = g_guiSettings.GetString("services.webserverport");
+#ifndef _WIN32
     headers["Version"] = Cocoa_GetAppVersion();
+#endif
     headers["Product"] = "Plex/Nine (dharma)";
   }
   

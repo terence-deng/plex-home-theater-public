@@ -13,7 +13,7 @@
 #define NS_REMOVAL_INTERVAL         2000
 #define NS_DEAD_SERVER_TIME        10000
 
-#define NS_MAX_PACKET_SIZE 2048
+#define NS_MAX_PACKET_SIZE 8096
 #define NS_BROADCAST_ADDR  boost::asio::ip::address::from_string("239.255.255.250")
 #define NS_SEARCH_MSG      "M-SEARCH * HTTP/1.1\r\n"
 

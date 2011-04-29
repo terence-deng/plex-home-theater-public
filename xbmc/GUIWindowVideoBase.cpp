@@ -1307,7 +1307,7 @@ bool CGUIWindowVideoBase::OnPlayMedia(int iItem)
       }
       else
       {
-        if (isnumber(videoRes[0]))
+        if (isdigit(videoRes[0]))
           videoRes += "p";
       
         label += videoRes;
