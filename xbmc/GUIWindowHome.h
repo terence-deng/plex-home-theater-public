@@ -32,6 +32,7 @@
 #define CONTENT_LIST_RECENTLY_ADDED    11000
 #define CONTENT_LIST_ON_DECK           11001
 #define CONTENT_LIST_RECENTLY_ACCESSED 11002
+#define CONTENT_LIST_QUEUE             11003
 
 #define CONTENT_LIST_FANART            12000
 
@@ -51,6 +52,7 @@ private:
   virtual bool CheckTimer(const CStdString& strExisting, const CStdString& strNew, int title, int line1, int line2);
   virtual void UpdateContentForSelectedItem(int itemID);
   virtual void Render();
+  void HideAllLists();
 
   int m_lastSelectedItem;
   int m_lastSelectedID;

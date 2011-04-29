@@ -72,6 +72,14 @@ CGUIWindowHome::~CGUIWindowHome(void)
 
 bool CGUIWindowHome::OnAction(const CAction &action)
 {
+  if (action.GetID() == ACTION_PREVIOUS_MENU && GetFocusedControlID() > 9000)
+  {
+    CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), 300);
+    OnMessage(msg);
+
+    return true;
+  }
+  
   if (action.GetID() == ACTION_CONTEXT_MENU)
   {
     return OnPopupMenu();
@@ -95,14 +103,7 @@ bool CGUIWindowHome::OnAction(const CAction &action)
       if (itemId != m_lastSelectedID)
       {
         // Hide lists.
-        short lists[] = {CONTENT_LIST_ON_DECK, CONTENT_LIST_RECENTLY_ACCESSED, CONTENT_LIST_RECENTLY_ADDED};
-        BOOST_FOREACH(int id, lists)
-        {
-          SET_CONTROL_HIDDEN(id);
-          SET_CONTROL_HIDDEN(id-1000);
-        }
-        
-        SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
+        HideAllLists();
         
         // OK, let's load it after a delay.
         m_pendingSelectID = itemId;
@@ -124,12 +125,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
   m_workerManager->cancelPending();
   
   // Hide lists.
-  short lists[] = {CONTENT_LIST_ON_DECK, CONTENT_LIST_RECENTLY_ACCESSED, CONTENT_LIST_RECENTLY_ADDED};
-  BOOST_FOREACH(int id, lists)
-  {
-    SET_CONTROL_HIDDEN(id);
-    SET_CONTROL_HIDDEN(id-1000);
-  }
+  HideAllLists();
   
   // Depending on what's selected, get the appropriate content.
   if (itemID >= 1000)
@@ -138,19 +134,28 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
     string sectionUrl = m_idToSectionUrlMap[itemID];
     int typeID = m_idToSectionTypeMap[itemID];
     
-    // Recently added.
-    m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
-    m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
-    
-    if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
+    if (typeID == PLEX_METADATA_MIXED)
     {
-      // On deck.
-      m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
-      m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+      // Queue.
+      m_contentLists[CONTENT_LIST_QUEUE] = Group(kVIDEO_LOADER);
+      m_workerManager->enqueue(WINDOW_HOME, sectionUrl, CONTENT_LIST_QUEUE);
     }
-    
-    // Asynchronously fetch the fanart for the section.
-    m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
+    else
+    {
+      // Recently added.
+      m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
+      m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
+      
+      if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
+      {
+        // On deck.
+        m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+      }
+      
+      // Asynchronously fetch the fanart for the section.
+      m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
+    }
   }
   else
   {
@@ -311,6 +316,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     if (m_lastSelectedID != -1)
       UpdateContentForSelectedItem(m_lastSelectedID);
     
+    HideAllLists();
+    
   case GUI_MSG_WINDOW_RESET:
   case GUI_MSG_UPDATE_MAIN_MENU:
   {
@@ -457,6 +464,19 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   }
   
   return ret;
+}
+
+void CGUIWindowHome::HideAllLists()
+{
+  // Hide lists.
+  short lists[] = {CONTENT_LIST_ON_DECK, CONTENT_LIST_RECENTLY_ACCESSED, CONTENT_LIST_RECENTLY_ADDED, CONTENT_LIST_QUEUE};
+  BOOST_FOREACH(int id, lists)
+  {
+    SET_CONTROL_HIDDEN(id);
+    SET_CONTROL_HIDDEN(id-1000);
+  }
+  
+  SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
 }
 
 void CGUIWindowHome::Render()
