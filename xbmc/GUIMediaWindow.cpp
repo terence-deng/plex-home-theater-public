@@ -540,7 +540,10 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
   case GUI_MSG_WINDOW_INIT:
     {
       if (m_vecItems->m_strPath == "?")
+      {
         m_vecItems->m_strPath.Empty();
+        m_history.ClearPathHistory();
+      }
       CStdString dir = message.GetStringParam(0);
       const CStdString &ret = message.GetStringParam(1);
       bool returning = ret.CompareNoCase("return") == 0;
@@ -558,6 +561,12 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
           m_vecItems->m_strPath.Empty();
         SetHistoryForPath(m_vecItems->m_strPath);
       }
+      else
+      {
+        m_history.ClearPathHistory();
+        m_vecItems->m_strPath.Empty();
+      }
+
       if (message.GetParam1() != WINDOW_INVALID)
       { // first time to this window - make sure we set the root path
         m_startDirectory = returning ? dir : "";
