@@ -88,6 +88,8 @@ bool CGUIWindowHome::OnAction(const CAction &action)
   {
     CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), 300);
     OnMessage(msg);
+    
+    return true;
   }
   
   bool ret = CGUIWindow::OnAction(action);
