@@ -227,10 +227,12 @@ bool CDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items, C
       }
     }
 
+#if 0
     //  Should any of the files we read be treated as a directory?
     //  Disable for database folders, as they already contain the extracted items
     if (bUseFileDirectories && !items.IsMusicDb() && !items.IsVideoDb() && !items.IsSmartPlayList())
       FilterFileDirectories(items, strMask);
+#endif
 
     return true;
   }
