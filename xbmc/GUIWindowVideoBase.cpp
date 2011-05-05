@@ -1000,13 +1000,51 @@ bool CGUIWindowVideoBase::ShowResumeMenu(CFileItem &item)
 }
 
 bool CGUIWindowVideoBase::OnResumeItem(int iItem)
-{
+{ 
   if (iItem < 0 || iItem >= m_vecItems->Size()) return true;
-  CFileItemPtr item = m_vecItems->Get(iItem);
+  CFileItemPtr pItem = m_vecItems->Get(iItem);
 
-  if (!item->m_bIsFolder)
+  // If there is more than one media item, allow picking which one.
+  if (pItem->m_mediaItems.size() > 1 && g_guiSettings.GetBool("videoplayer.alternatemedia") == true)
   {
-    CStdString resumeString = GetResumeString(*item);
+    CFileItemList   fileItems;
+    CContextButtons choices;
+    CPlexDirectory  mediaChoices;
+    
+    for (size_t i=0; i < pItem->m_mediaItems.size(); i++)
+    {
+      CFileItemPtr item = pItem->m_mediaItems[i];
+      
+      CStdString label;
+      CStdString videoCodec = item->GetProperty("mediaTag-videoCodec").ToUpper();
+      CStdString videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
+      
+      if (videoCodec.size() == 0 && videoRes.size() == 0)
+      {
+        label = "Unknown";
+      }
+      else
+      {
+        if (isdigit(videoRes[0]))
+          videoRes += "p";
+      
+        label += videoRes;
+        label += " " + videoCodec;
+      }
+      
+      choices.Add(i, label);
+    }
+    
+    int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
+    if (choice >= 0)
+      pItem->m_strPath = pItem->m_mediaItems[choice]->m_strPath;
+    else
+      return false;
+  }
+  
+  if (!pItem->m_bIsFolder)
+  {
+    CStdString resumeString = GetResumeString(*pItem);
     if (!resumeString.IsEmpty())
     {
       CContextButtons choices;
@@ -1286,57 +1324,6 @@ bool CGUIWindowVideoBase::OnPlayMedia(int iItem)
   
   CFileItemPtr pItem = m_vecItems->Get(iItem);
   
-  // If there is more than one media item, allow picking which one.
-  if (pItem->m_mediaItems.size() > 1 && g_guiSettings.GetBool("videoplayer.alternatemedia") == true)
-  {
-    CFileItemList   fileItems;
-    CContextButtons choices;
-    CPlexDirectory  mediaChoices;
-    
-    for (size_t i=0; i < pItem->m_mediaItems.size(); i++)
-    {
-      CFileItemPtr item = pItem->m_mediaItems[i];
-      
-      CStdString label;
-      CStdString videoCodec = item->GetProperty("mediaTag-videoCodec").ToUpper();
-      CStdString videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
-      
-      if (videoCodec.size() == 0 && videoRes.size() == 0)
-      {
-        label = "Unknown";
-      }
-      else
-      {
-        if (isdigit(videoRes[0]))
-          videoRes += "p";
-      
-        label += videoRes;
-        label += " " + videoCodec;
-      }
-      
-      choices.Add(i, label);
-    }
-    
-    int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-    if (choice > 0)
-    {
-      // Steal the resume offset and mode.
-      long offset = pItem->m_lStartOffset;
-      CStdString resumeTime = pItem->GetProperty("viewOffset");
-      
-      // Copy over the selected item.
-      pItem = pItem->m_mediaItems[choice-1];
-      
-      // Store what we need to resume.
-      pItem->m_lStartOffset = offset;
-      pItem->SetProperty("viewOffset", resumeTime);
-    }
-    else
-    {
-      return false;
-    }
-  }
-
   // Reset Playlistplayer, playback started now does
   // not use the playlistplayer.
   g_playlistPlayer.Reset();
