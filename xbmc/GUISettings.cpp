@@ -483,6 +483,15 @@ void CGUISettings::Initialize()
   AddInt(pwm, "powermanagement.displaysoff", 17500, 0, 0, 5, 120, SPIN_CONTROL_INT_PLUS, MASK_MINS, TEXT_OFF);
   AddInt(pwm, "powermanagement.shutdowntime", 357, 0, 0, 5, 120, SPIN_CONTROL_INT_PLUS, MASK_MINS, TEXT_OFF);
 
+  CSettingsCategory* ss = AddCategory(4, "screensaver", 360);
+  AddInt(ss, "screensaver.time", 355, 3, 1, 1, 60, SPIN_CONTROL_INT_PLUS, MASK_MINS);
+  AddDefaultAddon(ss, "screensaver.mode", 356, "screensaver.xbmc.builtin.dim", ADDON_SCREENSAVER);
+  AddString(0, "screensaver.settings", 21417, "", BUTTON_CONTROL_STANDARD);
+  AddString(ss, "screensaver.preview", 1000, "", BUTTON_CONTROL_STANDARD);
+  AddSeparator(ss, "screensaver.sep1");
+  AddBool(ss, "screensaver.usemusicvisinstead", 13392, true);
+  AddBool(ss, "screensaver.usedimonpause", 22014, true);
+
   map<int,int> shutdown;
   if (g_powerManager.CanPowerdown())
     shutdown.insert(make_pair(13005,POWERSTATE_SHUTDOWN));
@@ -755,15 +764,6 @@ void CGUISettings::Initialize()
 	CSettingsCategory * rss = AddCategory(7,"rss", 40104);
 	AddBool(rss, "rss.enablerssfeeds",13305,  true);
 	AddBool(rss, "rss.rssfeedsrtl",13412,  false);
-
-  //CSettingsCategory* ss = AddCategory(7, "screensaver", 360);
-  AddInt(NULL, "screensaver.time", 355, 3, 1, 1, 60, SPIN_CONTROL_INT_PLUS, MASK_MINS);
-  AddDefaultAddon(NULL, "screensaver.mode", 356, "screensaver.xbmc.builtin.dim", ADDON_SCREENSAVER);
-  AddString(NULL, "screensaver.settings", 21417, "", BUTTON_CONTROL_STANDARD);
-  AddString(NULL, "screensaver.preview", 1000, "", BUTTON_CONTROL_STANDARD);
-  AddSeparator(NULL, "screensaver.sep1");
-  AddBool(NULL, "screensaver.usemusicvisinstead", 13392, true);
-  AddBool(NULL, "screensaver.usedimonpause", 22014, true);
 
   AddCategory(7, "window", 0);
   AddInt(NULL, "window.width",  0, 1280, 10, 1, INT_MAX, SPIN_CONTROL_INT);
