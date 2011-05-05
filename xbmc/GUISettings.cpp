@@ -590,7 +590,7 @@ void CGUISettings::Initialize()
   // FIXME: hide this setting until it is properly respected. In the meanwhile, default to AUTO.
   //AddInt(5, "videoplayer.displayresolution", 169, (int)RES_AUTORES, (int)RES_AUTORES, 1, (int)CUSTOM+MAX_RESOLUTIONS, SPIN_CONTROL_TEXT);
   AddInt(NULL, "videoplayer.displayresolution", 169, (int)RES_AUTORES, (int)RES_AUTORES, 1, (int)RES_AUTORES, SPIN_CONTROL_TEXT);
-  AddBool(NULL, "videoplayer.adjustrefreshrate", 170, false);
+  AddBool(vp, "videoplayer.adjustrefreshrate", 170, false);
   //sync settings not available on windows gl build
 #if defined(_WIN32) && defined(HAS_GL)
   #define SYNCSETTINGS 0
@@ -614,9 +614,9 @@ void CGUISettings::Initialize()
   AddBool(NULL, "videoplayer.vdpau_allow_xrandr", 13122, false);
 #endif
 #if defined(HAS_GL) || HAS_GLES == 2  // May need changing for GLES
-  AddSeparator(NULL, "videoplayer.sep1.5");
+  AddSeparator(vp, "videoplayer.sep1.5");
   AddInt(vp, "videoplayer.highqualityupscaling", 13112, SOFTWARE_UPSCALING_DISABLED, SOFTWARE_UPSCALING_DISABLED, 1, SOFTWARE_UPSCALING_ALWAYS, SPIN_CONTROL_TEXT);
-  AddInt(NULL, "videoplayer.upscalingalgorithm", 13116, VS_SCALINGMETHOD_BICUBIC_SOFTWARE, VS_SCALINGMETHOD_BICUBIC_SOFTWARE, 1, VS_SCALINGMETHOD_VDPAU_HARDWARE, SPIN_CONTROL_TEXT);
+  AddInt(vp, "videoplayer.upscalingalgorithm", 13116, VS_SCALINGMETHOD_BICUBIC_SOFTWARE, VS_SCALINGMETHOD_BICUBIC_SOFTWARE, 1, VS_SCALINGMETHOD_VDPAU_HARDWARE, SPIN_CONTROL_TEXT);
 #ifdef HAVE_LIBVDPAU
   AddBool(NULL, "videoplayer.vdpauUpscalingLevel", 13121, false);
   AddBool(vp, "videoplayer.vdpaustudiolevel", 13122, false);
@@ -626,6 +626,8 @@ void CGUISettings::Initialize()
   AddSeparator(NULL, "videoplayer.sep5");
   AddBool(NULL, "videoplayer.teletextenabled", 23050, true);
 
+  AddBool(vp, "videoplayer.alternatemedia", 13148, true);
+  
   //CSettingsCategory* vid = AddCategory(5, "myvideos", 14081);
   AddInt(NULL, "myvideos.selectaction", 22079, SELECT_ACTION_PLAY_OR_RESUME, SELECT_ACTION_CHOOSE, 1, SELECT_ACTION_INFO, SPIN_CONTROL_TEXT);
   AddBool(NULL, "myvideos.treatstackasfile", 20051, true);
