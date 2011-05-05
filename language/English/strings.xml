@@ -105,7 +105,7 @@
   <string id="167">Enable FTP Server</string>
   <string id="168">Enable Internet Time Synchronization</string>
   <string id="169">Resolution</string>
-  <string id="170"></string>
+  <string id="170">Adjust display refresh rate to match video</string>
   <string id="171"></string>
   <string id="172">Release Date</string>
   <string id="173"></string>
@@ -1003,6 +1003,8 @@
   <string id="13145">If you are currently using the Apple Remote to control</string>
   <string id="13146">Plex, changing this setting might affect your ability</string>
   <string id="13147">to continue controlling it. Do you want to proceed?</string>
+
+  <string id="13148">Allow Picking Alternate Media</string>
 
   <string id="13150">HDD Key:</string>
   <string id="13151">HDD Temp:</string>
