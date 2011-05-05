@@ -23,6 +23,7 @@
   #include "config.h"
 #endif
 #include "Application.h"
+#include "BackgroundMusicPlayer.h"
 #include "utils/Builtins.h"
 #include "SystemGlobals.h"
 #include "Splash.h"
@@ -3608,6 +3609,9 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
     return false;
   }
 
+  // Stop the background music.
+  BackgroundMusicPlayer::SendThemeChangeMessage();
+  
   // if we have a stacked set of files, we need to setup our stack routines for
   // "seamless" seeking and total time of the movie etc.
   // will recall with restart set to true
