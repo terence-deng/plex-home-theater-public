@@ -308,6 +308,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     // Cancel pending tasks and reset contents of right hand lists.
     m_workerManager->cancelPending();
     m_contentLists.clear();
+    
+    HideAllLists();
   }
 
   bool ret = CGUIWindow::OnMessage(message);
