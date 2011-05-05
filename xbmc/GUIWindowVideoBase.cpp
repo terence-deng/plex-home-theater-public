@@ -67,6 +67,8 @@
 #include "MediaManager.h"
 
 #include "PlexMediaServerQueue.h"
+#include "BackgroundMusicPlayer.h"
+
 
 using namespace std;
 using namespace XFILE;
@@ -118,6 +120,7 @@ bool CGUIWindowVideoBase::OnMessage(CGUIMessage& message)
     if (m_thumbLoader.IsLoading())
       m_thumbLoader.StopThread();
     m_database.Close();
+    BackgroundMusicPlayer::SendThemeChangeMessage();
     break;
 
   case GUI_MSG_WINDOW_INIT:
