@@ -163,6 +163,7 @@
   </MyMusicPlaylistEditor>
   <MyMusicFiles>
     <keyboard>
+      <escape>ParentDir</escape>
       <space>Playlist</space>
       <q>Queue</q>
     </keyboard>
@@ -392,6 +393,7 @@
   </MyVideoLibrary>
   <MyVideoFiles>
     <keyboard>
+      <escape>ParentDir</escape>
       <space>Playlist</space>
       <q>Queue</q>
       <w>ToggleWatched</w>
