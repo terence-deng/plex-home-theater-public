@@ -37,6 +37,7 @@
 #include "GUIDialogYesNo.h"
 #include "PlayListFactory.h"
 #include "Application.h"
+#include "BackgroundMusicPlayer.h"
 #include "NfoFile.h"
 #include "Picture.h"
 #include "PlayListPlayer.h"
@@ -118,6 +119,7 @@ bool CGUIWindowVideoBase::OnMessage(CGUIMessage& message)
     if (m_thumbLoader.IsLoading())
       m_thumbLoader.StopThread();
     m_database.Close();
+    BackgroundMusicPlayer::SendThemeChangeMessage();
     break;
 
   case GUI_MSG_WINDOW_INIT:
