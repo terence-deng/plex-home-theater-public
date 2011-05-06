@@ -1322,6 +1322,13 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   }
   else if (type == CGUIControl::GUICONTROL_MULTI_IMAGE)
   {
+    TiXmlElement *info = pControlNode->FirstChildElement("info");
+    if (info)
+    {
+      if (info->Attribute("background") && strcmp(info->Attribute("background"), "true") == 0)  
+        texture.useLarge = true;
+    }
+    
     control = new CGUIMultiImage(
       parentID, id, posX, posY, width, height, texture, timePerImage, fadeTime, randomized, loop, timeToPauseAtEnd);
     ((CGUIMultiImage *)control)->SetInfo(texturePath);
