@@ -400,6 +400,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       m_idToSectionTypeMap.clear();
 
       // Now add the new ones.
+      bool itemStillExists = false;
       int id = 1000;
       BOOST_FOREACH(CFileItemPtr item, newItems)
       {
@@ -430,6 +431,10 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           newItem->SetProperty("fanart_image", newItem->GetCachedProgramFanart());
 
         newList.push_back(newItem);
+        
+        // See if it matches the selected item.
+        if (id == m_lastSelectedID)
+          itemStillExists = true;
       }
 
       // Replace 'em.
@@ -443,16 +448,27 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         g_windowManager.SendThreadMessage(msg);
       }
 
-      // Additionally, if we have a selected item on the right hand side, restore it.
-      if (m_selectedItem != -1)
+      // See if the item for which we were showing the right hand lists still exists.
+      if (itemStillExists)
       {
-        // Select group.
-        CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), m_selectedContainerID);
-        g_windowManager.SendThreadMessage(msg);
-        
-        // Select item.
-        CGUIMessage msg2(GUI_MSG_ITEM_SELECT, GetID(), m_selectedContainerID, m_selectedItem);
-        g_windowManager.SendThreadMessage(msg2);
+        // Additionally, if we have a selected item on the right hand side, restore it.
+        if (m_selectedItem != -1)
+        {
+          // Select group.
+          CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), m_selectedContainerID);
+          g_windowManager.SendThreadMessage(msg);
+
+          // Select item.
+          CGUIMessage msg2(GUI_MSG_ITEM_SELECT, GetID(), m_selectedContainerID, m_selectedItem);
+          g_windowManager.SendThreadMessage(msg2);
+        }
+      }
+      else
+      {
+        // Whack the right hand side.
+        HideAllLists();
+        m_workerManager->cancelPending();
+        m_contentLists.clear();
       }
     }
     
