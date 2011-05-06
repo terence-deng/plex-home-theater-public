@@ -129,7 +129,7 @@ class PlexContentPlayerMixin
             choices.Add(1, resumeString);
             choices.Add(2, g_localizeStrings.Get(12021));
             int retVal = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-            if (!retVal)
+            if (retVal == -1)
               return;
 
             resumeItem = (retVal == 1);
