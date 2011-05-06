@@ -332,7 +332,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     if (control == 0)
       control = (CGUIBaseContainer* )GetControl(300);
     
-    m_lastSelectedItem = control->GetSelectedItem();
+    if (control)
+      m_lastSelectedItem = control->GetSelectedItem();
     
     // Cancel pending tasks and hide.
     m_workerManager->cancelPending();
