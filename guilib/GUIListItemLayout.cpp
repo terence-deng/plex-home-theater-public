@@ -128,8 +128,11 @@ void CGUIListItemLayout::LoadControl(TiXmlElement *child, CGUIControlGroup *grou
   CGUIControlFactory factory;
   CGUIControl *control = factory.Create(0, rect, child, true);  // true indicating we're inside a list for the
                                                                 // different label control + defaults.
+  
   if (control)
   {
+    control->SetInitialVisibility();
+    
     group->AddControl(control);
     if (control->IsGroup())
     {
