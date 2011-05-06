@@ -9,6 +9,7 @@
 
 #include "Application.h"
 #include "FileItem.h"
+#include "GUISettings.h"
 #include "GUIBaseContainer.h"
 #include "GUIDialogContextMenu.h"
 #include "GUIWindowManager.h"
@@ -77,6 +78,44 @@ class PlexContentPlayerMixin
         else
         {
           bool resumeItem = false;
+          
+          // If there is more than one media item, allow picking which one.
+          if (file->m_mediaItems.size() > 1 && g_guiSettings.GetBool("videoplayer.alternatemedia") == true)
+          {
+            CFileItemList   fileItems;
+            CContextButtons choices;
+            CPlexDirectory  mediaChoices;
+            
+            for (size_t i=0; i < file->m_mediaItems.size(); i++)
+            {
+              CFileItemPtr item = file->m_mediaItems[i];
+              
+              CStdString label;
+              CStdString videoCodec = item->GetProperty("mediaTag-videoCodec").ToUpper();
+              CStdString videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
+              
+              if (videoCodec.size() == 0 && videoRes.size() == 0)
+              {
+                label = "Unknown";
+              }
+              else
+              {
+                if (isdigit(videoRes[0]))
+                  videoRes += "p";
+              
+                label += videoRes;
+                label += " " + videoCodec;
+              }
+              
+              choices.Add(i, label);
+            }
+            
+            int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
+            if (choice >= 0)
+              file->m_strPath = file->m_mediaItems[choice]->m_strPath;
+            else
+              return;
+          }
           
           if (!file->m_bIsFolder && file->HasProperty("viewOffset")) 
           {
