@@ -53,6 +53,7 @@ private:
   virtual void UpdateContentForSelectedItem(int itemID);
   virtual void Render();
   void HideAllLists();
+  virtual void SaveStateBeforePlay(CGUIBaseContainer* container);
 
   int m_lastSelectedItem;
   int m_lastSelectedID;
@@ -63,6 +64,8 @@ private:
   std::map<int, std::string> m_idToSectionUrlMap;
   std::map<int, int>         m_idToSectionTypeMap;
   std::map<int, Group>       m_contentLists;
+  int                        m_selectedContainerID;
+  int                        m_selectedItem;
   
   PlexContentWorkerManager*  m_workerManager;
 };

@@ -61,6 +61,8 @@ CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
   , m_lastSelectedItem(-1)
   , m_lastSelectedID(-1)
   , m_pendingSelectID(-1)
+  , m_selectedContainerID(-1)
+  , m_selectedItem(-1)
 {
   // Create the worker. We're not going to destroy it because whacking it on exit can cause problems.
   m_workerManager = new PlexContentWorkerManager();
@@ -120,52 +122,79 @@ bool CGUIWindowHome::OnAction(const CAction &action)
 
 void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
 {
-  // Clear old lists.
-  m_contentLists.clear();
-  
-  // Cancel any pending requests.
-  m_workerManager->cancelPending();
-  
   // Hide lists.
   HideAllLists();
   
-  // Depending on what's selected, get the appropriate content.
-  if (itemID >= 1000)
+  if (m_lastSelectedID == itemID)
   {
-    // A library section.
-    string sectionUrl = m_idToSectionUrlMap[itemID];
-    int typeID = m_idToSectionTypeMap[itemID];
+    // Bind the lists.
+    BOOST_FOREACH(int_list_pair pair, m_contentLists)
+    {
+      int controlID = pair.first;
+      CFileItemListPtr list = pair.second.list;
     
-    if (typeID == PLEX_METADATA_MIXED)
-    {
-      // Queue.
-      m_contentLists[CONTENT_LIST_QUEUE] = Group(kVIDEO_LOADER);
-      m_workerManager->enqueue(WINDOW_HOME, sectionUrl, CONTENT_LIST_QUEUE);
-    }
-    else
-    {
-      // Recently added.
-      m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
-      m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
-      
-      if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
+      CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(controlID);
+      if (control && list->Size() > 0)
       {
-        // On deck.
-        m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+        // Bind the list.
+        CGUIMessage msg(GUI_MSG_LABEL_BIND, MAIN_MENU, controlID, 0, 0, list.get());
+        OnMessage(msg);
+        
+        // Make sure it's visible.
+        SET_CONTROL_VISIBLE(controlID);
+        SET_CONTROL_VISIBLE(controlID-1000);
+        
+        // Load thumbs.
+        m_contentLists[controlID].loader->Load(*list.get());
       }
-      
-      // Asynchronously fetch the fanart for the section.
-      m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
     }
   }
   else
   {
-    SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
-  }
+    // Clear old lists.
+    m_contentLists.clear();
+    
+    // Cancel any pending requests.
+    m_workerManager->cancelPending();
+    
+    // Depending on what's selected, get the appropriate content.
+    if (itemID >= 1000)
+    {
+      // A library section.
+      string sectionUrl = m_idToSectionUrlMap[itemID];
+      int typeID = m_idToSectionTypeMap[itemID];
+
+      if (typeID == PLEX_METADATA_MIXED)
+      {
+        // Queue.
+        m_contentLists[CONTENT_LIST_QUEUE] = Group(kVIDEO_LOADER);
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl, CONTENT_LIST_QUEUE);
+      }
+      else
+      {
+        // Recently added.
+        m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
+
+        if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
+        {
+          // On deck.
+          m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
+          m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+        }
+
+        // Asynchronously fetch the fanart for the section.
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
+      }
+    }
+    else
+    {
+      SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
+    }
   
-  // Remember what the last one was.
-  m_lastSelectedID = itemID;
+    // Remember what the last one was.
+    m_lastSelectedID = itemID;
+  }
 }
 
 bool CGUIWindowHome::OnPopupMenu()
@@ -305,10 +334,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     
     m_lastSelectedItem = control->GetSelectedItem();
     
-    // Cancel pending tasks and reset contents of right hand lists.
+    // Cancel pending tasks and hide.
     m_workerManager->cancelPending();
-    m_contentLists.clear();
-    
     HideAllLists();
   }
 
@@ -317,10 +344,12 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   switch (message.GetMessage())
   {
   case GUI_MSG_WINDOW_INIT:
+  {
     if (m_lastSelectedID != -1)
       UpdateContentForSelectedItem(m_lastSelectedID);
-    
-    HideAllLists();
+    else
+      HideAllLists();
+  }
     
   case GUI_MSG_WINDOW_RESET:
   case GUI_MSG_UPDATE_MAIN_MENU:
@@ -412,7 +441,22 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), control->GetID(), m_lastSelectedItem+1, 0);
         g_windowManager.SendThreadMessage(msg);
       }
+
+      // Additionally, if we have a selected item on the right hand side, restore it.
+      if (m_selectedItem != -1)
+      {
+        // Select group.
+        CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), m_selectedContainerID);
+        g_windowManager.SendThreadMessage(msg);
+        
+        // Select item.
+        CGUIMessage msg2(GUI_MSG_ITEM_SELECT, GetID(), m_selectedContainerID, m_selectedItem);
+        g_windowManager.SendThreadMessage(msg2);
+      }
     }
+    
+    m_selectedContainerID = -1;
+    m_selectedItem = -1;
   }
   break;
   
@@ -468,6 +512,13 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   }
   
   return ret;
+}
+
+void CGUIWindowHome::SaveStateBeforePlay(CGUIBaseContainer* container)
+{
+  // Save state.
+  m_selectedContainerID = container->GetID();
+  m_selectedItem = container->GetSelectedItem();
 }
 
 void CGUIWindowHome::HideAllLists()
