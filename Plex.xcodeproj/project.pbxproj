@@ -53,7 +53,7 @@
 		74865F1112FBF5A600D8F899 /* ButtonTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E14770D25F9F900618676 /* ButtonTranslator.cpp */; };
 		74865F1212FBF5A600D8F899 /* CacheMemBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16970D25F9FA00618676 /* CacheMemBuffer.cpp */; };
 		74865F1312FBF5A600D8F899 /* CacheStrategy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16990D25F9FA00618676 /* CacheStrategy.cpp */; };
-		74865F1412FBF5A600D8F899 /* cc_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = E38E15350D25F9F900618676 /* cc_decoder.c */; };
+		74865F1412FBF5A600D8F899 /* cc_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = E38E15350D25F9F900618676 /* cc_decoder.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		74865F1512FBF5A600D8F899 /* CDDAcodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15E60D25F9FA00618676 /* CDDAcodec.cpp */; };
 		74865F1612FBF5A600D8F899 /* CDDADirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E169B0D25F9FA00618676 /* CDDADirectory.cpp */; };
 		74865F1712FBF5A600D8F899 /* CDDAReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E14800D25F9F900618676 /* CDDAReader.cpp */; };
@@ -7000,7 +7000,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
