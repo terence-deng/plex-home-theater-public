@@ -30,7 +30,7 @@
 #include "../../../lib/libmysql_win32/include/errmsg.h"
 #pragma comment(lib, "../../lib/libmysql_win32/lib/mysqlclient.lib")
 #else
-#include "mysql/errmsg.h"
+#include "errmsg.h"
 #endif
 
 

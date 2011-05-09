@@ -27,7 +27,7 @@
 #ifdef _WIN32
 #include "../../../lib/libmysql_win32/include/mysql.h"
 #else
-#include "mysql/mysql.h"
+#include "mysql.h"
 #endif
 
 namespace dbiplus {
@@ -142,7 +142,7 @@ public:
 /* destructor */
   ~MysqlDataset();
 
-/* set autorefresh boolean value (if true - refresh the data after edit() 
+/* set autorefresh boolean value (if true - refresh the data after edit()
 or insert() operations default = false) */
   void set_autorefresh(bool val);
 

@@ -7074,7 +7074,6 @@
 					lib/jsoncpp/jsoncpp/src/lib_json,
 					lib/libmicrohttpd/src/daemon/.libs,
 					vendor/homebrew.git/lib,
-					vendor/homebrew.git/lib/mysql,
 					/usr/lib/samba,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					/usr/X11/lib,
@@ -7111,10 +7110,8 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_18 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_19 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_20 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_21 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7135,7 +7132,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = Plex;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
+				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include /usr/X11R6/include /usr/X11/include/freetype2";
 				WARNING_CFLAGS = (
 					"-Wno-write-strings",
 					"-Wno-multichar",
@@ -7206,7 +7203,6 @@
 					lib/jsoncpp/jsoncpp/src/lib_json,
 					lib/libmicrohttpd/src/daemon/.libs,
 					vendor/homebrew.git/lib,
-					vendor/homebrew.git/lib/mysql,
 					/usr/lib/samba,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					/usr/X11/lib,
@@ -7243,10 +7239,8 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_18 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_19 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_20 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_21 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7267,7 +7261,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = Plex;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
+				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include /usr/X11R6/include /usr/X11/include/freetype2";
 				WARNING_CFLAGS = (
 					"-Wno-write-strings",
 					"-Wno-multichar",
