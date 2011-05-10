@@ -167,7 +167,7 @@ m_mode(f_mode), m_address(fcr_address), m_port(f_port), m_timer(0), m_sequence_t
 	m_socket = socket(AF_INET, SOCK_DGRAM, 0);
 	if (m_socket < 0)
 	{
-		ELOG(@"Error opening UDP socket! error: ", errno);
+		ELOG(@"Error opening UDP socket! error: %d", errno);
 		//TODO What to do?
 	}
 }

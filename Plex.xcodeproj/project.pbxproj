@@ -899,6 +899,23 @@
 		E3D01F381361779300EBD00D /* PlexContentWorker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3D01F361361779300EBD00D /* PlexContentWorker.cpp */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		743415731379D4930028671C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7434156C1379D4920028671C /* PlexHelper.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
+			remoteInfo = PlexHelper;
+		};
+		743415751379D4B40028671C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7434156C1379D4920028671C /* PlexHelper.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
+			remoteInfo = PlexHelper;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		183FDF8811AF0B0500B81E9C /* PluginSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginSource.cpp; path = addons/PluginSource.cpp; sourceTree = "<group>"; };
@@ -1057,6 +1074,8 @@
 		7417EDDC12F9ACF200DA5B18 /* addon.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = addon.xml; path = addons/visualization.nowplaying/addon.xml; sourceTree = "<group>"; };
 		74332DA212FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogPlexPluginSettings.cpp; path = plex/GUI/GUIDialogPlexPluginSettings.cpp; sourceTree = "<group>"; };
 		74332DA312FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogPlexPluginSettings.h; path = plex/GUI/GUIDialogPlexPluginSettings.h; sourceTree = "<group>"; };
+		7434156C1379D4920028671C /* PlexHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PlexHelper.xcodeproj; path = tools/EventClients/Clients/OSXRemote/PlexHelper.xcodeproj; sourceTree = "<group>"; };
+		743415771379D4BA0028671C /* PlexHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = PlexHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIWindowNowPlaying.cpp; path = plex/GUI/GUIWindowNowPlaying.cpp; sourceTree = "<group>"; };
 		743A74EF12F8BFCD00040C63 /* GUIWindowNowPlaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIWindowNowPlaying.h; path = plex/GUI/GUIWindowNowPlaying.h; sourceTree = "<group>"; };
 		74462EE612E37BF600C8B41F /* libwavpack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwavpack.a; path = vendor/homebrew.git/lib/libwavpack.a; sourceTree = "<group>"; };
@@ -2892,13 +2911,15 @@
 		08FB7794FE84155DC02AAC07 /* Plex */ = {
 			isa = PBXGroup;
 			children = (
+				743415771379D4BA0028671C /* PlexHelper */,
 				748667CE12FC07CA00D8F899 /* Plex.icns */,
 				6E2FACD20E26E92800DF79EA /* Info.plist */,
 				F5B413131065900C0035D105 /* config.h */,
-				08FB7795FE84155DC02AAC07 /* Source */,
+				7434157F1379D7350028671C /* Dependencies */,
 				C6859E96029091FE04C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				749502F412FBF5300039DE17 /* Frameworks */,
+				08FB7795FE84155DC02AAC07 /* Source */,
 				19C28FBDFE9D53C911CA2CBB /* Products */,
 			);
 			name = Plex;
@@ -2964,6 +2985,22 @@
 				74865EE312FBF59700D8F899 /* Plex.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7434156D1379D4920028671C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				743415741379D4930028671C /* PlexHelper */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7434157F1379D7350028671C /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				7434156C1379D4920028671C /* PlexHelper.xcodeproj */,
+			);
+			name = Dependencies;
 			sourceTree = "<group>";
 		};
 		744632E812E3A29F00C8B41F /* system */ = {
@@ -6040,6 +6077,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				743415761379D4B40028671C /* PBXTargetDependency */,
 			);
 			name = Plex;
 			productName = Plex;
@@ -6064,12 +6102,28 @@
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* Plex */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7434156D1379D4920028671C /* Products */;
+					ProjectRef = 7434156C1379D4920028671C /* PlexHelper.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				74865EE212FBF59700D8F899 /* Plex */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		743415741379D4930028671C /* PlexHelper */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = PlexHelper;
+			remoteRef = 743415731379D4930028671C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		74865EDF12FBF59700D8F899 /* Resources */ = {
@@ -6972,6 +7026,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		743415761379D4B40028671C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PlexHelper;
+			targetProxy = 743415751379D4B40028671C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB924C08733DCA0010E9CD /* Debug */ = {
