@@ -24,7 +24,7 @@ AC_DEFUN([XB_FIND_SONAME],
         sed -e 's/ \+SONAME \+//'; done 2> /dev/null )
   else
     AC_MSG_CHECKING([for lib$2 dylib])
-    local_lib_path=$PWD/vendor/homebrew.git/lib
+    local_lib_path=$PWD/vendor/build/lib
     gcc_lib_path=[`$CC -print-search-dirs 2>/dev/null | fgrep libraries: | sed 's/[^=]*=\(.*\)/\1/' | sed 's/:/ /g'`]
     env_lib_path=[`echo $LDFLAGS | sed 's/-L[ ]*//g'`]
     if test "$cross_compiling" = yes; then
@@ -366,6 +366,12 @@ case $host in
      ARCHTYPE=`uname -m`
      AC_SUBST([ARCHTYPE])
      ;;
+  x86_64-apple-darwin*)
+     ARCH="x86-osx"
+     # define i386 or x86_64, cannot use $HOSTTYPE as it reports x86_64 on 10.6 regardless of kernel flavor
+     ARCHTYPE=`uname -m`
+     AC_SUBST([ARCHTYPE])
+     ;;
   powerpc-apple-darwin*)
      ARCH="powerpc-osx"
      # define ppc
@@ -425,16 +431,16 @@ if test "$host_vendor" = "apple" ; then
   AC_SUBST(MACOSX_DEPLOYMENT_TARGET, "10.5")
   # need these in CFLAGS/CXXFLAGS so AC_CHECK_LIB works
   CFLAGS="$CFLAGS -arch i386"
-  CFLAGS="$CFLAGS -I$PWD/vendor/homebrew.git/include"
+  CFLAGS="$CFLAGS -I$PWD/vendor/build/include"
   CXXFLAGS="$CXXFLAGS -arch i386"
-  CXXFLAGS="$CXXFLAGS -I$PWD/vendor/homebrew.git/include"
+  CXXFLAGS="$CXXFLAGS -I$PWD/vendor/build/include"
   # standard xbmc paths
   INCLUDES="$INCLUDES -I\$(abs_top_srcdir)/xbmc/osx"
   LDFLAGS="$LDFLAGS -arch i386"
   LDFLAGS="$LDFLAGS -mmacosx-version-min=10.4"
   LDFLAGS="$LDFLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk"
-  LDFLAGS="$LDFLAGS -L$PWD/vendor/homebrew.git/lib"
-  LDFLAGS="$LDFLAGS -L$PWD/vendor/homebrew.git/lib/mysql"
+  LDFLAGS="$LDFLAGS -L$PWD/vendor/build/lib"
+  LDFLAGS="$LDFLAGS -L$PWD/vendor/build/lib/mysql"
   dnl LDFLAGS="$LDFLAGS -L/opt/local/lib/samba3"
   LIBS="$LIBS -framework IOKit"
   LIBS="$LIBS -framework Cocoa"

@@ -11,7 +11,6 @@ VERSION=1_44_0
 SOURCE=$(LIBNAME)_$(VERSION)
 # download location and format
 BASE_URL=http://mirrors.xbmc.org/build-deps/darwin-libs
-TARBALLS_LOCATION=/Users/Shared/xbmc-depends/tarballs
 
 RETRIEVE_TOOL=/usr/bin/curl
 RETRIEVE_TOOL_FLAGS=-Ls --create-dirs --output $(TARBALLS_LOCATION)/$(ARCHIVE)
@@ -31,8 +30,8 @@ $(LIBDYLIB): $(TARBALLS_LOCATION)/$(ARCHIVE)
 	$(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
 	echo $(SOURCE) > .gitignore
 	cat user-config.jam-osx-10.4_i386.in >> $(SOURCE)/tools/build/v2/user-config.jam
-	cd $(SOURCE); ./bootstrap.sh --prefix=$(PREFIX) --with-libraries=thread
-	cd $(SOURCE); ./bjam --prefix=$(PREFIX) toolset=darwin-4.0 --architecture=x86 address-model=32 target-os=darwin macosx-version=10.4 macosx-version-min=10.4 --link=static  install
+	cd $(SOURCE); ./bootstrap.sh --prefix=$(PREFIX) --with-libraries=thread,regex,system
+	cd $(SOURCE); ./bjam --prefix=$(PREFIX) toolset=darwin-4.0 --architecture=x86 address-model=32 target-os=darwin macosx-version=${SDK_VERSION} macosx-version-min=${SDK_VERSION} --link=static install
 
 clean:
 	cd $(SOURCE); ./bjam --clean

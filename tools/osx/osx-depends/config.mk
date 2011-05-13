@@ -1,15 +1,17 @@
 # Find where this Makefile is located
 TOP := $(dir $(lastword $(MAKEFILE_LIST)))
+BUILDDIR := $(abspath $(TOP)/../../../vendor)
+TARBALLS_LOCATION := $(BUILDDIR)/tarballs
 
 platform_os=MacOSX
-platform_sdk_version=10.4u
-platform_min_version=macosx-version-min=10.4
+platform_sdk_version=10.5
+platform_min_version=macosx-version-min=10.5
 platform_gcc_version=4.0.1
 platform_host=i386-apple-darwin8
 platform_path=/Developer
-platform_os_cflags=-arch i386
-platform_os_ldflags=-arch i386
-prefix_path=/Users/Shared/xbmc-depends/osx-10.4_i386
+platform_os_cflags=-arch i386 -no_compact_linkedit
+platform_os_ldflags=-arch i386 -no_compact_linkedit
+prefix_path=$(BUILDDIR)/build
 platform_sdk_path=${platform_path}/SDKs/${platform_os}${platform_sdk_version}.sdk
 platform_bin_path=${platform_path}/usr/bin
 
@@ -37,4 +39,5 @@ export DEVROOT=${platform_path}
 export SDKROOT=${platform_sdk_path}
 export PKG_CONFIG_PATH=${prefix_path}/lib/pkgconfig:${platform_sdk_path}/usr/lib/pkgconfig
 export PATH:=${prefix_path}/bin:${platform_bin_path}:/Developer/usr/bin:$(PATH)
-
+export MACOSX_DEPLOYMENT_TARGET=${platform_sdk_version}
+export SDK_VERSION=${platform_sdk_version}

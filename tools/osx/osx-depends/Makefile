@@ -1,4 +1,4 @@
-BUILDDIR=/Users/Shared/xbmc-depends/osx-10.4_i386
+include config.mk
 
 SUBDIRS = \
 	help2man autoconf automake libtool pkg-config yasm cmake \
@@ -9,20 +9,20 @@ SUBDIRS = \
 	libvorbis libmad fribidi libwavpack libmpeg2 \
 	faad2 libcdio libsamplerate librtmp \
 	libvorbis libflac libmad fribidi libwavpack libmpeg2 \
-	faad2 libass libcdio libsamplerate librtmp libcrystalhd \
+	faad2 libcdio libsamplerate librtmp \
 	libGLEW libsdl libsdl_mixer libsdl_image \
-	samba python26 mysqlclient boost \
+	mysqlclient boost \
 
 .PHONY: setup $(SUBDIRS)
 
 all: setup $(SUBDIRS)
 
 setup:
-	mkdir -p $(BUILDDIR)/bin
-	mkdir -p $(BUILDDIR)/lib
-	mkdir -p $(BUILDDIR)/slib
-	mkdir -p $(BUILDDIR)/share
-	mkdir -p $(BUILDDIR)/include
+	mkdir -p $(PREFIX)/bin
+	mkdir -p $(PREFIX)/lib
+	mkdir -p $(PREFIX)/slib
+	mkdir -p $(PREFIX)/share
+	mkdir -p $(PREFIX)/include
 
 $(SUBDIRS):
 	$(MAKE) -C $@

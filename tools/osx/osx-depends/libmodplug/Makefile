@@ -7,21 +7,23 @@
 include ../config.mk
 
 # lib name, version
-LIBNAME=libgcrypt
-VERSION=1.4.0
+LIBNAME=libmodplug
+VERSION=0.8.7
 SOURCE=$(LIBNAME)-$(VERSION)
 # download location and format
-BASE_URL=ftp://ftp.gnupg.org/gcrypt/libgcrypt
-ARCHIVE=$(SOURCE).tar.bz2
+BASE_URL=http://mirrors.xbmc.org/build-deps/darwin-libs
+ARCHIVE=$(SOURCE).tar.gz
+TARBALLS_LOCATION=/Users/Shared/xbmc-depends/tarballs
+
 RETRIEVE_TOOL=/usr/bin/curl
 RETRIEVE_TOOL_FLAGS=-Ls --create-dirs --output $(TARBALLS_LOCATION)/$(ARCHIVE)
 ARCHIVE_TOOL=tar
 ARCHIVE_TOOL_FLAGS=xf
 
 # configuration settings
-CONFIGURE=./configure --prefix=$(PREFIX) --host=$(HOST) --enable-shared=yes
+CONFIGURE=./configure --prefix=$(PREFIX) --host=$(HOST)
 
-LIBDYLIB=$(SOURCE)/.libs/libgcrypt.dylib
+LIBDYLIB=$(SOURCE)/.libs/$(LIBNAME).dylib
 
 CLEAN_FILES=$(ARCHIVE) $(SOURCE)
 
@@ -34,7 +36,6 @@ $(SOURCE): $(TARBALLS_LOCATION)/$(ARCHIVE)
 	-rm -rf $(SOURCE)
 	$(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
 	echo $(SOURCE) > .gitignore
-	cd $(SOURCE); autoreconf -vif
 	cd $(SOURCE); $(CONFIGURE)
 
 $(LIBDYLIB): $(SOURCE)
@@ -46,8 +47,7 @@ $(LIBDYLIB): $(SOURCE)
 
 clean:
 	make -C $(SOURCE) clean
-	rm  .installed
+	rm .installed
 
 distclean::
 	rm -rf $(SOURCE) .installed
-

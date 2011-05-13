@@ -14,7 +14,6 @@ SOURCE=$(LIBNAME)-$(VERSION)
 # download location and format
 BASE_URL=http://mirrors.xbmc.org/build-deps/darwin-libs
 ARCHIVE=$(SOURCE).tar.bz2
-TARBALLS_LOCATION=/Users/Shared/xbmc-depends/tarballs
 
 RETRIEVE_TOOL=/usr/bin/curl
 RETRIEVE_TOOL_FLAGS=-Ls --create-dirs --output $(TARBALLS_LOCATION)/$(ARCHIVE)
@@ -48,8 +47,8 @@ $(LIBDYLIB): $(TARBALLS_LOCATION)/$(ARCHIVE)
 
 .installed:
 	cd $(SOURCE); make install
-	find $(PREFIX)/lib/python2.6 -type f -name *.pyc -exec rm -f {} \;	
-	find $(PREFIX)/lib/python2.6 -type f -name *.pyo -exec rm -f {} \;	
+	find $(PREFIX)/lib/python2.6 -type f -name *.pyc -exec rm -f {} \;
+	find $(PREFIX)/lib/python2.6 -type f -name *.pyo -exec rm -f {} \;
 	touch $@
 
 clean:

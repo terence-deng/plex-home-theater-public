@@ -4,6 +4,8 @@
 #    make
 #    sudo make install
 
+include ../config.mk
+
 # lib name, version
 LIBNAME=pkg-config
 VERSION=0.23
@@ -11,14 +13,12 @@ SOURCE=$(LIBNAME)-$(VERSION)
 # download location and format
 BASE_URL=http://mirrors.xbmc.org/build-deps/darwin-libs
 ARCHIVE=$(SOURCE).tar.gz
-TARBALLS_LOCATION=/Users/Shared/xbmc-depends/tarballs
 RETRIEVE_TOOL=/usr/bin/curl
 RETRIEVE_TOOL_FLAGS=-Ls --create-dirs --output $(TARBALLS_LOCATION)/$(ARCHIVE)
 ARCHIVE_TOOL=tar
 ARCHIVE_TOOL_FLAGS=xf
 
 # configuration settings
-PREFIX:=/Users/Shared/xbmc-depends/osx-10.4_i386
 CONFIGURE=./configure --prefix=$(PREFIX) --enable-indirect-deps --with-pc-path=$(PREFIX)/lib/pkgconfig:$(PREFIX)/share/pkgconfig
 
 LIBDYLIB=$(SOURCE)/bin/pkg-config

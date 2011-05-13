@@ -4,6 +4,8 @@
 #    make
 #    sudo make install
 
+include ../config.mk
+
 # lib name, version
 LIBNAME=automake
 VERSION=1.10.3
@@ -12,14 +14,12 @@ SOURCE=$(LIBNAME)-$(VERSION)
 BASE_URL=http://mirrors.xbmc.org/build-deps/darwin-libs
 
 ARCHIVE=$(SOURCE).tar.gz
-TARBALLS_LOCATION=/Users/Shared/xbmc-depends/tarballs
 RETRIEVE_TOOL=/usr/bin/curl
 RETRIEVE_TOOL_FLAGS=-Ls --create-dirs --output $(TARBALLS_LOCATION)/$(ARCHIVE)
 ARCHIVE_TOOL=tar
 ARCHIVE_TOOL_FLAGS=xf
 
 # configuration settings
-PREFIX:=/Users/Shared/xbmc-depends/osx-10.4_i386
 export PATH:=$(PREFIX)/bin:$(PATH)
 CONFIGURE=./configure --prefix=$(PREFIX)
 

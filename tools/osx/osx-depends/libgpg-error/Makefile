@@ -13,7 +13,6 @@ SOURCE=$(LIBNAME)-$(VERSION)
 # download location and format
 BASE_URL=ftp://ftp.gnupg.org/gcrypt/libgpg-error
 ARCHIVE=$(SOURCE).tar.bz2
-TARBALLS_LOCATION=/Users/Shared/xbmc-depends/tarballs
 RETRIEVE_TOOL=/usr/bin/curl
 RETRIEVE_TOOL_FLAGS=-Ls --create-dirs --output $(TARBALLS_LOCATION)/$(ARCHIVE)
 ARCHIVE_TOOL=tar

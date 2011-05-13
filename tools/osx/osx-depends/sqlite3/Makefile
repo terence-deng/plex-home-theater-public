@@ -14,7 +14,6 @@ SOURCE=$(LIBNAME)-$(VERSION)
 #BASE_URL=http://mirrors.xbmc.org/build-deps/darwin-libs
 BASE_URL=http://www.sqlite.org
 ARCHIVE=$(SOURCE).tar.gz
-TARBALLS_LOCATION=/Users/Shared/xbmc-depends/tarballs
 RETRIEVE_TOOL=/usr/bin/curl
 RETRIEVE_TOOL_FLAGS=-Ls --create-dirs --output $(TARBALLS_LOCATION)/$(ARCHIVE)
 ARCHIVE_TOOL=tar
