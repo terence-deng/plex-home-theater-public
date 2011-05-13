@@ -27,7 +27,7 @@
 #ifdef _WIN32
 #include "../../../lib/libmysql_win32/include/mysql.h"
 #else
-#include "mysql.h"
+#include "mysql/mysql.h"
 #endif
 
 namespace dbiplus {
