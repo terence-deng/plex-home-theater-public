@@ -30,7 +30,8 @@ $(LIBDYLIB): $(TARBALLS_LOCATION)/$(ARCHIVE)
 	$(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
 	echo $(SOURCE) > .gitignore
 	cat user-config.jam-osx-10.4_i386.in >> $(SOURCE)/tools/build/v2/user-config.jam
-	cd $(SOURCE); ./bootstrap.sh --prefix=$(PREFIX) --with-libraries=thread,regex,system
+	cd $(SOURCE); echo $(PREFIX) | sed 's/\//\\\\\//g' | xargs -I '%' sed -i '' -e's/-install_name "/-install_name "%\/lib\//' tools/build/v2/tools/darwin.jam
+	cd $(SOURCE); ./bootstrap.sh --prefix=$(PREFIX) --with-libraries=thread,system
 	cd $(SOURCE); ./bjam --prefix=$(PREFIX) toolset=darwin-4.0 --architecture=x86 address-model=32 target-os=darwin macosx-version=${SDK_VERSION} macosx-version-min=${SDK_VERSION} --link=static install
 
 clean:
