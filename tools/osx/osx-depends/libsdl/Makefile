@@ -20,7 +20,7 @@ ARCHIVE_TOOL_FLAGS=xf
 
 # configuration settings
 CONFIGURE=./configure --prefix=$(PREFIX) --host=$(HOST) \
-  --enable-static --disable-shared --without-x --disable-video-x11
+  --disable-static --enable-shared --without-x --disable-video-x11
 
 LIBDYLIB=$(SOURCE)/.libs/$(LIBNAME).dylib
 
