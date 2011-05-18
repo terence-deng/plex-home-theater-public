@@ -117,6 +117,7 @@ bool CGUIWindowVideoNav::OnMessage(CGUIMessage& message)
   case GUI_MSG_WINDOW_DEINIT:
     if (m_thumbLoader.IsLoading())
       m_thumbLoader.StopThread();
+    BackgroundMusicPlayer::SendThemeChangeMessage();
     break;
   case GUI_MSG_WINDOW_INIT:
     {

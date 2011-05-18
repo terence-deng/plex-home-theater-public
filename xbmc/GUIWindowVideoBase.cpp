@@ -68,6 +68,8 @@
 #include "MediaManager.h"
 
 #include "PlexMediaServerQueue.h"
+#include "BackgroundMusicPlayer.h"
+
 
 using namespace std;
 using namespace XFILE;
