@@ -653,10 +653,10 @@ void CGUISettings::Initialize()
   AddSeparator(NULL, "subtitles.sep1");
   AddPath(NULL, "subtitles.custompath", 21366, "", BUTTON_CONTROL_PATH_INPUT, false, 657);
 
-  //CSettingsCategory* dvd = AddCategory(5, "dvds", 14087);
-  AddBool(NULL, "dvds.autorun", 14088, false);
-  AddInt(NULL, "dvds.playerregion", 21372, 0, 0, 1, 8, SPIN_CONTROL_INT_PLUS, -1, TEXT_OFF);
-  AddBool(NULL, "dvds.automenu", 21882, false);
+  CSettingsCategory* dvd = AddCategory(5, "dvds", 14087);
+  AddBool(dvd, "dvds.autorun", 14088, false);
+  AddInt(dvd, "dvds.playerregion", 21372, 0, 0, 1, 8, SPIN_CONTROL_INT_PLUS, -1, TEXT_OFF);
+  AddBool(dvd, "dvds.automenu", 21882, false);
 
   AddDefaultAddon(NULL, "scrapers.moviesdefault", 21413, "metadata.themoviedb.org", ADDON_SCRAPER_MOVIES);
   AddDefaultAddon(NULL, "scrapers.tvshowsdefault", 21414, "metadata.tvdb.com", ADDON_SCRAPER_TVSHOWS);
