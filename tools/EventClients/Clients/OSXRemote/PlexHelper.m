@@ -206,7 +206,7 @@
             newID:(SInt32)newID forHardwareWithAttributes:(NSMutableDictionary *)attributes
 {
   if(m_verbose)
-    NSLog(@"Change of remote ID from %d to %d", old, newID);
+    NSLog(@"Change of remote ID from %d to %d", (int)old, (int)newID);
   [mp_wrapper switchRemote: newID];
 
 }
@@ -218,7 +218,7 @@
 {
 	switch (buttonCode)
 	{
-		case kHIDRemoteButtonCodePlus:
+      case kHIDRemoteButtonCodePlus:
 			return (@"Plus");
       break;
 		case kHIDRemoteButtonCodeMinus:
@@ -268,7 +268,7 @@
   NSFileManager *fileManager = [NSFileManager defaultManager];
   if([fileManager fileExistsAtPath:mp_app_path]){
     if(mp_home_path && [mp_home_path length])
-      setenv("XBMC_HOME", [mp_home_path cString], 1);
+      setenv("PLEX_HOME", [mp_home_path UTF8String], 1);
     //launch or activate xbmc
     if(![[NSWorkspace sharedWorkspace] launchApplication:mp_app_path])
       ELOG(@"Error launching %@", mp_app_path);

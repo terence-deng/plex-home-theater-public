@@ -72,38 +72,7 @@ def get_exe_environ():
 def get_env_path():
     '''Returns the path to the build environ'''
     script_path = os.path.abspath(os.path.dirname(__file__))
-    return os.path.join(script_path, 'vendor', 'homebrew.git')
-
-
-def get_brew_path():
-    '''Returns the path to the homebrew executable'''
-    return os.path.join(get_env_path(), 'bin', 'brew')
-
-
-def brew(args, message = None):
-    '''Run the homebrew command with the given arguments'''
-    args.insert(0, get_brew_path())
-    run_cmd(args, message)
-
-
-def brew_install(name, options):
-    '''Install a forumula using homebrew'''
-    args = ['install', '--32bit', name] + options
-    if VERBOSE:
-      args.insert(1, '--verbose')
-    brew(args, "Installing %s" % name)
-
-
-def brew_link(name):
-    '''Create symlinks in the install tree for a given formula'''
-    brew(['link', name])
-
-
-def install_formula(formula):
-    '''Install and configure a formula'''
-    brew_install(formula.get('name'), formula.get('options', []))
-    if formula.get('link', False):
-        brew_link(formula.get('name'))
+    return os.path.join(script_path, 'vendor', 'build')
 
 
 def update_submodules():
@@ -130,38 +99,7 @@ def build_internal_libs():
 
 
 def bootstrap_dependencies():
-    requirements = [
-        {'name': 'curl', 'link': True},
-        {'name': 'pcre'},
-        {'name': 'expat'},
-        {'name': 'libiconv', 'link': True},
-        {'name': 'gettext', 'link': True},
-        {'name': 'cmake'},
-        {'name': 'pkgconfig'},
-        {'name': 'lzo'},
-        {'name': 'lzo1'},
-        {'name': 'boost'},
-        {'name': 'fontconfig'},
-        {'name': 'libpng', 'link': True},
-        {'name': 'mad'},
-        {'name': 'fribidi'},
-        {'name': 'wavpack'},
-        {'name': 'sdl'},
-        {'name': 'libmpeg2'},
-        {'name': 'glew', 'link': True},
-        {'name': 'libcdio'},
-        {'name': 'openssl', 'link': True},
-        {'name': 'libssh2', 'link': True},
-        {'name': 'sqlite'},
-        {'name': 'libsamplerate'},
-        {'name': 'sdl_mixer'},
-        {'name': 'sdl_image'},
-        {'name': 'yasm'},
-        {'name': 'rtmpdump'},
-        {'name': 'mysql', 'options': ['--client-only']}
-        ]
-    for formula in requirements:
-        install_formula(formula)
+    run_cmd(['make', '-C', 'tools/osx/osx-depends'], "Building dependencies")
 
 
 def usage():

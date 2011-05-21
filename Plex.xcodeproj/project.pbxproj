@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		742ADB6413843E8700E2F571 /* libSDL_image-1.2.0.1.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 742ADB6213843E8700E2F571 /* libSDL_image-1.2.0.1.6.dylib */; };
+		742ADB6513843E8700E2F571 /* libSDL_mixer-1.2.0.2.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 742ADB6313843E8700E2F571 /* libSDL_mixer-1.2.0.2.6.dylib */; };
+		742ADB67138441EE00E2F571 /* libSDL-1.2.0.11.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 742ADB66138441EE00E2F571 /* libSDL-1.2.0.11.2.dylib */; };
+		7462B2E7137D8FF600DE1658 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7462B2E6137D8FF600DE1658 /* libz.dylib */; };
+		7462B2E9137D901F00DE1658 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7462B2E8137D901F00DE1658 /* libiconv.dylib */; };
+		7462B30A137DAB8900DE1658 /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7462B308137DAB8900DE1658 /* libboost_system.dylib */; };
+		7462B30B137DAB8900DE1658 /* libboost_thread.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7462B309137DAB8900DE1658 /* libboost_thread.dylib */; };
 		7485ADBF1359DC2700E663B5 /* FilePlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADBD1359DC2700E663B5 /* FilePlaylist.cpp */; };
 		7485ADC21359E1E700E663B5 /* DVDInputStreamPlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADC01359E1E700E663B5 /* DVDInputStreamPlaylist.cpp */; };
 		7485ADC51359EB8500E663B5 /* Base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADC31359EB8400E663B5 /* Base64.cpp */; };
@@ -53,7 +60,7 @@
 		74865F1112FBF5A600D8F899 /* ButtonTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E14770D25F9F900618676 /* ButtonTranslator.cpp */; };
 		74865F1212FBF5A600D8F899 /* CacheMemBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16970D25F9FA00618676 /* CacheMemBuffer.cpp */; };
 		74865F1312FBF5A600D8F899 /* CacheStrategy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16990D25F9FA00618676 /* CacheStrategy.cpp */; };
-		74865F1412FBF5A600D8F899 /* cc_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = E38E15350D25F9F900618676 /* cc_decoder.c */; };
+		74865F1412FBF5A600D8F899 /* cc_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = E38E15350D25F9F900618676 /* cc_decoder.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		74865F1512FBF5A600D8F899 /* CDDAcodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E15E60D25F9FA00618676 /* CDDAcodec.cpp */; };
 		74865F1612FBF5A600D8F899 /* CDDADirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E169B0D25F9FA00618676 /* CDDADirectory.cpp */; };
 		74865F1712FBF5A600D8F899 /* CDDAReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E14800D25F9F900618676 /* CDDAReader.cpp */; };
@@ -856,26 +863,21 @@
 		7486672312FBF60600D8F899 /* libcdio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EEA12E37C3600C8B41F /* libcdio.a */; };
 		7486672412FBF60600D8F899 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EF112E37D7900C8B41F /* libpcre.a */; };
 		7486672512FBF60600D8F899 /* libsqlite3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EF512E37DC800C8B41F /* libsqlite3.a */; };
-		7486672612FBF60600D8F899 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EF912E37E8A00C8B41F /* libSDL.a */; };
-		7486672712FBF60600D8F899 /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0112E37F8400C8B41F /* libSDL_image.a */; };
-		7486672812FBF60600D8F899 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0D12E3808700C8B41F /* libSDL_mixer.a */; };
 		7486672912FBF60600D8F899 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462EFD12E37F4000C8B41F /* libGLEW.a */; };
-		7486672A12FBF60600D8F899 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0512E37FD300C8B41F /* libiconv.dylib */; };
 		7486672B12FBF60600D8F899 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F0912E3806200C8B41F /* libmysqlclient.a */; };
 		7486672C12FBF60600D8F899 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1112E380B000C8B41F /* libogg.a */; };
 		7486672D12FBF60600D8F899 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1512E380DB00C8B41F /* libpcrecpp.a */; };
 		7486672E12FBF60600D8F899 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1912E3811600C8B41F /* libvorbis.a */; };
 		7486672F12FBF60600D8F899 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2C12E3826400C8B41F /* libvorbisenc.a */; };
 		7486673012FBF60600D8F899 /* liblzo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F1D12E3814800C8B41F /* liblzo.a */; };
-		7486673112FBF60600D8F899 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F57E21400E3C3AD400700C9D /* libz.dylib */; };
 		7486673212FBF60600D8F899 /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2412E381E900C8B41F /* libmpeg2.a */; };
 		7486673312FBF60600D8F899 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2812E3822000C8B41F /* libfribidi.a */; };
 		7486673412FBF60600D8F899 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3012E3830600C8B41F /* libsamplerate.a */; };
-		7486673512FBF60600D8F899 /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3412E3833C00C8B41F /* libfontconfig.dylib */; };
+		7486673512FBF60600D8F899 /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3412E3833C00C8B41F /* libfontconfig.a */; };
 		7486673612FBF60600D8F899 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3812E3838D00C8B41F /* libvorbisfile.a */; };
 		7486673712FBF60600D8F899 /* liblzo2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3C12E383C400C8B41F /* liblzo2.a */; };
 		7486673812FBF60600D8F899 /* libmad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4012E3840D00C8B41F /* libmad.a */; };
-		7486673912FBF60600D8F899 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4812E3847200C8B41F /* libfreetype.dylib */; };
+		7486673912FBF60600D8F899 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4812E3847200C8B41F /* libfreetype.a */; };
 		7486673A12FBF60600D8F899 /* libapetag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC888A110A654000EE1B15 /* libapetag.a */; };
 		7486673B12FBF60600D8F899 /* libsquish-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43352CED1071634600706B8A /* libsquish-x86-osx.a */; };
 		7486673C12FBF60600D8F899 /* libxbms-x86-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC8816110A4B8900EE1B15 /* libxbms-x86-osx.a */; };
@@ -886,8 +888,6 @@
 		7486674112FBF60600D8F899 /* libjsonrpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464688212E759B300B2FF1E /* libjsonrpc.a */; };
 		7486674212FBF60600D8F899 /* libhttpapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A7A6F61128934C0059D6AA /* libhttpapi.a */; };
 		7486674312FBF60600D8F899 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B02512E838440077A38C /* SystemConfiguration.framework */; };
-		7486674412FBF60600D8F899 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B02B12E83A540077A38C /* libboost_system-mt.a */; };
-		7486674512FBF60600D8F899 /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7482B0EB12E852400077A38C /* libboost_thread-mt.a */; };
 		748667CF12FC07CA00D8F899 /* Plex.icns in Resources */ = {isa = PBXBuildFile; fileRef = 748667CE12FC07CA00D8F899 /* Plex.icns */; };
 		74972168132CEC0F0074DD27 /* AddonInstaller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74972166132CEC0F0074DD27 /* AddonInstaller.cpp */; };
 		74AF1A1813009F1A00923698 /* HTTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74AF1A1713009F1A00923698 /* HTTP.cpp */; };
@@ -898,6 +898,23 @@
 		E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E31A8E011357B44800EEB013 /* PlexUtils.cpp */; };
 		E3D01F381361779300EBD00D /* PlexContentWorker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3D01F361361779300EBD00D /* PlexContentWorker.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		743415731379D4930028671C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7434156C1379D4920028671C /* PlexHelper.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
+			remoteInfo = PlexHelper;
+		};
+		743415751379D4B40028671C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7434156C1379D4920028671C /* PlexHelper.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
+			remoteInfo = PlexHelper;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
@@ -1055,35 +1072,40 @@
 		6E97BDC30DA2B620003A2A89 /* Fanart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fanart.h; sourceTree = "<group>"; };
 		6E97BDC40DA2B620003A2A89 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 		7417EDDC12F9ACF200DA5B18 /* addon.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = addon.xml; path = addons/visualization.nowplaying/addon.xml; sourceTree = "<group>"; };
+		742ADB6213843E8700E2F571 /* libSDL_image-1.2.0.1.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL_image-1.2.0.1.6.dylib"; path = "vendor/build/lib/libSDL_image-1.2.0.1.6.dylib"; sourceTree = "<group>"; };
+		742ADB6313843E8700E2F571 /* libSDL_mixer-1.2.0.2.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL_mixer-1.2.0.2.6.dylib"; path = "vendor/build/lib/libSDL_mixer-1.2.0.2.6.dylib"; sourceTree = "<group>"; };
+		742ADB66138441EE00E2F571 /* libSDL-1.2.0.11.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL-1.2.0.11.2.dylib"; path = "vendor/build/lib/libSDL-1.2.0.11.2.dylib"; sourceTree = "<group>"; };
 		74332DA212FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogPlexPluginSettings.cpp; path = plex/GUI/GUIDialogPlexPluginSettings.cpp; sourceTree = "<group>"; };
 		74332DA312FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogPlexPluginSettings.h; path = plex/GUI/GUIDialogPlexPluginSettings.h; sourceTree = "<group>"; };
+		7434156C1379D4920028671C /* PlexHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PlexHelper.xcodeproj; path = tools/EventClients/Clients/OSXRemote/PlexHelper.xcodeproj; sourceTree = "<group>"; };
+		743415771379D4BA0028671C /* PlexHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = PlexHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIWindowNowPlaying.cpp; path = plex/GUI/GUIWindowNowPlaying.cpp; sourceTree = "<group>"; };
 		743A74EF12F8BFCD00040C63 /* GUIWindowNowPlaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIWindowNowPlaying.h; path = plex/GUI/GUIWindowNowPlaying.h; sourceTree = "<group>"; };
-		74462EE612E37BF600C8B41F /* libwavpack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwavpack.a; path = vendor/homebrew.git/lib/libwavpack.a; sourceTree = "<group>"; };
-		74462EEA12E37C3600C8B41F /* libcdio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcdio.a; path = vendor/homebrew.git/lib/libcdio.a; sourceTree = "<group>"; };
-		74462EF112E37D7900C8B41F /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = vendor/homebrew.git/lib/libpcre.a; sourceTree = "<group>"; };
-		74462EF512E37DC800C8B41F /* libsqlite3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsqlite3.a; path = vendor/homebrew.git/lib/libsqlite3.a; sourceTree = "<group>"; };
-		74462EF912E37E8A00C8B41F /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = vendor/homebrew.git/lib/libSDL.a; sourceTree = "<group>"; };
-		74462EFD12E37F4000C8B41F /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = vendor/homebrew.git/lib/libGLEW.a; sourceTree = "<group>"; };
-		74462F0112E37F8400C8B41F /* libSDL_image.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_image.a; path = vendor/homebrew.git/lib/libSDL_image.a; sourceTree = "<group>"; };
-		74462F0512E37FD300C8B41F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = vendor/homebrew.git/lib/libiconv.dylib; sourceTree = "<group>"; };
-		74462F0912E3806200C8B41F /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = vendor/homebrew.git/lib/mysql/libmysqlclient.a; sourceTree = "<group>"; };
-		74462F0D12E3808700C8B41F /* libSDL_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_mixer.a; path = vendor/homebrew.git/lib/libSDL_mixer.a; sourceTree = "<group>"; };
-		74462F1112E380B000C8B41F /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = vendor/homebrew.git/lib/libogg.a; sourceTree = "<group>"; };
-		74462F1512E380DB00C8B41F /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = vendor/homebrew.git/lib/libpcrecpp.a; sourceTree = "<group>"; };
-		74462F1912E3811600C8B41F /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = vendor/homebrew.git/lib/libvorbis.a; sourceTree = "<group>"; };
-		74462F1D12E3814800C8B41F /* liblzo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo.a; path = vendor/homebrew.git/lib/liblzo.a; sourceTree = "<group>"; };
-		74462F2412E381E900C8B41F /* libmpeg2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpeg2.a; path = vendor/homebrew.git/lib/libmpeg2.a; sourceTree = "<group>"; };
-		74462F2812E3822000C8B41F /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = vendor/homebrew.git/lib/libfribidi.a; sourceTree = "<group>"; };
-		74462F2C12E3826400C8B41F /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = vendor/homebrew.git/lib/libvorbisenc.a; sourceTree = "<group>"; };
-		74462F3012E3830600C8B41F /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = vendor/homebrew.git/lib/libsamplerate.a; sourceTree = "<group>"; };
-		74462F3412E3833C00C8B41F /* libfontconfig.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /usr/X11/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
-		74462F3812E3838D00C8B41F /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = vendor/homebrew.git/lib/libvorbisfile.a; sourceTree = "<group>"; };
-		74462F3C12E383C400C8B41F /* liblzo2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo2.a; path = vendor/homebrew.git/lib/liblzo2.a; sourceTree = "<group>"; };
-		74462F4012E3840D00C8B41F /* libmad.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmad.a; path = vendor/homebrew.git/lib/libmad.a; sourceTree = "<group>"; };
-		74462F4812E3847200C8B41F /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
-		744632D012E3A13F00C8B41F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = vendor/homebrew.git/lib/libssl.a; sourceTree = "<group>"; };
-		744632D512E3A23D00C8B41F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = vendor/homebrew.git/lib/libcrypto.a; sourceTree = "<group>"; };
+		74462EE612E37BF600C8B41F /* libwavpack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwavpack.a; path = vendor/build/lib/libwavpack.a; sourceTree = SOURCE_ROOT; };
+		74462EEA12E37C3600C8B41F /* libcdio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcdio.a; path = vendor/build/lib/libcdio.a; sourceTree = SOURCE_ROOT; };
+		74462EF112E37D7900C8B41F /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = vendor/build/lib/libpcre.a; sourceTree = SOURCE_ROOT; };
+		74462EF512E37DC800C8B41F /* libsqlite3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsqlite3.a; path = vendor/build/lib/libsqlite3.a; sourceTree = SOURCE_ROOT; };
+		74462EFD12E37F4000C8B41F /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = vendor/build/lib/libGLEW.a; sourceTree = SOURCE_ROOT; };
+		74462F0912E3806200C8B41F /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = vendor/build/lib/mysql/libmysqlclient.a; sourceTree = SOURCE_ROOT; };
+		74462F1112E380B000C8B41F /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = vendor/build/lib/libogg.a; sourceTree = SOURCE_ROOT; };
+		74462F1512E380DB00C8B41F /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = vendor/build/lib/libpcrecpp.a; sourceTree = SOURCE_ROOT; };
+		74462F1912E3811600C8B41F /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = vendor/build/lib/libvorbis.a; sourceTree = SOURCE_ROOT; };
+		74462F1D12E3814800C8B41F /* liblzo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo.a; path = vendor/build/lib/liblzo.a; sourceTree = SOURCE_ROOT; };
+		74462F2412E381E900C8B41F /* libmpeg2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpeg2.a; path = vendor/build/lib/libmpeg2.a; sourceTree = SOURCE_ROOT; };
+		74462F2812E3822000C8B41F /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = vendor/build/lib/libfribidi.a; sourceTree = SOURCE_ROOT; };
+		74462F2C12E3826400C8B41F /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = vendor/build/lib/libvorbisenc.a; sourceTree = SOURCE_ROOT; };
+		74462F3012E3830600C8B41F /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = vendor/build/lib/libsamplerate.a; sourceTree = SOURCE_ROOT; };
+		74462F3412E3833C00C8B41F /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = vendor/build/lib/libfontconfig.a; sourceTree = SOURCE_ROOT; };
+		74462F3812E3838D00C8B41F /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = vendor/build/lib/libvorbisfile.a; sourceTree = SOURCE_ROOT; };
+		74462F3C12E383C400C8B41F /* liblzo2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo2.a; path = vendor/build/lib/liblzo2.a; sourceTree = SOURCE_ROOT; };
+		74462F4012E3840D00C8B41F /* libmad.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmad.a; path = vendor/build/lib/libmad.a; sourceTree = SOURCE_ROOT; };
+		74462F4812E3847200C8B41F /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = vendor/build/lib/libfreetype.a; sourceTree = SOURCE_ROOT; };
+		744632D012E3A13F00C8B41F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = vendor/build/lib/libssl.a; sourceTree = SOURCE_ROOT; };
+		744632D512E3A23D00C8B41F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = vendor/build/lib/libcrypto.a; sourceTree = SOURCE_ROOT; };
+		7462B2E6137D8FF600DE1658 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		7462B2E8137D901F00DE1658 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		7462B308137DAB8900DE1658 /* libboost_system.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_system.dylib; path = vendor/build/lib/libboost_system.dylib; sourceTree = "<group>"; };
+		7462B309137DAB8900DE1658 /* libboost_thread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_thread.dylib; path = vendor/build/lib/libboost_thread.dylib; sourceTree = "<group>"; };
 		7464687112E7592B00B2FF1E /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = lib/jsoncpp/jsoncpp/src/lib_json/libjsoncpp.a; sourceTree = "<group>"; };
 		7464688212E759B300B2FF1E /* libjsonrpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsonrpc.a; path = xbmc/lib/libjsonrpc/libjsonrpc.a; sourceTree = "<group>"; };
 		746469F112E82AD700B2FF1E /* PlexApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexApplication.h; path = plex/PlexApplication.h; sourceTree = "<group>"; };
@@ -1099,8 +1121,6 @@
 		74756AA512F4668D0001203D /* BackgroundMusicPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackgroundMusicPlayer.h; path = plex/Utility/BackgroundMusicPlayer.h; sourceTree = "<group>"; };
 		747573F2132EA57D002387F7 /* NetworkServiceAdvertiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkServiceAdvertiser.h; sourceTree = "<group>"; };
 		7482B02512E838440077A38C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		7482B02B12E83A540077A38C /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "vendor/homebrew.git/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
-		7482B0EB12E852400077A38C /* libboost_thread-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_thread-mt.a"; path = "vendor/homebrew.git/lib/libboost_thread-mt.a"; sourceTree = "<group>"; };
 		7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexSourceScanner.cpp; path = plex/PlexSourceScanner.cpp; sourceTree = "<group>"; };
 		7482B23212E8C1470077A38C /* PlexSourceScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexSourceScanner.h; path = plex/PlexSourceScanner.h; sourceTree = "<group>"; };
 		7482B27412E8C5E90077A38C /* PlexDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexDirectory.cpp; path = plex/FileSystem/PlexDirectory.cpp; sourceTree = "<group>"; };
@@ -1130,7 +1150,7 @@
 		74AF1A191300A29400923698 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = plex/Utility/sha.h; sourceTree = "<group>"; };
 		74D7F385133F88A900DCE15F /* WebServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebServer.cpp; sourceTree = "<group>"; };
 		74D7F386133F88A900DCE15F /* WebServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServer.h; sourceTree = "<group>"; };
-		74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmicrohttpd.a; path = lib/libmicrohttpd/src/daemon/.libs/libmicrohttpd.a; sourceTree = "<group>"; };
+		74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmicrohttpd.a; path = lib/libmicrohttpd/src/daemon/.libs/libmicrohttpd.a; sourceTree = SOURCE_ROOT; };
 		74D8D37A1311A2DD00DBDBC8 /* sha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sha.cpp; path = plex/Utility/sha.cpp; sourceTree = "<group>"; };
 		74F034C212F2B0A500040736 /* GUIDialogRating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogRating.h; path = plex/GUI/GUIDialogRating.h; sourceTree = "<group>"; };
 		74F034C312F2B0A500040736 /* GUIDialogRating.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogRating.cpp; path = plex/GUI/GUIDialogRating.cpp; sourceTree = "<group>"; };
@@ -2677,7 +2697,6 @@
 		F56A08E30F4D3C2E003F9F87 /* GUITextureGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUITextureGL.h; sourceTree = "<group>"; };
 		F57B6F7E1071B8B500079ACB /* JobManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JobManager.cpp; sourceTree = "<group>"; };
 		F57B6F7F1071B8B500079ACB /* JobManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JobManager.h; sourceTree = "<group>"; };
-		F57E21400E3C3AD400700C9D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		F584E0FA0F25427500DB26A5 /* MusicInfoTagLoaderMidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicInfoTagLoaderMidi.h; path = xbmc/MusicInfoTagLoaderMidi.h; sourceTree = SOURCE_ROOT; };
 		F584E0FB0F25427500DB26A5 /* MusicInfoTagLoaderMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MusicInfoTagLoaderMidi.cpp; path = xbmc/MusicInfoTagLoaderMidi.cpp; sourceTree = SOURCE_ROOT; };
 		F584E1270F257BD800DB26A5 /* FileSpecialProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileSpecialProtocol.cpp; path = xbmc/FileSystem/FileSpecialProtocol.cpp; sourceTree = SOURCE_ROOT; };
@@ -2846,30 +2865,28 @@
 				7486671F12FBF60600D8F899 /* Carbon.framework in Frameworks */,
 				7486672012FBF60600D8F899 /* DiskArbitration.framework in Frameworks */,
 				7486672112FBF60600D8F899 /* QuartzCore.framework in Frameworks */,
+				7486674312FBF60600D8F899 /* SystemConfiguration.framework in Frameworks */,
+				7462B2E9137D901F00DE1658 /* libiconv.dylib in Frameworks */,
+				7462B2E7137D8FF600DE1658 /* libz.dylib in Frameworks */,
 				7486672212FBF60600D8F899 /* libwavpack.a in Frameworks */,
 				7486672312FBF60600D8F899 /* libcdio.a in Frameworks */,
 				7486672412FBF60600D8F899 /* libpcre.a in Frameworks */,
 				7486672512FBF60600D8F899 /* libsqlite3.a in Frameworks */,
-				7486672612FBF60600D8F899 /* libSDL.a in Frameworks */,
-				7486672712FBF60600D8F899 /* libSDL_image.a in Frameworks */,
-				7486672812FBF60600D8F899 /* libSDL_mixer.a in Frameworks */,
 				7486672912FBF60600D8F899 /* libGLEW.a in Frameworks */,
-				7486672A12FBF60600D8F899 /* libiconv.dylib in Frameworks */,
 				7486672B12FBF60600D8F899 /* libmysqlclient.a in Frameworks */,
 				7486672C12FBF60600D8F899 /* libogg.a in Frameworks */,
 				7486672D12FBF60600D8F899 /* libpcrecpp.a in Frameworks */,
 				7486672E12FBF60600D8F899 /* libvorbis.a in Frameworks */,
 				7486672F12FBF60600D8F899 /* libvorbisenc.a in Frameworks */,
 				7486673012FBF60600D8F899 /* liblzo.a in Frameworks */,
-				7486673112FBF60600D8F899 /* libz.dylib in Frameworks */,
 				7486673212FBF60600D8F899 /* libmpeg2.a in Frameworks */,
 				7486673312FBF60600D8F899 /* libfribidi.a in Frameworks */,
 				7486673412FBF60600D8F899 /* libsamplerate.a in Frameworks */,
-				7486673512FBF60600D8F899 /* libfontconfig.dylib in Frameworks */,
+				7486673512FBF60600D8F899 /* libfontconfig.a in Frameworks */,
 				7486673612FBF60600D8F899 /* libvorbisfile.a in Frameworks */,
 				7486673712FBF60600D8F899 /* liblzo2.a in Frameworks */,
 				7486673812FBF60600D8F899 /* libmad.a in Frameworks */,
-				7486673912FBF60600D8F899 /* libfreetype.dylib in Frameworks */,
+				7486673912FBF60600D8F899 /* libfreetype.a in Frameworks */,
 				7486673A12FBF60600D8F899 /* libapetag.a in Frameworks */,
 				7486673B12FBF60600D8F899 /* libsquish-x86-osx.a in Frameworks */,
 				7486673C12FBF60600D8F899 /* libxbms-x86-osx.a in Frameworks */,
@@ -2879,10 +2896,12 @@
 				7486674012FBF60600D8F899 /* libjsoncpp.a in Frameworks */,
 				7486674112FBF60600D8F899 /* libjsonrpc.a in Frameworks */,
 				7486674212FBF60600D8F899 /* libhttpapi.a in Frameworks */,
-				7486674312FBF60600D8F899 /* SystemConfiguration.framework in Frameworks */,
-				7486674412FBF60600D8F899 /* libboost_system-mt.a in Frameworks */,
-				7486674512FBF60600D8F899 /* libboost_thread-mt.a in Frameworks */,
 				74D7F389133F8A2F00DCE15F /* libmicrohttpd.a in Frameworks */,
+				7462B30A137DAB8900DE1658 /* libboost_system.dylib in Frameworks */,
+				7462B30B137DAB8900DE1658 /* libboost_thread.dylib in Frameworks */,
+				742ADB6413843E8700E2F571 /* libSDL_image-1.2.0.1.6.dylib in Frameworks */,
+				742ADB6513843E8700E2F571 /* libSDL_mixer-1.2.0.2.6.dylib in Frameworks */,
+				742ADB67138441EE00E2F571 /* libSDL-1.2.0.11.2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2895,11 +2914,13 @@
 				748667CE12FC07CA00D8F899 /* Plex.icns */,
 				6E2FACD20E26E92800DF79EA /* Info.plist */,
 				F5B413131065900C0035D105 /* config.h */,
-				08FB7795FE84155DC02AAC07 /* Source */,
+				7434157F1379D7350028671C /* Dependencies */,
 				C6859E96029091FE04C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				749502F412FBF5300039DE17 /* Frameworks */,
+				08FB7795FE84155DC02AAC07 /* Source */,
 				19C28FBDFE9D53C911CA2CBB /* Products */,
+				743415771379D4BA0028671C /* PlexHelper */,
 			);
 			name = Plex;
 			sourceTree = "<group>";
@@ -2966,12 +2987,27 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7434156D1379D4920028671C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				743415741379D4930028671C /* PlexHelper */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7434157F1379D7350028671C /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				7434156C1379D4920028671C /* PlexHelper.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
 		744632E812E3A29F00C8B41F /* system */ = {
 			isa = PBXGroup;
 			children = (
-				F57E21400E3C3AD400700C9D /* libz.dylib */,
-				74462F4812E3847200C8B41F /* libfreetype.dylib */,
-				74462F3412E3833C00C8B41F /* libfontconfig.dylib */,
+				7462B2E8137D901F00DE1658 /* libiconv.dylib */,
+				7462B2E6137D8FF600DE1658 /* libz.dylib */,
 				E38E238E0D2626E600618676 /* CoreAudio.framework */,
 				88ECB6580DE013C4003396A7 /* DiskArbitration.framework */,
 				E35EF3230D380E1E00DB5CD5 /* Carbon.framework */,
@@ -5846,14 +5882,18 @@
 		F57E1ED30E36E96B00700C9D /* vendor */ = {
 			isa = PBXGroup;
 			children = (
-				7482B0EB12E852400077A38C /* libboost_thread-mt.a */,
-				7482B02B12E83A540077A38C /* libboost_system-mt.a */,
+				742ADB66138441EE00E2F571 /* libSDL-1.2.0.11.2.dylib */,
+				742ADB6213843E8700E2F571 /* libSDL_image-1.2.0.1.6.dylib */,
+				742ADB6313843E8700E2F571 /* libSDL_mixer-1.2.0.2.6.dylib */,
+				7462B308137DAB8900DE1658 /* libboost_system.dylib */,
+				7462B309137DAB8900DE1658 /* libboost_thread.dylib */,
 				74462EEA12E37C3600C8B41F /* libcdio.a */,
 				744632D512E3A23D00C8B41F /* libcrypto.a */,
 				74462F2812E3822000C8B41F /* libfribidi.a */,
+				74462F4812E3847200C8B41F /* libfreetype.a */,
+				74462F3412E3833C00C8B41F /* libfontconfig.a */,
 				74462EFD12E37F4000C8B41F /* libGLEW.a */,
 				74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */,
-				74462F0512E37FD300C8B41F /* libiconv.dylib */,
 				744632D012E3A13F00C8B41F /* libssl.a */,
 				74462F4012E3840D00C8B41F /* libmad.a */,
 				74462F2412E381E900C8B41F /* libmpeg2.a */,
@@ -5864,9 +5904,6 @@
 				74462F1D12E3814800C8B41F /* liblzo.a */,
 				74462F3C12E383C400C8B41F /* liblzo2.a */,
 				74462F3012E3830600C8B41F /* libsamplerate.a */,
-				74462EF912E37E8A00C8B41F /* libSDL.a */,
-				74462F0112E37F8400C8B41F /* libSDL_image.a */,
-				74462F0D12E3808700C8B41F /* libSDL_mixer.a */,
 				74462EF512E37DC800C8B41F /* libsqlite3.a */,
 				74462F3812E3838D00C8B41F /* libvorbisfile.a */,
 				74462F2C12E3826400C8B41F /* libvorbisenc.a */,
@@ -6040,6 +6077,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				743415761379D4B40028671C /* PBXTargetDependency */,
 			);
 			name = Plex;
 			productName = Plex;
@@ -6064,12 +6102,28 @@
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* Plex */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7434156D1379D4920028671C /* Products */;
+					ProjectRef = 7434156C1379D4920028671C /* PlexHelper.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				74865EE212FBF59700D8F899 /* Plex */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		743415741379D4930028671C /* PlexHelper */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = PlexHelper;
+			remoteRef = 743415731379D4930028671C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		74865EDF12FBF59700D8F899 /* Resources */ = {
@@ -6095,7 +6149,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "#!/bin/bash\n\necho \"copy root files\"\n\nif [ \"$ACTION\" = build ] ; then\n\n# for external testing\n#TARGET_NAME=Plex.app\n#SRCROOT=/Users/Shared/xbmc_svn/Plex\n#TARGET_BUILD_DIR=/Users/Shared/xbmc_svn/Plex/build/Debug\n\n# rsync command with exclusions for items we don't want in the app package\nSYNC=\"rsync -av --exclude CVS* --exclude .svn* --exclude .cvsignore* --exclude .cvspass* --exclude .DS_Store* --exclude *.dll --exclude *.DLL --exclude *linux.* --exclude *.zlib --exclude *.a\"\n\n# rsync command for excluding pngs and jpgs as well. Note that if the skin itself is not compiled\n# using PlexTex then excluding the pngs and jpgs will most likely make the skin unusable \nSYNCSKIN=\"rsync -av --exclude CVS* --exclude .svn* --exclude .cvsignore* --exclude .cvspass* --exclude .DS_Store* --exclude *.dll  --exclude *.DLL --exclude *linux.* --exclude *.png --exclude *.jpg --exclude *.bat\"\n\n# rsync command for including everything but the skins\nADDONSYNC=\"rsync -av --exclude CVS* --exclude .svn* --exclude .cvsignore* --exclude .cvspass* --exclude .DS_Store* --exclude skin.confluence\"\n\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/language\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/media\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/sounds\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/system\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/userdata\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/media\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/tools/osx\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/extras/user\"\n\n${SYNC} \"$SRCROOT/LICENSE.GPL\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/\"\n${SYNC} \"$SRCROOT/xbmc/osx/Credits.html\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/\"\n${SYNC} \"$SRCROOT/tools/osx\"\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/tools\"\n${ADDONSYNC} \"$SRCROOT/addons\"\t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/language\"\t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/media\" \t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNCSKIN} \"$SRCROOT/addons/skin.confluence\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons\"\n${SYNC} \"$SRCROOT/addons/skin.confluence/backgrounds\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons/skin.confluence\"\n${SYNC} \"$SRCROOT/addons/skin.confluence/icon.png\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons/skin.confluence\"\n${SYNC} \"$SRCROOT/sounds\" \t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/system\" \t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/userdata\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n\n# copy extra packages if applicable\nif [ -d \"$SRCROOT/extras/system\" ]; then\n\t${SYNC} \"$SRCROOT/extras/system/\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\nfi\n\n# copy extra user packages if applicable\nif [ -d \"$SRCROOT/extras/user\" ]; then\n\t${SYNC} \"$SRCROOT/extras/user/\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/extras/user\"\nfi\n\n# magic that gets the icon to update\n#touch \"$TARGET_BUILD_DIR/$TARGET_NAME.app\"\n\n# not sure we want to do this with out major testing, many scripts cannot handle the spaces in the app name\n#mv \"$TARGET_BUILD_DIR/$TARGET_NAME\" \"$TARGET_BUILD_DIR/Plex Media Center.app\"\n\nfi";
+			shellScript = "#!/bin/bash\n\necho \"copy root files\"\n\nif [ \"$ACTION\" = build ] ; then\n\n# for external testing\n#TARGET_NAME=Plex.app\n#SRCROOT=/Users/Shared/xbmc_svn/Plex\n#TARGET_BUILD_DIR=/Users/Shared/xbmc_svn/Plex/build/Debug\n\n# rsync command with exclusions for items we don't want in the app package\nSYNC=\"rsync -av --exclude CVS* --exclude .svn* --exclude .cvsignore* --exclude .cvspass* --exclude .DS_Store* --exclude *.dll --exclude *.DLL --exclude *linux.* --exclude *.zlib --exclude *.a --exclude osx-depends/*\"\n\n# rsync command for excluding pngs and jpgs as well. Note that if the skin itself is not compiled\n# using PlexTex then excluding the pngs and jpgs will most likely make the skin unusable \nSYNCSKIN=\"rsync -av --exclude CVS* --exclude .svn* --exclude .cvsignore* --exclude .cvspass* --exclude .DS_Store* --exclude *.dll  --exclude *.DLL --exclude *linux.* --exclude *.png --exclude *.jpg --exclude *.bat\"\n\n# rsync command for including everything but the skins\nADDONSYNC=\"rsync -av --exclude CVS* --exclude .svn* --exclude .cvsignore* --exclude .cvspass* --exclude .DS_Store* --exclude skin.confluence\"\n\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/language\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/media\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/sounds\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/system\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/userdata\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/media\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/tools/osx\"\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/extras/user\"\n\n${SYNC} \"$SRCROOT/LICENSE.GPL\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/\"\n${SYNC} \"$SRCROOT/xbmc/osx/Credits.html\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/\"\n${SYNC} \"$SRCROOT/tools/osx\"\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/tools\"\n${ADDONSYNC} \"$SRCROOT/addons\"\t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/language\"\t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/media\" \t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNCSKIN} \"$SRCROOT/addons/skin.confluence\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons\"\n${SYNC} \"$SRCROOT/addons/skin.confluence/backgrounds\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons/skin.confluence\"\n${SYNC} \"$SRCROOT/addons/skin.confluence/icon.png\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/addons/skin.confluence\"\n${SYNC} \"$SRCROOT/sounds\" \t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/system\" \t\t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n${SYNC} \"$SRCROOT/userdata\" \t\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\n\n# copy extra packages if applicable\nif [ -d \"$SRCROOT/extras/system\" ]; then\n\t${SYNC} \"$SRCROOT/extras/system/\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex\"\nfi\n\n# copy extra user packages if applicable\nif [ -d \"$SRCROOT/extras/user\" ]; then\n\t${SYNC} \"$SRCROOT/extras/user/\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/extras/user\"\nfi\n\n# magic that gets the icon to update\n#touch \"$TARGET_BUILD_DIR/$TARGET_NAME.app\"\n\n# not sure we want to do this with out major testing, many scripts cannot handle the spaces in the app name\n#mv \"$TARGET_BUILD_DIR/$TARGET_NAME\" \"$TARGET_BUILD_DIR/Plex Media Center.app\"\n\nfi";
 		};
 		748667B212FC05DE00D8F899 /* Copy Libraries */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6109,7 +6163,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "LIB_REGEX=\"$SRCROOT/vendor/homebrew.git\\|/usr/X11\"\n\n# start clean so we don't keep old dylibs\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/\"\nrm -f \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/*\"\n\n\n# Copy all of Plex's dynamic dependencies and rename their locations to inside the Framework\necho \"Processing dependencies for Plex binary\"\nfor a in $(otool -L \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/Plex\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do \n\techo \"    Copying dependency $a\"\n\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\tinstall_name_tool -change \"$a\" @executable_path/../Frameworks/$(basename $a) \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/Plex\"\ndone\n\nREWIND=\"1\"\n# Copy all the *osx.so dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/system -name \"*.so\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/system/$(basename $b)\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the addon/*.so dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/addons -name \"*.so\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$b\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the addon/*.xbs dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/addons -name \"*.xbs\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$b\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/\"*dylib ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $b)\"\n\t\tdone \n\tdone\ndone\n";
+			shellScript = "LIB_REGEX=\"$SRCROOT/vendor/build\\|/usr/X11\"\n\n# start clean so we don't keep old dylibs\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/\"\nrm -f \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/*\"\n\n\n# Copy all of Plex's dynamic dependencies and rename their locations to inside the Framework\necho \"Processing dependencies for Plex binary\"\nfor a in $(otool -L \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/Plex\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do \n\techo \"    Copying dependency $a\"\n    cp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\tinstall_name_tool -change \"$a\" @executable_path/../Frameworks/$(basename $a) \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/Plex\"\ndone\n\nREWIND=\"1\"\n# Copy all the *osx.so dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/system -name \"*.so\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/Plex/system/$(basename $b)\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the addon/*.so dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/addons -name \"*.so\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$b\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the addon/*.xbs dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in $(find \"$TARGET_BUILD_DIR/$TARGET_NAME\".app/Contents/Resources/Plex/addons -name \"*.xbs\" -print) ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$b\"\n\t\tdone \n\tdone\ndone\n\nREWIND=\"1\"\n# Copy all the dynamic dependencies and rename their locations to inside the Framework\nwhile [ $REWIND = \"1\" ]\ndo\n\tlet REWIND=\"0\"\n\tfor b in \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/\"*dylib ; do\n\t\techo \"Processing dependencies for $b\"\n\t\tfor a in $(otool -L \"$b\"  | grep $LIB_REGEX | awk ' { print $1 } ') ; do\n\t\t\techo \"    Copying dependency $a\"\n\t\t\tif [ ! -f  \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\" ]; then\n\t\t\t\techo \"        Copying $a to Frameworks\"\n\t\t\t\tcp -f \"$a\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\t\t\t\tchmod u+w \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $a)\"\n\t\t\t\tlet REWIND=\"1\"\n\t\t\tfi\n\t\t\tinstall_name_tool -change \"$a\" \"@executable_path/../Frameworks/$(basename $a)\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks/$(basename $b)\"\n\t\tdone \n\tdone\ndone\n";
 		};
 		E31A8DE51356DFAF00EEB013 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6973,6 +7027,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		743415761379D4B40028671C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PlexHelper;
+			targetProxy = 743415751379D4B40028671C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		1DEB924C08733DCA0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -7000,7 +7062,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -7073,8 +7135,8 @@
 					"lib/libSDL-OSX",
 					lib/jsoncpp/jsoncpp/src/lib_json,
 					lib/libmicrohttpd/src/daemon/.libs,
-					vendor/homebrew.git/lib,
-					vendor/homebrew.git/lib/mysql,
+					vendor/build/lib,
+					vendor/build/lib/mysql,
 					/usr/lib/samba,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					/usr/X11/lib,
@@ -7102,19 +7164,21 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11 = "\"$(SRCROOT)/vendor/build/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/build/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16 = "\"$(SRCROOT)/vendor/build/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_18 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_19 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_20 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_21 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7127,7 +7191,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/vendor/build/lib\"";
 				OTHER_LDFLAGS = (
 					"-headerpad_max_install_names",
 					"-all_load",
@@ -7135,7 +7199,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = Plex;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
+				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/build/include /usr/X11R6/include /usr/X11/include/freetype2";
 				WARNING_CFLAGS = (
 					"-Wno-write-strings",
 					"-Wno-multichar",
@@ -7205,8 +7269,8 @@
 					"lib/libSDL-OSX",
 					lib/jsoncpp/jsoncpp/src/lib_json,
 					lib/libmicrohttpd/src/daemon/.libs,
-					vendor/homebrew.git/lib,
-					vendor/homebrew.git/lib/mysql,
+					vendor/build/lib,
+					vendor/build/lib/mysql,
 					/usr/lib/samba,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					/usr/X11/lib,
@@ -7234,19 +7298,21 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11 = "\"$(SRCROOT)/vendor/build/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/vendor/build/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16 = "\"$(SRCROOT)/vendor/build/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_18 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_19 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/homebrew.git/lib/mysql\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_20 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_21 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7259,7 +7325,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/xbmc/lib/libXBMS\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/xbmc/lib/libRTV\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/vendor/homebrew.git/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/vendor/build/lib\"";
 				OTHER_LDFLAGS = (
 					"-headerpad_max_install_names",
 					"-all_load",
@@ -7267,7 +7333,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = Plex;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/homebrew.git/include vendor/homebrew.git/include/mysql /usr/X11R6/include /usr/X11/include/freetype2";
+				USER_HEADER_SEARCH_PATHS = ". xbmc/cores/dvdplayer/Codecs/ffmpeg vendor/build/include /usr/X11R6/include /usr/X11/include/freetype2";
 				WARNING_CFLAGS = (
 					"-Wno-write-strings",
 					"-Wno-multichar",

@@ -40,7 +40,7 @@ PlexHelper* PlexHelper::smp_instance = 0;
 
 #define PLEX_HELPER_PROGRAM "PlexHelper"
 #define SOFA_CONTROL_PROGRAM "Sofa Control"
-#define PLEX_LAUNCH_PLIST "org.plex.helper.plist"
+#define PLEX_LAUNCH_PLIST "com.plexapp.helper.plist"
 
 static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount);
 

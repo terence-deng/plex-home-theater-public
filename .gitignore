@@ -71,6 +71,7 @@ xcuserdata
 /xbmc.bin
 /xbmc-xrandr
 /git_revision.h
+/vendor
 
 # /addons/
 /addons/com.nullsoft.milkdrop.xbmc/*.vis
