@@ -789,7 +789,9 @@ protected:
       return PLEX_METADATA_CLIP;
     else if (type == "person")
       return PLEX_METADATA_PERSON;
-
+    else if (type == "mixed")
+      return PLEX_METADATA_MIXED;
+    
     return -1;
   }
 };

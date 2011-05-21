@@ -28,6 +28,7 @@ using namespace XFILE;
 #define PLEX_MEDATATA_PICTURE 11
 #define PLEX_METADATA_CLIP    12
 #define PLEX_METADATA_PERSON  13 // FIXME, tied to the skin at the moment.
+#define PLEX_METADATA_MIXED   100
 
 class CPlexDirectory : public IDirectory, 
                        public CThread
