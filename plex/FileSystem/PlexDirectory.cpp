@@ -1292,7 +1292,7 @@ class PlexMediaVideo : public PlexMediaNode
     videoInfo.m_strPlot = videoInfo.m_strPlotOutline = el.Attribute("summary");
 
     const char* year = el.Attribute("year");
-    if (year)
+    if (year && strlen(year) > 0)
       videoInfo.m_iYear = boost::lexical_cast<int>(year);
 
     const char* pDuration = el.Attribute("duration");
