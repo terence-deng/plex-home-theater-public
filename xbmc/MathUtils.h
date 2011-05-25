@@ -71,6 +71,8 @@ namespace MathUtils
     int i;
 
 #ifndef _LINUX
+    return (int)ceil(x);
+#if 0
     __asm
     {
       fld x
@@ -79,6 +81,7 @@ namespace MathUtils
       fistp i
       sar i, 1
     }
+#endif
 #else
     //#if defined(__powerpc__) || defined(__ppc__) || defined(__arm__)
         return (int)ceil(x);
@@ -106,6 +109,8 @@ namespace MathUtils
     int i;
 
 #ifndef _LINUX
+    return (int)x;
+#if 0
     __asm
     {
       fld x
@@ -115,6 +120,7 @@ namespace MathUtils
       fistp i
       sar i, 1
     }
+#endif
 #else
     //#if defined(__powerpc__) || defined(__ppc__) || defined(__arm__)
         return (int)x;
