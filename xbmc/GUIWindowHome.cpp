@@ -553,7 +553,7 @@ void CGUIWindowHome::HideAllLists()
 
 void CGUIWindowHome::Render()
 {
-  if (m_pendingSelectID != -1 && m_contentLoadTimer.IsRunning() && m_contentLoadTimer.GetElapsedMilliseconds() > 500)
+  if (m_pendingSelectID != -1 && m_contentLoadTimer.IsRunning() && m_contentLoadTimer.GetElapsedMilliseconds() > 300)
   {
     UpdateContentForSelectedItem(m_pendingSelectID);
     m_pendingSelectID = -1;
