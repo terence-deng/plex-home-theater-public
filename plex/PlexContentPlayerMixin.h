@@ -45,11 +45,11 @@ class PlexContentPlayerMixin
         string type = file->GetProperty("type");
         if (type == "show" || type == "person")
         {
-          g_windowManager.ActivateWindow(WINDOW_VIDEO_FILES, file->m_strPath + ",return");
+          ActivateWindow(WINDOW_VIDEO_FILES, file->m_strPath);
         }
         else if (type == "artist" || type == "album")
         {
-          g_windowManager.ActivateWindow(WINDOW_MUSIC_FILES, file->m_strPath + ",return");
+          ActivateWindow(WINDOW_MUSIC_FILES, file->m_strPath);
         }
         else if (type == "track")
         {
@@ -148,5 +148,15 @@ class PlexContentPlayerMixin
         }
       }
     }
+  }
+  
+ private:
+  
+  void ActivateWindow(int window, const CStdString& path)
+  {
+    CStdString strWindow = (window == WINDOW_VIDEO_FILES) ? "MyVideoFiles" : (window == WINDOW_MUSIC_FILES) ? "MyMusicFiles" : "MyPictures";
+    CStdString cmd = "XBMC.ActivateWindow(MyMusicFiles," + path + ",return)";
+    
+    g_application.ExecuteXBMCAction(cmd);
   }
 };
