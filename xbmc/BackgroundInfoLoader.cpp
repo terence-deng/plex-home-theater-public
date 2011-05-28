@@ -18,32 +18,40 @@
  *  http://www.gnu.org/copyleft/gpl.html
  *
  */
-
 #include "BackgroundInfoLoader.h"
 #include "FileItem.h"
-#include "AdvancedSettings.h"
-#include "utils/SingleLock.h"
-#include "utils/log.h"
 
-using namespace std;
-
+#ifdef _XBOX
+#define ITEMS_PER_THREAD 10
+#define MAX_THREAD_COUNT 2
+#else
 #define ITEMS_PER_THREAD 5
+#define MAX_THREAD_COUNT 5
+#endif
+
+// Static initializers.
+CCriticalSection        CBackgroundRunner::g_lock;
+set<CBackgroundRunner*> CBackgroundRunner::g_activeThreads;
 
 CBackgroundInfoLoader::CBackgroundInfoLoader(int nThreads, int pauseBetweenLoadsInMS)
 {
   m_bStop = true;
-  m_pObserver=NULL;
-  m_pProgressCallback=NULL;
+  m_pObserver = NULL;
+  m_pProgressCallback = NULL;
   m_pVecItems = NULL;
   m_nRequestedThreads = nThreads;
-  m_bStartCalled = false;
-  m_nActiveThreads = 0;
   m_pauseBetweenLoadsInMS = pauseBetweenLoadsInMS;
+  m_workerGroup = 0;
 }
 
 CBackgroundInfoLoader::~CBackgroundInfoLoader()
 {
-  StopThread();
+  if (m_workerGroup)
+  {
+    m_workerGroup->Stop();
+    m_workerGroup->Detach();
+    m_workerGroup = 0;
+  }
 }
 
 void CBackgroundInfoLoader::SetNumOfWorkers(int nThreads)
@@ -51,72 +59,42 @@ void CBackgroundInfoLoader::SetNumOfWorkers(int nThreads)
   m_nRequestedThreads = nThreads;
 }
 
-void CBackgroundInfoLoader::Run()
+void CBackgroundRunner::Process()
 {
   try
   {
-    if (m_vecItems.size() > 0)
+    while (m_bStop == false)
     {
+      CFileItemPtr pItem = m_group.PopItem();
+      if (pItem)
       {
-        CSingleLock lock(m_lock);
-        if (!m_bStartCalled)
-        {
-          OnLoaderStart();
-          m_bStartCalled = true;
-        }
+        // Load the item.
+        try { m_group.LoadItem(pItem); }
+        catch (...) { CLog::Log(LOGERROR, "%s::LoadItem - Unhandled exception for item %s", __FUNCTION__, pItem->m_strPath.c_str()); }
       }
-      
-      while (!m_bStop)
+      else
       {
-        CSingleLock lock(m_lock);
-        CFileItemPtr pItem;
-        vector<CFileItemPtr>::iterator iter = m_vecItems.begin();
-        if (iter != m_vecItems.end())
-        {
-          pItem = *iter;
-          m_vecItems.erase(iter);
-        }
-
-        if (pItem == NULL)
-          break;
-
-        // Ask the callback if we should abort
-        if ((m_pProgressCallback && m_pProgressCallback->Abort()) || m_bStop)
-          break;
-
-        lock.Leave();
-        try
-        {
-          // Load an item.
-          if (LoadItem(pItem.get()) && m_pObserver)
-            m_pObserver->OnItemLoaded(pItem.get());
-
-          // Pause if it was requested.
-          if (m_pauseBetweenLoadsInMS > 0)
-#ifdef __APPLE__
-            ::usleep(m_pauseBetweenLoadsInMS*1000);
-#elif defined(_WIN32)
-            Sleep(m_pauseBetweenLoadsInMS);
-#endif
-        }
-        catch (...)
-        {
-          CLog::Log(LOGERROR, "%s::LoadItem - Unhandled exception for item %s", __FUNCTION__, pItem->m_strPath.c_str());
-        }
+        // We're done!
+        break;
       }
     }
-
-    CSingleLock lock(m_lock);
-    if (m_nActiveThreads == 1)
-      OnLoaderFinish();
-    m_nActiveThreads--;
-
   }
   catch (...)
   {
-    m_nActiveThreads--;
     CLog::Log(LOGERROR, "%s - Unhandled exception", __FUNCTION__);
   }
+
+  // We're done.
+  m_group.WorkerDone(this);
+}
+
+void CBackgroundInfoLoader::OnLoaderFinished()
+{
+  EnterCriticalSection(m_lock);
+  m_workerGroup = 0;
+  LeaveCriticalSection(m_lock);
+  
+  OnLoaderFinish();
 }
 
 void CBackgroundInfoLoader::Load(CFileItemList& items)
@@ -125,66 +103,59 @@ void CBackgroundInfoLoader::Load(CFileItemList& items)
 
   if (items.Size() == 0)
     return;
-
+  
   EnterCriticalSection(m_lock);
 
   for (int nItem=0; nItem < items.Size(); nItem++)
     m_vecItems.push_back(items[nItem]);
 
   m_pVecItems = &items;
-  m_bStop = false;
-  m_bStartCalled = false;
 
+  // Compute how many threads to spawn.
   int nThreads = m_nRequestedThreads;
   if (nThreads == -1)
     nThreads = (m_vecItems.size() / (ITEMS_PER_THREAD+1)) + 1;
 
-  if (nThreads > g_advancedSettings.m_bgInfoLoaderMaxThreads)
-    nThreads = g_advancedSettings.m_bgInfoLoaderMaxThreads;
+  if (nThreads > MAX_THREAD_COUNT)
+    nThreads = MAX_THREAD_COUNT;
 
   if (items.IsPlexMediaServer())
     nThreads = 2;
-
-  m_nActiveThreads = nThreads;
-  for (int i=0; i < nThreads; i++)
-  {
-    CThread *pThread = new CThread(this);
-    pThread->Create();
-#ifndef _LINUX
-    pThread->SetPriority(THREAD_PRIORITY_BELOW_NORMAL);
-#endif
-    pThread->SetName("Background Loader");
-    m_workers.push_back(pThread);
-  }
-
+  
+  // Create a worker group.
+  m_bStop = false;
+  m_workerGroup = new CBackgroundRunnerGroup(this, items, nThreads, m_pauseBetweenLoadsInMS);
+      
   LeaveCriticalSection(m_lock);
 }
 
 void CBackgroundInfoLoader::StopAsync()
 {
+  EnterCriticalSection(m_lock);
+  
+  if (m_workerGroup)
+  {
+    // Tell it to stop and then forget about it.
+    m_workerGroup->Stop();
+    m_workerGroup->Detach();
+    m_workerGroup = 0;
+  }
+ 
   m_bStop = true;
+  
+  LeaveCriticalSection(m_lock);
 }
 
 
 void CBackgroundInfoLoader::StopThread()
 {
   StopAsync();
-
-  for (int i=0; i<(int)m_workers.size(); i++)
-  {
-    m_workers[i]->StopThread();
-    delete m_workers[i];
-  }
-
-  m_workers.clear();
-  m_vecItems.clear();
-  m_pVecItems = NULL;
-  m_nActiveThreads = 0;
 }
 
 bool CBackgroundInfoLoader::IsLoading()
 {
-  return m_nActiveThreads > 0;
+  CSingleLock lock(m_lock);
+  return m_workerGroup != 0 && m_workerGroup->GetNumActiveThreads() > 0;
 }
 
 void CBackgroundInfoLoader::SetObserver(IBackgroundLoaderObserver* pObserver)
@@ -196,4 +167,3 @@ void CBackgroundInfoLoader::SetProgressCallback(IProgressCallback* pCallback)
 {
   m_pProgressCallback = pCallback;
 }
-
