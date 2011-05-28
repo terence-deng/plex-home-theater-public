@@ -48,6 +48,7 @@
 CGUIWindowPlexSearch::CGUIWindowPlexSearch()
   : CGUIWindow(WINDOW_PLEX_SEARCH, "PlexSearch.xml")
   , m_lastSearchUpdate(0)
+  , m_lastArrowKey(0)
   , m_resetOnNextResults(false)
   , m_selectedContainerID(-1)
   , m_selectedItem(-1)
@@ -139,6 +140,9 @@ bool CGUIWindowPlexSearch::OnAction(const CAction &action)
            // action.wID == ACTION_HOME      || action.wID == ACTION_END)
            action.GetID() == ACTION_SELECT_ITEM)
   {
+    // If we're going to reset the search time, then make sure we track time since the key.
+    m_lastArrowKey = CTimeUtils::GetTimeMS();
+    
     // Reset search time.
     m_lastSearchUpdate = 0;
 
@@ -296,7 +300,12 @@ bool CGUIWindowPlexSearch::OnMessage(CGUIMessage& message)
 ///////////////////////////////////////////////////////////////////////////////
 void CGUIWindowPlexSearch::Render()
 {
+  // Enough time has passed since a key was pressed.
   if (m_lastSearchUpdate && m_lastSearchUpdate + SEARCH_DELAY < CTimeUtils::GetTimeMS())
+    UpdateLabel();
+  
+  // Enough time has passed since an arrow key was pressed after we had input.
+  if (m_lastArrowKey && m_lastArrowKey + SEARCH_DELAY < CTimeUtils::GetTimeMS())
     UpdateLabel();
 
   CGUIWindow::Render();
@@ -339,11 +348,16 @@ void CGUIWindowPlexSearch::UpdateLabel()
     // Send off a search message if it's been SEARCH_DELAY since last search.
     DWORD now = CTimeUtils::GetTimeMS();
     if (!m_lastSearchUpdate || m_lastSearchUpdate + SEARCH_DELAY >= now)
+    {
       m_lastSearchUpdate = now;
+      m_lastArrowKey = 0;
+    }
 
-    if (m_lastSearchUpdate + SEARCH_DELAY < now)
+    if (m_lastSearchUpdate + SEARCH_DELAY < now ||
+        (m_lastArrowKey && m_lastArrowKey     + SEARCH_DELAY < now))
     {
       m_lastSearchUpdate = 0;
+      m_lastArrowKey = 0;
       StartSearch(utf8Edit);
     }
   }

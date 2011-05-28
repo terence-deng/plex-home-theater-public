@@ -69,6 +69,7 @@ class CGUIWindowPlexSearch : public CGUIWindow,
   CMusicThumbLoader  m_musicThumbLoader;
   CStdStringW        m_strEdit;
   DWORD              m_lastSearchUpdate;
+  DWORD              m_lastArrowKey;
   bool               m_resetOnNextResults;
   
   int                m_selectedContainerID;
