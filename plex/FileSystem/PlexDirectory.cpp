@@ -1739,6 +1739,7 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
   string parentPath(parent);
 
   // If the parent has ? we need to lop off whatever comes after.
+  CURL theFullURL(parentPath);
   unsigned int questionMark = parentPath.find('?');
   if (questionMark != string::npos)
     parentPath = parentPath.substr(0, questionMark);
@@ -1771,7 +1772,21 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
 
     theURL.SetFileName(path + url);
   }
+  
+  string finalURL = theURL.Get();
 
-  return theURL.Get();
+  // If we have an auth token, make sure it gets propagated.
+  map<CStdString, CStdString> options = theFullURL.GetOptionsAsMap();
+  if (options.find("auth_token") != options.end())
+  {
+    if (finalURL.find("?") == string::npos)
+      finalURL += "?";
+    else
+      finalURL += "&";
+      
+    finalURL += "auth_token=" + options["auth_token"];
+  }
+  
+  return finalURL;
 }
 
