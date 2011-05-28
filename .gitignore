@@ -3,6 +3,8 @@
 # commonly used editors
 # vim
 *.swp
+.gitignore
+.installed
 
 # generated files etc
 config.cache
