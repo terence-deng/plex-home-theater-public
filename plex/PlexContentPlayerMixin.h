@@ -75,6 +75,15 @@ class PlexContentPlayerMixin
           g_playlistPlayer.SetCurrentPlaylist(PLAYLIST_MUSIC);
           g_playlistPlayer.Play(itemIndex);
         }
+        else if (type == "channel")
+        {
+          if (file->m_strPath.find("/video/") != string::npos)
+            ActivateWindow(WINDOW_VIDEO_FILES, file->m_strPath);
+          else if (file->m_strPath.find("/music/") != string::npos)
+            ActivateWindow(WINDOW_MUSIC_FILES, file->m_strPath);
+          else
+            ActivateWindow(WINDOW_PICTURES, file->m_strPath);
+        }
         else
         {
           bool resumeItem = false;

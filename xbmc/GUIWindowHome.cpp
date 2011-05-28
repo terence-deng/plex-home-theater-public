@@ -187,6 +187,14 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
         m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
       }
     }
+    else if (itemID >= 1 && itemID <= 3)
+    {
+      string filter = (itemID==1) ? "video" : (itemID==2) ? "music" : "photo";
+
+      // Recently accessed.
+      m_contentLists[CONTENT_LIST_RECENTLY_ACCESSED] = Group(kVIDEO_LOADER);
+      m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/channels/recentlyViewed?filter=" + filter, CONTENT_LIST_RECENTLY_ACCESSED);
+    }
     else
     {
       SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
@@ -418,6 +426,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         
         if (item->GetProperty("type") == "artist")
           newItem->m_strPath = "XBMC.ActivateWindow(MyMusicFiles," + item->m_strPath + ",return)";
+        else if (item->GetProperty("type") == "photo")
+          newItem->m_strPath = "XBMC.ActivateWindow(MyPictures," + item->m_strPath + ",return)";
         else
           newItem->m_strPath = "XBMC.ActivateWindow(MyVideoFiles," + item->m_strPath + ",return)";
         
