@@ -12,6 +12,8 @@
 #include "Thread.h"
 #include "PlexDirectory.h"
 #include "StackDirectory.h"
+#include "URL.h"
+#include "Util.h"
 
 using namespace std;
 using namespace boost;
@@ -73,8 +75,8 @@ class PlexMediaServerQueue : public CThread
   }
   
   /// Play progress.
-  void onPlayingProgress(const CFileItemPtr& item, int ms)
-  { enqueue("progress", item, "&time=" + boost::lexical_cast<string>(ms)); }
+  void onPlayingProgress(const CFileItemPtr& item, int ms, const string& state="playing")
+  { enqueue("progress", item, "&time=" + boost::lexical_cast<string>(ms) + "&state=" + state); }
   
   /// Clear playing progress.
   void onClearPlayingProgress(const CFileItemPtr& item)
@@ -131,11 +133,21 @@ class PlexMediaServerQueue : public CThread
         path = stack.GetFirstStackedFile(path);
       }
       
+      // Encode the key.
+      CStdString encodedKey = item->GetProperty("ratingKey");
+      CUtil::URLEncode(encodedKey);
+      
+      // Figure out the identifier ~ FIXME, remove this code once Andre fixes the cloud.
+      string identifier = item->GetProperty("pluginIdentifier");
+      CURL theURL(item->GetProperty("key"));
+      if (theURL.GetHostName() == "node.plexapp.com")
+        identifier = "com.plexapp.plugins.myplex";
+      
       // Build the URL.
       string url = "/:/" + verb;
       url = buildUrl(item, url);
-      url += "?key=" + item->GetProperty("ratingKey");
-      url += "&identifier=" + item->GetProperty("pluginIdentifier");
+      url += "?key=" + encodedKey;
+      url += "&identifier=" + identifier;
       url += options;
       
       // Queue it up!
@@ -145,15 +157,24 @@ class PlexMediaServerQueue : public CThread
   
   string buildUrl(const CFileItemPtr& item, const string& url)
   {
-    CStdString path = item->m_strPath;
-    if (item->IsStack())
+    // If we have a node key, then just send it to the local PMS.
+    CURL theURL(item->GetProperty("key"));
+    if (theURL.GetHostName() == "node.plexapp.com")
     {
-      CStackDirectory stack;
-      path = stack.GetFirstStackedFile(path);
+      return CPlexDirectory::ProcessUrl(item->GetProperty("containerKey"), url, false);
     }
-    
-    // Build the URL.
-    return CPlexDirectory::ProcessUrl(path, url, false);
+    else
+    {
+      CStdString path = item->m_strPath;
+      if (item->IsStack())
+      {
+        CStackDirectory stack;
+        path = stack.GetFirstStackedFile(path);
+      }
+      
+      // Build the URL.
+      return CPlexDirectory::ProcessUrl(path, url, false);
+    }
   }
   
  private:
