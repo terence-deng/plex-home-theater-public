@@ -4031,6 +4031,15 @@ bool CApplication::IsPlaying() const
   return true;
 }
 
+bool CApplication::IsBuffering() const
+{
+  if (!m_pPlayer)
+    return false;
+  if (m_pPlayer->IsCaching() && m_pPlayer->IsPaused() && g_infoManager.GetSeeking() == false)
+    return true;
+  return false;
+}
+
 bool CApplication::IsPaused() const
 {
   if (!m_pPlayer)
@@ -4094,6 +4103,32 @@ void CApplication::UpdateFileState()
   }
   else
   {
+    // Update the media server as needed.
+    static time_t lastUpdated = 0;
+    static string lastState;
+    static float  lastTime = 0;
+    static string lastKey;
+    
+    time_t now = time(0);
+    string state = IsBuffering() ? "buffering" : IsPaused() ? "paused" : "playing";
+    
+    // Enough time has passed, we changed state, we skipped, or we're playing something different.
+    if (now - lastUpdated > 5           || 
+        lastState != state              || 
+        fabs(lastTime-GetTime()) > 10.0 ||
+        lastKey != m_progressTrackingItem->GetProperty("key"))
+    {
+      lastUpdated = time(0);
+      lastState = state;
+      lastTime = GetTime();
+      lastKey = m_progressTrackingItem->GetProperty("key");
+      
+      PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, GetTime()*1000, state);
+    }
+
+    // Always keep the item up to date.
+    m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(GetTime()*1000)));
+
     if (IsPlayingVideo() || IsPlayingAudio())
     {
       if (m_progressTrackingItem->m_strPath == "")
@@ -4135,9 +4170,6 @@ void CApplication::UpdateFileState()
         }
         else if (GetTime() > g_advancedSettings.m_videoIgnoreSecondsAtStart)
         {
-          PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, m_progressTrackingVideoResumeBookmark.timeInSeconds*1000);
-          m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(m_progressTrackingVideoResumeBookmark.timeInSeconds*1000)));
-
           // Update the bookmark
           m_progressTrackingVideoResumeBookmark.timeInSeconds = GetTime();
           m_progressTrackingVideoResumeBookmark.totalTimeInSeconds = GetTotalTime();

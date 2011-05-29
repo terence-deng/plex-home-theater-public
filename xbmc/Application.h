@@ -160,6 +160,7 @@ public:
   void CheckDelayedPlayerRestart();
   bool IsPlaying() const;
   bool IsPaused() const;
+  bool IsBuffering() const;
   bool IsPlayingAudio() const;
   bool IsPlayingVideo() const;
   bool IsPlayingFullScreenVideo() const;
