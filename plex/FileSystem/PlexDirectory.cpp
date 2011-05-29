@@ -210,6 +210,9 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
   {
     CFileItemPtr pItem = items[i];
 
+    // Save the container URL.
+    pItem->SetProperty("containerKey", strPath);
+    
     // See if this is a provider.
     if (pItem->GetProperty("provider") == "1")
     {
