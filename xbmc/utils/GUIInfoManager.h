@@ -622,6 +622,7 @@ public:
   bool GetDisplayAfterSeek();
   void SetDisplayAfterSeek(unsigned int timeOut = 2500, int seekOffset = 0);
   void SetSeeking(bool seeking) { m_playerSeeking = seeking; };
+  bool GetSeeking() const { return m_playerSeeking; }
   void SetShowTime(bool showtime) { m_playerShowTime = showtime; };
   void SetShowCodec(bool showcodec) { m_playerShowCodec = showcodec; };
   void SetShowInfo(bool showinfo) { m_playerShowInfo = showinfo; };
