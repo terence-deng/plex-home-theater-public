@@ -46,7 +46,7 @@ bool CSaveFileStateJob::DoWork()
             CLog::Log(LOGDEBUG, "%s - Marking video item %s as watched", __FUNCTION__, progressTrackingFile.c_str());
 
             // consider this item as played
-            videodatabase.IncrementPlayCount(m_item);
+            //videodatabase.IncrementPlayCount(m_item);
             m_item.GetVideoInfoTag()->m_playCount++;
             m_item.SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, true);
             updateListing = true;
@@ -54,20 +54,18 @@ bool CSaveFileStateJob::DoWork()
             PlexMediaServerQueue::Get().onViewed(boost::make_shared<CFileItem>(m_item), true);
           }
           else
-            videodatabase.UpdateLastPlayed(m_item);
+            ;//videodatabase.UpdateLastPlayed(m_item);
 
           if (m_bookmark.timeInSeconds < 0.0f)
           {
             PlexMediaServerQueue::Get().onClearPlayingProgress(boost::make_shared<CFileItem>(m_item));
-            
-            videodatabase.ClearBookMarksOfFile(progressTrackingFile, CBookmark::RESUME);
+            //videodatabase.ClearBookMarksOfFile(progressTrackingFile, CBookmark::RESUME);
           }
           else if (m_bookmark.timeInSeconds > 0.0f)
           {
-            PlexMediaServerQueue::Get().onPlayingProgress(boost::make_shared<CFileItem>(m_item), m_bookmark.timeInSeconds);
+            PlexMediaServerQueue::Get().onPlayingProgress(boost::make_shared<CFileItem>(m_item), m_bookmark.timeInSeconds*1000, "stopped");
             m_item.SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
-            
-            videodatabase.AddBookMarkToFile(progressTrackingFile, m_bookmark, CBookmark::RESUME);
+            //videodatabase.AddBookMarkToFile(progressTrackingFile, m_bookmark, CBookmark::RESUME);
           }
         }
 
