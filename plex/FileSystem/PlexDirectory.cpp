@@ -521,7 +521,7 @@ class PlexMediaNode
      }
 
      // Make sure we have the trailing slash.
-     if (pItem->m_bIsFolder == true && pItem->m_strPath[pItem->m_strPath.size()-1] != '/')
+     if (pItem->m_bIsFolder == true && pItem->m_strPath[pItem->m_strPath.size()-1] != '/' && pItem->m_strPath.find("?") == string::npos)
        pItem->m_strPath += "/";
 
      // Set up the context menu
@@ -628,20 +628,22 @@ class PlexMediaNode
      const char* val = el->Attribute(resource.c_str());
      if (val && strlen(val) > 0)
      {
-       string attr = resource;
+       CStdString attr = resource;
        if (attrName.size() > 0)
          attr = attrName;
 
-       // Complete the URL.
-       string url = baseURL;
-       url += attr + "/";
-
        CStdString encodedValue = val;
        CUtil::URLEncode(encodedValue);
-       url += encodedValue;
 
-       url += "?t=";
-       url += version;
+       // Complete the URL.
+       CURL theURL(baseURL);
+       theURL.SetFileName(theURL.GetFileName() + attr + "/" + encodedValue);
+       if (theURL.GetOptions().empty())
+         theURL.SetOptions("?t=" + version);
+       else
+         theURL.SetOptions("?t=" + version + "&" + theURL.GetOptions().substr(1));
+       
+       string url = theURL.Get();
 
        // See if it exists (fasttrack) or queue it for download.
        string localFile = CFileItem::GetCachedPlexMediaServerThumb(url);
@@ -1652,7 +1654,7 @@ void CPlexDirectory::Process()
   m_http.SetTimeout(m_timeout);
   if (m_http.Open(url) == false)
   {
-    CLog::Log(LOGERROR, "%s - Unable to get Plex Media Server directory", __FUNCTION__);
+    CLog::Log(LOGERROR, "%s - Unable to get Plex Media Server directory for %s", __FUNCTION__, m_url.c_str());
     m_bSuccess = false;
     m_downloadEvent.Set();
     return;
@@ -1780,16 +1782,17 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
 
   // If we have an auth token, make sure it gets propagated.
   map<CStdString, CStdString> options = theFullURL.GetOptionsAsMap();
-  if (options.find("auth_token") != options.end())
+  if (options.find("X-Plex-Token") != options.end())
   {
     if (finalURL.find("?") == string::npos)
       finalURL += "?";
     else
       finalURL += "&";
       
-    finalURL += "auth_token=" + options["auth_token"];
+    finalURL += "X-Plex-Token=" + options["X-Plex-Token"];
   }
   
+  //CLog::Log(LOGNOTICE, "Processed [%s] + [%s] => [%s]\n", parent.c_str(), url.c_str(), finalURL.c_str());
   return finalURL;
 }
 
