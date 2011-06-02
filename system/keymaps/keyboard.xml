@@ -180,7 +180,7 @@
       <r>Rewind</r>
       <period>StepForward</period>
       <comma>StepBack</comma>
-      <backspace>Fullscreen</backspace>
+      <backspace>SmallStepBack</backspace>
       <quote>SmallStepBack</quote>
       <opensquarebracket>BigStepForward</opensquarebracket>
       <closesquarebracket>BigStepBack</closesquarebracket>
@@ -197,7 +197,7 @@
       <up>BigStepForward</up>
       <down>BigStepBack</down>
       <a>AudioDelay</a>
-      <escape>Fullscreen</escape>
+      <escape>Stop</escape>
       <v>XBMC.ActivateWindow(Teletext)</v>
     </keyboard>
   </FullscreenVideo>
@@ -489,7 +489,7 @@
   <shutdownmenu>
     <keyboard>
       <backspace>PreviousMenu</backspace>
-      <s>Close</s>  
+      <s>Close</s>
     </keyboard>
   </shutdownmenu>
   <submenu>

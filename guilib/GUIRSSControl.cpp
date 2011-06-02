@@ -89,7 +89,7 @@ void CGUIRSSControl::UpdateColors()
 void CGUIRSSControl::Render()
 {
   // only render the control if they are enabled
-  if (g_guiSettings.GetBool("lookandfeel.enablerssfeeds") && g_rssManager.IsActive())
+  if (g_guiSettings.GetBool("rss.enablerssfeeds") && g_rssManager.IsActive())
   {
     CSingleLock lock(m_criticalSection);
     // Create RSS background/worker thread if needed
