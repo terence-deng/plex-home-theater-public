@@ -968,12 +968,12 @@ void CGUIWindowSettingsCategory::UpdateSettings()
       if (pControl && g_guiSettings.GetString(strSetting, false).IsEmpty())
         pControl->SetLabel2("");
     }
-    else if (strSetting.Equals("lookandfeel.rssedit"))
+    else if (strSetting.Equals("rss.rssedit"))
     {
       CGUIControl *pControl = (CGUIControl *)GetControl(pSettingControl->GetID());
       AddonPtr addon;
       CAddonMgr::Get().GetAddon("script.rss.editor",addon);
-      pControl->SetEnabled(addon && g_guiSettings.GetBool("lookandfeel.enablerssfeeds"));
+      pControl->SetEnabled(addon && g_guiSettings.GetBool("rss.enablerssfeeds"));
     }
     else if (strSetting.Equals("videoplayer.synctype"))
     {

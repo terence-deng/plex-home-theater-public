@@ -734,9 +734,9 @@ void CGUISettings::Initialize()
   AddInt(NULL, "lookandfeel.skinzoom",20109, 0, -20, 2, 20, SPIN_CONTROL_INT, MASK_PERCENT);
   AddInt(NULL, "lookandfeel.startupwindow",512,1, WINDOW_HOME, 1, WINDOW_PYTHON_END, SPIN_CONTROL_TEXT);
   AddString(laf, "lookandfeel.soundskin",15108,"SKINDEFAULT", SPIN_CONTROL_TEXT);
-  AddSeparator(NULL, "lookandfeel.sep2");
-  AddBool(NULL, "lookandfeel.enablerssfeeds",13305,  true);
-  AddString(NULL, "lookandfeel.rssedit", 21450, "", BUTTON_CONTROL_STANDARD);
+  //AddSeparator(NULL, "lookandfeel.sep2");
+  //AddBool(NULL, "lookandfeel.enablerssfeeds",13305,  true);
+  //AddString(NULL, "lookandfeel.rssedit", 21450, "", BUTTON_CONTROL_STANDARD);
 
   CSettingsCategory* loc = AddCategory(7, "locale", 20026);
   AddString(NULL, "locale.language",248,"english", SPIN_CONTROL_TEXT);
