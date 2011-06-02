@@ -18,8 +18,8 @@ PlexContentWorkerPtr PlexContentWorkerManager::enqueue(int targetWindow, const s
   m_pendingWorkers[worker->getID()] = worker;
   
   // Run in a separate thread.
-  thread t(boost::bind(&PlexContentWorker::run, worker.get()));
-  t.detach();
+  thread_ptr t = thread_ptr(new thread(&PlexContentWorker::run, worker.get()));
+  worker->setThread(t);
   
   return worker;
 }

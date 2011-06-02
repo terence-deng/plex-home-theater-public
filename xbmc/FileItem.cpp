@@ -2698,10 +2698,15 @@ void CFileItem::SetUserMusicThumb(bool alwaysCheckRemote /* = false */)
 CStdString CFileItem::GetCachedVideoThumb() const
 {
   CStdString path = m_strPath;
+  
   if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)
-    path = m_strThumbnailImage;
+  {
+    return GetCachedThumb(m_strThumbnailImage, g_settings.GetPlexMediaServerThumbFolder(),true);
+  }
   else if (IsStack())
+  {
     return GetCachedThumb(CStackDirectory::GetFirstStackedFile(m_strPath),g_settings.GetVideoThumbFolder(),true);
+  }
   else if (IsVideoDb() && HasVideoInfoTag())
   {
     if (m_bIsFolder && !GetVideoInfoTag()->m_strPath.IsEmpty())
@@ -2709,6 +2714,7 @@ CStdString CFileItem::GetCachedVideoThumb() const
     else if (!GetVideoInfoTag()->m_strFileNameAndPath.IsEmpty())
       return GetCachedThumb(GetVideoInfoTag()->m_strFileNameAndPath, g_settings.GetVideoThumbFolder(), true);
   }
+  
   return GetCachedThumb(path,g_settings.GetVideoThumbFolder(),true);
 }
 
@@ -3064,7 +3070,7 @@ CStdString CFileItem::GetCachedPlexMediaServerBanner() const
 
 CStdString CFileItem::GetCachedPlexMediaServerFanart(const CStdString &path)
 {
-  return GetCachedThumb(path, g_settings.GetPlexMediaServerThumbFolder());
+  return GetCachedThumb(path, g_settings.GetPlexMediaServerThumbFolder(), true);
 }
 
 CStdString CFileItem::GetCachedPlexMediaServerThumb() const
@@ -3074,7 +3080,7 @@ CStdString CFileItem::GetCachedPlexMediaServerThumb() const
 
 CStdString CFileItem::GetCachedPlexMediaServerThumb(const CStdString& path)
 {
-  return GetCachedThumb(path, g_settings.GetPlexMediaServerFanartFolder());
+  return GetCachedThumb(path, g_settings.GetPlexMediaServerThumbFolder(), true);
 }
 
 CStdString CFileItem::GetCachedFanart() const

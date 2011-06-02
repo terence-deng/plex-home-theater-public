@@ -1756,9 +1756,9 @@ CStdString CSettings::GetPlexMediaServerThumbFolder() const
 {
   CStdString folder;
   if (GetCurrentProfile().hasDatabases())
-    CUtil::AddFileToFolder(g_settings.GetProfileUserDataFolder(), _P("Thumbnails\\PlexMediaServer"), folder);
+    CUtil::AddFileToFolder(g_settings.GetProfileUserDataFolder(), _P("Thumbnails\\"), folder);
   else
-    CUtil::AddFileToFolder(g_settings.GetUserDataFolder(), _P("Thumbnails\\PlexMediaServer"), folder);
+    CUtil::AddFileToFolder(g_settings.GetUserDataFolder(), _P("Thumbnails\\"), folder);
   
   return folder;
   
@@ -1768,9 +1768,9 @@ CStdString CSettings::GetPlexMediaServerFanartFolder() const
 {
   CStdString folder;
   if (GetCurrentProfile().hasDatabases())
-    CUtil::AddFileToFolder(g_settings.GetProfileUserDataFolder(), "Thumbnails\\PlexMediaServer\\Fanart", folder);
+    CUtil::AddFileToFolder(g_settings.GetProfileUserDataFolder(), "Thumbnails\\", folder);
   else
-    CUtil::AddFileToFolder(g_settings.GetUserDataFolder(), "Thumbnails\\PlexMediaServer\\Fanart", folder);
+    CUtil::AddFileToFolder(g_settings.GetUserDataFolder(), "Thumbnails\\", folder);
   
   return folder;
 }

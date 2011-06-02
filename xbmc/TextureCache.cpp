@@ -198,7 +198,12 @@ CStdString CTextureCache::CheckAndCacheImage(const CStdString &url, bool returnD
       if (g_advancedSettings.m_useDDSFanart)
         AddJob(new CDDSJob(path));
     }
-    return path;
+    
+    // We're not going to give up just yet for PMS-sourced images. This will result in the texture
+    // cache downloading the image, which seems just as good as the background loader.
+    //
+    if (!CUtil::IsPlexMediaServer(url))
+      return path;
   }
 
   // Uncached image - best we can do for now is cache it so that the texture manager

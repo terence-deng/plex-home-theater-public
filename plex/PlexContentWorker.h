@@ -21,6 +21,7 @@
 
 class PlexContentWorker;
 typedef boost::shared_ptr<PlexContentWorker> PlexContentWorkerPtr;
+typedef boost::shared_ptr<boost::thread> thread_ptr;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 class PlexContentWorkerManager
@@ -84,7 +85,7 @@ class PlexContentWorker
 
   void run()
   {
-    printf("Processing content request in thread [%s]\n", m_url.c_str());
+    printf("[%p] Processing content request in thread [%s]\n", this, m_url.c_str());
 
     if (m_cancelled == false)
     {
@@ -110,6 +111,7 @@ class PlexContentWorker
   void cancel() { m_cancelled = true; }
   CFileItemListPtr getResults() { return m_results; }
   int getID() { return m_id; }
+  void setThread(thread_ptr& t) { m_myThread = t; }
 
  protected:
 
@@ -133,6 +135,7 @@ class PlexContentWorker
   bool             m_cancelled;
   int              m_contextID;
   CFileItemListPtr m_results;
+  thread_ptr       m_myThread;
 };
 
 typedef boost::shared_ptr<CBackgroundInfoLoader> CBackgroundInfoLoaderPtr;
