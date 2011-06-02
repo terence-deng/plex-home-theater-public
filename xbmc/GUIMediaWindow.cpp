@@ -202,7 +202,11 @@ bool CGUIMediaWindow::OnAction(const CAction &action)
   if (action.GetID() == ACTION_PARENT_DIR)
   {
     if ((m_vecItems->IsVirtualDirectoryRoot() || m_vecItems->m_strPath == m_startDirectory) && g_advancedSettings.m_bUseEvilB)
+    {
+      m_vecItems->m_strPath="";
+      m_history.ClearPathHistory();
       g_windowManager.PreviousWindow();
+    }
     else
       GoParentFolder();
     return true;
