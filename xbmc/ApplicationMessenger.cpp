@@ -444,6 +444,10 @@ case TMSG_POWERDOWN:
       g_application.Minimize();
       break;
 
+    case TMSG_HIDE:
+      g_application.Hide();
+      break;
+      
     case TMSG_EXECUTE_OS:
 #if defined( _LINUX) && !defined(__APPLE__)
       CUtil::RunCommandLine(pMsg->strParam.c_str(), (pMsg->dwParam1 == 1));
@@ -959,6 +963,12 @@ void CApplicationMessenger::Minimize(bool wait)
 {
   ThreadMessage tMsg = {TMSG_MINIMIZE};
   SendMessage(tMsg, wait);
+}
+
+void CApplicationMessenger::Hide()
+{
+  ThreadMessage tMsg = {TMSG_HIDE};
+  SendMessage(tMsg, true);
 }
 
 void CApplicationMessenger::DoModal(CGUIDialog *pDialog, int iWindowID, const CStdString &param)

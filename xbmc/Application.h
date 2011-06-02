@@ -304,6 +304,7 @@ public:
   bool IsPresentFrame();
 
   void Minimize();
+  void Hide();
   bool ToggleDPMS(bool manual);
 protected:
   void RenderScreenSaver();

@@ -69,6 +69,7 @@ class CGUIDialog;
 #define TMSG_SWITCHTOFULLSCREEN   308
 #define TMSG_MINIMIZE             309
 #define TMSG_TOGGLEFULLSCREEN     310
+#define TMSG_HIDE                 311
 
 #define TMSG_HTTPAPI              400
 
@@ -146,6 +147,7 @@ public:
   void Reset();
   void SwitchToFullscreen(); //
   void Minimize(bool wait = false);
+  void Hide();
   void ExecOS(const CStdString command, bool waitExit = false);
   void UserEvent(int code);
 
