@@ -19,6 +19,7 @@
  *
  */
 
+#include "FileItem.h"
 #include "GUITexture.h"
 #include "GraphicContext.h"
 #include "TextureManager.h"
@@ -601,7 +602,18 @@ void CGUITextureBase::SetAspectRatio(const CAspectRatio &aspect)
 
 void CGUITextureBase::SetFileName(const CStdString& filename)
 {
-  if (m_info.filename.Equals(filename)) return;
+  // If the name matches, don't do anything.
+  if (m_info.filename.Equals(filename)) 
+    return;
+  
+  // If the new name is the cached version of the old name, don't do anything.
+  // This can occur if the texture cache loads something for us, and then a bit
+  // later the texture is requested with the cached name and we don't want it
+  // flickering.
+  //
+  if (CFileItem::GetCachedPlexMediaServerThumb(m_info.filename) == filename)
+    return;
+  
   // Don't completely free resources here - we may be just changing
   // filenames mid-animation
   FreeResources();
