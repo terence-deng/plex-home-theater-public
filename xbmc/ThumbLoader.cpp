@@ -57,7 +57,7 @@ bool CThumbLoader::LoadRemoteThumb(CFileItem *pItem)
 {
   // look for remote thumbs
   CStdString thumb(pItem->GetThumbnailImage());
-  if (!g_TextureManager.CanLoad(thumb))
+  if (!g_TextureManager.CanLoad(thumb) || CUtil::IsPlexMediaServer(thumb))
   {
     CStdString cachedThumb(pItem->GetCachedVideoThumb());
     if (CFile::Exists(cachedThumb))
@@ -278,7 +278,9 @@ bool CVideoThumbLoader::LoadItem(CFileItem* pItem)
     }
   }
   
-  if (!pItem->m_bIsFolder &&
+#if 0
+  if (!pItem->m_bIsFolder && 
+      !pItem->IsPlexMediaServer() &&
        pItem->HasVideoInfoTag() &&
        g_guiSettings.GetBool("myvideos.extractflags") &&
        (!pItem->GetVideoInfoTag()->HasStreamDetails() ||
@@ -287,6 +289,7 @@ bool CVideoThumbLoader::LoadItem(CFileItem* pItem)
     CThumbExtractor* extract = new CThumbExtractor(*pItem,pItem->m_strPath,false);
     AddJob(extract);
   }
+#endif
   
   // Walk through properties and see if there are any image resources to be loaded.
   CGUIListItem::PropertyMap& properties = pItem->GetPropertyDict();
