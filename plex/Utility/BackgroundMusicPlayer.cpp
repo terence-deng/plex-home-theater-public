@@ -11,6 +11,7 @@
 #include "GUISettings.h"
 #include "GUIUserMessages.h"
 #include "GUIWindowManager.h"
+#include "Settings.h"
 #include "Log.h"
 #include "cores/playercorefactory/PlayerCoreFactory.h"
 
@@ -33,7 +34,14 @@ BackgroundMusicPlayer::BackgroundMusicPlayer()
 {
   m_globalVolume = 100;
   m_player.reset(CPlayerCoreFactory::CreatePlayer(EPC_DVDPLAYER, *this));
+  m_player->RegisterAudioCallback(this);
   SyncSettings();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+BackgroundMusicPlayer::~BackgroundMusicPlayer()
+{
+  m_player->UnRegisterAudioCallback();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +50,7 @@ void BackgroundMusicPlayer::SyncSettings()
   CLog::Log(LOGDEBUG,"Updating background music settings");
   
   m_isEnabled = g_guiSettings.GetBool("backgroundmusic.thememusicenabled");
-  m_volume = g_guiSettings.GetInt("backgroundmusic.bgmusicvolume")/100.0f;
+  m_volume = g_guiSettings.GetInt("backgroundmusic.bgmusicvolume");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,16 +72,17 @@ void BackgroundMusicPlayer::SetTheme(const CStdString& theme)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void BackgroundMusicPlayer::OnPlayBackEnded()
-{
-  PlayCurrentTheme();
-}
-
-////////////////////////////////////////////////////////////////////////////////
 void BackgroundMusicPlayer::PlayCurrentTheme()
 {
   if (m_theme.size())
     m_player->OpenFile(CFileItem(m_theme, false), CPlayerOptions());
   else if (m_player->IsPlaying())
   	m_player->CloseFile();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void BackgroundMusicPlayer::OnInitialize(int iChannels, int iSamplesPerSec, int iBitsPerSample)
+{
+  long volume = VOLUME_MINIMUM * ((100.0f - m_volume) / 100.0f); // FIX: volume is measured in db so using a percentage here is wrong.
+  m_player->SetVolume(volume);
 }

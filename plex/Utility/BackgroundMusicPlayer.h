@@ -20,7 +20,7 @@ typedef boost::shared_ptr<IPlayer> PlayerPtr;
 //
 // Utility class for playing background theme music.
 //
-class BackgroundMusicPlayer : public IPlayerCallback
+class BackgroundMusicPlayer : public IPlayerCallback, IAudioCallback
 {
 public:
   // Factory method.
@@ -28,6 +28,9 @@ public:
   
   // Convenience method to send a background theme change message.
   static void SendThemeChangeMessage(const CStdString& theme = CStdString());
+  
+  // Destructor
+  ~BackgroundMusicPlayer();
   
   // Sync state with background music settings.
   void SyncSettings();
@@ -46,10 +49,14 @@ private:
   BackgroundMusicPlayer();
   
   // Player callbacks.
-  void OnPlayBackEnded();
+  void OnPlayBackEnded(){};
   void OnPlayBackStarted(){};
   void OnPlayBackStopped(){};
   void OnQueueNextItem(){};
+  
+  // Audio callbacks
+  void OnInitialize(int iChannels, int iSamplesPerSec, int iBitsPerSample);
+  void OnAudioData(const unsigned char* pAudioData, int iAudioDataLength){};
   
   // Member variables.
   bool m_isEnabled;
