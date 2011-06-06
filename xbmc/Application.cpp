@@ -4125,17 +4125,20 @@ void CApplication::UpdateFileState()
         lastState != state              || 
         fabs(lastTime-GetTime()) > 10.0 ||
         lastKey != m_progressTrackingItem->GetProperty("key"))
-    {
+    {      
       lastUpdated = time(0);
       lastState = state;
       lastTime = GetTime();
       lastKey = m_progressTrackingItem->GetProperty("key");
-      
+
+      m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(GetTime()*1000)));
       PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, GetTime()*1000, state);
     }
-
-    // Always keep the item up to date.
-    m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(GetTime()*1000)));
+    else
+    {
+      PlexMediaServerQueue::Get().onClearPlayingProgress(m_itemCurrentFile);
+      m_itemCurrentFile->ClearProperty("viewOffset");
+    }
 
     if (IsPlayingVideo() || IsPlayingAudio())
     {
