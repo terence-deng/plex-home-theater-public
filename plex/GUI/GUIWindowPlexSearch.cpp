@@ -141,7 +141,7 @@ bool CGUIWindowPlexSearch::OnAction(const CAction &action)
            action.GetID() == ACTION_SELECT_ITEM)
   {
     // If we're going to reset the search time, then make sure we track time since the key.
-    if (GetFocusedControlID() < 9000)
+    if (GetFocusedControlID() < 9000 && m_lastSearchUpdate != 0)
       m_lastArrowKey = CTimeUtils::GetTimeMS();
     
     // Reset search time.
