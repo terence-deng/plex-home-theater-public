@@ -53,20 +53,30 @@ class PlexContentPlayerMixin
         }
         else if (type == "track")
         {
-          // Get album.
-          CFileItemList  fileItems;
-          CPlexDirectory plexDir;
-          plexDir.GetDirectory(file->GetProperty("parentPath"), fileItems);
-          int itemIndex = -1;
-          
-          for (int i=0; i < fileItems.Size(); ++i)
+          CFileItemList fileItems;
+          int itemIndex = 0;
+
+          if (file->HasProperty("parentPath"))
           {
-            CFileItemPtr fileItem = fileItems[i];
-            if (fileItem->GetProperty("unprocessedKey") == file->GetProperty("unprocessedKey"))
+            // Get album.
+            CPlexDirectory plexDir;
+            plexDir.GetDirectory(file->GetProperty("parentPath"), fileItems);
+            
+            for (int i=0; i < fileItems.Size(); ++i)
             {
-              itemIndex = i;
-              break;
+              CFileItemPtr fileItem = fileItems[i];
+              if (fileItem->GetProperty("unprocessedKey") == file->GetProperty("unprocessedKey"))
+              {
+                itemIndex = i;
+                break;
+              }
             }
+          }
+          else
+          {
+            // Just add the track.
+            CFileItemPtr theTrack(new CFileItem(*file));
+            fileItems.Add(theTrack);
           }
           
           g_playlistPlayer.ClearPlaylist(PLAYLIST_MUSIC);
