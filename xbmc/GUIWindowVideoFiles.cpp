@@ -447,7 +447,7 @@ bool CGUIWindowVideoFiles::OnContextButton(int itemNumber, CONTEXT_BUTTON button
   {    
   case CONTEXT_BUTTON_MARK_WATCHED:
     // If we're about to hide this item, select the next one
-    m_viewControl.SetSelectedItem((itemNumber+1) % m_vecItems->Size());
+    //m_viewControl.SetSelectedItem((itemNumber+1) % m_vecItems->Size());
     MarkWatched(item);
     return true;
 
