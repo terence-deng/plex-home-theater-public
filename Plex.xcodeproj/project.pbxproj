@@ -6176,7 +6176,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./build-number.py";
+			shellScript = "/usr/bin/python ./build-number.py";
 		};
 /* End PBXShellScriptBuildPhase section */
 

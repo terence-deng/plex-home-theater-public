@@ -42,6 +42,11 @@ CGUIRSSControl::CGUIRSSControl(int parentID, int controlID, float posX, float po
   m_pReader = NULL;
   m_rtl = false;
   ControlType = GUICONTROL_RSS;
+  
+  if (g_guiSettings.GetBool("rss.rssfeedsrtl"))
+  {
+    m_scrollInfo.SetSpeed(-60);
+  }
 }
 
 CGUIRSSControl::CGUIRSSControl(const CGUIRSSControl &from)
