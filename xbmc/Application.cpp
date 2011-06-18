@@ -875,11 +875,11 @@ bool CApplication::InitDirectoriesOSX()
     CSpecialProtocol::SetMasterProfilePath(userHome + "/Library/Application Support/Plex/userdata");
 
 #ifdef __APPLE__
-    CStdString strTempPath = CUtil::AddFileToFolder(userHome, ".xbmc/");
+    CStdString strTempPath = CUtil::AddFileToFolder(userHome, ".plex/");
     CDirectory::Create(strTempPath);
 #endif
 
-    strTempPath = CUtil::AddFileToFolder(userHome, ".xbmc/temp");
+    strTempPath = CUtil::AddFileToFolder(userHome, ".plex/temp");
     CSpecialProtocol::SetTempPath(strTempPath);
 
 #ifdef __APPLE__
