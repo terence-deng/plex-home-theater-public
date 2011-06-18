@@ -368,7 +368,8 @@ ASS_Drawing *ass_drawing_new(void *fontconfig_priv, ASS_Font *font,
     drawing->fontconfig_priv = fontconfig_priv;
     drawing->font = font;
     drawing->ftlibrary = lib;
-    drawing->library = font->library;
+    if (font)
+        drawing->library = font->library;
 
     drawing->scale_x = 1.;
     drawing->scale_y = 1.;
