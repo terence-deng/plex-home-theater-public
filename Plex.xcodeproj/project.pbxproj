@@ -14,6 +14,7 @@
 		7462B2E9137D901F00DE1658 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7462B2E8137D901F00DE1658 /* libiconv.dylib */; };
 		7462B30A137DAB8900DE1658 /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7462B308137DAB8900DE1658 /* libboost_system.dylib */; };
 		7462B30B137DAB8900DE1658 /* libboost_thread.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7462B309137DAB8900DE1658 /* libboost_thread.dylib */; };
+		746C007613ACFFCE00841A1D /* libfontconfig.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 746C007513ACFFCE00841A1D /* libfontconfig.1.dylib */; };
 		7485ADBF1359DC2700E663B5 /* FilePlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADBD1359DC2700E663B5 /* FilePlaylist.cpp */; };
 		7485ADC21359E1E700E663B5 /* DVDInputStreamPlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADC01359E1E700E663B5 /* DVDInputStreamPlaylist.cpp */; };
 		7485ADC51359EB8500E663B5 /* Base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7485ADC31359EB8400E663B5 /* Base64.cpp */; };
@@ -873,7 +874,6 @@
 		7486673212FBF60600D8F899 /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2412E381E900C8B41F /* libmpeg2.a */; };
 		7486673312FBF60600D8F899 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F2812E3822000C8B41F /* libfribidi.a */; };
 		7486673412FBF60600D8F899 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3012E3830600C8B41F /* libsamplerate.a */; };
-		7486673512FBF60600D8F899 /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3412E3833C00C8B41F /* libfontconfig.a */; };
 		7486673612FBF60600D8F899 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3812E3838D00C8B41F /* libvorbisfile.a */; };
 		7486673712FBF60600D8F899 /* liblzo2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F3C12E383C400C8B41F /* liblzo2.a */; };
 		7486673812FBF60600D8F899 /* libmad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74462F4012E3840D00C8B41F /* libmad.a */; };
@@ -1095,7 +1095,6 @@
 		74462F2812E3822000C8B41F /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = vendor/build/lib/libfribidi.a; sourceTree = SOURCE_ROOT; };
 		74462F2C12E3826400C8B41F /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = vendor/build/lib/libvorbisenc.a; sourceTree = SOURCE_ROOT; };
 		74462F3012E3830600C8B41F /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = vendor/build/lib/libsamplerate.a; sourceTree = SOURCE_ROOT; };
-		74462F3412E3833C00C8B41F /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = vendor/build/lib/libfontconfig.a; sourceTree = SOURCE_ROOT; };
 		74462F3812E3838D00C8B41F /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = vendor/build/lib/libvorbisfile.a; sourceTree = SOURCE_ROOT; };
 		74462F3C12E383C400C8B41F /* liblzo2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzo2.a; path = vendor/build/lib/liblzo2.a; sourceTree = SOURCE_ROOT; };
 		74462F4012E3840D00C8B41F /* libmad.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmad.a; path = vendor/build/lib/libmad.a; sourceTree = SOURCE_ROOT; };
@@ -1115,6 +1114,7 @@
 		74646A1C12E82E8F00B2FF1E /* NetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkService.h; sourceTree = "<group>"; };
 		74646A1F12E82E8F00B2FF1E /* NetworkServiceBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkServiceBase.h; sourceTree = "<group>"; };
 		74646A2012E82E8F00B2FF1E /* NetworkServiceBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkServiceBrowser.h; sourceTree = "<group>"; };
+		746C007513ACFFCE00841A1D /* libfontconfig.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.1.dylib; path = vendor/build/lib/libfontconfig.1.dylib; sourceTree = "<group>"; };
 		74756A9912F450DF0001203D /* GUIDialogTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogTimer.h; path = plex/GUI/GUIDialogTimer.h; sourceTree = "<group>"; };
 		74756A9A12F450DF0001203D /* GUIDialogTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogTimer.cpp; path = plex/GUI/GUIDialogTimer.cpp; sourceTree = "<group>"; };
 		74756AA412F4668D0001203D /* BackgroundMusicPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BackgroundMusicPlayer.cpp; path = plex/Utility/BackgroundMusicPlayer.cpp; sourceTree = "<group>"; };
@@ -2882,7 +2882,6 @@
 				7486673212FBF60600D8F899 /* libmpeg2.a in Frameworks */,
 				7486673312FBF60600D8F899 /* libfribidi.a in Frameworks */,
 				7486673412FBF60600D8F899 /* libsamplerate.a in Frameworks */,
-				7486673512FBF60600D8F899 /* libfontconfig.a in Frameworks */,
 				7486673612FBF60600D8F899 /* libvorbisfile.a in Frameworks */,
 				7486673712FBF60600D8F899 /* liblzo2.a in Frameworks */,
 				7486673812FBF60600D8F899 /* libmad.a in Frameworks */,
@@ -2902,6 +2901,7 @@
 				742ADB6413843E8700E2F571 /* libSDL_image-1.2.0.1.6.dylib in Frameworks */,
 				742ADB6513843E8700E2F571 /* libSDL_mixer-1.2.0.2.6.dylib in Frameworks */,
 				742ADB67138441EE00E2F571 /* libSDL-1.2.0.11.2.dylib in Frameworks */,
+				746C007613ACFFCE00841A1D /* libfontconfig.1.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5882,6 +5882,7 @@
 		F57E1ED30E36E96B00700C9D /* vendor */ = {
 			isa = PBXGroup;
 			children = (
+				746C007513ACFFCE00841A1D /* libfontconfig.1.dylib */,
 				742ADB66138441EE00E2F571 /* libSDL-1.2.0.11.2.dylib */,
 				742ADB6213843E8700E2F571 /* libSDL_image-1.2.0.1.6.dylib */,
 				742ADB6313843E8700E2F571 /* libSDL_mixer-1.2.0.2.6.dylib */,
@@ -5891,7 +5892,6 @@
 				744632D512E3A23D00C8B41F /* libcrypto.a */,
 				74462F2812E3822000C8B41F /* libfribidi.a */,
 				74462F4812E3847200C8B41F /* libfreetype.a */,
-				74462F3412E3833C00C8B41F /* libfontconfig.a */,
 				74462EFD12E37F4000C8B41F /* libGLEW.a */,
 				74D7F388133F8A2F00DCE15F /* libmicrohttpd.a */,
 				744632D012E3A13F00C8B41F /* libssl.a */,
@@ -7166,6 +7166,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_26)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7185,6 +7186,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25 = "\"$(SRCROOT)/lib/libmicrohttpd/src/daemon/.libs\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_26 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
@@ -7300,6 +7302,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_26)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/lib/jsoncpp/jsoncpp/src/lib_json\"";
@@ -7319,6 +7322,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24 = "\"$(SRCROOT)/xbmc/lib/libhttpapi\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25 = "\"$(SRCROOT)/lib/libmicrohttpd/src/daemon/.libs\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_26 = "\"$(SRCROOT)/vendor/build/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/xbmc/lib/libsquish\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/xbmc/lib/libjsonrpc\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/xbmc/lib/libapetag/.libs\"";
