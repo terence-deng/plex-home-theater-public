@@ -471,7 +471,7 @@ void CGUISettings::Initialize()
   remotemode.insert(make_pair(13612,APPLE_REMOTE_UNIVERSAL));
   remotemode.insert(make_pair(13613,APPLE_REMOTE_MULTIREMOTE));
   AddInt(in, "input.appleremotemode", 13600, APPLE_REMOTE_STANDARD, remotemode, SPIN_CONTROL_TEXT);
-  AddBool(in, "input.appleremotealwayson", 13602, false);
+  AddBool(in, "input.appleremotealwayson", 13602, true);
   AddInt(in, "input.appleremotesequencetime", 13603, 500, 50, 50, 1000, SPIN_CONTROL_INT_PLUS, MASK_MS, TEXT_OFF);
   AddSeparator(NULL, "input.sep1");
 #endif

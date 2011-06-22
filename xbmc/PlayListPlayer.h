@@ -128,7 +128,7 @@ public:
    \param shuffle set true to shuffle, false to unshuffle.
    \sa IsShuffled
    */
-  void SetShuffle(int playlist, bool shuffle);
+  void SetShuffle(int playlist, bool shuffle, bool bTemporary = false);
   
   /*! \brief Return whether a playlist is shuffled.
    If partymode is enabled, this always returns false.
@@ -175,6 +175,8 @@ protected:
   unsigned int m_failedSongsStart;
   int m_iCurrentSong;
   int m_iCurrentPlayList;
+  bool m_bPreviousMusicShuffle;
+  bool m_bTemporaryShuffle;
   CPlayList* m_PlaylistMusic;
   CPlayList* m_PlaylistVideo;
   CPlayList* m_PlaylistEmpty;

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>org.xbmc.helper</string>
+	<string>com.plexapp.helper</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>${PATH}</string>
