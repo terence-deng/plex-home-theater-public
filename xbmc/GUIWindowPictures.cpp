@@ -191,6 +191,9 @@ void CGUIWindowPictures::OnPrepareFileItems(CFileItemList& items)
 
   if (items.GetFolderCount()==items.Size() || !g_guiSettings.GetBool("pictures.usetags"))
     return;
+  
+  // Don't bother with this.
+  return;
 
   // Start the music info loader thread
   CPictureInfoLoader loader;
