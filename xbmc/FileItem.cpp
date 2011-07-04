@@ -533,10 +533,12 @@ bool CFileItem::Exists(bool bUseCache /* = true */) const
 
 bool CFileItem::IsVideo() const
 {
-#pragma warning look at this: album_type property not set
-  string type = GetProperty("album_type");
-  if (type == "episode" || type == "movie")
+  string type = GetProperty("type");
+  if (type == "episode" || type == "movie" || type == "clip")
     return true;
+  
+  if (type == "photo")
+    return false;
   
   /* check preset mime type */
   if( m_mimetype.Left(6).Equals("video/") )
@@ -623,10 +625,10 @@ bool CFileItem::IsPicture() const
   if( m_mimetype.Left(6).Equals("image/") )
     return true;
 
+  if (GetProperty("type") == "image" || GetProperty("type") == "photo") return true;
   if (HasPictureInfoTag()) return true;
   if (HasMusicInfoTag()) return false;
   if (HasVideoInfoTag()) return false;
-  if (GetProperty("type") == "image" || GetProperty("type") == "photo") return true;
   
   return CUtil::IsPicture(m_strPath);
 }

@@ -174,7 +174,7 @@ class PlexContentPlayerMixin
   void ActivateWindow(int window, const CStdString& path)
   {
     CStdString strWindow = (window == WINDOW_VIDEO_FILES) ? "MyVideoFiles" : (window == WINDOW_MUSIC_FILES) ? "MyMusicFiles" : "MyPictures";
-    CStdString cmd = "XBMC.ActivateWindow(MyMusicFiles," + path + ",return)";
+    CStdString cmd = "XBMC.ActivateWindow(" + strWindow + "," + path + ",return)";
     
     g_application.ExecuteXBMCAction(cmd);
   }
