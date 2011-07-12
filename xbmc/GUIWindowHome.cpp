@@ -168,7 +168,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
       {
         // Queue.
         m_contentLists[CONTENT_LIST_QUEUE] = Group(kVIDEO_LOADER);
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl, CONTENT_LIST_QUEUE);
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/unwatched", CONTENT_LIST_QUEUE);
       }
       else
       {
