@@ -332,42 +332,16 @@ bool CDVDPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
     if(ThreadHandle())
       CloseFile();
     
-    // See if we can find the file locally.
-    CFileItem theFile(file);
-    string localPath = file.GetProperty("localPath");
-    if (localPath.size() > 0 && CFile::Exists(localPath))
-      theFile.m_strPath = localPath;
-    
-    // See if we need to resolve an indirect item.
-    if (file.GetPropertyInt("indirect") == 1)
-    {
-      CFileItemList  fileItems;
-      CPlexDirectory plexDir;
-      
-      plexDir.GetDirectory(file.m_strPath, fileItems);
-      if (fileItems.Size() == 1)
-      {
-        CFileItemPtr finalFile = fileItems.Get(0);
-        g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
-        g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
-        g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
-        theFile.m_strPath = finalFile->m_strPath;
-      }
-    }
-
     m_bFileOpenComplete = false;
     m_bAbortRequest = false;
     SetPlaySpeed(DVD_PLAYSPEED_NORMAL);
 
     m_State.Clear();
     m_UpdateApplication = 0;
-
     m_PlayerOptions = options;
-    m_item     = theFile;
-    m_mimetype  = theFile.GetMimeType();
-    m_filename = theFile.m_strPath;
-
+    m_item = file;
     m_ready.Reset();
+    
     Create();
 
     return true;
@@ -904,6 +878,43 @@ bool CDVDPlayer::IsBetterStream(CCurrentStream& current, CDemuxStream* stream)
 
 void CDVDPlayer::Process()
 {
+  // See if we can find the file locally.
+  string localPath = m_item.GetProperty("localPath");
+  if (localPath.size() > 0 && CFile::Exists(localPath))
+    m_item.m_strPath = localPath;
+  
+  // See if we need to resolve an indirect item.
+  CStdString body;
+  if (m_item.GetPropertyInt("indirect") == 1)
+  {
+    // See if we need to send data to resolve the indirect.
+    if (m_item.HasProperty("postURL"))
+    {
+      // Go get the page, FIXME, respect headers.
+      CFileCurl curl;
+      curl.Get(m_item.GetProperty("postURL"), body);
+      
+      // FIXME, prepend headers to body.
+    }
+
+    CFileItemList  fileItems;
+    CPlexDirectory plexDir(true, false);
+    
+    plexDir.SetBody(body);
+    plexDir.GetDirectory(m_item.m_strPath, fileItems);
+    if (fileItems.Size() == 1)
+    {
+      CFileItemPtr finalFile = fileItems.Get(0);
+      g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
+      g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
+      g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
+      m_item.m_strPath = finalFile->m_strPath;
+    }
+  }
+
+  m_mimetype = m_item.GetMimeType();
+  m_filename = m_item.m_strPath;
+  
   // Get details on the item we're playing.
   if (g_application.CurrentFileItem().IsPlexMediaServerLibrary())
   {
