@@ -53,6 +53,13 @@ class TiXmlElement;
 #define APPLE_REMOTE_UNIVERSAL    2
 #define APPLE_REMOTE_MULTIREMOTE  3
 
+// Media quality preference.
+#define MEDIA_QUALITY_ALWAYS_ASK  0
+#define MEDIA_QUALITY_1080P       1080
+#define MEDIA_QUALITY_720P        720
+#define MEDIA_QUALITY_480P        480
+#define MEDIA_QUALITY_SD          400
+
 // Subtitle colours
 
 #define SUBTITLE_COLOR_START  0

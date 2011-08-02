@@ -637,6 +637,14 @@ void CGUISettings::Initialize()
 
   AddBool(vp, "videoplayer.alternatemedia", 13148, true);
   
+  map<int,int> quality;
+  quality.insert(make_pair(13181,MEDIA_QUALITY_ALWAYS_ASK));
+  quality.insert(make_pair(13182,MEDIA_QUALITY_1080P));
+  quality.insert(make_pair(13183,MEDIA_QUALITY_720P));
+  quality.insert(make_pair(13184,MEDIA_QUALITY_480P));
+  quality.insert(make_pair(13185,MEDIA_QUALITY_SD));
+  AddInt(vp, "videoplayer.onlinemediaquality", 13180, MEDIA_QUALITY_ALWAYS_ASK, quality, SPIN_CONTROL_TEXT);
+  
   //CSettingsCategory* vid = AddCategory(5, "myvideos", 14081);
   AddInt(NULL, "myvideos.selectaction", 22079, SELECT_ACTION_PLAY_OR_RESUME, SELECT_ACTION_CHOOSE, 1, SELECT_ACTION_INFO, SPIN_CONTROL_TEXT);
   AddBool(NULL, "myvideos.treatstackasfile", 20051, true);
