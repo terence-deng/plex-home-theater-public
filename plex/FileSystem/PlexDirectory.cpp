@@ -636,21 +636,24 @@ class PlexMediaNode
        CUtil::URLEncode(encodedValue);
 
        // Complete the URL.
-       CURL theURL(baseURL);
-       theURL.SetFileName(theURL.GetFileName() + attr + "/" + encodedValue);
-       if (theURL.GetOptions().empty())
-         theURL.SetOptions("?t=" + version);
-       else
-         theURL.SetOptions("?t=" + version + "&" + theURL.GetOptions().substr(1));
+       if (baseURL.empty() == false && version.empty() == false)
+       {
+         CURL theURL(baseURL);
+         theURL.SetFileName(theURL.GetFileName() + attr + "/" + encodedValue);
+         if (theURL.GetOptions().empty())
+           theURL.SetOptions("?t=" + version);
+         else
+           theURL.SetOptions("?t=" + version + "&" + theURL.GetOptions().substr(1));
        
-       string url = theURL.Get();
-
-       // See if it exists (fasttrack) or queue it for download.
-       string localFile = CFileItem::GetCachedPlexMediaServerThumb(url);
-       if (CFile::Exists(localFile))
-         mediaItem->SetProperty("mediaTag::" + attr, localFile);
-       else
-         mediaItem->SetProperty("cache$mediaTag::" + attr, url);
+         string url = theURL.Get();
+         
+         // See if it exists (fasttrack) or queue it for download.
+         string localFile = CFileItem::GetCachedPlexMediaServerThumb(url);
+         if (CFile::Exists(localFile))
+           mediaItem->SetProperty("mediaTag::" + attr, localFile);
+         else
+           mediaItem->SetProperty("cache$mediaTag::" + attr, url);
+       }
 
        string value = val;
 
@@ -805,7 +808,7 @@ class PlexMediaNodeLibrary : public PlexMediaNode
 {
  public:
 
-  string ComputeMediaUrl(const string& parentPath, TiXmlElement* media, string& localPath, vector<MediaPartPtr>& mediaParts)
+  string ComputeMediaUrl(const CFileItemPtr& pItem, const string& parentPath, TiXmlElement* media, string& localPath, vector<MediaPartPtr>& mediaParts)
   {
     string ret;
 
@@ -825,6 +828,12 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         localPaths.push_back(path);
       }
 
+      if (part->Attribute("postURL"))
+        pItem->SetProperty("postURL", part->Attribute("postURL"));
+      
+      if (part->Attribute("postHeaders"))
+        pItem->SetProperty("postHeaders", part->Attribute("postHeaders"));
+      
       // Create a media part.
       int partID = 0;
       if (part->Attribute("id"))
@@ -941,7 +950,7 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         // Path to the track.
         string localPath;
         vector<MediaPartPtr> mediaParts;
-        string url = ComputeMediaUrl(parentPath, media, localPath, mediaParts);
+        string url = ComputeMediaUrl(pItem, parentPath, media, localPath, mediaParts);
         pItem->m_strPath = url;
         song.strFileName = pItem->m_strPath;
 
@@ -1013,7 +1022,7 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         // Compute the URL.
         string localPath;
         vector<MediaPartPtr> mediaParts;
-        string url = ComputeMediaUrl(parentPath, media, localPath, mediaParts);
+        string url = ComputeMediaUrl(pItem, parentPath, media, localPath, mediaParts);
         videoInfo.m_strFile = url;
         videoInfo.m_strFileNameAndPath = url;
 
@@ -1034,6 +1043,11 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         {
           pItem->SetProperty("indirect", 1);
           theMediaItem->SetProperty("indirect", 1);
+          
+          if (pItem->HasProperty("postURL"))
+            theMediaItem->SetProperty("postURL", pItem->GetProperty("postURL"));
+          if (pItem->HasProperty("postHeaders"))
+            theMediaItem->SetProperty("postHeaders", pItem->GetProperty("postHeaders"));
         }
         
         // If it's not an STRM file then save the local path.
@@ -1056,28 +1070,30 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         TiXmlElement* parent = (TiXmlElement* )el.Parent();
         const char* pRoot = parent->Attribute("mediaTagPrefix");
         const char* pVersion = parent->Attribute("mediaTagVersion");
-        if (pRoot && pVersion)
+        
         {
-          string url = CPlexDirectory::ProcessUrl(parentPath, pRoot, false);
-          CacheMediaThumb(theMediaItem, media, url, "aspectRatio", pVersion);
-          CacheMediaThumb(theMediaItem, media, url, "audioChannels", pVersion);
-          CacheMediaThumb(theMediaItem, media, url, "audioCodec", pVersion);
-          CacheMediaThumb(theMediaItem, media, url, "videoCodec", pVersion);
-          CacheMediaThumb(theMediaItem, media, url, "videoResolution", pVersion);
-          CacheMediaThumb(theMediaItem, media, url, "videoFrameRate", pVersion);
-
+          string url = pRoot ? CPlexDirectory::ProcessUrl(parentPath, pRoot, false) : "";
+          string version = pVersion ? pVersion : ""; 
+          
+          CacheMediaThumb(theMediaItem, media, url, "aspectRatio", version);
+          CacheMediaThumb(theMediaItem, media, url, "audioChannels", version);
+          CacheMediaThumb(theMediaItem, media, url, "audioCodec", version);
+          CacheMediaThumb(theMediaItem, media, url, "videoCodec", version);
+          CacheMediaThumb(theMediaItem, media, url, "videoResolution", version);
+          CacheMediaThumb(theMediaItem, media, url, "videoFrameRate", version);
+          
           // From the metadata item.
           if (el.Attribute("contentRating"))
-            CacheMediaThumb(theMediaItem, &el, url, "contentRating", pVersion);
+            CacheMediaThumb(theMediaItem, &el, url, "contentRating", version);
           else
-            CacheMediaThumb(theMediaItem, parent, url, "grandparentContentRating", pVersion, "contentRating");
-
+            CacheMediaThumb(theMediaItem, parent, url, "grandparentContentRating", version, "contentRating");
+          
           if (el.Attribute("studio"))
-            CacheMediaThumb(theMediaItem, &el, url, "studio", pVersion);
+            CacheMediaThumb(theMediaItem, &el, url, "studio", version);
           else
-            CacheMediaThumb(theMediaItem, parent, url, "grandparentStudio", pVersion, "studio");
+            CacheMediaThumb(theMediaItem, parent, url, "grandparentStudio", version, "studio");
         }
-
+          
         // But we add each one to the list.
         mediaItems.push_back(theMediaItem);
       }
