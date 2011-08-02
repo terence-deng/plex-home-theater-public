@@ -1666,52 +1666,13 @@ void CPlexDirectory::Process()
   }
 
   m_http.SetRequestHeader("X-Plex-Client-Capabilities", protocols);
-
   m_http.SetTimeout(m_timeout);
-  if (m_http.Open(url) == false)
-  {
-    CLog::Log(LOGERROR, "%s - Unable to get Plex Media Server directory for %s", __FUNCTION__, m_url.c_str());
-    m_bSuccess = false;
-    m_downloadEvent.Set();
-    return;
-  }
-
-  // Restore protocol.
-  url.SetProtocol(protocol);
-
-  CStdString content = m_http.GetContent();
-  if (false && content.Equals("text/xml;charset=utf-8") == false && content.Equals("application/xml") == false)
-  {
-    CLog::Log(LOGERROR, "=====================================================================================");
-    CLog::Log(LOGERROR, "%s - Invalid content type %s for %s", __FUNCTION__, content.c_str(), m_url.c_str());
-    CLog::Log(LOGERROR, "=====================================================================================");
-    m_bSuccess = false;
-    m_downloadEvent.Set();
-  }
+  
+  if (m_body.empty() == false)
+    m_bSuccess = m_http.Post(url.Get(), m_body, m_data);
   else
-  {
-    int size_read = 0;
-    unsigned int size_total = m_http.GetLength();
-    int data_size = 0;
-
-    m_data.reserve(size_total);
-    //printf("Content-Length was %d bytes\n", size_total);
-
-    // Read response from server into string buffer.
-    char buffer[4096];
-    while (m_bStop == false && (size_read = m_http.Read(buffer, sizeof(buffer)-1)) > 0)
-    {
-      buffer[size_read] = 0;
-      m_data += buffer;
-      data_size += size_read;
-    }
-
-    // If we didn't get it all, we failed.
-    if (m_data.size() != size_total)
-      m_bSuccess = false;
-  }
-
-  m_http.Close();
+    m_bSuccess = m_http.Get(url.Get(), m_data);
+  
   m_downloadEvent.Set();
 }
 

@@ -43,6 +43,7 @@ class CPlexDirectory : public IDirectory,
   virtual DIR_CACHE_TYPE GetCacheType(const CStdString &strPath) const { return m_dirCacheType; };
   static std::string ProcessUrl(const std::string& parent, const std::string& url, bool isDirectory);
   virtual void SetTimeout(int timeout) { m_timeout = timeout; }
+  void SetBody(const CStdString& body) { m_body = body; }
   
   std::string GetData() { return m_data; } 
   
@@ -63,6 +64,7 @@ class CPlexDirectory : public IDirectory,
   
   CStdString m_url;
   CStdString m_data;
+  CStdString m_body;
   bool       m_bSuccess;
   bool       m_bParseResults;
   int        m_timeout;
