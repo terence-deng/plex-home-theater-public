@@ -69,7 +69,7 @@
 
 #include "PlexMediaServerQueue.h"
 #include "BackgroundMusicPlayer.h"
-
+#include "PlexContentPlayerMixin.h"
 
 using namespace std;
 using namespace XFILE;
@@ -1007,44 +1007,10 @@ bool CGUIWindowVideoBase::OnResumeItem(int iItem)
 { 
   if (iItem < 0 || iItem >= m_vecItems->Size()) return true;
   CFileItemPtr pItem = m_vecItems->Get(iItem);
-
+  
   // If there is more than one media item, allow picking which one.
-  if (pItem->m_mediaItems.size() > 1 && g_guiSettings.GetBool("videoplayer.alternatemedia") == true)
-  {
-    CFileItemList   fileItems;
-    CContextButtons choices;
-    CPlexDirectory  mediaChoices;
-    
-    for (size_t i=0; i < pItem->m_mediaItems.size(); i++)
-    {
-      CFileItemPtr item = pItem->m_mediaItems[i];
-      
-      CStdString label;
-      CStdString videoCodec = item->GetProperty("mediaTag-videoCodec").ToUpper();
-      CStdString videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
-      
-      if (videoCodec.size() == 0 && videoRes.size() == 0)
-      {
-        label = "Unknown";
-      }
-      else
-      {
-        if (isdigit(videoRes[0]))
-          videoRes += "p";
-      
-        label += videoRes;
-        label += " " + videoCodec;
-      }
-      
-      choices.Add(i, label);
-    }
-    
-    int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-    if (choice >= 0)
-      pItem->m_strPath = pItem->m_mediaItems[choice]->m_strPath;
-    else
-      return false;
-  }
+  if (PlexContentPlayerMixin::ProcessMediaChoice(pItem.get()) == false)
+    return false;
   
   if (!pItem->m_bIsFolder)
   {
