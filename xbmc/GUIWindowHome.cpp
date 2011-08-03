@@ -174,7 +174,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
       {
         // Recently added.
         m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded?unwatched=1", CONTENT_LIST_RECENTLY_ADDED);
 
         if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
         {
