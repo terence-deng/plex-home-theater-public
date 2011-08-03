@@ -533,9 +533,14 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   
   case GUI_MSG_CLICKED:
   {
-    int iControl = message.GetSenderId();
-    PlayFileFromContainer(GetControl(iControl));
+    int iAction = message.GetParam1();
+    if (iAction == ACTION_SELECT_ITEM)
+    {
+      int iControl = message.GetSenderId();
+      PlayFileFromContainer(GetControl(iControl));
+    }
   }
+  break;
   }
   
   return ret;
