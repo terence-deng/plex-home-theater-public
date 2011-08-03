@@ -32,6 +32,9 @@ CHttpHeader::~CHttpHeader()
 
 void CHttpHeader::Parse(CStdString strData)
 {
+  // Add to the string that holds all of the headers in raw form.
+  m_headers += strData;
+  
   unsigned int iIter = 0;
   int iValueStart = 0;
   int iValueEnd = 0;
@@ -107,4 +110,5 @@ void CHttpHeader::GetHeader(CStdString& strHeader) const
 void CHttpHeader::Clear()
 {
   m_params.clear();
+  m_headers.clear();
 }
