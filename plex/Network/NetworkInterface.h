@@ -35,6 +35,14 @@ class NetworkInterface
   
   /// Return a list of the interfaces.
   static void GetAll(vector<NetworkInterface>& interfaces);
+  
+  /// Returns a list of the known interfaces, without actually polling.
+  static void GetCachedList(vector<NetworkInterface>& interfaces)
+  {
+    g_mutex.lock();
+    interfaces.assign(g_interfaces.begin(), g_interfaces.end());
+    g_mutex.unlock();
+  }
 
   /// See if this address is local.
   static bool IsLocalAddress(const string& address);
@@ -45,15 +53,15 @@ class NetworkInterface
     // Save the observer.
     g_mutex.lock();
     g_observers.push_back(observer);
+    observer(g_interfaces);
     g_mutex.unlock();
-
-    // Call with the initial list.
-    NotifyOfNetworkChange(true);
   }
   
   /// Called when a network change occurs.
   static void NotifyOfNetworkChange(bool forceNotify=false)
   {
+    dprintf("NetworkInterface: Notified of network changed (force=%d)", forceNotify);
+
     // Get current list.
     vector<NetworkInterface> interfaces;
     GetAll(interfaces);
@@ -81,6 +89,10 @@ class NetworkInterface
       
       // Save the new list.
       g_interfaces.assign(interfaces.begin(), interfaces.end());
+    }
+    else
+    {
+      dprintf("Network change notification but nothing changed.");
     }
   }
   

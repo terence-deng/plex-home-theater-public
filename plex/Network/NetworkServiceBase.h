@@ -22,6 +22,9 @@ class NetworkServiceBase
     dprintf("%p: Creating new Network Service and registering for notifications.", this);
     NetworkInterface::RegisterObserver(boost::bind(&NetworkServiceBase::onNetworkChanged, this, _1));
   }
+  
+  /// Destructor.
+  virtual ~NetworkServiceBase() {}
 
   /// Utility to set up a listener.
   void setupListener(const udp_socket_ptr& socket, const string& bindAddress, unsigned short port)
@@ -39,7 +42,7 @@ class NetworkServiceBase
   }
   
   /// Utility to set up a multicast listener/broadcaster for a single interface.
-  void setupMulticastListener(const udp_socket_ptr& socket, const string& bindAddress, unsigned short port, bool outboundInterface = false)
+  void setupMulticastListener(const udp_socket_ptr& socket, const string& bindAddress, const boost::asio::ip::address& groupAddr, unsigned short port, bool outboundInterface = false)
   {
     // Create the server socket.
     dprintf("NetworkService: Setting up multicast listener on %s:%d (outbound: %d)", bindAddress.c_str(), port, outboundInterface);
@@ -51,9 +54,9 @@ class NetworkServiceBase
     socket->set_option(boost::asio::ip::multicast::enable_loopback(true));
     
     // Join the multicast group after leaving it (just in case).
-    try { socket->set_option(boost::asio::ip::multicast::leave_group(NS_BROADCAST_ADDR)); } 
+    try { socket->set_option(boost::asio::ip::multicast::leave_group(groupAddr)); } 
     catch (std::exception& ex) { }
-    try { socket->set_option(boost::asio::ip::multicast::join_group(NS_BROADCAST_ADDR)); }
+    try { socket->set_option(boost::asio::ip::multicast::join_group(groupAddr)); }
     catch (std::exception& ex) { eprintf("NetworkService: Couldn't join multicast group: %s", ex.what()); }
     
     if (outboundInterface)

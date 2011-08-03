@@ -54,6 +54,9 @@ void NetworkInterface::GetAll(vector<NetworkInterface>& interfaces)
       interfaces.push_back(NetworkInterface(index, pInterface->ifa_name, str, pInterface->ifa_flags & IFF_LOOPBACK));
     }
   }
+  
+  // Free the structure.
+  freeifaddrs(ifa);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

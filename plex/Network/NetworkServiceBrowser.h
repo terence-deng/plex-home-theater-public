@@ -19,13 +19,16 @@
 #include "NetworkServiceBase.h"
 #include "NetworkService.h"
 
+class NetworkServiceBrowser;
+typedef boost::shared_ptr<NetworkServiceBrowser> NetworkServiceBrowserPtr;
 typedef pair<boost::asio::ip::address, NetworkServicePtr> address_service_pair;
-
+ 
 /////////////////////////////////////////////////////////////////////////////
 class NetworkServiceBrowser : public NetworkServiceBase
 {
  public:
   
+  /// Constructor.
   NetworkServiceBrowser(boost::asio::io_service& ioService, unsigned short port, int refreshTime=NS_BROWSE_REFRESH_INTERVAL)
    : NetworkServiceBase(ioService)
    , m_port(port)
@@ -37,6 +40,9 @@ class NetworkServiceBrowser : public NetworkServiceBase
     try { m_timer.async_wait(boost::bind(&NetworkServiceBrowser::handleTimeout, this)); }
     catch (std::exception& ex) { eprintf("Unable to create timer."); }
   }
+  
+  // Destructor.
+  virtual ~NetworkServiceBrowser() {}
   
   /// Notify of a new service.
   virtual void handleServiceArrival(NetworkServicePtr& service) 
@@ -74,31 +80,29 @@ class NetworkServiceBrowser : public NetworkServiceBase
   /// Handle network change.
   virtual void handleNetworkChange(const vector<NetworkInterface>& interfaces)
   {
-    dprintf("Network change for browser.");
+    dprintf("Network change for browser, closing %d browse sockets.", m_sockets.size());
 
     // Close the old one.
     BOOST_FOREACH(udp_socket_ptr socket, m_sockets)
       socket->close();
     
-    // Create the new multicast receiver and bind to the designated port for received broadcast updates.
+    // Create the new multicast receiver and bind to the designated port for receiving broadcast updates.
     if (m_multicastSocket)
       m_multicastSocket->close();
     
     m_multicastSocket = udp_socket_ptr(new boost::asio::ip::udp::socket(m_ioService));
-    setupMulticastListener(m_multicastSocket, "0.0.0.0", m_port+1);
+    setupMulticastListener(m_multicastSocket, "0.0.0.0", NS_BROADCAST_ADDR, m_port+1);
     m_multicastSocket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, m_multicastSocket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, 0));
     
     // Now create the browse sockets.
     m_sockets.clear();
     m_ignoredAddresses.clear();
 
-    int  interfaceIndex = 0;
-    bool addInterface = true;
-    
+    int interfaceIndex = 0;
     BOOST_FOREACH(const NetworkInterface& xface, interfaces)
     {
       // Don't add virtual interfaces.
-      if (addInterface == true && xface.name()[0] != 'v')
+      if (xface.name()[0] != 'v')
       {
         dprintf("NetworkService: Browsing on interface %s.", xface.address().c_str());
         
@@ -106,16 +110,12 @@ class NetworkServiceBrowser : public NetworkServiceBase
         // a UDP reply packet.
         //
         udp_socket_ptr socket = udp_socket_ptr(new boost::asio::ip::udp::socket(m_ioService));
-        setupMulticastListener(socket, xface.address(), 0, true);
+        setupMulticastListener(socket, xface.address(), NS_BROADCAST_ADDR, 0, true);
         m_sockets.push_back(socket);
         
         // Wait for data.
         socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
         interfaceIndex++;
-        
-        // Don't add any more if we've added the first non-loopback address. The first one will be the highest priority one.
-        if (xface.loopback() == false)
-          addInterface = false;
       }
       else
       {
@@ -241,18 +241,18 @@ class NetworkServiceBrowser : public NetworkServiceBase
         else if (notifyUpdate)
           handleServiceUpdate(service);
       }
-      
-      // Read the next packet.
-      socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
     }
     else
     {
-#ifdef _WIN32
-      // If we got a packet that was too big, keep reading, otherwise we'll miss all subsequent packets.
-      if (error.value() == 10040)
-        socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
-#endif
+      eprintf("Network Service: Error in browser handle read: %d (%s) socket=%d", error.value(), error.message().c_str(), socket->native());
+      usleep(1000 * 100);
     }
+    
+    // If the socket is open, keep receiving (On XP we need to abandon a socket for 10022 - An invalid argument was supplied - as well).
+    if (socket->is_open() && error.value() != 10022)
+      socket->async_receive_from(boost::asio::buffer(m_data, NS_MAX_PACKET_SIZE), m_endpoint, boost::bind(&NetworkServiceBrowser::handleRead, this, socket, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, interfaceIndex));
+    else
+      iprintf("Network Service: Abandoning browse socket, it was closed.");
   }
   
   /// Handle the deletion timer.

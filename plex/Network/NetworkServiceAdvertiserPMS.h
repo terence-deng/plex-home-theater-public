@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <boost/enable_shared_from_this.hpp>
+
 #include "BonjourRequestHandler.h"
 #include "Common.h"
 #include "Database.h"
@@ -17,10 +19,7 @@
 #include "Serializable.h"
 
 #ifdef _WIN32
-string Cocoa_GetAppVersion();
 extern int getUpdatedAt();
-#else
-const char* Cocoa_GetAppVersion();
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -51,15 +50,35 @@ class PlexMediaServer : public Serializable
 };
 
 /////////////////////////////////////////////////////////////////////////////
-class NetworkServiceAdvertiserPMS : public NetworkServiceAdvertiser
+class NetworkServiceAdvertiserPMS : public NetworkServiceAdvertiser,
+                                    public PreferenceObserver,
+                                    public boost::enable_shared_from_this<NetworkServiceAdvertiserPMS>
 {
  public:
   
   /// Constructor.
-  NetworkServiceAdvertiserPMS(boost::asio::io_service& ioService)
-    : NetworkServiceAdvertiser(ioService, NS_PLEX_MEDIA_SERVER_PORT) {}
+  NetworkServiceAdvertiserPMS(boost::asio::io_service& ioService, const boost::asio::ip::address& groupAddr, unsigned short port)
+    : NetworkServiceAdvertiser(ioService, groupAddr, port)
+  {
+  }
+  
+  /// Destructor.
+  virtual ~NetworkServiceAdvertiserPMS() 
+  {
+  }
   
  protected:
+  
+  /// From NetworkServiceAdvertiser.
+  virtual void doStart()
+  {
+    Preferences::Get()->addPreferenceObserver(PREF_FRIENDLY_NAME, shared_from_this());    
+  }
+  
+  virtual void doStop()
+  {
+    Preferences::Get()->removePreferenceObserver(PREF_FRIENDLY_NAME, shared_from_this());
+  }
   
   /// For subclasses to fill in.
   virtual void createReply(map<string, string>& headers) 
@@ -87,5 +106,12 @@ class NetworkServiceAdvertiserPMS : public NetworkServiceAdvertiser
   {
     PlexMediaServer pms;
     return pms.toReply().content;
+  }
+  
+  /// Overridden from PreferenceObserver.
+  virtual void preferenceModified(const string& prefKey)
+  {
+    if (prefKey == PREF_FRIENDLY_NAME)
+      update("serverMod=name");
   }
 };
