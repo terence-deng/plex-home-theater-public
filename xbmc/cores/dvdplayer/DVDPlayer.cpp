@@ -981,13 +981,10 @@ void CDVDPlayer::Process()
   if (localPath.size() > 0 && CFile::Exists(localPath))
     m_item.m_strPath = localPath;
 
-  printf("CDVDPlayer::Process(aborted=%d)\n", m_bAbortRequest);
-  
   // See if we need to resolve an indirect item.
   if (m_item.GetPropertyInt("indirect") == 1)
   {
     // Spin up async thread.
-    printf("Spinning up resolver thread.\n");
     PlexAsyncUrlResolverPtr resolver = PlexAsyncUrlResolver::Resolve(m_item);
 
     // Wait for it to complete.
@@ -997,7 +994,6 @@ void CDVDPlayer::Process()
     // If we cancelled, stop it.
     if (m_bAbortRequest == true)
     {
-      printf("Cancelling resolver.\n");
       resolver->Cancel();
       m_bAbortRequest = true;
       return;
@@ -1005,7 +1001,6 @@ void CDVDPlayer::Process()
     
     // Suck the data out of the resolver.
     m_item.m_strPath = resolver->GetFinalPath();
-    printf("Resolver falling out of scope...\n");
   }    
 
   m_mimetype = m_item.GetMimeType();
