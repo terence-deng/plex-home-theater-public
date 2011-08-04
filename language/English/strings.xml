@@ -1004,7 +1004,7 @@
   <string id="13146">Plex, changing this setting might affect your ability</string>
   <string id="13147">to continue controlling it. Do you want to proceed?</string>
 
-  <string id="13148">Allow Picking Alternate Media</string>
+  <string id="13148">Allow Picking Alternate Library Media</string>
 
   <string id="13150">HDD Key:</string>
   <string id="13151">HDD Temp:</string>
@@ -1034,6 +1034,13 @@
   <string id="13172">After %i secs</string>
   <string id="13173">HDD Install Date:</string>
   <string id="13174">HDD Power Cycle Count:</string>
+
+  <string id="13180">Preferred Online Video Quality</string>
+  <string id="13181">Always ask</string>
+  <string id="13182">1080p</string>
+  <string id="13183">720p</string>
+  <string id="13184">480p</string>
+  <string id="13185">SD</string>
 
   <string id="13200">Profiles</string>
   <string id="13201">Delete profile '%s'?</string>

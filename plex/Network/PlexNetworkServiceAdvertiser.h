@@ -19,7 +19,7 @@ class PlexNetworkServiceAdvertiser : public NetworkServiceAdvertiser
   
   /// Constructor.
   PlexNetworkServiceAdvertiser(boost::asio::io_service& ioService)
-    : NetworkServiceAdvertiser(ioService, NS_PLEX_MEDIA_CLIENT_PORT) {}
+    : NetworkServiceAdvertiser(ioService, NS_BROADCAST_ADDR, NS_PLEX_MEDIA_CLIENT_PORT) {}
   
  protected:
   

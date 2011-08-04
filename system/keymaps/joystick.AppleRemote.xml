@@ -69,7 +69,6 @@
   </global>
   <Home>
     <joystick name="AppleRemote">
-      <button id="6">XBMC.ActivateWindow(Favourites)</button>
       <button id="8">ActivateWindow(shutdownmenu)</button>
     </joystick>
   </Home>
@@ -110,11 +109,11 @@
       <button id="3">StepBack</button>
       <button id="4">StepForward</button>
       <button id="5">Pause</button>
-      <button id="6">Stop</button>
-      <button id="7">OSD</button>
-      <button id="8">Fullscreen</button>
-      <button id="9">Rewind</button>
-      <button id="10">FastForward</button>
+      <button id="6">OSD</button>
+      <button id="9">BigStepBack</button>                               <!--- Hold Left --->
+      <button id="10">BigStepForward</button>                           <!--- Hold Right --->
+      <button id="11">Stop</button>                                     <!--- Hold Menu --->
+      <button id="12">Info</button>                                     <!--- Hold Play --->
     </joystick>
   </FullscreenVideo>
   <FullscreenInfo>
@@ -277,4 +276,17 @@
       <button id="6">Close</button>
     </joystick>
   </NumericInput>
+  <NowPlaying>
+    <joystick name="Apple Remote">
+      <button id="1">VolumeUp</button>                                  <!--- Up --->
+      <button id="2">VolumeDown</button>                                <!--- Down --->
+      <button id="3">SkipPrevious</button>                              <!--- Left --->
+      <button id="4">SkipNext</button>                                  <!--- Right --->
+      <button id="5">Pause</button>                                     <!--- Play --->
+      <button id="6">PreviousMenu</button>                              <!--- Menu --->
+      <button id="9">Rewind</button>                                    <!--- Hold Left --->
+      <button id="10">FastForward</button>                              <!--- Hold Right --->
+      <button id="11">Stop</button>                                     <!--- Hold Menu --->
+    </joystick>
+  </NowPlaying>
 </keymap>

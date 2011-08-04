@@ -40,6 +40,7 @@ public:
   CStdString GetValue(CStdString strParam) const;
 
   void GetHeader(CStdString& strHeader) const;
+  CStdString GetHeaders() { return m_headers; }
 
   CStdString GetMimeType() { return GetValue(HTTPHEADER_CONTENT_TYPE); }
   CStdString GetProtoLine() { return m_protoLine; }
@@ -49,5 +50,6 @@ public:
 protected:
   HeaderParams m_params;
   CStdString   m_protoLine;
+  CStdString   m_headers;
 };
 

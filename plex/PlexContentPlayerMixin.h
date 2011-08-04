@@ -96,68 +96,12 @@ class PlexContentPlayerMixin
         }
         else
         {
-          bool resumeItem = false;
-          
           // If there is more than one media item, allow picking which one.
-          if (file->m_mediaItems.size() > 1 && g_guiSettings.GetBool("videoplayer.alternatemedia") == true)
-          {
-            CFileItemList   fileItems;
-            CContextButtons choices;
-            CPlexDirectory  mediaChoices;
-            
-            for (size_t i=0; i < file->m_mediaItems.size(); i++)
-            {
-              CFileItemPtr item = file->m_mediaItems[i];
-              
-              CStdString label;
-              CStdString videoCodec = item->GetProperty("mediaTag-videoCodec").ToUpper();
-              CStdString videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
-              
-              if (videoCodec.size() == 0 && videoRes.size() == 0)
-              {
-                label = "Unknown";
-              }
-              else
-              {
-                if (isdigit(videoRes[0]))
-                  videoRes += "p";
-              
-                label += videoRes;
-                label += " " + videoCodec;
-              }
-              
-              choices.Add(i, label);
-            }
-            
-            int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-            if (choice >= 0)
-              file->m_strPath = file->m_mediaItems[choice]->m_strPath;
-            else
-              return;
-          }
+          if (ProcessMediaChoice(file) == false)
+            return;
           
-          if (!file->m_bIsFolder && file->HasProperty("viewOffset")) 
-          {
-            // Oh my god. Copy and paste code. We need a superclass which manages media.
-            float seconds = boost::lexical_cast<int>(file->GetProperty("viewOffset")) / 1000.0f;
-
-            CContextButtons choices;
-            CStdString resumeString;
-            CStdString time = StringUtils::SecondsToTimeString(seconds);
-            resumeString.Format(g_localizeStrings.Get(12022).c_str(), time.c_str());
-            choices.Add(1, resumeString);
-            choices.Add(2, g_localizeStrings.Get(12021));
-            int retVal = CGUIDialogContextMenu::ShowAndGetChoice(choices);
-            if (retVal == -1)
-              return;
-
-            resumeItem = (retVal == 1);
-          }
-
-          if (resumeItem)
-            file->m_lStartOffset = STARTOFFSET_RESUME;
-          else
-            file->m_lStartOffset = 0;
+          // See if we're going to resume the playback or not.
+          ProcessResumeChoice(file);
 
           // Allow class to save state.
           SaveStateBeforePlay(container);
@@ -167,6 +111,129 @@ class PlexContentPlayerMixin
         }
       }
     }
+  }
+  
+ public:
+  
+  static void ProcessResumeChoice(CFileItem* file)
+  {
+    bool resumeItem = false;
+    
+    if (!file->m_bIsFolder && file->HasProperty("viewOffset")) 
+    {
+      // Oh my god. Copy and paste code. We need a superclass which manages media.
+      float seconds = boost::lexical_cast<int>(file->GetProperty("viewOffset")) / 1000.0f;
+
+      CContextButtons choices;
+      CStdString resumeString;
+      CStdString time = StringUtils::SecondsToTimeString(seconds);
+      resumeString.Format(g_localizeStrings.Get(12022).c_str(), time.c_str());
+      choices.Add(1, resumeString);
+      choices.Add(2, g_localizeStrings.Get(12021));
+      int retVal = CGUIDialogContextMenu::ShowAndGetChoice(choices);
+      if (retVal == -1)
+        return;
+
+      resumeItem = (retVal == 1);
+    }
+
+    if (resumeItem)
+      file->m_lStartOffset = STARTOFFSET_RESUME;
+    else
+      file->m_lStartOffset = 0;
+  }
+  
+  static bool ProcessMediaChoice(CFileItem* file)
+  {
+    // If there is more than one media item, allow picking which one.
+     if (file->m_mediaItems.size() > 1)
+     {
+       bool pickLibraryItem = g_guiSettings.GetBool("videoplayer.alternatemedia");
+       int  onlineQuality   = g_guiSettings.GetInt("videoplayer.onlinemediaquality");
+       bool isLibraryItem   = file->IsPlexMediaServerLibrary();
+       
+       // See if we're offering a choice.
+       if ((isLibraryItem  && pickLibraryItem) ||
+           (!isLibraryItem && onlineQuality == MEDIA_QUALITY_ALWAYS_ASK))
+       {
+         CFileItemList   fileItems;
+         CContextButtons choices;
+         CPlexDirectory  mediaChoices;
+         
+         for (size_t i=0; i < file->m_mediaItems.size(); i++)
+         {
+           CFileItemPtr item = file->m_mediaItems[i];
+           
+           CStdString label;
+           CStdString videoCodec = item->GetProperty("mediaTag-videoCodec").ToUpper();
+           CStdString videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
+           
+           if (videoCodec.size() == 0 && videoRes.size() == 0)
+           {
+             label = "Unknown";
+           }
+           else
+           {
+             if (isdigit(videoRes[0]))
+               videoRes += "p";
+             
+             label += videoRes;
+             label += " " + videoCodec;
+           }
+           
+           choices.Add(i, label);
+         }
+         
+         int choice = CGUIDialogContextMenu::ShowAndGetChoice(choices);
+         if (choice >= 0)
+           file->m_strPath = file->m_mediaItems[choice]->m_strPath;
+         else
+           return false;
+       }
+       else
+       {
+         if (isLibraryItem == false)
+         {
+           // Try to pick something that's equal or less than the preferred resolution.
+           map<int, int> qualityMap;
+           vector<int> qualities;
+           int sd = MEDIA_QUALITY_SD;
+           
+           for (size_t i=0; i < file->m_mediaItems.size(); i++)
+           {
+             CFileItemPtr item = file->m_mediaItems[i];
+             CStdString   videoRes = item->GetProperty("mediaTag-videoResolution").ToUpper();
+
+             // Compute the quality, subsequent SDs get lesser values, assuming they're ordered descending.
+             int q = sd;
+             if (videoRes != "SD" && videoRes.empty() == false)
+               q = boost::lexical_cast<int>(videoRes);
+             else
+               sd -= 10;
+
+             qualityMap[q] = i;
+             qualities.push_back(q);
+           }
+           
+           // Sort on quality descending.
+           std::sort(qualities.begin(), qualities.end());
+           std::reverse(qualities.begin(), qualities.end());
+           
+           int pickedIndex = qualities[qualities.size()-1];
+           BOOST_FOREACH(int q, qualities)
+           {
+             if (q <= onlineQuality)
+             {
+               pickedIndex = qualityMap[q];
+               file->m_strPath = file->m_mediaItems[pickedIndex]->m_strPath;
+               break;
+             }
+           }
+         }
+       }
+     }
+     
+     return true;
   }
   
  private:

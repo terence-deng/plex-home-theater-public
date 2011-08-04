@@ -345,8 +345,19 @@ int CGUIWindowAddonBrowser::SelectAddonID(TYPE type, CStdString &addonID, bool s
     item->SetSpecialSort(SORT_ON_TOP);
     items.Add(item);
   }
+  
+  if (type == ADDON_VIZ)
+  {
+    CFileItemPtr nowPlaying(new CFileItem());
+    nowPlaying->SetLabel("Now Playing");
+    nowPlaying->m_strPath = "Now Playing";
+    
+    items.Add(nowPlaying);
+  }
+  
   for (ADDON::IVECADDONS i = addons.begin(); i != addons.end(); ++i)
     items.Add(CAddonsDirectory::FileItemFromAddon(*i, ""));
+  
   items.Sort(SORT_METHOD_LABEL, SORT_ORDER_ASC);
   for (int i = 0; i < items.Size(); ++i)
   {

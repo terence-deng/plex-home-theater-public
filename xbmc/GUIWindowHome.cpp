@@ -168,13 +168,13 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
       {
         // Queue.
         m_contentLists[CONTENT_LIST_QUEUE] = Group(kVIDEO_LOADER);
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl, CONTENT_LIST_QUEUE);
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/unwatched", CONTENT_LIST_QUEUE);
       }
       else
       {
         // Recently added.
         m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded", CONTENT_LIST_RECENTLY_ADDED);
+        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded?unwatched=1", CONTENT_LIST_RECENTLY_ADDED);
 
         if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
         {
@@ -533,9 +533,14 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   
   case GUI_MSG_CLICKED:
   {
-    int iControl = message.GetSenderId();
-    PlayFileFromContainer(GetControl(iControl));
+    int iAction = message.GetParam1();
+    if (iAction == ACTION_SELECT_ITEM)
+    {
+      int iControl = message.GetSenderId();
+      PlayFileFromContainer(GetControl(iControl));
+    }
   }
+  break;
   }
   
   return ret;

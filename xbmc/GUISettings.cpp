@@ -284,7 +284,7 @@ void CGUISettings::Initialize()
   AddString(NULL, "musiclibrary.export", 20196, "", BUTTON_CONTROL_STANDARD);
   AddString(NULL, "musiclibrary.import", 20197, "", BUTTON_CONTROL_STANDARD);
 
-  //CSettingsCategory* mp = AddCategory(3, "musicplayer", 16000);
+  CSettingsCategory* mp = AddCategory(3, "musicplayer", 16000);
   AddBool(NULL, "musicplayer.autoplaynextitem", 489, true);
   AddBool(NULL, "musicplayer.queuebydefault", 14084, false);
   AddSeparator(NULL, "musicplayer.sep1");
@@ -297,10 +297,10 @@ void CGUISettings::Initialize()
   AddInt(NULL, "musicplayer.replaygainpreamp", 641, 89, 77, 1, 101, SPIN_CONTROL_INT_PLUS, MASK_DB);
   AddInt(NULL, "musicplayer.replaygainnogainpreamp", 642, 89, 77, 1, 101, SPIN_CONTROL_INT_PLUS, MASK_DB);
   AddBool(NULL, "musicplayer.replaygainavoidclipping", 643, false);
-  AddInt(NULL, "musicplayer.crossfade", 13314, 0, 0, 1, 15, SPIN_CONTROL_INT_PLUS, MASK_SECS, TEXT_OFF);
-  AddBool(NULL, "musicplayer.crossfadealbumtracks", 13400, true);
-  AddSeparator(NULL, "musicplayer.sep3");
-  AddDefaultAddon(NULL, "musicplayer.visualisation", 250, "Now Playing.vis", ADDON_VIZ);
+  AddInt(mp, "musicplayer.crossfade", 13314, 0, 0, 1, 15, SPIN_CONTROL_INT_PLUS, MASK_SECS, TEXT_OFF);
+  AddBool(mp, "musicplayer.crossfadealbumtracks", 13400, true);
+  AddSeparator(mp, "musicplayer.sep3");
+  AddDefaultAddon(mp, "musicplayer.visualisation", 250, "Now Playing.vis", ADDON_VIZ);
 
   //CSettingsCategory* mf = AddCategory(3, "musicfiles", 14081);
   AddBool(NULL, "musicfiles.usetags", 258, true);
@@ -636,6 +636,14 @@ void CGUISettings::Initialize()
   AddBool(NULL, "videoplayer.teletextenabled", 23050, true);
 
   AddBool(vp, "videoplayer.alternatemedia", 13148, true);
+  
+  map<int,int> quality;
+  quality.insert(make_pair(13181,MEDIA_QUALITY_ALWAYS_ASK));
+  quality.insert(make_pair(13182,MEDIA_QUALITY_1080P));
+  quality.insert(make_pair(13183,MEDIA_QUALITY_720P));
+  quality.insert(make_pair(13184,MEDIA_QUALITY_480P));
+  quality.insert(make_pair(13185,MEDIA_QUALITY_SD));
+  AddInt(vp, "videoplayer.onlinemediaquality", 13180, MEDIA_QUALITY_ALWAYS_ASK, quality, SPIN_CONTROL_TEXT);
   
   //CSettingsCategory* vid = AddCategory(5, "myvideos", 14081);
   AddInt(NULL, "myvideos.selectaction", 22079, SELECT_ACTION_PLAY_OR_RESUME, SELECT_ACTION_CHOOSE, 1, SELECT_ACTION_INFO, SPIN_CONTROL_TEXT);

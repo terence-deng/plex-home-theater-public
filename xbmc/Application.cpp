@@ -4134,11 +4134,6 @@ void CApplication::UpdateFileState()
       m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(GetTime()*1000)));
       PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, GetTime()*1000, state);
     }
-    else
-    {
-      PlexMediaServerQueue::Get().onClearPlayingProgress(m_itemCurrentFile);
-      m_itemCurrentFile->ClearProperty("viewOffset");
-    }
 
     if (IsPlayingVideo() || IsPlayingAudio())
     {
@@ -4466,7 +4461,7 @@ void CApplication::ActivateVisualizer()
 {
   // See which visualizer to activate.
   CStdString name = g_guiSettings.GetString("musicplayer.visualisation");
-  if (name == "Now Playing.vis" || name == "visualization.nowplaying")
+  if (name == "Now Playing" || name == "visualization.nowplaying")
     g_windowManager.ActivateWindow(WINDOW_NOW_PLAYING);
   else
     g_windowManager.ActivateWindow(WINDOW_VISUALISATION);

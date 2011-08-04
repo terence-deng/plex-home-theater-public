@@ -8,7 +8,7 @@
 #pragma once
 
 #include "NetworkServiceAdvertiserPMS.h"
-#include "NetworkServiceBrowser.h"
+#include "NetworkServiceBrowserPlayer.h"
 
 class NetworkServices
 {
@@ -28,26 +28,36 @@ class NetworkServices
   
   void start()
   {
-    dprintf("NetworkServices: Initializing.");
+    dprintf("NetworkServices: Initializing...");
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__linux__)
     // We start watching for changes in here.
     NetworkInterface::WatchForChanges();
 #endif
     
     // Create the advertiser and start it.
-    m_pmsAdvertiser = new NetworkServiceAdvertiserPMS(m_ioService);
+    m_pmsAdvertiser = NetworkServiceAdvertiserPtr(new NetworkServiceAdvertiserPMS(m_ioService, NS_BROADCAST_ADDR, NS_PLEX_MEDIA_SERVER_PORT));
     m_pmsAdvertiser->start();
+    
+    // Create the old advertiser, which is needed for backwards compatiblity.
+    m_pmsOldAdvertiser = NetworkServiceAdvertiserPtr(new NetworkServiceAdvertiserPMS(m_ioService, NS_BROADCAST_ADDR_OLD, NS_PLEX_MEDIA_SERVER_PORT_OLD));
+    m_pmsOldAdvertiser->start();
+    
+    // Create the player browser.
+    m_playerBrowser = NetworkServiceBrowserPtr(new NetworkServiceBrowserPlayer(m_ioService));
+    
+    // Create the server browser.
+    //m_serverBrowser = NetworkServiceBrowserPtr(new NetworkServiceBrowserServer(m_ioService));
     
     // Start the I/O service in its own thread.
     boost::thread t(boost::bind(&boost::asio::io_service::run, &m_ioService));
     t.detach();
   }
   
-  void broadcastUpdate()
+  void broadcastUpdate(const string& parameter="")
   {
     if (m_pmsAdvertiser)
-      m_pmsAdvertiser->update();
+      m_pmsAdvertiser->update(parameter);
   }
   
   void stop()
@@ -55,24 +65,24 @@ class NetworkServices
     m_pmsAdvertiser->stop();
     m_ioService.stop();
   }
+ 
+  NetworkServiceBrowserPtr getPlayerBrowser() { return m_playerBrowser; }
   
  private:
  
   NetworkServices()
-   : m_pmsAdvertiser(0)
-   //, m_pmsBrowser(m_ioService, NS_PLEX_MEDIA_SERVER_PORT) {}
   {
     dprintf("Creating NetworkServices singleton.");
   }
   
   ~NetworkServices()
   {
-    delete m_pmsAdvertiser;
-    m_pmsAdvertiser = 0;
   }
   
-  boost::asio::io_service      m_ioService;
-  NetworkServiceAdvertiserPMS* m_pmsAdvertiser;
-  //NetworkServiceBrowser      m_pmsBrowser;
+  boost::asio::io_service     m_ioService;
+  NetworkServiceAdvertiserPtr m_pmsOldAdvertiser;
+  NetworkServiceAdvertiserPtr m_pmsAdvertiser;
+  NetworkServiceBrowserPtr    m_playerBrowser;
+  NetworkServiceBrowserPtr    m_serverBrowser;
 };
 

@@ -70,7 +70,10 @@
 #include "MediaManager.h"
 #include "GUIDialogBusy.h"
 #include "PlexDirectory.h"
+
 #include <boost/foreach.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/thread.hpp>
 
 using namespace std;
 
@@ -332,42 +335,16 @@ bool CDVDPlayer::OpenFile(const CFileItem& file, const CPlayerOptions &options)
     if(ThreadHandle())
       CloseFile();
     
-    // See if we can find the file locally.
-    CFileItem theFile(file);
-    string localPath = file.GetProperty("localPath");
-    if (localPath.size() > 0 && CFile::Exists(localPath))
-      theFile.m_strPath = localPath;
-    
-    // See if we need to resolve an indirect item.
-    if (file.GetPropertyInt("indirect") == 1)
-    {
-      CFileItemList  fileItems;
-      CPlexDirectory plexDir;
-      
-      plexDir.GetDirectory(file.m_strPath, fileItems);
-      if (fileItems.Size() == 1)
-      {
-        CFileItemPtr finalFile = fileItems.Get(0);
-        g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
-        g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
-        g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
-        theFile.m_strPath = finalFile->m_strPath;
-      }
-    }
-
     m_bFileOpenComplete = false;
     m_bAbortRequest = false;
     SetPlaySpeed(DVD_PLAYSPEED_NORMAL);
 
     m_State.Clear();
     m_UpdateApplication = 0;
-
     m_PlayerOptions = options;
-    m_item     = theFile;
-    m_mimetype  = theFile.GetMimeType();
-    m_filename = theFile.m_strPath;
-
+    m_item = file;
     m_ready.Reset();
+    
     Create();
 
     return true;
@@ -423,6 +400,7 @@ bool CDVDPlayer::CloseFile()
   // wait for the main thread to finish up
   // since this main thread cleans up all other resources and threads
   // we are done after the StopThread call
+  //
   StopThread();
 
   m_Edl.Clear();
@@ -902,8 +880,132 @@ bool CDVDPlayer::IsBetterStream(CCurrentStream& current, CDemuxStream* stream)
   return false;
 }
 
+class PlexAsyncUrlResolver;
+typedef boost::shared_ptr<PlexAsyncUrlResolver> PlexAsyncUrlResolverPtr;
+
+class PlexAsyncUrlResolver
+{
+ public:
+  
+  static PlexAsyncUrlResolverPtr Resolve(const CFileItem& item)
+  {
+    // Pass in a reference to the shared pointer, so ownership is maintained between caller and thread.
+    PlexAsyncUrlResolverPtr self = PlexAsyncUrlResolverPtr(new PlexAsyncUrlResolver(item));
+    boost::thread t(boost::bind(&PlexAsyncUrlResolver::Process, self.get(), self));
+    t.detach();
+    
+    return self;
+  }
+  
+  PlexAsyncUrlResolver(const CFileItem& item)
+    : m_item(item) {}
+  
+  bool WaitForCompletion(int ms)
+  {
+    return m_downloadEvent.WaitMSec(ms);
+  }
+  
+  CStdString GetFinalPath()
+  {
+    return m_finalPath;
+  }
+  
+  void Cancel()
+  {
+    m_bStop = true;
+  }
+  
+ protected:
+  
+  void Process(PlexAsyncUrlResolverPtr me)
+  {
+    CStdString body;
+    CStdString url = m_item.m_strPath;
+    
+    // See if we need to send data to resolve the indirect.
+    if (m_item.HasProperty("postURL"))
+    {
+      // Go get the page, FIXME, respect headers.
+      CFileCurl curl;
+      curl.Get(m_item.GetProperty("postURL"), body);
+      
+      // Get the headers and prepend them to the request.
+      CHttpHeader header = curl.GetHttpHeader();
+      body = header.GetHeaders() + body;
+      
+      // Add the postURL to the request.
+      CStdString param = m_item.GetProperty("postURL");
+      CUtil::URLEncode(param);
+      url = url + "&postURL=" + param;
+    }
+
+    if (m_bStop == false)
+    {
+      CFileItemList  fileItems;
+      CPlexDirectory plexDir(true, false);
+      
+      plexDir.SetBody(body);
+      plexDir.GetDirectory(url, fileItems);
+      if (fileItems.Size() == 1)
+      {
+        if (m_bStop == false)
+        {
+          CFileItemPtr finalFile = fileItems.Get(0);
+          g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
+          g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
+          g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
+          
+          // Set the final path, by reference.
+          m_finalPath = finalFile->m_strPath;
+        }
+      }
+    }
+
+    // Notify of completeness.
+    m_downloadEvent.Set();
+  }
+
+ private:
+  
+  CEvent     m_downloadEvent;
+  bool       m_bStop;
+  CStdString m_finalPath;
+  CFileItem  m_item;
+  PlexAsyncUrlResolverPtr m_me;
+};
+
 void CDVDPlayer::Process()
 {
+  // See if we can find the file locally.
+  string localPath = m_item.GetProperty("localPath");
+  if (localPath.size() > 0 && CFile::Exists(localPath))
+    m_item.m_strPath = localPath;
+
+  // See if we need to resolve an indirect item.
+  if (m_item.GetPropertyInt("indirect") == 1)
+  {
+    // Spin up async thread.
+    PlexAsyncUrlResolverPtr resolver = PlexAsyncUrlResolver::Resolve(m_item);
+
+    // Wait for it to complete.
+    for (bool done = false; done == false && m_bAbortRequest == false; )
+      done = resolver->WaitForCompletion(100);
+
+    // If we cancelled, stop it.
+    if (m_bAbortRequest == true)
+    {
+      resolver->Cancel();
+      m_bAbortRequest = true;
+      return;
+    }
+    
+    // Suck the data out of the resolver.
+    m_item.m_strPath = resolver->GetFinalPath();
+  }    
+
+  m_mimetype = m_item.GetMimeType();
+  m_filename = m_item.m_strPath;
+  
   // Get details on the item we're playing.
   if (g_application.CurrentFileItem().IsPlexMediaServerLibrary())
   {
