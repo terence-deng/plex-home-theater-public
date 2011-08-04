@@ -284,7 +284,7 @@ void CGUISettings::Initialize()
   AddString(NULL, "musiclibrary.export", 20196, "", BUTTON_CONTROL_STANDARD);
   AddString(NULL, "musiclibrary.import", 20197, "", BUTTON_CONTROL_STANDARD);
 
-  //CSettingsCategory* mp = AddCategory(3, "musicplayer", 16000);
+  CSettingsCategory* mp = AddCategory(3, "musicplayer", 16000);
   AddBool(NULL, "musicplayer.autoplaynextitem", 489, true);
   AddBool(NULL, "musicplayer.queuebydefault", 14084, false);
   AddSeparator(NULL, "musicplayer.sep1");
@@ -297,10 +297,10 @@ void CGUISettings::Initialize()
   AddInt(NULL, "musicplayer.replaygainpreamp", 641, 89, 77, 1, 101, SPIN_CONTROL_INT_PLUS, MASK_DB);
   AddInt(NULL, "musicplayer.replaygainnogainpreamp", 642, 89, 77, 1, 101, SPIN_CONTROL_INT_PLUS, MASK_DB);
   AddBool(NULL, "musicplayer.replaygainavoidclipping", 643, false);
-  AddInt(NULL, "musicplayer.crossfade", 13314, 0, 0, 1, 15, SPIN_CONTROL_INT_PLUS, MASK_SECS, TEXT_OFF);
-  AddBool(NULL, "musicplayer.crossfadealbumtracks", 13400, true);
-  AddSeparator(NULL, "musicplayer.sep3");
-  AddDefaultAddon(NULL, "musicplayer.visualisation", 250, "Now Playing.vis", ADDON_VIZ);
+  AddInt(mp, "musicplayer.crossfade", 13314, 0, 0, 1, 15, SPIN_CONTROL_INT_PLUS, MASK_SECS, TEXT_OFF);
+  AddBool(mp, "musicplayer.crossfadealbumtracks", 13400, true);
+  AddSeparator(mp, "musicplayer.sep3");
+  AddDefaultAddon(mp, "musicplayer.visualisation", 250, "Now Playing.vis", ADDON_VIZ);
 
   //CSettingsCategory* mf = AddCategory(3, "musicfiles", 14081);
   AddBool(NULL, "musicfiles.usetags", 258, true);
