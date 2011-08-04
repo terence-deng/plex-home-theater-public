@@ -4134,11 +4134,6 @@ void CApplication::UpdateFileState()
       m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(GetTime()*1000)));
       PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, GetTime()*1000, state);
     }
-    else
-    {
-      PlexMediaServerQueue::Get().onClearPlayingProgress(m_itemCurrentFile);
-      m_itemCurrentFile->ClearProperty("viewOffset");
-    }
 
     if (IsPlayingVideo() || IsPlayingAudio())
     {
