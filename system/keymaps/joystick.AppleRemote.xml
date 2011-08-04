@@ -109,11 +109,11 @@
       <button id="3">StepBack</button>
       <button id="4">StepForward</button>
       <button id="5">Pause</button>
-      <button id="6">Stop</button>
-      <button id="7">OSD</button>
-      <button id="8">Fullscreen</button>
-      <button id="9">Rewind</button>
-      <button id="10">FastForward</button>
+      <button id="6">OSD</button>
+      <button id="9">BigStepBack</button>                               <!--- Hold Left --->
+      <button id="10">BigStepForward</button>                           <!--- Hold Right --->
+      <button id="11">Stop</button>                                     <!--- Hold Menu --->
+      <button id="12">Info</button>                                     <!--- Hold Play --->
     </joystick>
   </FullscreenVideo>
   <FullscreenInfo>
