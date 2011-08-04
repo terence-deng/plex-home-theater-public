@@ -46,7 +46,6 @@ bool CSaveFileStateJob::DoWork()
             CLog::Log(LOGDEBUG, "%s - Marking video item %s as watched", __FUNCTION__, progressTrackingFile.c_str());
 
             // consider this item as played
-            //videodatabase.IncrementPlayCount(m_item);
             m_item.GetVideoInfoTag()->m_playCount++;
             m_item.SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, true);
             updateListing = true;
