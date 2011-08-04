@@ -276,4 +276,17 @@
       <button id="6">Close</button>
     </joystick>
   </NumericInput>
+  <NowPlaying>
+    <joystick name="Apple Remote">
+      <button id="1">VolumeUp</button>                                  <!--- Up --->
+      <button id="2">VolumeDown</button>                                <!--- Down --->
+      <button id="3">SkipPrevious</button>                              <!--- Left --->
+      <button id="4">SkipNext</button>                                  <!--- Right --->
+      <button id="5">Pause</button>                                     <!--- Play --->
+      <button id="6">PreviousMenu</button>                              <!--- Menu --->
+      <button id="9">Rewind</button>                                    <!--- Hold Left --->
+      <button id="10">FastForward</button>                              <!--- Hold Right --->
+      <button id="11">Stop</button>                                     <!--- Hold Menu --->
+    </joystick>
+  </NowPlaying>
 </keymap>
