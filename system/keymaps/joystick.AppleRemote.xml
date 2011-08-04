@@ -69,7 +69,6 @@
   </global>
   <Home>
     <joystick name="AppleRemote">
-      <button id="6">XBMC.ActivateWindow(Favourites)</button>
       <button id="8">ActivateWindow(shutdownmenu)</button>
     </joystick>
   </Home>
