@@ -1338,6 +1338,10 @@ void CGUIWindowMusicBase::OnRetrieveMusicInfo(CFileItemList& items)
   {
     return;
   }
+  
+  // Don't bother with this.
+  return;
+  
   // Start the music info loader thread
   m_musicInfoLoader.SetProgressCallback(m_dlgProgress);
   m_musicInfoLoader.Load(items);
