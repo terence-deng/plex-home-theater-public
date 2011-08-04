@@ -225,6 +225,7 @@ class PlexContentPlayerMixin
              if (q <= onlineQuality)
              {
                pickedIndex = qualityMap[q];
+               file->m_strPath = file->m_mediaItems[pickedIndex]->m_strPath;
                break;
              }
            }
