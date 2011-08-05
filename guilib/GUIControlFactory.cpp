@@ -1308,10 +1308,10 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     // use a bordered texture if we have <bordersize> or <bordertexture> specified.
     if (borderTexture.filename.IsEmpty() && borderStr.IsEmpty())
       control = new CGUIImage(
-        parentID, id, posX, posY, width, height, texture);
+        parentID, id, posX, posY, width, height, texture, minWidth);
     else
       control = new CGUIBorderedImage(
-        parentID, id, posX, posY, width, height, texture, borderTexture, borderSize);
+        parentID, id, posX, posY, width, height, texture, borderTexture, borderSize, minWidth);
 #ifdef PRE_SKIN_VERSION_9_10_COMPATIBILITY
     if (insideContainer && textureFile.IsConstant())
       aspect.ratio = CAspectRatio::AR_STRETCH;
