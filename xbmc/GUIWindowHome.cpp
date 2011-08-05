@@ -124,7 +124,8 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
 {
   // Hide lists.
   HideAllLists();
-  
+
+  printf("Updating content for item %d (last selected was %d).\n", itemID, m_lastSelectedID);
   if (m_lastSelectedID == itemID)
   {
     // Bind the lists.
@@ -354,9 +355,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   {
   case GUI_MSG_WINDOW_INIT:
   {
-    if (m_lastSelectedID != -1)
-      UpdateContentForSelectedItem(m_lastSelectedID);
-    else
+    if (m_lastSelectedID == -1)
       HideAllLists();
   }
     
@@ -457,13 +456,15 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), control->GetID(), m_lastSelectedItem+1, 0);
         g_windowManager.SendThreadMessage(msg);
       }
-
+      
       // See if the item for which we were showing the right hand lists still exists.
       if (itemStillExists)
       {
         // Additionally, if we have a selected item on the right hand side, restore it.
         if (m_selectedItem != -1)
         {
+          printf("Something was selected, restoring\n");
+          
           // Select group.
           CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), m_selectedContainerID);
           g_windowManager.SendThreadMessage(msg);
@@ -471,6 +472,14 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           // Select item.
           CGUIMessage msg2(GUI_MSG_ITEM_SELECT, GetID(), m_selectedContainerID, m_selectedItem);
           g_windowManager.SendThreadMessage(msg2);
+        }
+        else if (m_lastSelectedID != -1)
+        {
+          printf("Reloading.\n");
+          
+          m_pendingSelectID = m_lastSelectedID;
+          m_lastSelectedID = -1;
+          m_contentLoadTimer.StartZero();
         }
       }
       else
@@ -550,7 +559,9 @@ void CGUIWindowHome::SaveStateBeforePlay(CGUIBaseContainer* container)
 {
   // Save state.
   m_selectedContainerID = container->GetID();
-  m_selectedItem = container->GetSelectedItem();
+  
+  // Reset selected item so we reload, not restore selection.
+  m_selectedItem = -1;
 }
 
 void CGUIWindowHome::HideAllLists()

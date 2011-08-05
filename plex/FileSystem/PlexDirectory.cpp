@@ -1639,33 +1639,40 @@ void CPlexDirectory::Process()
   url.SetProtocol("http");
   url.SetPort(32400);
 
-  // Set request headers.
-#ifdef __APPLE__
-  m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
-#pragma warning FIX platform specific code.
-  m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); //FIXME
-  m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
-#elif defined (_WIN32)
-  m_http.SetRequestHeader("X-Plex-Client-Platform", "Windows");
-#endif
-
-  // Build an audio codecs description.
-#ifdef _WIN32
-  CStdString protocols = "protocols=shoutcast,http-video;audioDecoders=mp3,aac";
-#else
-  CStdString protocols = "protocols=shoutcast,webkit,http-video;audioDecoders=mp3,aac";
-#endif
-
-  if (AUDIO_IS_BITSTREAM(g_guiSettings.GetInt("audiooutput.mode")))
+  // Only send headers if we're NOT going to the node, which looks like a PMS, but isn't, and sending these
+  // headers seems to make it switch into non-cloud mode.
+  //
+  if (url.Get().find("http://node.plexapp.com") == -1 && url.Get().find("http://nodedev.plexapp.com") == -1)
   {
-    if (g_guiSettings.GetBool("audiooutput.dtspassthrough"))
-      protocols += ",dts{bitrate:800000&channels:8}";
-
-    if (g_guiSettings.GetBool("audiooutput.ac3passthrough"))
-      protocols += ",ac3{bitrate:800000&channels:8}";
+    // Set request headers.
+#ifdef __APPLE__
+    m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
+#pragma warning FIX platform specific code.
+    m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); //FIXME
+    m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
+#elif defined (_WIN32)
+    m_http.SetRequestHeader("X-Plex-Client-Platform", "Windows");
+#endif
+    
+    // Build an audio codecs description.
+#ifdef _WIN32
+    CStdString protocols = "protocols=shoutcast,http-video;audioDecoders=mp3,aac";
+#else
+    CStdString protocols = "protocols=shoutcast,webkit,http-video;audioDecoders=mp3,aac";
+#endif
+    
+    if (AUDIO_IS_BITSTREAM(g_guiSettings.GetInt("audiooutput.mode")))
+    {
+      if (g_guiSettings.GetBool("audiooutput.dtspassthrough"))
+        protocols += ",dts{bitrate:800000&channels:8}";
+      
+      if (g_guiSettings.GetBool("audiooutput.ac3passthrough"))
+        protocols += ",ac3{bitrate:800000&channels:8}";
+    }
+    
+    m_http.SetRequestHeader("X-Plex-Client-Capabilities", protocols);
   }
-
-  m_http.SetRequestHeader("X-Plex-Client-Capabilities", protocols);
+  
   m_http.SetTimeout(m_timeout);
   
   if (m_body.empty() == false)
