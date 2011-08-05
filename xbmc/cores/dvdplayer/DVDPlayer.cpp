@@ -898,7 +898,9 @@ class PlexAsyncUrlResolver
   }
   
   PlexAsyncUrlResolver(const CFileItem& item)
-    : m_item(item) {}
+    : m_item(item)
+    , m_bSuccess(true)
+    , m_bStop(false) {}
   
   bool WaitForCompletion(int ms)
   {
@@ -908,6 +910,11 @@ class PlexAsyncUrlResolver
   CStdString GetFinalPath()
   {
     return m_finalPath;
+  }
+  
+  bool Success()
+  {
+    return m_bSuccess;
   }
   
   void Cancel()
@@ -945,19 +952,27 @@ class PlexAsyncUrlResolver
       CPlexDirectory plexDir(true, false);
       
       plexDir.SetBody(body);
-      plexDir.GetDirectory(url, fileItems);
-      if (fileItems.Size() == 1)
+      if (plexDir.GetDirectory(url, fileItems))
       {
-        if (m_bStop == false)
+        if (fileItems.Size() == 1)
         {
-          CFileItemPtr finalFile = fileItems.Get(0);
-          g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
-          g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
-          g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
-          
-          // Set the final path, by reference.
-          m_finalPath = finalFile->m_strPath;
+          if (m_bStop == false)
+          {
+            CFileItemPtr finalFile = fileItems.Get(0);
+            printf("Final path: %s\n", finalFile->m_strPath.c_str());
+            
+            g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
+            g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
+            g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
+            
+            // Set the final path, by reference.
+            m_finalPath = finalFile->m_strPath;
+          }
         }
+      }
+      else
+      {
+        m_bSuccess = false;
       }
     }
 
@@ -968,6 +983,7 @@ class PlexAsyncUrlResolver
  private:
   
   CEvent     m_downloadEvent;
+  bool       m_bSuccess;
   bool       m_bStop;
   CStdString m_finalPath;
   CFileItem  m_item;
@@ -992,7 +1008,7 @@ void CDVDPlayer::Process()
       done = resolver->WaitForCompletion(100);
 
     // If we cancelled, stop it.
-    if (m_bAbortRequest == true)
+    if (m_bAbortRequest == true && resolver->Success() == false)
     {
       resolver->Cancel();
       m_bAbortRequest = true;
