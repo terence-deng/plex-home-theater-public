@@ -101,7 +101,8 @@ class PlexContentPlayerMixin
             return;
           
           // See if we're going to resume the playback or not.
-          ProcessResumeChoice(file);
+          if (ProcessResumeChoice(file) == false)
+            return;
 
           // Allow class to save state.
           SaveStateBeforePlay(container);
@@ -115,7 +116,7 @@ class PlexContentPlayerMixin
   
  public:
   
-  static void ProcessResumeChoice(CFileItem* file)
+  static bool ProcessResumeChoice(CFileItem* file)
   {
     bool resumeItem = false;
     
@@ -132,7 +133,7 @@ class PlexContentPlayerMixin
       choices.Add(2, g_localizeStrings.Get(12021));
       int retVal = CGUIDialogContextMenu::ShowAndGetChoice(choices);
       if (retVal == -1)
-        return;
+        return false;
 
       resumeItem = (retVal == 1);
     }
@@ -141,6 +142,8 @@ class PlexContentPlayerMixin
       file->m_lStartOffset = STARTOFFSET_RESUME;
     else
       file->m_lStartOffset = 0;
+    
+    return true;
   }
   
   static bool ProcessMediaChoice(CFileItem* file)
