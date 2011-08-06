@@ -932,8 +932,11 @@ class PlexAsyncUrlResolver
     // See if we need to send data to resolve the indirect.
     if (m_item.HasProperty("postURL"))
     {
-      // Go get the page, FIXME, respect headers.
+      // Go get the page, clearing cookies (b/c we want to get all needed ones back in the headers.
+      // FIXME, we should look at postHeaders as well.
+      //
       CFileCurl curl;
+      curl.ClearCookies();
       curl.Get(m_item.GetProperty("postURL"), body);
       
       // Get the headers and prepend them to the request.
