@@ -443,37 +443,41 @@ void CGUITextureBase::CalculateSize()
 float CGUITextureBase::GetWidth() const
 {
   float ret = m_width;
-  float newWidth = m_width;
-  float newHeight = m_height;
-
-  if (m_aspect.ratio != CAspectRatio::AR_STRETCH && m_frameWidth && m_frameHeight)
+  
+  if (m_minWidth)
   {
-    // to get the pixel ratio, we must use the SCALED output sizes
-    float pixelRatio = g_graphicsContext.GetScalingPixelRatio();
-
-    float fSourceFrameRatio = m_frameWidth / m_frameHeight;
-    if (GetOrientation() & 4)
-      fSourceFrameRatio = m_frameHeight / m_frameWidth;
-    float fOutputFrameRatio = fSourceFrameRatio / pixelRatio;
-
-    // maximize the width
-    newHeight = m_width / fOutputFrameRatio;
-
-    if ((m_aspect.ratio == CAspectRatio::AR_SCALE && newHeight < m_height) ||
-        (m_aspect.ratio == CAspectRatio::AR_KEEP && newHeight > m_height))
+    float newWidth = m_width;
+    float newHeight = m_height;
+    
+    if (m_aspect.ratio != CAspectRatio::AR_STRETCH && m_frameWidth && m_frameHeight)
     {
-      newHeight = m_height;
-      newWidth = newHeight * fOutputFrameRatio;
+      // to get the pixel ratio, we must use the SCALED output sizes
+      float pixelRatio = g_graphicsContext.GetScalingPixelRatio();
+      
+      float fSourceFrameRatio = m_frameWidth / m_frameHeight;
+      if (GetOrientation() & 4)
+        fSourceFrameRatio = m_frameHeight / m_frameWidth;
+      float fOutputFrameRatio = fSourceFrameRatio / pixelRatio;
+      
+      // maximize the width
+      newHeight = m_width / fOutputFrameRatio;
+      
+      if ((m_aspect.ratio == CAspectRatio::AR_SCALE && newHeight < m_height) ||
+          (m_aspect.ratio == CAspectRatio::AR_KEEP && newHeight > m_height))
+      {
+        newHeight = m_height;
+        newWidth = newHeight * fOutputFrameRatio;
+      }
+      if (m_aspect.ratio == CAspectRatio::AR_CENTER)
+      { // keep original size + center
+        newWidth = m_frameWidth;
+        newHeight = m_frameHeight;
+      }
     }
-    if (m_aspect.ratio == CAspectRatio::AR_CENTER)
-    { // keep original size + center
-      newWidth = m_frameWidth;
-      newHeight = m_frameHeight;
-    }
-  }
 
-  if (m_minWidth && m_minWidth != m_width)
-    ret = CLAMP(newWidth, m_minWidth, m_width);
+    if (m_minWidth != m_width)
+      ret = CLAMP(newWidth, m_minWidth, m_width);
+  }
   
   return ret;
 }
