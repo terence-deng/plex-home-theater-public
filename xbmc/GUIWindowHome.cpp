@@ -463,8 +463,6 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         // Additionally, if we have a selected item on the right hand side, restore it.
         if (m_selectedItem != -1)
         {
-          printf("Something was selected, restoring\n");
-          
           // Select group.
           CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), m_selectedContainerID);
           g_windowManager.SendThreadMessage(msg);
@@ -473,14 +471,11 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           CGUIMessage msg2(GUI_MSG_ITEM_SELECT, GetID(), m_selectedContainerID, m_selectedItem);
           g_windowManager.SendThreadMessage(msg2);
         }
-        else if (m_lastSelectedID != -1)
-        {
-          printf("Reloading.\n");
-          
-          m_pendingSelectID = m_lastSelectedID;
-          m_lastSelectedID = -1;
-          m_contentLoadTimer.StartZero();
-        }
+        
+        // Reload if needed.
+        m_pendingSelectID = m_lastSelectedID;
+        m_lastSelectedID = -1;
+        m_contentLoadTimer.StartZero();
       }
       else
       {
