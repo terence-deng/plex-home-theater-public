@@ -70,6 +70,7 @@ namespace XFILE
       void SetPostData(CStdString postdata)                      { m_postdata = postdata; }
       void SetReferer(CStdString referer)                        { m_referer = referer; }
       void SetCookie(CStdString cookie)                          { m_cookie = cookie; }
+      void ClearCookies()                                        { m_clearCookies = true; }
       void SetMimeType(CStdString mimetype)                      { SetRequestHeader("Content-Type", m_mimetype); }
       void SetRequestHeader(CStdString header, CStdString value);
       void SetRequestHeader(CStdString header, long value);
@@ -153,6 +154,7 @@ namespace XFILE
       bool            m_seekable;
       bool            m_multisession;
       bool            m_skipshout;
+      bool            m_clearCookies;
 
       CRingBuffer     m_buffer;           // our ringhold buffer
       char *          m_overflowBuffer;   // in the rare case we would overflow the above buffer

@@ -329,6 +329,7 @@ CFileCurl::CFileCurl()
   m_httpauth = "";
   m_state = new CReadState();
   m_skipshout = false;
+  m_clearCookies = false;
 }
 
 //Has to be called before Open()
@@ -391,19 +392,26 @@ void CFileCurl::SetCommonOptions(CReadState* state)
   g_curlInterface.easy_setopt(h, CURLOPT_FOLLOWLOCATION, TRUE);
   g_curlInterface.easy_setopt(h, CURLOPT_MAXREDIRS, 5);
 
-  // Enable cookie engine for current handle to re-use them in future requests
-  CStdString strCookieFile;
-  CStdString strTempPath = CSpecialProtocol::TranslatePath(g_advancedSettings.m_cachePath);
-  CUtil::AddFileToFolder(strTempPath, "cookies.dat", strCookieFile);
-
-  g_curlInterface.easy_setopt(h, CURLOPT_COOKIEFILE, strCookieFile.c_str());
-  g_curlInterface.easy_setopt(h, CURLOPT_COOKIEJAR, strCookieFile.c_str());
-
-  // Set custom cookie if requested
-  if (!m_cookie.IsEmpty())
-    g_curlInterface.easy_setopt(h, CURLOPT_COOKIE, m_cookie.c_str());
-
-  g_curlInterface.easy_setopt(h, CURLOPT_COOKIELIST, "FLUSH");
+  if (m_clearCookies == false)
+  {
+    // Enable cookie engine for current handle to re-use them in future requests
+    CStdString strCookieFile;
+    CStdString strTempPath = CSpecialProtocol::TranslatePath(g_advancedSettings.m_cachePath);
+    CUtil::AddFileToFolder(strTempPath, "cookies.dat", strCookieFile);
+    
+    g_curlInterface.easy_setopt(h, CURLOPT_COOKIEFILE, strCookieFile.c_str());
+    g_curlInterface.easy_setopt(h, CURLOPT_COOKIEJAR, strCookieFile.c_str());
+    
+    // Set custom cookie if requested
+    if (!m_cookie.IsEmpty())
+      g_curlInterface.easy_setopt(h, CURLOPT_COOKIE, m_cookie.c_str());
+    
+    g_curlInterface.easy_setopt(h, CURLOPT_COOKIELIST, "FLUSH");
+  }
+  else
+  {
+    g_curlInterface.easy_setopt(h, CURLOPT_COOKIESESSION, 1);
+  }
 
   // When using multiple threads you should set the CURLOPT_NOSIGNAL option to
   // TRUE for all handles. Everything will work fine except that timeouts are not
