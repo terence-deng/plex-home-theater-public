@@ -33,7 +33,8 @@ CHttpHeader::~CHttpHeader()
 void CHttpHeader::Parse(CStdString strData)
 {
   // Add to the string that holds all of the headers in raw form.
-  m_headers += strData;
+  if (strData.find("HTTP/") == -1)
+    m_headers += strData;
   
   unsigned int iIter = 0;
   int iValueStart = 0;
