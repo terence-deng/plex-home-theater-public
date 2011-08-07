@@ -1168,6 +1168,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   }
   else if (type == CGUIControl::GUICONTROL_RSS)
   {
+#if 0
     control = new CGUIRSSControl(
       parentID, id, posX, posY, width, height,
       labelInfo, textColor3, labelInfo2.textColor, strRSSTags);
@@ -1180,6 +1181,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     }
     else
       CLog::Log(LOGERROR,"invalid rss url set referenced in skin");
+#endif
   }
   else if (type == CGUIControl::GUICONTROL_BUTTON)
   {
