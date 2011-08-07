@@ -140,8 +140,6 @@ class PlexMediaServerQueue : public CThread
       // Figure out the identifier ~ FIXME, remove this code once Andre fixes the cloud.
       string identifier = item->GetProperty("pluginIdentifier");
       CURL theURL(item->GetProperty("key"));
-      if (theURL.GetHostName() == "node.plexapp.com")
-        identifier = "com.plexapp.plugins.myplex";
       
       // Build the URL.
       string url = "/:/" + verb;
@@ -157,24 +155,8 @@ class PlexMediaServerQueue : public CThread
   
   string buildUrl(const CFileItemPtr& item, const string& url)
   {
-    // If we have a node key, then just send it to the local PMS.
-    CURL theURL(item->GetProperty("key"));
-    if (theURL.GetHostName() == "node.plexapp.com")
-    {
-      return CPlexDirectory::ProcessUrl(item->GetProperty("containerKey"), url, false);
-    }
-    else
-    {
-      CStdString path = item->m_strPath;
-      if (item->IsStack())
-      {
-        CStackDirectory stack;
-        path = stack.GetFirstStackedFile(path);
-      }
-      
-      // Build the URL.
-      return CPlexDirectory::ProcessUrl(path, url, false);
-    }
+    // Build the URL.
+    return CPlexDirectory::ProcessUrl(item->GetProperty("key"), url, false);
   }
   
  private:
