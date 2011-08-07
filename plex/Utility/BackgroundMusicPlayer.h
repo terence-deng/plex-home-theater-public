@@ -30,10 +30,7 @@ public:
   static void SendThemeChangeMessage(const CStdString& theme = CStdString());
   
   // Destructor
-  ~BackgroundMusicPlayer();
-  
-  // Sync state with background music settings.
-  void SyncSettings();
+  virtual ~BackgroundMusicPlayer();
   
   // Set the global volume as a percentage of total possible volume.
   void SetGlobalVolumeAsPercent(int volume);
@@ -59,8 +56,6 @@ private:
   void OnAudioData(const unsigned char* pAudioData, int iAudioDataLength){};
   
   // Member variables.
-  bool m_isEnabled;
-  float m_volume;
   int m_globalVolume;
   CStdString m_theme;
   PlayerPtr m_player;
