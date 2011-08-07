@@ -95,6 +95,7 @@ CGUITextureBase::CGUITextureBase(const CGUITextureBase &right)
   m_width = right.m_width;
   m_height = right.m_height;
   m_info = right.m_info;
+  m_minWidth = right.m_minWidth;
 
   m_visible = right.m_visible;
   m_diffuseColor = right.m_diffuseColor;
