@@ -670,8 +670,8 @@ void CGUIMediaWindow::ClearFileItems()
 // \brief Sorts Fileitems based on the sort method and sort oder provided by guiViewState
 void CGUIMediaWindow::SortItems(CFileItemList &items)
 {
+#if 0
   auto_ptr<CGUIViewState> guiState(CGUIViewState::GetViewState(GetID(), items));
-
   if (guiState.get())
   {
     items.Sort(guiState->GetSortMethod(), guiState->GetDisplaySortOrder());
@@ -680,6 +680,7 @@ void CGUIMediaWindow::SortItems(CFileItemList &items)
     if (items.CacheToDiscAlways())
       items.Save(GetID());
   }
+#endif
 }
 
 // \brief Formats item labels based on the formatting provided by guiViewState
