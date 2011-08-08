@@ -194,46 +194,6 @@ void CGUIWindowPictures::OnPrepareFileItems(CFileItemList& items)
   
   // Don't bother with this.
   return;
-
-  // Start the music info loader thread
-  CPictureInfoLoader loader;
-  loader.SetProgressCallback(m_dlgProgress);
-  loader.Load(items);
-
-  bool bShowProgress=!g_windowManager.HasModalDialog();
-  bool bProgressVisible=false;
-
-  unsigned int tick=CTimeUtils::GetTimeMS();
-
-  while (loader.IsLoading() && m_dlgProgress && !m_dlgProgress->IsCanceled())
-  {
-    if (bShowProgress)
-    { // Do we have to init a progress dialog?
-      unsigned int elapsed=CTimeUtils::GetTimeMS()-tick;
-
-      if (!bProgressVisible && elapsed>1500 && m_dlgProgress)
-      { // tag loading takes more then 1.5 secs, show a progress dialog
-        CURL url(items.m_strPath);
-
-        m_dlgProgress->SetHeading(189);
-        m_dlgProgress->SetLine(0, 505);
-        m_dlgProgress->SetLine(1, "");
-        m_dlgProgress->SetLine(2, url.GetWithoutUserDetails());
-        m_dlgProgress->StartModal();
-        m_dlgProgress->ShowProgressBar(true);
-        bProgressVisible = true;
-      }
-
-      if (bProgressVisible && m_dlgProgress)
-      { // keep GUI alive
-        m_dlgProgress->Progress();
-      }
-    } // if (bShowProgress)
-    Sleep(1);
-  } // while (loader.IsLoading())
-
-  if (bProgressVisible && m_dlgProgress)
-    m_dlgProgress->Close();
 }
 
 bool CGUIWindowPictures::Update(const CStdString &strDirectory)
@@ -374,7 +334,6 @@ void CGUIWindowPictures::OnSlideShow(const CStdString &strPicture)
 void CGUIWindowPictures::OnRegenerateThumbs()
 {
   if (m_thumbLoader.IsLoading()) return;
-  m_thumbLoader.SetRegenerateThumbs(true);
   m_thumbLoader.Load(*m_vecItems);
 }
 
@@ -473,7 +432,7 @@ bool CGUIWindowPictures::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 
 void CGUIWindowPictures::OnItemLoaded(CFileItem *pItem)
 {
-  CPictureThumbLoader::ProcessFoldersAndArchives(pItem);
+  //CPictureThumbLoader::ProcessFoldersAndArchives(pItem);
 }
 
 void CGUIWindowPictures::LoadPlayList(const CStdString& strPlayList)
