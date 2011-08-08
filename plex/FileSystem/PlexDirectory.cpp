@@ -42,6 +42,8 @@ using namespace XFILE;
 
 bool Cocoa_IsHostLocal(const string& host);
 
+CFileItemListPtr CPlexDirectory::g_filterList;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CPlexDirectory::CPlexDirectory(bool parseResults, bool displayDialog)
   : m_bStop(false)
@@ -62,6 +64,34 @@ CPlexDirectory::~CPlexDirectory()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items)
+{
+  // Get the directory.
+  bool ret = CPlexDirectory::ReallyGetDirectory(strPath, items);
+  
+  // See if it's an intermediate filter directory.
+  if (false && items.GetContent() == "secondary")
+  {
+    printf("Found a filter directory on %s\n", strPath.c_str());
+    
+    // And request the first item in the list (for now).
+    CFileItemPtr firstItem = items.Get(0);
+    if (firstItem)
+    {
+      // We'll save the filter.
+      g_filterList = CFileItemListPtr(new CFileItemList());
+      g_filterList->Assign(items);
+      items.Clear();
+      
+      // Get the filtered directory.
+      ret = CPlexDirectory::ReallyGetDirectory(firstItem->m_strPath, items);
+    }      
+  }
+  
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool CPlexDirectory::ReallyGetDirectory(const CStdString& strPath, CFileItemList &items)
 {
   CStdString strRoot = strPath;
   if (CUtil::HasSlashAtEnd(strRoot) && strRoot != "plex://")
@@ -113,6 +143,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
 
   // Wait for the thread to exit.
   WaitForThreadExit(INFINITE);
+  StopThread();
 
   // See if we suceeded.
   if (m_bSuccess == false)
@@ -639,7 +670,11 @@ class PlexMediaNode
        if (baseURL.empty() == false && version.empty() == false)
        {
          CURL theURL(baseURL);
+         if (boost::ends_with(theURL.GetFileName(), "/") == false)
+           theURL.SetFileName(theURL.GetFileName() + "/");
+           
          theURL.SetFileName(theURL.GetFileName() + attr + "/" + encodedValue);
+         
          if (theURL.GetOptions().empty())
            theURL.SetOptions("?t=" + version);
          else

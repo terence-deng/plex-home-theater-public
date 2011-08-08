@@ -32,6 +32,8 @@
 class CFileItemList;
 class MediaRefresher;
 
+#define CONTENT_LIST_FILTERS 13000
+
 // base class for all media windows
 class CGUIMediaWindow : public CGUIWindow
 {

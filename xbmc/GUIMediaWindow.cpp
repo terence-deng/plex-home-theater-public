@@ -354,6 +354,17 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
           OnFilterItems("");
         return true;
       }
+      else if (iControl == CONTENT_LIST_FILTERS)
+      {
+        // See what filter was selected and execute it.
+        CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(CONTENT_LIST_FILTERS);
+        
+        int selected = control->GetSelectedItem();
+        CFileItemPtr filterItem = CPlexDirectory::GetFilterList()->Get(selected);
+        
+        printf("Selected: %s (%s)\n", filterItem->GetLabel().c_str(), filterItem->m_strPath.c_str());
+        Update(filterItem->m_strPath);
+      }
       else if (m_viewControl.HasControl(iControl))  // list/thumb control
       {
         int iItem = m_viewControl.GetSelectedItem();
@@ -960,6 +971,15 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
   if (m_vecItems->IsVirtualDirectoryRoot())
     m_vecItems->SetContent("plugins");
 
+  // Last, but not least, make sure the filter list is bound.
+  CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(CONTENT_LIST_FILTERS);
+  if (control && CPlexDirectory::GetFilterList()->Size() > 0)
+  {
+    // Bind the list.
+    CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), CONTENT_LIST_FILTERS, 0, 0, CPlexDirectory::GetFilterList().get());
+    OnMessage(msg);
+  }
+  
   return true;
 }
 
