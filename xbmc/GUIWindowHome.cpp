@@ -114,6 +114,8 @@ bool CGUIWindowHome::OnAction(const CAction &action)
         m_lastSelectedID = -1;
         m_contentLoadTimer.StartZero();
       }
+      
+      m_lastSelectedItem = pControl->GetSelectedItem();
     }
   }
   
@@ -482,9 +484,12 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     }
     
     // Reload if needed.
-    m_pendingSelectID = m_lastSelectedID;
-    m_lastSelectedID = -1;
-    m_contentLoadTimer.StartZero();
+    if (m_lastSelectedID != -1)
+    {
+      m_pendingSelectID = m_lastSelectedID;
+      m_lastSelectedID = -1;
+      m_contentLoadTimer.StartZero();
+    }
     
     m_selectedContainerID = -1;
     m_selectedItem = -1;
