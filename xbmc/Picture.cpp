@@ -47,6 +47,10 @@ bool CPicture::CreateThumbnail(const CStdString& file, const CStdString& thumbFi
 
 bool CPicture::CacheImage(const CStdString& sourceUrl, const CStdString& destFile, int width, int height)
 {
+  // Short circuit if the file already exists.
+  if (CFile::Exists(destFile))
+    return true;
+  
   CStdString tmpFile = destFile + ".tmp." + boost::lexical_cast<CStdString>(CThread::GetCurrentThreadId());
   if (GetMediaFromPlexMediaServerCache(sourceUrl, tmpFile) == false)
   {
@@ -80,10 +84,6 @@ bool CPicture::CacheImage(const CStdString& sourceUrl, const CStdString& destFil
       }
       return true;
     }
-
-    // FIXME: This was a recursive call into ourselves.
-    //else
-    //  CacheImage(sourceUrl, tmpFile);
   }
   
   // Atomically rename.
