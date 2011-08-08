@@ -51,5 +51,5 @@ protected:
   int m_iRegionSet; // for cd stuff
 
   virtual CBackgroundInfoLoader* GetBackgroundLoader() { return &m_thumbLoader; }
-  CProgramThumbLoader m_thumbLoader;
+  CVideoThumbLoader m_thumbLoader;
 };
