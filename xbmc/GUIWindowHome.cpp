@@ -58,7 +58,7 @@ using namespace boost;
 #define SLIDESHOW_MULTIIMAGE 10101
 
 CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
-  , m_lastSelectedItem(-1)
+  , m_lastSelectedItem(3)
   , m_lastSelectedID(-1)
   , m_pendingSelectID(-1)
   , m_selectedContainerID(-1)
