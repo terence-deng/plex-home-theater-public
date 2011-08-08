@@ -84,12 +84,21 @@ public:
     // We start watching for changes in here.
     NetworkInterface::WatchForChanges();
        
+    // Server browser.
+    m_pmsBrowser = NetworkServiceBrowserPtr(new PlexNetworkServiceBrowser(m_ioService, NS_PLEX_MEDIA_SERVER_PORT));
+    
+    // Player advertiser.
+    m_plexAdvertiser = NetworkServiceAdvertiserPtr(new PlexNetworkServiceAdvertiser(m_ioService));
+    m_plexAdvertiser->start();
+    
     // Start the I/O service in its own thread.
     m_ptrThread = ThreadPtr(new boost::thread(boost::bind(&boost::asio::io_service::run, &m_ioService)));
   }
 
   void stop()
   {
+    m_plexAdvertiser->stop();
+    
     m_ioService.stop();
     if (m_ptrThread)
 	  {
@@ -98,17 +107,16 @@ public:
 	  }
   }
 
-private:
+ private:
+ 
   PlexServiceListener()
-  : m_pmsBrowser(m_ioService, NS_PLEX_MEDIA_SERVER_PORT) 
-  , m_plexAdvertiser(m_ioService)
   {
     start();
   }
 
-  boost::asio::io_service      m_ioService;
-  PlexNetworkServiceBrowser    m_pmsBrowser;
-  PlexNetworkServiceAdvertiser m_plexAdvertiser;
-  ThreadPtr                    m_ptrThread;
+  boost::asio::io_service     m_ioService;
+  NetworkServiceBrowserPtr    m_pmsBrowser;
+  NetworkServiceAdvertiserPtr m_plexAdvertiser;
+  ThreadPtr                   m_ptrThread;
 };
 
