@@ -182,20 +182,6 @@ void CVideoThumbLoader::OnLoaderFinish()
 */
 void CVideoThumbLoader::SetWatchedOverlay(CFileItem *item)
 {
-  // do this only for video files and exclude everything else.
-  if (item->IsVideo() && !item->IsVideoDb() && !item->IsInternetStream()
-      && !item->IsFileFolder() && !item->IsPlugin())
-  {
-    CVideoDatabase dbs;
-    if (dbs.Open())
-    {
-      int playCount = dbs.GetPlayCount(*item);
-      if (playCount >= 0)
-        item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, playCount > 0);
-
-      dbs.Close();
-    }
-  }
 }
 
 /**
