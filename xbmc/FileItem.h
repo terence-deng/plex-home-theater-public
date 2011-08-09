@@ -78,8 +78,8 @@ typedef boost::shared_ptr<CFileItemList>  CFileItemListPtr;
 class MediaStream
 {
 public:
-  MediaStream(int id, const std::string& key, int streamType, const std::string& codec, int anIndex, bool selected, const std::string& language)
-  : id(id), key(key), streamType(streamType), codec(codec), selected(selected), language(language) 
+  MediaStream(int id, const std::string& key, int streamType, const std::string& codec, int anIndex, int subIndex, bool selected, const std::string& language)
+  : id(id), key(key), streamType(streamType), codec(codec), subIndex(subIndex), selected(selected), language(language) 
   {
     index = anIndex;	  // This looks crazy, but VS seems to barf at the initialization list.
   }
@@ -89,6 +89,7 @@ public:
   int         streamType;
   std::string codec;
   int         index;
+  int         subIndex;
   bool        selected;
   std::string language;
 };
