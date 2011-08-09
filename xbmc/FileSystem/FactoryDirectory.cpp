@@ -119,8 +119,9 @@ IDirectory* CFactoryDirectory::Create(const CStdString& strPath)
 
   if (strProtocol.size() == 0 || strProtocol == "file") return new CHDDirectory();
   
-  // Two cases for Plex
+  // Three cases for Plex.
   if (strProtocol == "plex") return new CPlexDirectory();
+  if (strPath.find("X-Plex-Token=") != -1) return new CPlexDirectory();
   if (strProtocol == "http" && url.GetPort() == 32400) return new CPlexDirectory();
   
   if (strProtocol == "special") return new CSpecialProtocolDirectory();
