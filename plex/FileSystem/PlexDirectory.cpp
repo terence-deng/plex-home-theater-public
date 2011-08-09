@@ -258,7 +258,7 @@ bool CPlexDirectory::ReallyGetDirectory(const CStdString& strPath, CFileItemList
     {
       pItem->SetQuickFanart(strFanart);
 
-      if (strFanart.find("32400/:/resources") != string::npos)
+      if (strFanart.find("/:/resources") != string::npos)
         pItem->SetProperty("fanart_fallback", "1");
     }
 
@@ -424,6 +424,7 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
 
   // We can safely assume it will always be local with respect to the server we're hitting.
   mediaUrl.SetHostName("127.0.0.1");
+  mediaUrl.SetPort(32400);
 
   encodedUrl = mediaUrl.Get();
   CUtil::URLEncode(encodedUrl);
@@ -444,8 +445,13 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   }
 
   CURL url(parentURL);
-  url.SetProtocol("http");
-  url.SetPort(32400);
+  
+  if (url.GetProtocol() == "plex")
+  {
+    url.SetProtocol("http");
+    url.SetPort(32400);
+  }
+  
   url.SetOptions("");
   url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl + token);
   return url.Get();
@@ -1679,8 +1685,12 @@ void CPlexDirectory::Process()
 {
   CURL url(m_url);
   CStdString protocol = url.GetProtocol();
-  url.SetProtocol("http");
-  url.SetPort(32400);
+  
+  if (url.GetProtocol() == "plex")
+  {
+    url.SetProtocol("http");
+    url.SetPort(32400);
+  }
 
   // Set request headers.
 #ifdef __APPLE__
@@ -1777,8 +1787,11 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
   // Files use plain HTTP.
   if (isDirectory == false)
   {
-    theURL.SetProtocol("http");
-    theURL.SetPort(32400);
+    if (theURL.GetProtocol() == "plex")
+    {
+      theURL.SetProtocol("http");
+      theURL.SetPort(32400);
+    }
   }
 
   if (url.find("://") != string::npos)
