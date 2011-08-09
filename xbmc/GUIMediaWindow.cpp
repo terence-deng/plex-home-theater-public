@@ -20,6 +20,7 @@
  */
 
 #include "GUIMediaWindow.h"
+#include "HTTP.h"
 #include "GUIUserMessages.h"
 #include "Util.h"
 #include "PlayListPlayer.h"
@@ -35,7 +36,9 @@
 #include "PartyModeManager.h"
 #include "GUIDialogMediaSource.h"
 #include "GUIWindowFileManager.h"
+#include "GUIDialogYesNo.h"
 #include "Favourites.h"
+#include "DirectoryCache.h"
 #include "utils/LabelFormatter.h"
 #include "GUIDialogProgress.h"
 #include "AdvancedSettings.h"
@@ -1544,18 +1547,29 @@ void CGUIMediaWindow::OnDeleteItem(int iItem)
   if ( iItem < 0 || iItem >= m_vecItems->Size()) return;
   CFileItemPtr item = m_vecItems->Get(iItem);
 
-  if (item->IsPlayList())
-    item->m_bIsFolder = false;
-
-  if (g_settings.GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE && g_settings.GetCurrentProfile().filesLocked())
-    if (!g_passwordManager.IsMasterLockUnlocked(true))
-      return;
-
-  if (!CFileUtils::DeleteItem(item))
+  // Confirm.
+  if (!CGUIDialogYesNo::ShowAndGetInput(122, 125, 0, 0))
     return;
-  m_vecItems->RemoveDiscCache(GetID());
-  Update(m_vecItems->m_strPath);
-  m_viewControl.SetSelectedItem(iItem);
+  
+  // Delete.
+  CHTTP set;
+  CStdString strData;
+  int status = set.Open(item->GetProperty("key"), "DELETE", 0);
+  set.ReadData(strData);
+  set.Close();
+  
+  if (status >= 400)
+  {
+    // Show error.
+    CGUIDialogOK::ShowAndGetInput(257, 16205, 0, 0);
+  }
+  else
+  {
+    // Refresh.
+    g_directoryCache.ClearDirectory(m_vecItems->m_strPath);
+    Update(m_vecItems->m_strPath);
+    m_viewControl.SetSelectedItem(iItem);
+  }
 }
 
 void CGUIMediaWindow::OnRenameItem(int iItem)
@@ -1642,6 +1656,13 @@ void CGUIMediaWindow::GetContextButtons(int itemNumber, CContextButtons &buttons
   if (item->HasProperty("ratingKey") && item->HasProperty("pluginIdentifier"))
     buttons.Add(CONTEXT_BUTTON_RATING, item->HasProperty("userRating") ? 40206 : 40205);
 
+  if (item->IsPlexMediaServerLibrary() && 
+      (item->GetProperty("type") == "episode" || item->GetProperty("type") == "movie" || 
+       item->GetProperty("type") == "track"   || item->GetProperty("type") == "photo"))
+  {
+    buttons.Add(CONTEXT_BUTTON_DELETE, 15015);
+  }
+  
   // user added buttons
   CStdString label;
   CStdString action;
@@ -1657,30 +1678,12 @@ void CGUIMediaWindow::GetContextButtons(int itemNumber, CContextButtons &buttons
 
     buttons.Add((CONTEXT_BUTTON)i, item->GetProperty(label));
   }
-
-  if (item->GetPropertyBOOL("pluginreplacecontextitems"))
-    return;
-
-  // TODO: FAVOURITES Conditions on masterlock and localisation
-  if (!item->IsParentFolder() && !item->m_strPath.Equals("add") && !item->m_strPath.Equals("newplaylist://") && !item->m_strPath.Left(19).Equals("newsmartplaylist://"))
-  {
-    if (CFavourites::IsFavourite(item.get(), GetID()))
-      buttons.Add(CONTEXT_BUTTON_ADD_FAVOURITE, 14077);     // Remove Favourite
-    else
-      buttons.Add(CONTEXT_BUTTON_ADD_FAVOURITE, 14076);     // Add To Favourites;
-  }
 }
 
 bool CGUIMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
   switch (button)
   {
-  case CONTEXT_BUTTON_ADD_FAVOURITE:
-    {
-      CFileItemPtr item = m_vecItems->Get(itemNumber);
-      CFavourites::AddOrRemove(item.get(), GetID());
-      return true;
-    }
   case CONTEXT_BUTTON_PLUGIN_SETTINGS:
     {
       CURL plugin(m_vecItems->Get(itemNumber)->m_strPath);
@@ -1690,6 +1693,11 @@ bool CGUIMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
           Update(m_vecItems->m_strPath);
       return true;
     }
+  case CONTEXT_BUTTON_DELETE:
+  {
+    OnDeleteItem(itemNumber);
+    return true;
+  }
   case CONTEXT_BUTTON_RATING:
   {
     CFileItemPtr item = m_vecItems->Get(itemNumber);

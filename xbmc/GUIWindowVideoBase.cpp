@@ -197,28 +197,6 @@ bool CGUIWindowVideoBase::OnMessage(CGUIMessage& message)
         {
           return OnResumeItem(iItem);
         }
-        else if (iAction == ACTION_DELETE_ITEM)
-        {
-          // is delete allowed?
-          if (g_settings.GetCurrentProfile().canWriteDatabases())
-          {
-            // must be at the title window
-            if (GetID() == WINDOW_VIDEO_NAV)
-              OnDeleteItem(iItem);
-
-            // or be at the files window and have file deletion enabled
-            else if (GetID() == WINDOW_VIDEO_FILES && g_guiSettings.GetBool("filelists.allowfiledeletion"))
-              OnDeleteItem(iItem);
-
-            // or be at the video playlists location
-            else if (m_vecItems->m_strPath.Equals("special://videoplaylists/"))
-              OnDeleteItem(iItem);
-            else
-              return false;
-
-            return true;
-          }
-        }
       }
     }
     break;
@@ -1213,9 +1191,6 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 
       return true;
     }
-  case CONTEXT_BUTTON_DELETE:
-    OnDeleteItem(itemNumber);
-    return true;
   case CONTEXT_BUTTON_EDIT_SMART_PLAYLIST:
     {
       CStdString playlist = m_vecItems->Get(itemNumber)->IsSmartPlayList() ? m_vecItems->Get(itemNumber)->m_strPath : m_vecItems->m_strPath; // save path as activatewindow will destroy our items
@@ -1362,32 +1337,6 @@ void CGUIWindowVideoBase::PlayMovie(const CFileItem *item)
 
   if(!g_application.IsPlayingVideo())
     m_thumbLoader.Load(*m_vecItems);
-}
-
-void CGUIWindowVideoBase::OnDeleteItem(int iItem)
-{
-  if ( iItem < 0 || iItem >= m_vecItems->Size())
-    return;
-
-  OnDeleteItem(m_vecItems->Get(iItem));
-
-  Update(m_vecItems->m_strPath);
-  m_viewControl.SetSelectedItem(iItem);
-}
-
-void CGUIWindowVideoBase::OnDeleteItem(CFileItemPtr item)
-{
-  // HACK: stacked files need to be treated as folders in order to be deleted
-  if (item->IsStack())
-    item->m_bIsFolder = true;
-  if (g_settings.GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE &&
-      g_settings.GetCurrentProfile().filesLocked())
-  {
-    if (!g_passwordManager.IsMasterLockUnlocked(true))
-      return;
-  }
-
-  CFileUtils::DeleteItem(item);
 }
 
 void CGUIWindowVideoBase::MarkUnWatched(const CFileItemPtr &item)
