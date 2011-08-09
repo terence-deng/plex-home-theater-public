@@ -506,7 +506,7 @@ bool CDVDPlayer::OpenInputStream()
           if (lastIdxStream)
             idxStream = lastIdxStream;
           
-          CStdString path = "z:\\subtitle.plex." + boost::lexical_cast<string>(idxStream->id) + "." + stream->codec;
+          CStdString path = "special://temp/subtitle.plex." + boost::lexical_cast<string>(idxStream->id) + "." + stream->codec;
           CLog::Log(LOGINFO, "Considering caching Plex subtitle locally for stream %d (codec: %s) to %s (exists: %d)", stream->id, stream->codec.c_str(), path.c_str(), CFile::Exists(path));
           
           if (CFile::Exists(path) || CFile::Cache(stream->key, path))
@@ -518,7 +518,7 @@ bool CDVDPlayer::OpenInputStream()
           // If it's an IDX, we need to cache the SUB file as well.
           if (stream->codec == "idx")
           {
-            CStdString path = "z:\\subtitle.plex." + boost::lexical_cast<string>(idxStream->id) + ".sub";
+            CStdString path = "special://temp/subtitle.plex." + boost::lexical_cast<string>(idxStream->id) + ".sub";
             if (CFile::Exists(path) == false)
             {
               CLog::Log(LOGINFO, "Caching Plex subtitle locally for stream %d to %s", stream->id, path.c_str());
