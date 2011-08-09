@@ -417,9 +417,13 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   CStdString encodedUrl = imageURL;
   CURL mediaUrl(encodedUrl);
 
-  // If it's local, don't use the Bonjour host.
-  if (local)
-    mediaUrl.SetHostName("127.0.0.1");
+  CStdString token;
+  map<CStdString, CStdString> options = mediaUrl.GetOptionsAsMap();
+  if (options.find("X-Plex-Token") != options.end())
+    token = "&X-Plex-Token=" + options["X-Plex-Token"];
+
+  // We can safely assume it will always be local with respect to the server we're hitting.
+  mediaUrl.SetHostName("127.0.0.1");
 
   encodedUrl = mediaUrl.Get();
   CUtil::URLEncode(encodedUrl);
@@ -443,7 +447,7 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   url.SetProtocol("http");
   url.SetPort(32400);
   url.SetOptions("");
-  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl);
+  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl + token);
   return url.Get();
 }
 
