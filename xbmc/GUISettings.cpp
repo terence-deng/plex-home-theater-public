@@ -769,9 +769,9 @@ void CGUISettings::Initialize()
   AddBool(NULL, "filelists.showaddsourcebuttons", 21382,  false);
   AddBool(NULL, "filelists.showhidden", 21330, false);
   
-	CSettingsCategory * rss = AddCategory(7,"rss", 40104);
-	AddBool(rss, "rss.enablerssfeeds",13305,  true);
-	AddBool(rss, "rss.rssfeedsrtl",13412,  false);
+	//CSettingsCategory * rss = AddCategory(7,"rss", 40104);
+	//AddBool(rss, "rss.enablerssfeeds",13305,  true);
+	//AddBool(rss, "rss.rssfeedsrtl",13412,  false);
 
   AddCategory(7, "window", 0);
   AddInt(NULL, "window.width",  0, 1280, 10, 1, INT_MAX, SPIN_CONTROL_INT);
