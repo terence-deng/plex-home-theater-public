@@ -97,6 +97,7 @@ struct SelectionStream
 {
   SelectionStream()
     : plexID(-1)
+    , plexSubIndex(-1)
   {}
   
   SelectionStream& operator=(const SelectionStream& other)
@@ -126,7 +127,8 @@ struct SelectionStream
   CDemuxStream::EFlags flags;
   int          source;
   int          id;
-  int          plexID;  
+  int          plexID;
+  int          plexSubIndex;
 };
 
 class CSelectionStreams
@@ -276,6 +278,7 @@ protected:
   void UnlockStreams()                                          { LeaveCriticalSection(&m_critStreamSection); }
   
   void OpenFileComplete();
+  void RelinkPlexStreams();
 
   virtual void OnStartup();
   virtual void OnExit();
@@ -343,6 +346,7 @@ protected:
 
   CFileItemPtr m_itemWithDetails;
   bool         m_hidingSub;
+  int          m_vobsubToDisplay;
   
   MediaPartPtr GetMediaPart()
   {
