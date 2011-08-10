@@ -66,7 +66,7 @@ bool CSaveFileStateJob::DoWork()
 
         if (g_settings.m_currentVideoSettings != g_settings.m_defaultVideoSettings)
         {
-          videodatabase.SetVideoSettings(progressTrackingFile, g_settings.m_currentVideoSettings);
+          //videodatabase.SetVideoSettings(progressTrackingFile, g_settings.m_currentVideoSettings);
         }
 
         if ((m_item.IsDVDImage() ||
@@ -74,7 +74,7 @@ bool CSaveFileStateJob::DoWork()
              m_item.HasVideoInfoTag() &&
              m_item.GetVideoInfoTag()->HasStreamDetails())
         {
-          videodatabase.SetStreamDetailsForFile(m_item.GetVideoInfoTag()->m_streamDetails,progressTrackingFile);
+          //videodatabase.SetStreamDetailsForFile(m_item.GetVideoInfoTag()->m_streamDetails,progressTrackingFile);
           updateListing = true;
         }
         videodatabase.Close();
