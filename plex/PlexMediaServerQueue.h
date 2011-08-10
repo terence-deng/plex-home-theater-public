@@ -124,20 +124,13 @@ class PlexMediaServerQueue : public CThread
   
   void enqueue(const string& verb, const CFileItemPtr& item, const string& options="")
   {
-    if (item->HasProperty("ratingKey"))
+    if (item->HasProperty("ratingKey") && item->HasProperty("containerKey"))
     {
-      CStdString path = item->m_strPath;
-      if (item->IsStack())
-      {
-        CStackDirectory stack;
-        path = stack.GetFirstStackedFile(path);
-      }
-      
       // Encode the key.
       CStdString encodedKey = item->GetProperty("ratingKey");
       CUtil::URLEncode(encodedKey);
       
-      // Figure out the identifier ~ FIXME, remove this code once Andre fixes the cloud.
+      // Figure out the identifier.
       string identifier = item->GetProperty("pluginIdentifier");
       CURL theURL(item->GetProperty("key"));
       
@@ -156,7 +149,7 @@ class PlexMediaServerQueue : public CThread
   string buildUrl(const CFileItemPtr& item, const string& url)
   {
     // Build the URL.
-    return CPlexDirectory::ProcessUrl(item->GetProperty("key"), url, false);
+    return CPlexDirectory::ProcessUrl(item->GetProperty("containerKey"), url, false);
   }
   
  private:
