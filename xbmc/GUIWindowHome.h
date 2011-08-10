@@ -66,6 +66,7 @@ private:
   std::map<int, Group>       m_contentLists;
   int                        m_selectedContainerID;
   int                        m_selectedItem;
+  bool                       m_globalArt;
   
   PlexContentWorkerManager*  m_workerManager;
 };

@@ -22,6 +22,7 @@
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 #include <boost/thread/recursive_mutex.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <list>
@@ -63,6 +64,7 @@ CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
   , m_pendingSelectID(-1)
   , m_selectedContainerID(-1)
   , m_selectedItem(-1)
+  , m_globalArt(true)
 {
   // Create the worker. We're not going to destroy it because whacking it on exit can cause problems.
   m_workerManager = new PlexContentWorkerManager();
@@ -154,6 +156,8 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
   }
   else
   {
+    bool globalArt = true;
+    
     // Clear old lists.
     m_contentLists.clear();
     
@@ -173,7 +177,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
         m_contentLists[CONTENT_LIST_QUEUE] = Group(kVIDEO_LOADER);
         m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/unwatched", CONTENT_LIST_QUEUE);
       }
-      else
+      else if (boost::ends_with(sectionUrl, "shared") == false)
       {
         // Recently added.
         m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
@@ -187,6 +191,8 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
         }
 
         // Asynchronously fetch the fanart for the section.
+        globalArt = false;
+        m_globalArt = false;
         m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
       }
     }
@@ -198,11 +204,14 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
       m_contentLists[CONTENT_LIST_RECENTLY_ACCESSED] = Group(kVIDEO_LOADER);
       m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/channels/recentlyViewed?filter=" + filter, CONTENT_LIST_RECENTLY_ACCESSED);
     }
-    else
+
+    // If we need to, load global art.
+    if (globalArt && m_globalArt == false)
     {
-      SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
+      m_globalArt = true;
+      m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/library/arts", CONTENT_LIST_FANART);
     }
-  
+    
     // Remember what the last one was.
     m_lastSelectedID = itemID;
   }
@@ -490,6 +499,10 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       m_lastSelectedID = -1;
       m_contentLoadTimer.StartZero();
     }
+    else
+    {
+      m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/library/arts", CONTENT_LIST_FANART);
+    }
     
     m_selectedContainerID = -1;
     m_selectedItem = -1;
@@ -573,8 +586,6 @@ void CGUIWindowHome::HideAllLists()
     SET_CONTROL_HIDDEN(id);
     SET_CONTROL_HIDDEN(id-1000);
   }
-  
-  SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
 }
 
 void CGUIWindowHome::Render()
