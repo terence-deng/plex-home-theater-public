@@ -42,6 +42,7 @@ CGUIMultiImage::CGUIMultiImage(int parentID, int controlID, float posX, float po
   ControlType = GUICONTROL_MULTI_IMAGE;
   m_bDynamicResourceAlloc=false;
   m_directoryLoaded = false;
+  m_expireTimer = false;
 }
 
 CGUIMultiImage::CGUIMultiImage(const CGUIMultiImage &from)
@@ -58,6 +59,7 @@ CGUIMultiImage::CGUIMultiImage(const CGUIMultiImage &from)
     m_currentPath = m_texturePath.GetLabel(WINDOW_INVALID);
   m_currentImage = 0;
   ControlType = GUICONTROL_MULTI_IMAGE;
+  m_expireTimer = false;
 }
 
 CGUIMultiImage::~CGUIMultiImage(void)
@@ -121,12 +123,14 @@ void CGUIMultiImage::Render()
       unsigned int timeToShow = m_timePerImage;
       if (0 == nextImage) // last image should be paused for a bit longer if that's what the skinner wishes.
         timeToShow += m_timeToPauseAtEnd;
-      if (m_imageTimer.IsRunning() && m_imageTimer.GetElapsedMilliseconds() > timeToShow)
+      
+      if (m_imageTimer.IsRunning() && (m_imageTimer.GetElapsedMilliseconds() > timeToShow || m_expireTimer))
       {
         // grab a new image
         m_currentImage = nextImage;
         m_image.SetFileName(m_files[m_currentImage]);
         m_imageTimer.StartZero();
+        m_expireTimer = false;
       }
     }
     m_image.SetColorDiffuse(m_diffuseColor);
@@ -152,26 +156,27 @@ bool CGUIMultiImage::OnMessage(CGUIMessage &message)
   else if (message.GetMessage() == GUI_MSG_LABEL_BIND && message.GetPointer())
   {
     CFileItemList* list = (CFileItemList* )message.GetPointer();
+
+    // Copy over files.
     m_files.clear();
-    FreeResources();
-    
     for (int i=0; i<list->Size(); i++)
       m_files.push_back(list->Get(i)->m_strPath);
-    
+
     // Randomize or sort our images if necessary
     if (m_randomized)
       random_shuffle(m_files.begin(), m_files.end());
     else
       sort(m_files.begin(), m_files.end());
-    
+
+    // Mark the directory as loaded, and make sure we fade to the next image right away.
     m_directoryLoaded = true;
-    m_imageTimer.StartZero();
-    printf("Loaded %d fanarts.\n", m_files.size());
+    m_expireTimer = true;
     
-    // Make sure GUI images are lazily loaded.
-    m_image.FreeResources(true);
-    m_image.SetLazyLoaded();
-    m_image.AllocResources();
+    if (m_image.GetFileName().IsEmpty())
+    {
+      m_image.SetLazyLoaded();
+      m_image.AllocResources();
+    }
     
     return true;
   }

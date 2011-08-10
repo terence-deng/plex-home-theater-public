@@ -70,6 +70,7 @@ protected:
   unsigned int m_timeToPauseAtEnd;
   bool m_randomized;
   bool m_loop;
+  bool m_expireTimer;
 
   bool m_bDynamicResourceAlloc;
   bool m_directoryLoaded;
