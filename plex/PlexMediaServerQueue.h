@@ -80,7 +80,7 @@ class PlexMediaServerQueue : public CThread
   
   /// Clear playing progress.
   void onClearPlayingProgress(const CFileItemPtr& item)
-  { enqueue("progress", item, "&time=-1"); }
+  { enqueue("progress", item, "&time=-1&state=stopped"); }
   
   /// Notify of a viewed item (a scrobble).
   void onViewed(const CFileItemPtr& item, bool force=false)
