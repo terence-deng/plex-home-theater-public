@@ -405,7 +405,8 @@ void CGUIWindowVideoFiles::GetContextButtons(int itemNumber, CContextButtons &bu
     else if (m_vecItems->GetContent() == "episodes")
       buttons.Add(CONTEXT_BUTTON_INFO, 20352);
     
-    if (item->IsPlexMediaServerLibrary() && m_vecItems->GetContent() != "files")
+    if ((item->IsPlexMediaServerLibrary() && m_vecItems->GetContent() != "files") ||
+        item->HasProperty("ratingKey"))
     {
       CStdString viewOffset = item->GetProperty("viewOffset");
       
