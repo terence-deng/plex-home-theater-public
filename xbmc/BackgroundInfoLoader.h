@@ -33,6 +33,10 @@
 #include "boost/shared_ptr.hpp"
 #include "boost/foreach.hpp"
 
+#ifdef _WIN32
+#define usleep(a) Sleep(a/1000)
+#endif
+
 using namespace std;
 class CFileItem; 
 typedef boost::shared_ptr<CFileItem> CFileItemPtr;
@@ -229,7 +233,7 @@ class CBackgroundRunnerGroup
           
           // Pause if it was requested.
           if (m_msBetweenLoads > 0 && m_stopped == false)
-            ::usleep(m_msBetweenLoads*1000);
+            usleep(m_msBetweenLoads*1000);
         }
       }
     }

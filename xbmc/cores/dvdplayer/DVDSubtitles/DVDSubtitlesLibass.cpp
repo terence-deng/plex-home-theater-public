@@ -40,7 +40,11 @@ static void libass_log(int level, const char *fmt, va_list args, void *data)
 CDVDSubtitlesLibass::CDVDSubtitlesLibass()
 {
   // Make sure we set up the environment for SSA+fontconfig.
+#ifdef _WIN32
+  SetEnvironmentVariable("FONTCONFIG_PATH", _P("special://xbmc/fontconfig").c_str());
+#else
   setenv("FONTCONFIG_PATH", _P("special://xbmc/fontconfig").c_str(), 1);
+#endif
     
   m_track = NULL;
   m_library = NULL;

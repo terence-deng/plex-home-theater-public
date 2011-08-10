@@ -9,6 +9,10 @@
 
 #include <boost/asio.hpp>
 
+#ifdef _WIN32
+#define usleep(x) Sleep(x/1000)
+#endif
+
 #define NS_BROWSE_REFRESH_INTERVAL  5000
 #define NS_REMOVAL_INTERVAL         2000
 #define NS_DEAD_SERVER_TIME        10000
