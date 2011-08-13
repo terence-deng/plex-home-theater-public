@@ -1195,6 +1195,31 @@
   <string id="13418">Advanced Shaders (GLSL)</string>
   <string id="13419">Software</string>
 
+  <string id="13420">Remove safely</string>
+  <string id="13421">VDPAU</string>
+  <string id="13422">Start slideshow here</string>
+  <string id="13423">Remember for this path</string>
+  <string id="13424">Use pixel buffer objects</string>
+  <string id="13425">Allow hardware acceleration (VDPAU)</string>
+  <string id="13426">Allow hardware acceleration (VAAPI)</string>
+  <string id="13427">Allow hardware acceleration (DXVA2)</string>
+  <string id="13428">Allow hardware acceleration (CrystalHD)</string>
+  <string id="13429">Allow hardware acceleration (VDADecoder)</string>
+  <string id="13430">Allow hardware acceleration (OpenMax)</string>
+  <string id="13431">Pixel Shaders</string>
+
+  <string id="13500">A/V sync method</string>
+  <string id="13501">Audio clock</string>
+  <string id="13502">Video clock (Drop/Dupe audio)</string>
+  <string id="13503">Video clock (Resample audio)</string>
+  <string id="13504">Maximum resample amount (%)</string>
+  <string id="13505">Resample quality</string>
+  <string id="13506">Low(fast)</string>
+  <string id="13507">Medium</string>
+  <string id="13508">High</string>
+  <string id="13509">Really high(slow!)</string>
+  <string id="13510">Sync playback to display</string>
+
   <string id="13450">Sleep System</string>
 
   <string id="13600">Input Devices</string>
@@ -2067,6 +2092,8 @@
   <string id="22012">Total Memory</string>
   <string id="22013">Profile Data</string>
   <string id="22014">Use Dim if paused during video playback</string>
+
+  <string id="22021">Allowed error in aspect ratio to minimize black bars</string>
 
   <!-- strings 29800 thru 29998 reserved strings used only in the default Project Mayhem III skin and not c++ code -->
   <string id="29800">Library Mode</string>
