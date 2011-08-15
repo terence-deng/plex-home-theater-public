@@ -172,13 +172,13 @@
   <string id="237">Minification</string>
   <string id="238">Magnification</string>
   <string id="239">Clear playlist on finish</string>
-  <string id="240">Autorun DVD-Video</string>
-  <string id="241">Autorun VCD/SVCD</string>
-  <string id="242">Autorun Audio-CD</string>
-  <string id="243">Autorun XBOX Games</string>
-  <string id="244">Autorun Videos</string>
-  <string id="245">Autorun Music</string>
-  <string id="246">Autorun Pictures</string>
+  <string id="240">Display Mode</string>
+  <string id="241">Full Screen #%d</string>
+  <string id="242">Windowed</string>
+  <string id="243">Refresh Rate</string>
+  <string id="244">Full screen</string>
+  <string id="245">Sizing: (%i,%i)->(%i,%i) (Zoom x%2.2f) AR:%2.2f:1 (Pixels: %2.2f:1)</string>
+    
   <string id="247">Scripts</string>
   <string id="248">Language</string>
   <string id="249">Music</string>
