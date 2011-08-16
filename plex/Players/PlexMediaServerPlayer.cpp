@@ -404,7 +404,6 @@ void CPlexMediaServerPlayer::Render()
 
     ipc::scoped_lock<ipc::named_mutex> lock(m_frameMutex);
     
-      
     // FIXME
     //g_renderManager.SetRGB32Image((const char*)m_mappedRegion->get_address(), m_height, m_width, m_width*4);
   }
@@ -446,7 +445,6 @@ void CPlexMediaServerPlayer::OnPlaybackStarted()
   try
   {
     //g_renderManager.Configure(m_width, m_height, m_width, m_height, 30.0f, CONF_FLAGS_FULLSCREEN | CONF_FLAGS_RGB);
-    
     ipc::scoped_lock<ipc::named_mutex> lock(m_frameMutex);
     memset(m_mappedRegion->get_address(), 0, m_height*m_width*4);
     //g_renderManager.SetRGB32Image((const char*)m_mappedRegion->get_address(), m_height, m_width, m_width*4);

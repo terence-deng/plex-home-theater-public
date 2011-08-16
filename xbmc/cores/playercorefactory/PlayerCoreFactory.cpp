@@ -25,6 +25,7 @@
 #include "dvdplayer/DVDPlayer.h"
 #include "paplayer/PAPlayer.h"
 #include "paplayer/DVDPlayerCodec.h"
+#include "PlexMediaServerPlayer.h"
 #include "GUIDialogContextMenu.h"
 #include "FileSystem/FileCurl.h"
 #include "utils/HttpHeader.h"
@@ -275,6 +276,10 @@ bool CPlayerCoreFactory::LoadConfiguration(TiXmlElement* pConfig, bool clear)
     paplayer->m_bPlaysAudio = true;
     s_vecCoreConfigs.push_back(paplayer);
 
+    CPlayerCoreConfig* pmsplayer = new CPlayerCoreConfig("PMSPlayer", EPC_PMSPLAYER, NULL);
+    pmsplayer->m_bPlaysAudio = pmsplayer->m_bPlaysVideo = true;
+    s_vecCoreConfigs.push_back(pmsplayer);
+    
     s_vecCoreSelectionRules.clear();
   }
 
@@ -299,6 +304,7 @@ bool CPlayerCoreFactory::LoadConfiguration(TiXmlElement* pConfig, bool clear)
       if (type == "dvdplayer" || type == "mplayer") eCore = EPC_DVDPLAYER;
       if (type == "paplayer" ) eCore = EPC_PAPLAYER;
       if (type == "externalplayer" ) eCore = EPC_EXTPLAYER;
+      if (type == "pmsplayer") eCore = EPC_PMSPLAYER;
 
       if (eCore != EPC_NONE)
       {
