@@ -43,6 +43,7 @@ class CGUIDialog;
 #define TMSG_MEDIA_RESTART        203
 
 #define TMSG_MEDIA_OPEN_COMPLETE  207
+#define TMSG_MEDIA_RESTART_WITH_NEW_PLAYER 208
 
 #define TMSG_PLAYLISTPLAYER_PLAY  210
 #define TMSG_PLAYLISTPLAYER_NEXT  211
@@ -101,6 +102,8 @@ typedef struct
 }
 ThreadMessage;
 
+class CDlgCache;
+
 class CApplicationMessenger
 {
 
@@ -150,6 +153,7 @@ public:
   void Hide();
   void ExecOS(const CStdString command, bool waitExit = false);
   void UserEvent(int code);
+  void RestartWithNewPlayer(CDlgCache* dlg, const std::string& newURL);
 
   CStdString GetResponse();
   int SetResponse(CStdString response);

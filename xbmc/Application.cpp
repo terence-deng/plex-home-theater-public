@@ -276,6 +276,7 @@
 #endif
 
 #include "plex/PlexApplication.h"
+#include "PlexMediaServerPlayer.h"
 
 using namespace std;
 using namespace ADDON;
@@ -4984,6 +4985,33 @@ void CApplication::CheckDelayedPlayerRestart()
     m_restartPlayerTimer.Reset();
     Restart(true);
   }
+}
+
+void CApplication::RestartWithNewPlayer(CDlgCache* cacheDlg, const CStdString& newURL)
+{
+  CFileItem newFile(newURL, false);
+  newFile.SetLabel(m_itemCurrentFile->GetLabel());
+  *m_itemCurrentFile = newFile;
+  
+  // We're moving to a new player, so whack the old one.
+  delete m_pPlayer;
+  m_pPlayer = 0;
+  
+  // Create the new player.
+  PLAYERCOREID eNewCore = CPlayerCoreFactory::GetDefaultPlayer(newFile);
+  m_eCurrentPlayer = eNewCore;
+  m_pPlayer = CPlayerCoreFactory::CreatePlayer(eNewCore, *this);
+  
+  // See if we're passing along the cache dialog.
+  if (cacheDlg)
+  {
+    if (eNewCore == EPC_PMSPLAYER)
+      ((CPlexMediaServerPlayer* )m_pPlayer)->SetCacheDialog(cacheDlg);
+    else
+      cacheDlg->Close();
+  }
+  
+  PlayFile(*m_itemCurrentFile, false);
 }
 
 void CApplication::Restart(bool bSamePosition)
