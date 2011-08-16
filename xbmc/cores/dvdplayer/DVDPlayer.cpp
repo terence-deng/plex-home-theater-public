@@ -1012,16 +1012,22 @@ class PlexAsyncUrlResolver
       //
       CFileCurl curl;
       curl.ClearCookies();
-      curl.Get(m_item.GetProperty("postURL"), body);
-      
-      // Get the headers and prepend them to the request.
-      CHttpHeader header = curl.GetHttpHeader();
-      body = header.GetHeaders() + body;
-      
-      // Add the postURL to the request.
-      CStdString param = m_item.GetProperty("postURL");
-      CUtil::URLEncode(param);
-      url = url + "&postURL=" + param;
+      if (curl.Get(m_item.GetProperty("postURL"), body))
+      {
+        // Get the headers and prepend them to the request.
+        CHttpHeader header = curl.GetHttpHeader();
+        body = header.GetHeaders() + body;
+        
+        // Add the postURL to the request.
+        CStdString param = m_item.GetProperty("postURL");
+        CUtil::URLEncode(param);
+        url = url + "&postURL=" + param;
+      }
+      else
+      {
+        m_bSuccess = false;
+        m_bStop = true;
+      }
     }
 
     if (m_bStop == false)
