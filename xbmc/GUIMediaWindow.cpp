@@ -1054,32 +1054,6 @@ bool CGUIMediaWindow::OnClick(int iItem)
     return true;
   }
 
-  if (!pItem->m_bIsFolder && pItem->IsFileFolder())
-  {
-    XFILE::IFileDirectory *pFileDirectory = NULL;
-    pFileDirectory = XFILE::CFactoryFileDirectory::Create(pItem->m_strPath, pItem.get(), "");
-    if(pFileDirectory)
-      pItem->m_bIsFolder = true;
-    else if(pItem->m_bIsFolder)
-      pItem->m_bIsFolder = false;
-    delete pFileDirectory;
-  }
-
-  CURL url(pItem->m_strPath);
-  if (url.GetProtocol() == "script")
-  {
-    // execute the script
-    AddonPtr addon;
-    if (CAddonMgr::Get().GetAddon(url.GetHostName(), addon))
-    {
-#ifdef HAS_PYTHON
-      if (!g_pythonParser.StopScript(addon->LibPath()))
-        g_pythonParser.evalFile(addon->LibPath());
-#endif
-      return true;
-    }
-  }
-
   if (pItem->m_bIsFolder)
   {
     if ( pItem->m_bIsShareOrDrive )
