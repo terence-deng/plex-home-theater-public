@@ -44,6 +44,7 @@
 
 #define CONF_FLAGS_YUV_FULLRANGE 0x08
 #define CONF_FLAGS_FULLSCREEN    0x10
+#define CONF_FLAGS_RGB           0x20
 
 #define CONF_FLAGS_FORMAT_MASK(a) ((a) & 0xff000)
 #define CONF_FLAGS_FORMAT_YV12   0x01000

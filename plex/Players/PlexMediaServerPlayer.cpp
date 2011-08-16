@@ -398,14 +398,10 @@ void CPlexMediaServerPlayer::Render()
   if (!m_playing)
     return;
   
-  // Grab the new frame out of shared memory.
   {
-    //printf("Frame %08d @ %f\n", ++m_frameCount, getTime());
-
+    // Grab the new frame out of shared memory.
     ipc::scoped_lock<ipc::named_mutex> lock(m_frameMutex);
-    
-    // FIXME
-    //g_renderManager.SetRGB32Image((const char*)m_mappedRegion->get_address(), m_height, m_width, m_width*4);
+    g_renderManager.SetRGB32Image((const char*)m_mappedRegion->get_address(), m_height, m_width, m_width*4);
   }
   
   g_application.NewFrame();
@@ -437,29 +433,29 @@ void CPlexMediaServerPlayer::OnPlaybackEnded(const string& args)
 ///////////////////////////////////////////////////////////////////////////////
 void CPlexMediaServerPlayer::OnPlaybackStarted()
 {
-  CSingleLock lock(g_graphicsContext);
-
   m_playing = true;
   m_callback.OnPlayBackStarted();    
   
   try
   {
-    //g_renderManager.Configure(m_width, m_height, m_width, m_height, 30.0f, CONF_FLAGS_FULLSCREEN | CONF_FLAGS_RGB);
+    // Configure renderer.
+    g_renderManager.Configure(m_width, m_height, m_width, m_height, 30.0f, CONF_FLAGS_FULLSCREEN | CONF_FLAGS_RGB);
+    
+    // Set the initial frame to all black.
     ipc::scoped_lock<ipc::named_mutex> lock(m_frameMutex);
     memset(m_mappedRegion->get_address(), 0, m_height*m_width*4);
-    //g_renderManager.SetRGB32Image((const char*)m_mappedRegion->get_address(), m_height, m_width, m_width*4);
+    g_renderManager.SetRGB32Image((const char*)m_mappedRegion->get_address(), m_height, m_width, m_width*4);
+    
+    g_application.NewFrame();
   }
   catch(...)
   {
     CLog::Log(LOGERROR,"%s - Exception thrown on open", __FUNCTION__);
   }  
   
-  g_application.NewFrame();
-  
   if (m_pDlgCache)
     m_pDlgCache->Close();
-  m_pDlgCache = NULL;
-  
+  m_pDlgCache = 0;
 }
 
 void CPlexMediaServerPlayer::OnFrameMap(const string& args)
