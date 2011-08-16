@@ -1114,9 +1114,19 @@ void CDVDPlayer::Process()
     }
   }
   
-  if (!OpenInputStream())
+  try
   {
-    m_bAbortRequest = true;
+    if (!OpenInputStream())
+    {
+      m_bAbortRequest = true;
+      return;
+    }
+  }
+  catch (CRedirectToNewPlayerException* ex)
+  {
+    g_application.getApplicationMessenger().RestartWithNewPlayer(0, ex->m_newURL);
+    delete ex;
+    m_bFileOpenComplete = true;
     return;
   }
 

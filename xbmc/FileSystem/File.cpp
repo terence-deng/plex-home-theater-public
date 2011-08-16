@@ -258,6 +258,11 @@ bool CFile::Open(const CStdString& strFileName, unsigned int flags)
         }
       }
     }
+    catch (CRedirectToNewPlayerException* pRedirectEx)
+    {
+      // Keep it going.
+      throw;
+    }
     catch (...)
     {
       CLog::Log(LOGERROR, "File::Open - unknown exception when opening %s", strFileName.c_str());
@@ -283,6 +288,10 @@ bool CFile::Open(const CStdString& strFileName, unsigned int flags)
     e.writelog(__FUNCTION__);
   }
 #endif
+  catch (CRedirectToNewPlayerException* pRedirectEx)
+  {
+    throw;
+  }
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Unhandled exception", __FUNCTION__);

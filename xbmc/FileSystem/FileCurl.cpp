@@ -136,6 +136,19 @@ size_t CFileCurl::CReadState::HeaderCallback(void *ptr, size_t size, size_t nmem
 
   free(strData);
 
+  // See if we redirected to a player that CURL can't handle.
+  CStdString redirectUrl = m_httpheader.GetValue("Location");
+  if (redirectUrl.size() > 7)
+  {
+    if (redirectUrl.substr(0, 7) == "plex://" ||
+        redirectUrl.substr(0, 6) == "mms://"  ||
+        redirectUrl.Find("/video/:/webkit") != -1)
+    {
+      CLog::Log(LOGINFO, "We reached a non-CURL URL: %s", redirectUrl.c_str());
+      m_strDeadEndUrl = redirectUrl;
+    }
+  }
+  
   return iSize;
 }
 
@@ -866,7 +879,7 @@ bool CFileCurl::Open(const CURL& url)
   SetRequestHeaders(m_state);
 
   long response = m_state->Connect(m_bufferSize);
-  if( response < 0 || response >= 400)
+  if ((response < 0 || response >= 400) && m_state->m_strDeadEndUrl.empty())
     return false;
 
   SetCorrectHeaders(m_state);
@@ -885,6 +898,12 @@ bool CFileCurl::Open(const CURL& url)
   {
     CLog::Log(LOGDEBUG,"FileCurl - file <%s> is a shoutcast stream. re-opening", m_url.c_str());
     throw new CRedirectException(new CFileShoutcast);
+  }
+  
+  // Did we hit a dead end?
+  if (m_state->m_strDeadEndUrl.size() > 0)
+  {
+    throw new CRedirectToNewPlayerException(m_state->m_strDeadEndUrl);
   }
 
   m_multisession = false;
@@ -1098,7 +1117,7 @@ int CFileCurl::Stat(const CURL& url, struct __stat64* buffer)
 
   SetCommonOptions(m_state);
   SetRequestHeaders(m_state);
-  g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 5);
+  g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 15);
   g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_NOBODY, 1);
   g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
 
@@ -1110,6 +1129,9 @@ int CFileCurl::Stat(const CURL& url, struct __stat64* buffer)
 
   CURLcode result = g_curlInterface.easy_perform(m_state->m_easyHandle);
 
+  // Did we hit a dead end?
+  if (m_state->m_strDeadEndUrl.size() > 0)
+    throw new CRedirectToNewPlayerException(m_state->m_strDeadEndUrl);
 
   if(result == CURLE_HTTP_RETURNED_ERROR)
   {
