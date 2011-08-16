@@ -1208,13 +1208,13 @@ const CStdString& CFileItem::GetMimeType(bool lookup /*= true*/) const
         m_ref = "audio/x-pn-realaudio";
       
       else
-        CFileCurl::GetMimeType(GetAsUrl(), m_ref);
+        ; //CFileCurl::GetMimeType(GetAsUrl(), m_ref);
 
       // try to get mime-type again but with an NSPlayer User-Agent
       // in order for server to provide correct mime-type.  Allows us
       // to properly detect an MMS stream
       if (m_ref.Left(11).Equals("video/x-ms-"))
-        CFileCurl::GetMimeType(GetAsUrl(), m_ref, "NSPlayer/11.00.6001.7000");
+        ; //CFileCurl::GetMimeType(GetAsUrl(), m_ref, "NSPlayer/11.00.6001.7000");
 
       // make sure there are no options set in mime-type
       // mime-type can look like "video/x-ms-asf ; charset=utf8"
