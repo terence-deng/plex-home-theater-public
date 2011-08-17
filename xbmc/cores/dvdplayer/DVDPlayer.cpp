@@ -75,6 +75,9 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/thread.hpp>
 
+#include "hmac_sha2.h"
+#include "Base64.h"
+
 using namespace std;
 
 void CSelectionStreams::Clear(StreamType type, StreamSource source)
@@ -1117,6 +1120,60 @@ void CDVDPlayer::Process()
     {
       // Save it.
       m_itemWithDetails = items[0];
+    }
+    
+    // If it's remote, see if we're transcoding.
+    if (m_item.IsRemotePlexMediaServerLibrary() && g_guiSettings.GetInt("videogeneral.remoteplexquality") != -1)
+    {
+      printf("TRANSCODING.\n");
+
+      // Build the media URL.
+      CURL mediaURL(m_filename);
+      mediaURL.SetHostName("127.0.0.1");
+      mediaURL.SetPort(32400);
+      mediaURL.SetOptions("");
+      printf(" -> Media URL: %s\n", mediaURL.Get().c_str());
+      
+      CStdString encodedMediaURL = mediaURL.Get();
+      CUtil::URLEncode(encodedMediaURL);
+      
+      CURL transcodeURL(m_filename);
+      transcodeURL.SetFileName("video/:/transcode/segmented/start.m3u8");
+      
+      CStdString options;
+      options += "?url=" + encodedMediaURL;
+      options += "&quality=" + lexical_cast<string>(g_guiSettings.GetInt("videogeneral.remoteplexquality"));
+      
+      printf(" -> Full URL: %s\n", transcodeURL.Get().c_str());
+      
+      // Sign it with the public key.
+      time_t time = ::time(0);
+      string apiKey = "KQMIY6GATPC63AIMC4R2";
+      string secretKey = CBase64::Decode("k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0=");
+
+      // Compute the message.
+      string message = "/" + transcodeURL.GetFileName() + options;
+      message += "@" + lexical_cast<string>(time);
+      printf("Message: [%s]\n", message.c_str());
+      
+      // Compute the HMAC.
+      unsigned char mac[32];
+      hmac_sha256((unsigned char* )secretKey.c_str(), secretKey.size(), (unsigned char* )message.c_str(), message.size(), mac, 32);
+      string sig = CBase64::Encode((unsigned char *)mac, 32);
+      boost::replace_all(sig, "/", "%2F");
+      boost::replace_all(sig, "=", "%3D");
+
+      options += "&" + transcodeURL.GetOptions().substr(1);
+      options += "&X-Plex-Access-Key=" + apiKey;
+      options += "&X-Plex-Access-Time=" + lexical_cast<string>(time);
+      options += "&X-Plex-Access-Code=" + sig;
+       
+      transcodeURL.SetOptions(options);
+
+      // We need to re-open the file because it's a "playlist"
+      g_application.getApplicationMessenger().RestartWithNewPlayer(0, transcodeURL.Get());
+      m_bFileOpenComplete = true;
+      return;
     }
   }
   

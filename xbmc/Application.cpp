@@ -5011,7 +5011,8 @@ void CApplication::RestartWithNewPlayer(CDlgCache* cacheDlg, const CStdString& n
       cacheDlg->Close();
   }
   
-  PlayFile(*m_itemCurrentFile, false);
+  PlayMedia(*m_itemCurrentFile, PLAYLIST_VIDEO);
+  //PlayFile(*m_itemCurrentFile, false);
 }
 
 void CApplication::Restart(bool bSamePosition)
