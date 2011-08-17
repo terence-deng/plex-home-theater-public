@@ -1005,6 +1005,7 @@
   <string id="13147">to continue controlling it. Do you want to proceed?</string>
 
   <string id="13148">Allow Picking Alternate Library Media</string>
+  <string id="13149">Quality From Remote Media Servers</string>
 
   <string id="13150">HDD Key:</string>
   <string id="13151">HDD Temp:</string>
@@ -2167,6 +2168,18 @@
   <string id="42006">File was not found</string>
   <string id="42007">Unsupported network protocol</string>
   <string id="42008">Error while opening file</string>
+
+  <string id="42999">Direct Play</string>
+  <string id="43000">64kbps</string>
+  <string id="43001">96kbps</string>
+  <string id="43002">208kbps</string>
+  <string id="43003">320kbps</string>
+  <string id="43004">720kbps</string>
+  <string id="43005">1.5Mbps</string>
+  <string id="43006">2Mbps</string>
+  <string id="43007">3Mbps</string>
+  <string id="43008">4Mbps</string>
+  <string id="43009">8Mbps</string>
 
 </strings>
 

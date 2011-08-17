@@ -151,8 +151,8 @@ class PlexContentPlayerMixin
     // If there is more than one media item, allow picking which one.
      if (file->m_mediaItems.size() > 1)
      {
-       bool pickLibraryItem = g_guiSettings.GetBool("videoplayer.alternatemedia");
-       int  onlineQuality   = g_guiSettings.GetInt("videoplayer.onlinemediaquality");
+       bool pickLibraryItem = g_guiSettings.GetBool("videogeneral.alternatemedia");
+       int  onlineQuality   = g_guiSettings.GetInt("videogeneral.onlinemediaquality");
        bool isLibraryItem   = file->IsPlexMediaServerLibrary();
        
        // See if we're offering a choice.
