@@ -1061,7 +1061,7 @@ bool CUtil::IsAddonsPath(const CStdString& strFile)
 bool CUtil::IsPlexMediaServer(const CStdString& strFile)
 {
   CURL url(strFile);
-  if (url.GetProtocol() == "plex" || url.GetPort() == 32400)
+  if (url.GetProtocol() == "plex" || url.GetPort() == 32400 || url.GetOptions().find("X-Plex-Token") != -1)
     return true;
 
   // A stack can also come from the Plex Media Servers.
