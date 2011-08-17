@@ -171,6 +171,7 @@ public:
   bool IsURL() const;
   bool IsDAAP() const;
   bool IsPlexMediaServer() const;
+  bool IsRemotePlexMediaServerLibrary() const;
   virtual bool IsPlexMediaServerMusic() const;
   bool IsPlexMediaServerLibrary() const;
   bool IsWebKit() const;

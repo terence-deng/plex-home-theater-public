@@ -19,6 +19,8 @@
  *
  */
 
+#include <boost/algorithm/string.hpp>
+
 #include "FileItem.h"
 #include "LocalizeStrings.h"
 #include "StringUtils.h"
@@ -837,6 +839,19 @@ bool CFileItem::IsDAAP() const
 bool CFileItem::IsPlexMediaServer() const
 {
   return CUtil::IsPlexMediaServer(m_strPath);
+}
+
+bool CFileItem::IsRemotePlexMediaServerLibrary() const
+{
+  CURL url(m_strPath);
+  
+  if (boost::starts_with(url.GetFileName(), "library/"))
+  {
+    if (url.GetOptions().find("X-Plex-Token") != -1)
+      return true;
+  }
+  
+  return false;
 }
 
 bool CFileItem::IsPlexMediaServerLibrary() const
