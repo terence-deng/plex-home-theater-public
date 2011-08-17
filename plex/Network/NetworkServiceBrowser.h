@@ -102,7 +102,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
     BOOST_FOREACH(const NetworkInterface& xface, interfaces)
     {
       // Don't add virtual interfaces.
-      if (xface.name()[0] != 'v')
+      if (xface.name()[0] != 'v' && boost::starts_with(xface.address(), "169.254.") == false)
       {
         dprintf("NetworkService: Browsing on interface %s.", xface.address().c_str());
         
