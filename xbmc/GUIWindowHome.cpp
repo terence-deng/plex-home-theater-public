@@ -59,11 +59,6 @@ using namespace boost;
 #define SLIDESHOW_MULTIIMAGE 10101
 
 CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
-  , m_lastSelectedItem(-1)
-  , m_lastSelectedID(-1)
-  , m_pendingSelectID(-1)
-  , m_selectedContainerID(-1)
-  , m_selectedItem(-1)
   , m_globalArt(true)
 {
   // Create the worker. We're not going to destroy it because whacking it on exit can cause problems.
@@ -104,33 +99,115 @@ bool CGUIWindowHome::OnAction(const CAction &action)
     CGUIBaseContainer* pControl = (CGUIBaseContainer*)GetFocusedControl();
     if (pControl)
     {
-      CGUIListItemPtr pItem = pControl->GetListItem(pControl->GetSelectedItem());
-      int itemId = pControl->GetSelectedItemID();
-      if (itemId != m_lastSelectedID)
+      CGUIListItemPtr pItem = pControl->GetListItem(0);
+      if (pItem)
       {
-        // Hide lists.
-        HideAllLists();
-        
-        // OK, let's load it after a delay.
-        m_pendingSelectID = itemId;
-        m_lastSelectedID = -1;
-        m_contentLoadTimer.StartZero();
+        // Save the selected menu item and if it's changed, get new lists.
+        if (SaveSelectedMenuItem() == true)
+        {
+          // Hide lists.
+          HideAllLists();
+          
+          // OK, let's load it after a delay.
+          CFileItem* pFileItem = (CFileItem* )pItem.get();
+          m_pendingSelectItemKey = pFileItem->m_strPath;
+          m_lastSelectedItemKey.clear();
+          m_contentLoadTimer.StartZero();
+        }
       }
-      
-      m_lastSelectedItem = pControl->GetSelectedItem();
     }
   }
   
   return ret;
 }
 
-void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool CGUIWindowHome::SaveSelectedMenuItem()
+{
+  bool changed = false;
+  
+  CGUIBaseContainer* pControl = (CGUIBaseContainer* )GetControl(MAIN_MENU);
+  if (pControl)
+  {
+    CGUIListItemPtr item = pControl->GetListItem(0);
+    if (item->IsFileItem())
+    {
+      CFileItem* fileItem = (CFileItem* )item.get();
+      
+      // See if it's changed.
+      if (m_lastSelectedItemKey != fileItem->m_strPath)
+        changed = true;
+      
+      // Save the current selection.
+      m_lastSelectedItemKey = fileItem->m_strPath;
+    }
+  }
+  
+  return changed;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void CGUIWindowHome::RestoreSelectedMenuItem()
+{
+  CGUIBaseContainer* pControl = (CGUIBaseContainer* )GetControl(MAIN_MENU);
+  if (pControl && m_lastSelectedItemKey.empty() == false)
+  {
+    int selectionItem = -1;
+    
+    // Figure out the ID with the selected key.
+    int i = 0;
+    BOOST_FOREACH(CGUIListItemPtr item, pControl->GetItems())
+    {
+      CFileItem* fileItem = (CFileItem* )item.get();
+      if (fileItem->m_strPath == m_lastSelectedItemKey)
+      {
+        selectionItem = i;
+        break;
+      }
+      
+      i++;
+    }
+    
+    if (selectionItem != -1)
+    {
+      CGUIListItemPtr item = pControl->GetListItem(0);
+      CFileItem* fileItem = (CFileItem* )item.get();
+      
+      // See if we need to refocus.
+      if (fileItem->m_strPath != m_lastSelectedItemKey)
+      {
+        CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), pControl->GetID(), selectionItem+1, 0);
+        g_windowManager.SendThreadMessage(msg);
+      }
+    }
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+int CGUIWindowHome::LookupIDFromKey(const std::string& key)
+{
+  CGUIBaseContainer* pControl = (CGUIBaseContainer* )GetControl(MAIN_MENU);
+  if (pControl)
+  {
+    // Figure out the ID with the selected key.
+    BOOST_FOREACH(CGUIListItemPtr item, pControl->GetItems())
+    {
+      CFileItem* fileItem = (CFileItem* )item.get();
+      if (fileItem->m_strPath == key)
+        return fileItem->m_iprogramCount;
+    }
+  }
+  
+  return -1;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
 {
   // Hide lists.
   HideAllLists();
 
-  printf("Updating content for item %d (last selected was %d).\n", itemID, m_lastSelectedID);
-  if (m_lastSelectedID == itemID)
+  if (m_lastSelectedItemKey == key)
   {
     // Bind the lists.
     BOOST_FOREACH(int_list_pair pair, m_contentLists)
@@ -165,6 +242,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
     m_workerManager->cancelPending();
     
     // Depending on what's selected, get the appropriate content.
+    int itemID = LookupIDFromKey(key);
     if (itemID >= 1000)
     {
       // A library section.
@@ -213,7 +291,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(int itemID)
     }
     
     // Remember what the last one was.
-    m_lastSelectedID = itemID;
+    m_lastSelectedItemKey = key;
   }
 }
 
@@ -348,12 +426,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
 {
   if (message.GetMessage() ==  GUI_MSG_WINDOW_DEINIT)
   {
-    CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(MAIN_MENU);
-    if (control == 0)
-      control = (CGUIBaseContainer* )GetControl(300);
-    
-    if (control)
-      m_lastSelectedItem = control->GetSelectedItem();
+    // Save the selected menu item.
+    SaveSelectedMenuItem();
     
     // Cancel pending tasks and hide.
     m_workerManager->cancelPending();
@@ -366,7 +440,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
   {
   case GUI_MSG_WINDOW_INIT:
   {
-    if (m_lastSelectedID == -1)
+    if (m_lastSelectedItemKey.empty())
       HideAllLists();
   }
     
@@ -453,37 +527,18 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         newList.push_back(newItem);
         
         // See if it matches the selected item.
-        if (id == m_lastSelectedID)
+        if (newItem->m_strPath == m_lastSelectedItemKey)
           itemStillExists = true;
       }
 
       // Replace 'em.
-      control->GetStaticItems().clear();
-      control->GetStaticItems().assign(newList.begin(), newList.end());
+      control->SetStaticContent(newList);
       
-      // See if we have a selected item and restore it if we do.
-      if (m_lastSelectedItem >= 0)
-      {
-        CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), control->GetID(), m_lastSelectedItem+1, 0);
-        g_windowManager.SendThreadMessage(msg);
-      }
+      // Restore selection.
+      RestoreSelectedMenuItem();
       
       // See if the item for which we were showing the right hand lists still exists.
-      if (itemStillExists)
-      {
-        // Additionally, if we have a selected item on the right hand side, restore it.
-        if (m_selectedItem != -1)
-        {
-          // Select group.
-          CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), m_selectedContainerID);
-          g_windowManager.SendThreadMessage(msg);
-
-          // Select item.
-          CGUIMessage msg2(GUI_MSG_ITEM_SELECT, GetID(), m_selectedContainerID, m_selectedItem);
-          g_windowManager.SendThreadMessage(msg2);
-        }
-      }
-      else
+      if (itemStillExists == false)
       {
         // Whack the right hand side.
         HideAllLists();
@@ -491,21 +546,21 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         m_contentLists.clear();
       }
     }
-    
-    // Reload if needed.
-    if (m_lastSelectedID != -1)
+
+    if (message.GetMessage() != GUI_MSG_UPDATE_MAIN_MENU)
     {
-      m_pendingSelectID = m_lastSelectedID;
-      m_lastSelectedID = -1;
-      m_contentLoadTimer.StartZero();
+      // Reload if needed.
+      if (m_lastSelectedItemKey.empty() == false)
+      {
+        m_pendingSelectItemKey = m_lastSelectedItemKey;
+        m_lastSelectedItemKey.clear();
+        m_contentLoadTimer.StartZero();
+      }
+      else
+      {
+        m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/library/arts", CONTENT_LIST_FANART);
+      }
     }
-    else
-    {
-      m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/library/arts", CONTENT_LIST_FANART);
-    }
-    
-    m_selectedContainerID = -1;
-    m_selectedItem = -1;
   }
   break;
   
@@ -570,11 +625,6 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
 
 void CGUIWindowHome::SaveStateBeforePlay(CGUIBaseContainer* container)
 {
-  // Save state.
-  m_selectedContainerID = container->GetID();
-  
-  // Reset selected item so we reload, not restore selection.
-  m_selectedItem = -1;
 }
 
 void CGUIWindowHome::HideAllLists()
@@ -590,10 +640,10 @@ void CGUIWindowHome::HideAllLists()
 
 void CGUIWindowHome::Render()
 {
-  if (m_pendingSelectID != -1 && m_contentLoadTimer.IsRunning() && m_contentLoadTimer.GetElapsedMilliseconds() > 300)
+  if (m_pendingSelectItemKey.empty() == false && m_contentLoadTimer.IsRunning() && m_contentLoadTimer.GetElapsedMilliseconds() > 300)
   {
-    UpdateContentForSelectedItem(m_pendingSelectID);
-    m_pendingSelectID = -1;
+    UpdateContentForSelectedItem(m_pendingSelectItemKey);
+    m_pendingSelectItemKey.clear();
     m_contentLoadTimer.Stop();
   }
   
