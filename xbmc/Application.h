@@ -78,7 +78,7 @@ class CApplicationMessenger;
 class DPMSSupport;
 class CSplash;
 class CGUITextLayout;
-
+class CDlgCache;
 class PlexApplication;
 typedef boost::shared_ptr<PlexApplication>PlexApplicationPtr;
 
@@ -156,6 +156,7 @@ public:
   void UpdateViewOffset();
   void StopPlaying();
   void Restart(bool bSamePosition = true);
+  void RestartWithNewPlayer(CDlgCache* cacheDlg, const CStdString& newURL);
   void DelayedPlayerRestart();
   void CheckDelayedPlayerRestart();
   bool IsPlaying() const;

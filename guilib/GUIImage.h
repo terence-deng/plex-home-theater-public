@@ -62,7 +62,7 @@ public:
     bool         m_fading;   ///< whether we're fading out
   };
 
-  CGUIImage(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& texture);
+  CGUIImage(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& texture, float minWidth=0.0f);
   CGUIImage(const CGUIImage &left);
   virtual ~CGUIImage(void);
   virtual CGUIImage *Clone() const { return new CGUIImage(*this); };
@@ -92,6 +92,8 @@ public:
   const CStdString& GetFileName() const;
   float GetTextureWidth() const;
   float GetTextureHeight() const;
+  
+  virtual float GetWidth() const { return m_texture.GetWidth(); }
 
 #ifdef _DEBUG
   virtual void DumpTextureUse();
@@ -108,7 +110,8 @@ protected:
   // border + conditional info
   CTextureInfo m_image;
   CGUIInfoLabel m_info;
-
+  float m_minWidth;
+  
   CGUITexture m_texture;
   std::vector<CFadingTexture *> m_fadingTextures;
   CStdString m_currentTexture;

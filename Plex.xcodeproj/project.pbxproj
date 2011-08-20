@@ -896,7 +896,10 @@
 		74D8D37B1311A2DD00DBDBC8 /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74D8D37A1311A2DD00DBDBC8 /* sha.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		74FEC65A132D285100B019CB /* GUIWindowPlexSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC658132D285100B019CB /* GUIWindowPlexSearch.cpp */; };
 		E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E31A8E011357B44800EEB013 /* PlexUtils.cpp */; };
+		E329D64613F3669C00AFCC3E /* PlexMediaServerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E329D64413F3669C00AFCC3E /* PlexMediaServerPlayer.cpp */; };
 		E3D01F381361779300EBD00D /* PlexContentWorker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3D01F361361779300EBD00D /* PlexContentWorker.cpp */; };
+		E3EF679F13FBA34F00843A59 /* hmac_sha2.c in Sources */ = {isa = PBXBuildFile; fileRef = E3EF679D13FBA34F00843A59 /* hmac_sha2.c */; };
+		E3EF67A613FBA3D900843A59 /* sha2.c in Sources */ = {isa = PBXBuildFile; fileRef = E3EF67A413FBA3D900843A59 /* sha2.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1318,6 +1321,8 @@
 		E306D12C0DDF7B590052C2AD /* PlexHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlexHelper.cpp; sourceTree = "<group>"; };
 		E306D12D0DDF7B590052C2AD /* PlexHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlexHelper.h; sourceTree = "<group>"; };
 		E31A8E011357B44800EEB013 /* PlexUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexUtils.cpp; path = plex/PlexUtils.cpp; sourceTree = "<group>"; };
+		E329D64413F3669C00AFCC3E /* PlexMediaServerPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexMediaServerPlayer.cpp; path = plex/Players/PlexMediaServerPlayer.cpp; sourceTree = "<group>"; };
+		E329D64513F3669C00AFCC3E /* PlexMediaServerPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexMediaServerPlayer.h; path = plex/Players/PlexMediaServerPlayer.h; sourceTree = "<group>"; };
 		E33206370D5070AA00435CE3 /* DVDDemuxVobsub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDDemuxVobsub.cpp; sourceTree = "<group>"; };
 		E33466A50D2E5103005A65EC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E33979940D62FD47004ECDDA /* DVDInputStreamTV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDInputStreamTV.cpp; sourceTree = "<group>"; };
@@ -2604,6 +2609,10 @@
 		E3E91FFB0D8C61DF002BF43D /* EventServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventServer.cpp; sourceTree = "<group>"; };
 		E3E91FFC0D8C61DF002BF43D /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
 		E3E920010D8C622A002BF43D /* EventClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventClient.cpp; sourceTree = "<group>"; };
+		E3EF679D13FBA34F00843A59 /* hmac_sha2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hmac_sha2.c; path = plex/Utility/hmac_sha2.c; sourceTree = "<group>"; };
+		E3EF679E13FBA34F00843A59 /* hmac_sha2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hmac_sha2.h; path = plex/Utility/hmac_sha2.h; sourceTree = "<group>"; };
+		E3EF67A413FBA3D900843A59 /* sha2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha2.c; path = plex/Utility/sha2.c; sourceTree = "<group>"; };
+		E3EF67A513FBA3D900843A59 /* sha2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha2.h; path = plex/Utility/sha2.h; sourceTree = "<group>"; };
 		E43196130FB2382D0030E150 /* HTSPDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTSPDirectory.h; sourceTree = "<group>"; };
 		E43196140FB2382E0030E150 /* HTSPDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HTSPDirectory.cpp; sourceTree = "<group>"; };
 		E43196150FB2382E0030E150 /* HTSPSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTSPSession.h; sourceTree = "<group>"; };
@@ -3031,6 +3040,7 @@
 		746469DE12E827B500B2FF1E /* plex */ = {
 			isa = PBXGroup;
 			children = (
+				E329D64213F3668D00AFCC3E /* Players */,
 				E3D01F361361779300EBD00D /* PlexContentWorker.cpp */,
 				E3D01F371361779300EBD00D /* PlexContentWorker.h */,
 				E31A8E011357B44800EEB013 /* PlexUtils.cpp */,
@@ -3072,6 +3082,10 @@
 		74756A9C12F464050001203D /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E3EF67A413FBA3D900843A59 /* sha2.c */,
+				E3EF67A513FBA3D900843A59 /* sha2.h */,
+				E3EF679D13FBA34F00843A59 /* hmac_sha2.c */,
+				E3EF679E13FBA34F00843A59 /* hmac_sha2.h */,
 				74AF1A1613009F1A00923698 /* HTTP.h */,
 				74AF1A1713009F1A00923698 /* HTTP.cpp */,
 				74756AA512F4668D0001203D /* BackgroundMusicPlayer.h */,
@@ -3418,6 +3432,15 @@
 				880DBE360DC2077000E26B71 /* README.osx */,
 			);
 			name = Documentation;
+			sourceTree = "<group>";
+		};
+		E329D64213F3668D00AFCC3E /* Players */ = {
+			isa = PBXGroup;
+			children = (
+				E329D64413F3669C00AFCC3E /* PlexMediaServerPlayer.cpp */,
+				E329D64513F3669C00AFCC3E /* PlexMediaServerPlayer.h */,
+			);
+			name = Players;
 			sourceTree = "<group>";
 		};
 		E37D5CB40D3023BB0081D327 /* osx */ = {
@@ -7023,6 +7046,9 @@
 				7485ADC51359EB8500E663B5 /* Base64.cpp in Sources */,
 				E31A8E021357B44800EEB013 /* PlexUtils.cpp in Sources */,
 				E3D01F381361779300EBD00D /* PlexContentWorker.cpp in Sources */,
+				E329D64613F3669C00AFCC3E /* PlexMediaServerPlayer.cpp in Sources */,
+				E3EF679F13FBA34F00843A59 /* hmac_sha2.c in Sources */,
+				E3EF67A613FBA3D900843A59 /* sha2.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

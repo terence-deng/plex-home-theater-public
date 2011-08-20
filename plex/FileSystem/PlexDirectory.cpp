@@ -42,6 +42,8 @@ using namespace XFILE;
 
 bool Cocoa_IsHostLocal(const string& host);
 
+CFileItemListPtr CPlexDirectory::g_filterList;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CPlexDirectory::CPlexDirectory(bool parseResults, bool displayDialog)
   : m_bStop(false)
@@ -62,6 +64,34 @@ CPlexDirectory::~CPlexDirectory()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items)
+{
+  // Get the directory.
+  bool ret = CPlexDirectory::ReallyGetDirectory(strPath, items);
+  
+  // See if it's an intermediate filter directory.
+  if (false && items.GetContent() == "secondary")
+  {
+    printf("Found a filter directory on %s\n", strPath.c_str());
+    
+    // And request the first item in the list (for now).
+    CFileItemPtr firstItem = items.Get(0);
+    if (firstItem)
+    {
+      // We'll save the filter.
+      g_filterList = CFileItemListPtr(new CFileItemList());
+      g_filterList->Assign(items);
+      items.Clear();
+      
+      // Get the filtered directory.
+      ret = CPlexDirectory::ReallyGetDirectory(firstItem->m_strPath, items);
+    }      
+  }
+  
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool CPlexDirectory::ReallyGetDirectory(const CStdString& strPath, CFileItemList &items)
 {
   CStdString strRoot = strPath;
   if (CUtil::HasSlashAtEnd(strRoot) && strRoot != "plex://")
@@ -113,6 +143,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
 
   // Wait for the thread to exit.
   WaitForThreadExit(INFINITE);
+  StopThread();
 
   // See if we suceeded.
   if (m_bSuccess == false)
@@ -227,7 +258,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
     {
       pItem->SetQuickFanart(strFanart);
 
-      if (strFanart.find("32400/:/resources") != string::npos)
+      if (strFanart.find("/:/resources") != string::npos)
         pItem->SetProperty("fanart_fallback", "1");
     }
 
@@ -386,9 +417,14 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   CStdString encodedUrl = imageURL;
   CURL mediaUrl(encodedUrl);
 
-  // If it's local, don't use the Bonjour host.
-  if (local)
-    mediaUrl.SetHostName("127.0.0.1");
+  CStdString token;
+  map<CStdString, CStdString> options = mediaUrl.GetOptionsAsMap();
+  if (options.find("X-Plex-Token") != options.end())
+    token = "&X-Plex-Token=" + options["X-Plex-Token"];
+
+  // We can safely assume it will always be local with respect to the server we're hitting.
+  mediaUrl.SetHostName("127.0.0.1");
+  mediaUrl.SetPort(32400);
 
   encodedUrl = mediaUrl.Get();
   CUtil::URLEncode(encodedUrl);
@@ -409,10 +445,15 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   }
 
   CURL url(parentURL);
-  url.SetProtocol("http");
-  url.SetPort(32400);
+  
+  if (url.GetProtocol() == "plex")
+  {
+    url.SetProtocol("http");
+    url.SetPort(32400);
+  }
+  
   url.SetOptions("");
-  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl);
+  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl + token);
   return url.Get();
 }
 
@@ -639,7 +680,11 @@ class PlexMediaNode
        if (baseURL.empty() == false && version.empty() == false)
        {
          CURL theURL(baseURL);
+         if (boost::ends_with(theURL.GetFileName(), "/") == false)
+           theURL.SetFileName(theURL.GetFileName() + "/");
+           
          theURL.SetFileName(theURL.GetFileName() + attr + "/" + encodedValue);
+         
          if (theURL.GetOptions().empty())
            theURL.SetOptions("?t=" + version);
          else
@@ -848,11 +893,15 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         int id = boost::lexical_cast<int>(stream->Attribute("id"));
         int streamType = boost::lexical_cast<int>(stream->Attribute("streamType"));
         int index = -1;
+        int subIndex = -1;
         bool selected = false;
 
         if (stream->Attribute("index"))
           index = boost::lexical_cast<int>(stream->Attribute("index"));
 
+        if (stream->Attribute("subIndex"))
+          subIndex = boost::lexical_cast<int>(stream->Attribute("subIndex"));
+        
         if (stream->Attribute("selected") && strcmp(stream->Attribute("selected"), "1") == 0)
           selected = true;
 
@@ -868,7 +917,7 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         if (stream->Attribute("codec"))
           codec = stream->Attribute("codec");
 
-        MediaStreamPtr mediaStream(new MediaStream(id, key, streamType, codec, index, selected, language));
+        MediaStreamPtr mediaStream(new MediaStream(id, key, streamType, codec, index, subIndex, selected, language));
         mediaPart->mediaStreams.push_back(mediaStream);
       }
     }
@@ -1636,36 +1685,43 @@ void CPlexDirectory::Process()
 {
   CURL url(m_url);
   CStdString protocol = url.GetProtocol();
-  url.SetProtocol("http");
-  url.SetPort(32400);
+  
+  if (url.GetProtocol() == "plex")
+  {
+    url.SetProtocol("http");
+    url.SetPort(32400);
+  }
 
   // Set request headers.
 #ifdef __APPLE__
   m_http.SetRequestHeader("X-Plex-Version", Cocoa_GetAppVersion());
 #pragma warning FIX platform specific code.
-  m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); //FIXME
+  // Only send headers if we're NOT going to the node.
+  if (url.Get().find("http://node.plexapp.com") == -1 && url.Get().find("http://nodedev.plexapp.com") == -1)
+    m_http.SetRequestHeader("X-Plex-Language", Cocoa_GetLanguage()); //FIXME
   m_http.SetRequestHeader("X-Plex-Client-Platform", "MacOSX");
 #elif defined (_WIN32)
   m_http.SetRequestHeader("X-Plex-Client-Platform", "Windows");
 #endif
-
+  
   // Build an audio codecs description.
 #ifdef _WIN32
   CStdString protocols = "protocols=shoutcast,http-video;audioDecoders=mp3,aac";
 #else
   CStdString protocols = "protocols=shoutcast,webkit,http-video;audioDecoders=mp3,aac";
 #endif
-
+  
   if (AUDIO_IS_BITSTREAM(g_guiSettings.GetInt("audiooutput.mode")))
   {
     if (g_guiSettings.GetBool("audiooutput.dtspassthrough"))
       protocols += ",dts{bitrate:800000&channels:8}";
-
+    
     if (g_guiSettings.GetBool("audiooutput.ac3passthrough"))
       protocols += ",ac3{bitrate:800000&channels:8}";
   }
-
+  
   m_http.SetRequestHeader("X-Plex-Client-Capabilities", protocols);
+  m_http.UseOldHttpVersion(true);
   m_http.SetTimeout(m_timeout);
   
   if (m_body.empty() == false)
@@ -1731,8 +1787,11 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
   // Files use plain HTTP.
   if (isDirectory == false)
   {
-    theURL.SetProtocol("http");
-    theURL.SetPort(32400);
+    if (theURL.GetProtocol() == "plex")
+    {
+      theURL.SetProtocol("http");
+      theURL.SetPort(32400);
+    }
   }
 
   if (url.find("://") != string::npos)

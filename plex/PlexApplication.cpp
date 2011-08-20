@@ -48,12 +48,11 @@ bool PlexApplication::OnMessage(CGUIMessage& message)
     }
     case GUI_MSG_BG_MUSIC_SETTINGS_UPDATED:
     {
-      m_bgMusicPlayer->SyncSettings();
       return true;
     }
     case GUI_MSG_BG_MUSIC_THEME_UPDATED:
     {
-	  m_bgMusicPlayer->SetTheme(message.GetStringParam());
+      m_bgMusicPlayer->SetTheme(message.GetStringParam());
       return true;
     }
   }

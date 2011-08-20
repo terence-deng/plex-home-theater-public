@@ -75,6 +75,7 @@ public:
       case EPC_DVDPLAYER: pPlayer = new CDVDPlayer(callback); break;
       case EPC_PAPLAYER: pPlayer = new PAPlayer(callback); break;
       case EPC_EXTPLAYER: pPlayer = new CExternalPlayer(callback); break;
+      case EPC_PMSPLAYER: pPlayer = new CPlexMediaServerPlayer(callback); break;
       default: return NULL;
     }
 

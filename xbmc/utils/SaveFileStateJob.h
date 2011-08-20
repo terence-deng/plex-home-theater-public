@@ -52,25 +52,21 @@ bool CSaveFileStateJob::DoWork()
             
             PlexMediaServerQueue::Get().onViewed(boost::make_shared<CFileItem>(m_item), true);
           }
-          else
-            ;//videodatabase.UpdateLastPlayed(m_item);
 
           if (m_bookmark.timeInSeconds < 0.0f)
           {
             PlexMediaServerQueue::Get().onClearPlayingProgress(boost::make_shared<CFileItem>(m_item));
-            //videodatabase.ClearBookMarksOfFile(progressTrackingFile, CBookmark::RESUME);
           }
           else if (m_bookmark.timeInSeconds > 0.0f)
           {
             PlexMediaServerQueue::Get().onPlayingProgress(boost::make_shared<CFileItem>(m_item), m_bookmark.timeInSeconds*1000, "stopped");
             m_item.SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
-            //videodatabase.AddBookMarkToFile(progressTrackingFile, m_bookmark, CBookmark::RESUME);
           }
         }
 
         if (g_settings.m_currentVideoSettings != g_settings.m_defaultVideoSettings)
         {
-          videodatabase.SetVideoSettings(progressTrackingFile, g_settings.m_currentVideoSettings);
+          //videodatabase.SetVideoSettings(progressTrackingFile, g_settings.m_currentVideoSettings);
         }
 
         if ((m_item.IsDVDImage() ||
@@ -78,7 +74,7 @@ bool CSaveFileStateJob::DoWork()
              m_item.HasVideoInfoTag() &&
              m_item.GetVideoInfoTag()->HasStreamDetails())
         {
-          videodatabase.SetStreamDetailsForFile(m_item.GetVideoInfoTag()->m_streamDetails,progressTrackingFile);
+          //videodatabase.SetStreamDetailsForFile(m_item.GetVideoInfoTag()->m_streamDetails,progressTrackingFile);
           updateListing = true;
         }
         videodatabase.Close();

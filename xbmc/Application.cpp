@@ -276,6 +276,7 @@
 #endif
 
 #include "plex/PlexApplication.h"
+#include "PlexMediaServerPlayer.h"
 
 using namespace std;
 using namespace ADDON;
@@ -392,10 +393,16 @@ bool CApplication::OnEvent(XBMC_Event& newEvent)
       if (!g_application.m_bInitializing &&
           !g_advancedSettings.m_fullScreen)
       {
-        g_Windowing.SetWindowResolution(newEvent.resize.w, newEvent.resize.h);
+        int width = newEvent.resize.w;
+        int height = newEvent.resize.h;
+        
+        // Maintain 16:9 AR.
+        height = width * 9 / 16;
+        
+        g_Windowing.SetWindowResolution(width, height);
         g_graphicsContext.SetVideoResolution(RES_WINDOW, true);
-        g_guiSettings.SetInt("window.width", newEvent.resize.w);
-        g_guiSettings.SetInt("window.height", newEvent.resize.h);
+        g_guiSettings.SetInt("window.width", width);
+        g_guiSettings.SetInt("window.height", height);
         g_settings.Save();
       }
       break;
@@ -4978,6 +4985,34 @@ void CApplication::CheckDelayedPlayerRestart()
     m_restartPlayerTimer.Reset();
     Restart(true);
   }
+}
+
+void CApplication::RestartWithNewPlayer(CDlgCache* cacheDlg, const CStdString& newURL)
+{
+  CFileItem newFile(newURL, false);
+  newFile.SetLabel(m_itemCurrentFile->GetLabel());
+  *m_itemCurrentFile = newFile;
+  
+  // We're moving to a new player, so whack the old one.
+  delete m_pPlayer;
+  m_pPlayer = 0;
+  
+  // Create the new player.
+  PLAYERCOREID eNewCore = CPlayerCoreFactory::GetDefaultPlayer(newFile);
+  m_eCurrentPlayer = eNewCore;
+  m_pPlayer = CPlayerCoreFactory::CreatePlayer(eNewCore, *this);
+  
+  // See if we're passing along the cache dialog.
+  if (cacheDlg)
+  {
+    if (eNewCore == EPC_PMSPLAYER)
+      ((CPlexMediaServerPlayer* )m_pPlayer)->SetCacheDialog(cacheDlg);
+    else
+      cacheDlg->Close();
+  }
+  
+  PlayMedia(*m_itemCurrentFile, PLAYLIST_VIDEO);
+  //PlayFile(*m_itemCurrentFile, false);
 }
 
 void CApplication::Restart(bool bSamePosition)

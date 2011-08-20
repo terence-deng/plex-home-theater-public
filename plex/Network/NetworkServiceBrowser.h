@@ -80,7 +80,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
   /// Handle network change.
   virtual void handleNetworkChange(const vector<NetworkInterface>& interfaces)
   {
-    dprintf("Network change for browser, closing %d browse sockets.", m_sockets.size());
+    dprintf("Network change for browser, closing %d browse sockets (%d interfaces)", m_sockets.size(), interfaces.size());
 
     // Close the old one.
     BOOST_FOREACH(udp_socket_ptr socket, m_sockets)
@@ -102,7 +102,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
     BOOST_FOREACH(const NetworkInterface& xface, interfaces)
     {
       // Don't add virtual interfaces.
-      if (xface.name()[0] != 'v')
+      if (xface.name()[0] != 'v' && boost::starts_with(xface.address(), "169.254.") == false)
       {
         dprintf("NetworkService: Browsing on interface %s.", xface.address().c_str());
         

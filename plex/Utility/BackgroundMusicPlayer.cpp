@@ -18,7 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 BackgroundMusicPlayerPtr BackgroundMusicPlayer::Create()
 {
-  return BackgroundMusicPlayerPtr( new BackgroundMusicPlayer() );
+  return BackgroundMusicPlayerPtr(new BackgroundMusicPlayer());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,22 +35,12 @@ BackgroundMusicPlayer::BackgroundMusicPlayer()
   m_globalVolume = 100;
   m_player.reset(CPlayerCoreFactory::CreatePlayer(EPC_DVDPLAYER, *this));
   m_player->RegisterAudioCallback(this);
-  SyncSettings();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 BackgroundMusicPlayer::~BackgroundMusicPlayer()
 {
   m_player->UnRegisterAudioCallback();
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void BackgroundMusicPlayer::SyncSettings()
-{
-  CLog::Log(LOGDEBUG,"Updating background music settings");
-  
-  m_isEnabled = g_guiSettings.GetBool("backgroundmusic.thememusicenabled");
-  m_volume = g_guiSettings.GetInt("backgroundmusic.bgmusicvolume");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,12 +52,17 @@ void BackgroundMusicPlayer::SetGlobalVolumeAsPercent(int volume)
 ////////////////////////////////////////////////////////////////////////////////
 void BackgroundMusicPlayer::SetTheme(const CStdString& theme)
 {
-  if (m_theme.Equals(theme))
+  // Disabled?
+  if (g_guiSettings.GetBool("backgroundmusic.thememusicenabled") == false)
     return;
   
-  m_theme = theme;
-  
+  // Same theme?
+  if (m_theme.Equals(theme))
+    return;
+
+  // Play the new theme.
   CLog::Log(LOGDEBUG,"Background music theme changed to: %s", theme.c_str());
+  m_theme = theme;
   PlayCurrentTheme();
 }
 
@@ -83,6 +78,8 @@ void BackgroundMusicPlayer::PlayCurrentTheme()
 ////////////////////////////////////////////////////////////////////////////////
 void BackgroundMusicPlayer::OnInitialize(int iChannels, int iSamplesPerSec, int iBitsPerSample)
 {
-  long volume = VOLUME_MINIMUM * ((100.0f - m_volume) / 100.0f); // FIX: volume is measured in db so using a percentage here is wrong.
-  m_player->SetVolume(volume);
+  int volPercent = g_guiSettings.GetInt("backgroundmusic.bgmusicvolume");
+  int volDB = (int)(20.0 * log((float)volPercent/100.0));
+  
+  m_player->SetVolume(volDB);
 }

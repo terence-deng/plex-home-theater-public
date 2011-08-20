@@ -156,6 +156,8 @@ public:
   virtual bool Supports(EINTERLACEMETHOD method);
   virtual bool Supports(ESCALINGMETHOD method);
 
+  virtual void SetRGB32Image(const char *image, int nHeight, int nWidth, int nPitch);
+  
 protected:
   virtual void Render(DWORD flags, int renderBuffer);
 
@@ -291,7 +293,8 @@ protected:
   DllSwScale  *m_dllSwScale;
   BYTE        *m_rgbBuffer;  // if software scale is used, this will hold the result image
   unsigned int m_rgbBufferSize;
-
+  bool         m_bRGBImageSet;
+  
   HANDLE m_eventTexturesDone[NUM_BUFFERS];
 
   void BindPbo(YUVBUFFER& buff);

@@ -20,6 +20,7 @@
  */
 
 #include "GUIMediaWindow.h"
+#include "HTTP.h"
 #include "GUIUserMessages.h"
 #include "Util.h"
 #include "PlayListPlayer.h"
@@ -35,7 +36,9 @@
 #include "PartyModeManager.h"
 #include "GUIDialogMediaSource.h"
 #include "GUIWindowFileManager.h"
+#include "GUIDialogYesNo.h"
 #include "Favourites.h"
+#include "DirectoryCache.h"
 #include "utils/LabelFormatter.h"
 #include "GUIDialogProgress.h"
 #include "AdvancedSettings.h"
@@ -354,6 +357,17 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
           OnFilterItems("");
         return true;
       }
+      else if (iControl == CONTENT_LIST_FILTERS)
+      {
+        // See what filter was selected and execute it.
+        CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(CONTENT_LIST_FILTERS);
+        
+        int selected = control->GetSelectedItem();
+        CFileItemPtr filterItem = CPlexDirectory::GetFilterList()->Get(selected);
+        
+        printf("Selected: %s (%s)\n", filterItem->GetLabel().c_str(), filterItem->m_strPath.c_str());
+        Update(filterItem->m_strPath);
+      }
       else if (m_viewControl.HasControl(iControl))  // list/thumb control
       {
         int iItem = m_viewControl.GetSelectedItem();
@@ -659,8 +673,8 @@ void CGUIMediaWindow::ClearFileItems()
 // \brief Sorts Fileitems based on the sort method and sort oder provided by guiViewState
 void CGUIMediaWindow::SortItems(CFileItemList &items)
 {
+#if 0
   auto_ptr<CGUIViewState> guiState(CGUIViewState::GetViewState(GetID(), items));
-
   if (guiState.get())
   {
     items.Sort(guiState->GetSortMethod(), guiState->GetDisplaySortOrder());
@@ -669,6 +683,7 @@ void CGUIMediaWindow::SortItems(CFileItemList &items)
     if (items.CacheToDiscAlways())
       items.Save(GetID());
   }
+#endif
 }
 
 // \brief Formats item labels based on the formatting provided by guiViewState
@@ -960,6 +975,15 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
   if (m_vecItems->IsVirtualDirectoryRoot())
     m_vecItems->SetContent("plugins");
 
+  // Last, but not least, make sure the filter list is bound.
+  CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(CONTENT_LIST_FILTERS);
+  if (control && CPlexDirectory::GetFilterList()->Size() > 0)
+  {
+    // Bind the list.
+    CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), CONTENT_LIST_FILTERS, 0, 0, CPlexDirectory::GetFilterList().get());
+    OnMessage(msg);
+  }
+  
   return true;
 }
 
@@ -1028,32 +1052,6 @@ bool CGUIMediaWindow::OnClick(int iItem)
   {
     OnContextButton(0, CONTEXT_BUTTON_ADD_SOURCE);
     return true;
-  }
-
-  if (!pItem->m_bIsFolder && pItem->IsFileFolder())
-  {
-    XFILE::IFileDirectory *pFileDirectory = NULL;
-    pFileDirectory = XFILE::CFactoryFileDirectory::Create(pItem->m_strPath, pItem.get(), "");
-    if(pFileDirectory)
-      pItem->m_bIsFolder = true;
-    else if(pItem->m_bIsFolder)
-      pItem->m_bIsFolder = false;
-    delete pFileDirectory;
-  }
-
-  CURL url(pItem->m_strPath);
-  if (url.GetProtocol() == "script")
-  {
-    // execute the script
-    AddonPtr addon;
-    if (CAddonMgr::Get().GetAddon(url.GetHostName(), addon))
-    {
-#ifdef HAS_PYTHON
-      if (!g_pythonParser.StopScript(addon->LibPath()))
-        g_pythonParser.evalFile(addon->LibPath());
-#endif
-      return true;
-    }
   }
 
   if (pItem->m_bIsFolder)
@@ -1523,18 +1521,29 @@ void CGUIMediaWindow::OnDeleteItem(int iItem)
   if ( iItem < 0 || iItem >= m_vecItems->Size()) return;
   CFileItemPtr item = m_vecItems->Get(iItem);
 
-  if (item->IsPlayList())
-    item->m_bIsFolder = false;
-
-  if (g_settings.GetCurrentProfile().getLockMode() != LOCK_MODE_EVERYONE && g_settings.GetCurrentProfile().filesLocked())
-    if (!g_passwordManager.IsMasterLockUnlocked(true))
-      return;
-
-  if (!CFileUtils::DeleteItem(item))
+  // Confirm.
+  if (!CGUIDialogYesNo::ShowAndGetInput(122, 125, 0, 0))
     return;
-  m_vecItems->RemoveDiscCache(GetID());
-  Update(m_vecItems->m_strPath);
-  m_viewControl.SetSelectedItem(iItem);
+  
+  // Delete.
+  CHTTP set;
+  CStdString strData;
+  int status = set.Open(item->GetProperty("key"), "DELETE", 0);
+  set.ReadData(strData);
+  set.Close();
+  
+  if (status >= 400)
+  {
+    // Show error.
+    CGUIDialogOK::ShowAndGetInput(257, 16205, 0, 0);
+  }
+  else
+  {
+    // Refresh.
+    g_directoryCache.ClearDirectory(m_vecItems->m_strPath);
+    Update(m_vecItems->m_strPath);
+    m_viewControl.SetSelectedItem(iItem);
+  }
 }
 
 void CGUIMediaWindow::OnRenameItem(int iItem)
@@ -1621,6 +1630,13 @@ void CGUIMediaWindow::GetContextButtons(int itemNumber, CContextButtons &buttons
   if (item->HasProperty("ratingKey") && item->HasProperty("pluginIdentifier"))
     buttons.Add(CONTEXT_BUTTON_RATING, item->HasProperty("userRating") ? 40206 : 40205);
 
+  if (item->IsPlexMediaServerLibrary() && 
+      (item->GetProperty("type") == "episode" || item->GetProperty("type") == "movie" || 
+       item->GetProperty("type") == "track"   || item->GetProperty("type") == "photo"))
+  {
+    buttons.Add(CONTEXT_BUTTON_DELETE, 15015);
+  }
+  
   // user added buttons
   CStdString label;
   CStdString action;
@@ -1636,30 +1652,12 @@ void CGUIMediaWindow::GetContextButtons(int itemNumber, CContextButtons &buttons
 
     buttons.Add((CONTEXT_BUTTON)i, item->GetProperty(label));
   }
-
-  if (item->GetPropertyBOOL("pluginreplacecontextitems"))
-    return;
-
-  // TODO: FAVOURITES Conditions on masterlock and localisation
-  if (!item->IsParentFolder() && !item->m_strPath.Equals("add") && !item->m_strPath.Equals("newplaylist://") && !item->m_strPath.Left(19).Equals("newsmartplaylist://"))
-  {
-    if (CFavourites::IsFavourite(item.get(), GetID()))
-      buttons.Add(CONTEXT_BUTTON_ADD_FAVOURITE, 14077);     // Remove Favourite
-    else
-      buttons.Add(CONTEXT_BUTTON_ADD_FAVOURITE, 14076);     // Add To Favourites;
-  }
 }
 
 bool CGUIMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 {
   switch (button)
   {
-  case CONTEXT_BUTTON_ADD_FAVOURITE:
-    {
-      CFileItemPtr item = m_vecItems->Get(itemNumber);
-      CFavourites::AddOrRemove(item.get(), GetID());
-      return true;
-    }
   case CONTEXT_BUTTON_PLUGIN_SETTINGS:
     {
       CURL plugin(m_vecItems->Get(itemNumber)->m_strPath);
@@ -1669,6 +1667,11 @@ bool CGUIMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
           Update(m_vecItems->m_strPath);
       return true;
     }
+  case CONTEXT_BUTTON_DELETE:
+  {
+    OnDeleteItem(itemNumber);
+    return true;
+  }
   case CONTEXT_BUTTON_RATING:
   {
     CFileItemPtr item = m_vecItems->Get(itemNumber);

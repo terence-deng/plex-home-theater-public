@@ -83,6 +83,16 @@ public:
       return m_pRenderer->DrawSlice(src, stride, w, h, x, y);
     return 0;
   }
+  
+  inline void SetRGB32Image(const char *image, int nHeight, int nWidth, int nPitch)
+  {
+    if (!image)
+      return;
+    
+    CSharedLock lock(m_sharedSection);
+    if (m_pRenderer)
+      m_pRenderer->SetRGB32Image(image, nHeight, nWidth, nPitch);    
+  } 
 
   void FlipPage(volatile bool& bStop, double timestamp = 0.0, int source = -1, EFIELDSYNC sync = FS_NONE);
   unsigned int PreInit();

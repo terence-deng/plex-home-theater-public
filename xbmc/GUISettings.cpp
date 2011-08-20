@@ -556,6 +556,28 @@ void CGUISettings::Initialize()
   AddString(NULL, "videolibrary.export", 647, "", BUTTON_CONTROL_STANDARD);
   AddString(NULL, "videolibrary.import", 648, "", BUTTON_CONTROL_STANDARD);
 
+  // Videos > General
+  CSettingsCategory* vgen = AddCategory(5, "videogeneral", 128);
+  
+  //   -> Allow picking alternatemedia.
+  AddBool(vgen, "videogeneral.alternatemedia", 13148, true);
+  
+  //   -> Online media default quality.
+  map<int,int> quality;
+  quality.insert(make_pair(13181,MEDIA_QUALITY_ALWAYS_ASK));
+  quality.insert(make_pair(13182,MEDIA_QUALITY_1080P));
+  quality.insert(make_pair(13183,MEDIA_QUALITY_720P));
+  quality.insert(make_pair(13184,MEDIA_QUALITY_480P));
+  quality.insert(make_pair(13185,MEDIA_QUALITY_SD));
+  AddInt(vgen, "videogeneral.onlinemediaquality", 13180, MEDIA_QUALITY_ALWAYS_ASK, quality, SPIN_CONTROL_TEXT);
+  
+  //   -> Remote Plex library quality.
+  map<int,int> transcodeQualityMap;
+  for (int i=-1; i<=9; i++)
+    transcodeQualityMap.insert(make_pair(43000+i,i));
+  
+  AddInt(vgen, "videogeneral.remoteplexquality", 13149, -1, transcodeQualityMap, SPIN_CONTROL_TEXT);
+  
   CSettingsCategory* vp = AddCategory(5, "videoplayer", 16003);
 
   map<int, int> renderers;
@@ -571,46 +593,50 @@ void CGUISettings::Initialize()
   renderers.insert(make_pair(13418, RENDER_METHOD_GLSL));
   renderers.insert(make_pair(13419, RENDER_METHOD_SOFTWARE));
 #endif
-  AddInt(NULL, "videoplayer.rendermethod", 13415, RENDER_METHOD_AUTO, renderers, SPIN_CONTROL_TEXT);
+  AddInt(0, "videoplayer.rendermethod", 13415, RENDER_METHOD_AUTO, renderers, SPIN_CONTROL_TEXT);
 
 #ifdef HAVE_LIBVDPAU
-  AddBool(NULL, "videoplayer.usevdpau", 13425, true);
+  AddBool(vp, "videoplayer.usevdpau", 13425, true);
 #endif
 #ifdef HAVE_LIBVA
-  AddBool(NULL, "videoplayer.usevaapi", 13426, true);
+  AddBool(vp, "videoplayer.usevaapi", 13426, true);
 #endif
 #ifdef HAS_DX
-  AddBool(NULL, "videoplayer.usedxva2", 13427, false);
+  AddBool(vp, "videoplayer.usedxva2", 13427, false);
 #endif
 #ifdef HAVE_LIBCRYSTALHD
-  AddBool(NULL, "videoplayer.usechd", 13428, true);
+  AddBool(vp, "videoplayer.usechd", 13428, true);
 #endif
 #ifdef HAVE_LIBVDADECODER
-  AddBool(NULL, "videoplayer.usevda", 13429, true);
+  AddBool(vp, "videoplayer.usevda", 13429, true);
 #endif
 #ifdef HAVE_LIBOPENMAX
   AddBool(vp, "videoplayer.useomx", 13430, true);
 #endif
 
 #ifdef HAS_GL
-  AddBool(NULL, "videoplayer.usepbo", 13424, true);
+  AddBool(0, "videoplayer.usepbo", 13424, true);
 #endif
 
   // FIXME: hide this setting until it is properly respected. In the meanwhile, default to AUTO.
   //AddInt(5, "videoplayer.displayresolution", 169, (int)RES_AUTORES, (int)RES_AUTORES, 1, (int)CUSTOM+MAX_RESOLUTIONS, SPIN_CONTROL_TEXT);
   AddInt(NULL, "videoplayer.displayresolution", 169, (int)RES_AUTORES, (int)RES_AUTORES, 1, (int)RES_AUTORES, SPIN_CONTROL_TEXT);
+  
+#if !defined(__APPLE__)
   AddBool(vp, "videoplayer.adjustrefreshrate", 170, false);
+#endif
+  
   //sync settings not available on windows gl build
 #if defined(_WIN32) && defined(HAS_GL)
   #define SYNCSETTINGS 0
 #else
   #define SYNCSETTINGS 1
 #endif
-  AddBool(NULL, "videoplayer.usedisplayasclock", 13510, false);
-  AddInt(NULL, "videoplayer.synctype", 13500, SYNC_RESAMPLE, SYNC_DISCON, 1, SYNC_RESAMPLE, SPIN_CONTROL_TEXT);
-  AddFloat(NULL, "videoplayer.maxspeedadjust", 13504, 5.0f, 0.0f, 0.1f, 10.0f);
-  AddInt(NULL, "videoplayer.resamplequality", 13505, RESAMPLE_MID, RESAMPLE_LOW, 1, RESAMPLE_REALLYHIGH, SPIN_CONTROL_TEXT);
-  AddInt(NULL, "videoplayer.errorinaspect", 22021, 0, 0, 1, 20, SPIN_CONTROL_INT_PLUS, MASK_PERCENT, TEXT_NONE);
+  AddBool(vp, "videoplayer.usedisplayasclock", 13510, false);
+  AddInt(vp, "videoplayer.synctype", 13500, SYNC_RESAMPLE, SYNC_DISCON, 1, SYNC_RESAMPLE, SPIN_CONTROL_TEXT);
+  AddFloat(vp, "videoplayer.maxspeedadjust", 13504, 5.0f, 0.0f, 0.1f, 10.0f);
+  AddInt(vp, "videoplayer.resamplequality", 13505, RESAMPLE_MID, RESAMPLE_LOW, 1, RESAMPLE_REALLYHIGH, SPIN_CONTROL_TEXT);
+  AddInt(vp, "videoplayer.errorinaspect", 22021, 0, 0, 1, 20, SPIN_CONTROL_INT_PLUS, MASK_PERCENT, TEXT_NONE);
 
   map<int,int> stretch;
   stretch.insert(make_pair(630,VIEW_MODE_NORMAL));
@@ -635,16 +661,6 @@ void CGUISettings::Initialize()
   AddSeparator(NULL, "videoplayer.sep5");
   AddBool(NULL, "videoplayer.teletextenabled", 23050, true);
 
-  AddBool(vp, "videoplayer.alternatemedia", 13148, true);
-  
-  map<int,int> quality;
-  quality.insert(make_pair(13181,MEDIA_QUALITY_ALWAYS_ASK));
-  quality.insert(make_pair(13182,MEDIA_QUALITY_1080P));
-  quality.insert(make_pair(13183,MEDIA_QUALITY_720P));
-  quality.insert(make_pair(13184,MEDIA_QUALITY_480P));
-  quality.insert(make_pair(13185,MEDIA_QUALITY_SD));
-  AddInt(vp, "videoplayer.onlinemediaquality", 13180, MEDIA_QUALITY_ALWAYS_ASK, quality, SPIN_CONTROL_TEXT);
-  
   //CSettingsCategory* vid = AddCategory(5, "myvideos", 14081);
   AddInt(NULL, "myvideos.selectaction", 22079, SELECT_ACTION_PLAY_OR_RESUME, SELECT_ACTION_CHOOSE, 1, SELECT_ACTION_INFO, SPIN_CONTROL_TEXT);
   AddBool(NULL, "myvideos.treatstackasfile", 20051, true);
@@ -769,9 +785,9 @@ void CGUISettings::Initialize()
   AddBool(NULL, "filelists.showaddsourcebuttons", 21382,  false);
   AddBool(NULL, "filelists.showhidden", 21330, false);
   
-	CSettingsCategory * rss = AddCategory(7,"rss", 40104);
-	AddBool(rss, "rss.enablerssfeeds",13305,  true);
-	AddBool(rss, "rss.rssfeedsrtl",13412,  false);
+	//CSettingsCategory * rss = AddCategory(7,"rss", 40104);
+	//AddBool(rss, "rss.enablerssfeeds",13305,  true);
+	//AddBool(rss, "rss.rssfeedsrtl",13412,  false);
 
   AddCategory(7, "window", 0);
   AddInt(NULL, "window.width",  0, 1280, 10, 1, INT_MAX, SPIN_CONTROL_INT);

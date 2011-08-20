@@ -26,15 +26,16 @@
 
 using namespace std;
 
-CGUIImage::CGUIImage(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& texture)
+CGUIImage::CGUIImage(int parentID, int controlID, float posX, float posY, float width, float height, const CTextureInfo& texture, float minWidth)
     : CGUIControl(parentID, controlID, posX, posY, width, height)
-    , m_texture(posX, posY, width, height, texture)
+    , m_texture(posX, posY, width, height, texture, minWidth)
 {
   m_crossFadeTime = 0;
   m_currentFadeTime = 0;
   m_lastRenderTime = 0;
   ControlType = GUICONTROL_IMAGE;
   m_bDynamicResourceAlloc=false;
+  m_minWidth = minWidth;
 }
 
 CGUIImage::CGUIImage(const CGUIImage &left)
@@ -47,6 +48,7 @@ CGUIImage::CGUIImage(const CGUIImage &left)
   m_lastRenderTime = 0;
   ControlType = GUICONTROL_IMAGE;
   m_bDynamicResourceAlloc=false;
+  m_minWidth = left.m_minWidth;
 }
 
 CGUIImage::~CGUIImage(void)

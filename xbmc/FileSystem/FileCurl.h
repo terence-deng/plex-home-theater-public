@@ -70,6 +70,7 @@ namespace XFILE
       void SetPostData(CStdString postdata)                      { m_postdata = postdata; }
       void SetReferer(CStdString referer)                        { m_referer = referer; }
       void SetCookie(CStdString cookie)                          { m_cookie = cookie; }
+      void ClearCookies()                                        { m_clearCookies = true; }
       void SetMimeType(CStdString mimetype)                      { SetRequestHeader("Content-Type", m_mimetype); }
       void SetRequestHeader(CStdString header, CStdString value);
       void SetRequestHeader(CStdString header, long value);
@@ -101,6 +102,7 @@ namespace XFILE
           int64_t         m_fileSize;
           int64_t         m_filePos;
           bool            m_bFirstLoop;
+          CStdString      m_strDeadEndUrl;    // If we can't redirect, this holds the last URL.
 
           /* returned http header */
           CHttpHeader m_httpheader;
@@ -153,13 +155,14 @@ namespace XFILE
       bool            m_seekable;
       bool            m_multisession;
       bool            m_skipshout;
+      bool            m_clearCookies;
 
       CRingBuffer     m_buffer;           // our ringhold buffer
       char *          m_overflowBuffer;   // in the rare case we would overflow the above buffer
       unsigned int    m_overflowSize;     // size of the overflow buffer
 
       int             m_stillRunning;     // Is background url fetch still in progress?
-
+      
       struct XCURL::curl_slist* m_curlAliasList;
       struct XCURL::curl_slist* m_curlHeaderList;
 

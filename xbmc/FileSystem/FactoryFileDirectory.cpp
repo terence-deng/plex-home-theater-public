@@ -111,8 +111,9 @@ IFileDirectory* CFactoryFileDirectory::Create(const CStdString& strPath, CFileIt
   }
 #endif
 
-  if (pItem->IsRSS())
-    return new CRSSDirectory();
+  // Really? This results in a stat() on everything, which is damned wasteful.
+  //if (pItem->IsRSS())
+  //  return new CRSSDirectory();
 
 #endif
   if (strExtension.Equals(".zip"))

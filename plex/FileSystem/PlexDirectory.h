@@ -9,6 +9,7 @@
 #include <string>
 
 #include "FileCurl.h"
+#include "FileItem.h"
 #include "IDirectory.h"
 #include "Thread.h"
 #include "SortFileItem.h"
@@ -50,12 +51,15 @@ class CPlexDirectory : public IDirectory,
   static std::string ProcessMediaElement(const std::string& parentPath, const char* mediaURL, int maxAge, bool local);
   static std::string BuildImageURL(const std::string& parentURL, const std::string& imageURL, bool local);
   
+  static CFileItemListPtr GetFilterList() { return g_filterList; }
+  
  protected:
   
   virtual void Process();
   virtual void OnExit();
   virtual void StopThread();
   
+  bool ReallyGetDirectory(const CStdString& strPath, CFileItemList &items);
   void Parse(const CURL& url, TiXmlElement* root, CFileItemList &items, std::string& strFileLabel, std::string& strSecondFileLabel, std::string& strDirLabel, std::string& strSecondDirLabel, bool isLocal);
   void ParseTags(TiXmlElement* element, const CFileItemPtr& item, const std::string& name);
   
@@ -70,5 +74,7 @@ class CPlexDirectory : public IDirectory,
   int        m_timeout;
   CFileCurl  m_http;
   DIR_CACHE_TYPE m_dirCacheType;
+  
+  static CFileItemListPtr g_filterList;
 };
 

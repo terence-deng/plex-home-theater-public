@@ -50,22 +50,25 @@ private:
   virtual bool OnMessage(CGUIMessage& message);
   virtual bool OnPopupMenu();
   virtual bool CheckTimer(const CStdString& strExisting, const CStdString& strNew, int title, int line1, int line2);
-  virtual void UpdateContentForSelectedItem(int itemID);
+  virtual void UpdateContentForSelectedItem(const std::string& key);
   virtual void Render();
   void HideAllLists();
   virtual void SaveStateBeforePlay(CGUIBaseContainer* container);
 
-  int m_lastSelectedItem;
-  int m_lastSelectedID;
+  bool SaveSelectedMenuItem();
+  void RestoreSelectedMenuItem();
+  int  LookupIDFromKey(const std::string& key);
   
-  int m_pendingSelectID;
+  std::string m_lastSelectedItemKey;
+  std::string m_pendingSelectItemKey;
+  
   CStopWatch m_contentLoadTimer;
   
   std::map<int, std::string> m_idToSectionUrlMap;
   std::map<int, int>         m_idToSectionTypeMap;
   std::map<int, Group>       m_contentLists;
   int                        m_selectedContainerID;
-  int                        m_selectedItem;
+  bool                       m_globalArt;
   
   PlexContentWorkerManager*  m_workerManager;
 };

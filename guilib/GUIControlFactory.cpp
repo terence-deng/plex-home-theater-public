@@ -1168,6 +1168,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   }
   else if (type == CGUIControl::GUICONTROL_RSS)
   {
+#if 0
     control = new CGUIRSSControl(
       parentID, id, posX, posY, width, height,
       labelInfo, textColor3, labelInfo2.textColor, strRSSTags);
@@ -1180,6 +1181,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     }
     else
       CLog::Log(LOGERROR,"invalid rss url set referenced in skin");
+#endif
   }
   else if (type == CGUIControl::GUICONTROL_BUTTON)
   {
@@ -1308,10 +1310,10 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     // use a bordered texture if we have <bordersize> or <bordertexture> specified.
     if (borderTexture.filename.IsEmpty() && borderStr.IsEmpty())
       control = new CGUIImage(
-        parentID, id, posX, posY, width, height, texture);
+        parentID, id, posX, posY, width, height, texture, minWidth);
     else
       control = new CGUIBorderedImage(
-        parentID, id, posX, posY, width, height, texture, borderTexture, borderSize);
+        parentID, id, posX, posY, width, height, texture, borderTexture, borderSize, minWidth);
 #ifdef PRE_SKIN_VERSION_9_10_COMPATIBILITY
     if (insideContainer && textureFile.IsConstant())
       aspect.ratio = CAspectRatio::AR_STRETCH;

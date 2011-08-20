@@ -75,6 +75,9 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/thread.hpp>
 
+#include "hmac_sha2.h"
+#include "Base64.h"
+
 using namespace std;
 
 void CSelectionStreams::Clear(StreamType type, StreamSource source)
@@ -291,7 +294,8 @@ CDVDPlayer::CDVDPlayer(IPlayerCallback& callback)
       m_dvdPlayerSubtitle(&m_overlayContainer),
       m_dvdPlayerTeletext(),
       m_ready(true),
-      m_hidingSub(false)
+      m_hidingSub(false),
+      m_vobsubToDisplay(-1)
 {
   m_pDemuxer = NULL;
   m_pSubtitleDemuxer = NULL;
@@ -469,26 +473,64 @@ bool CDVDPlayer::OpenInputStream()
   {
     MediaPartPtr part = GetMediaPart();
     if (part)
-    {          
+    {
+      MediaStreamPtr lastIdxStream;
+      int            lastIdxSource = -1;
+      
       BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
       {
         if (stream->streamType == PLEX_STREAM_SUBTITLE && stream->index == -1)
         {
           SelectionStream s;
-          s.source   = m_SelectionStreams.Source(STREAM_SOURCE_TEXT, stream->key);
           s.type     = STREAM_SUBTITLE;
-          s.id       = stream->id;
-          s.plexID   = stream->id; 
-          s.language = stream->language;
+          s.id       = stream->subIndex >= 0 ? stream->subIndex : stream->id;
+          s.plexID   = stream->id;
           s.filename = stream->key;
           s.name     = stream->language;
           
-          // Cache the subtitle locally.
-          CStdString path = "z:\\subtitle.plex." + boost::lexical_cast<string>(stream->id) + "." + stream->codec;
-          if (CFile::Cache(stream->key, path))
+          if (stream->codec == "idx")
+          {
+            // All IDX streams have the same source.
+            if (lastIdxStream)
+              s.source = lastIdxSource;
+            else
+              s.source = m_SelectionStreams.Source(STREAM_SOURCE_DEMUX_SUB, stream->key);
+          }
+          else
+          {
+            // New file, new source.
+            s.source = m_SelectionStreams.Source(STREAM_SOURCE_TEXT, stream->key);
+          }
+          
+          // Cache the subtitle locally. Since multiple streams can be served out of a single file,
+          // let's not download it multiple times, one for each stream.
+          //
+          MediaStreamPtr idxStream = stream;
+          if (lastIdxStream)
+            idxStream = lastIdxStream;
+          
+          CStdString path = "special://temp/subtitle.plex." + boost::lexical_cast<string>(idxStream->id) + "." + stream->codec;
+          CLog::Log(LOGINFO, "Considering caching Plex subtitle locally for stream %d (codec: %s) to %s (exists: %d)", stream->id, stream->codec.c_str(), path.c_str(), CFile::Exists(path));
+          
+          if (CFile::Exists(path) || CFile::Cache(stream->key, path))
           {
             s.filename = path;
             m_SelectionStreams.Update(s);  
+          }
+          
+          // If it's an IDX, we need to cache the SUB file as well.
+          if (stream->codec == "idx")
+          {
+            CStdString path = "special://temp/subtitle.plex." + boost::lexical_cast<string>(idxStream->id) + ".sub";
+            if (CFile::Exists(path) == false)
+            {
+              CLog::Log(LOGINFO, "Caching Plex subtitle locally for stream %d to %s", stream->id, path.c_str());
+              CFile::Cache(stream->key + ".sub", path);
+            }
+            
+            // Remember the last IDX stream.
+            lastIdxStream = stream;
+            lastIdxSource = s.source;
           }
         }
       }
@@ -578,38 +620,8 @@ bool CDVDPlayer::OpenDemuxStream()
   }
   
   // Update Plex streams from the demuxer.
-  MediaPartPtr part = GetMediaPart();
-  if (part)
-  {          
-    BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
-    {
-      StreamType type = STREAM_NONE;
-      
-      if (stream->streamType == PLEX_STREAM_SUBTITLE)
-        type = STREAM_SUBTITLE;
-      else if (stream->streamType == PLEX_STREAM_AUDIO)
-        type = STREAM_AUDIO;
-      
-      if (type != STREAM_NONE)
-      {
-        // Look for the right index and set the Plex stream ID.
-        int count = m_SelectionStreams.Count(type);
-        for (int i=0; i<count; i++)
-        {
-          SelectionStream& s = m_SelectionStreams.Get(type, i);
-          if (s.id == stream->index)
-          {
-            s.plexID = stream->id;
-            s.language = stream->language;
-            
-            if (stream->streamType == PLEX_STREAM_SUBTITLE)
-              s.name = stream->language;
-          }
-        }
-      }
-    }
-  }
-
+  RelinkPlexStreams();
+  
   return true;
 }
 
@@ -653,6 +665,8 @@ void CDVDPlayer::OpenDefaultStreams()
     {
       BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
       {
+        CLog::Log(LOGINFO, "Considering Plex stream %d of type %d (selected: %d)", stream->id, stream->streamType, stream->selected);
+        
         // If we've found the selected audio stream...
         if (stream->streamType == PLEX_STREAM_AUDIO && stream->selected)
         {
@@ -702,7 +716,13 @@ void CDVDPlayer::OpenDefaultStreams()
         {
           SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
           if (s.plexID == stream->id && OpenSubtitleStream(s.id, s.source))
+          {
+            // We're going to need to open this later.
+            if (s.source == STREAM_SOURCE_DEMUX_SUB)
+              m_vobsubToDisplay = s.plexID;
+            
             valid = true;
+          }
         }
       }
       
@@ -714,6 +734,9 @@ void CDVDPlayer::OpenDefaultStreams()
     {
       SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, 0);
       OpenSubtitleStream(s.id, s.source);
+      
+      if (s.source == STREAM_SOURCE_DEMUX_SUB)
+        m_vobsubToDisplay = s.plexID;
     }
     
     // Set them on/off based on whether we found one.
@@ -753,6 +776,25 @@ bool CDVDPlayer::ReadPacket(DemuxPacket*& packet, CDemuxStream*& stream)
       {
         m_SelectionStreams.Clear(STREAM_NONE, STREAM_SOURCE_DEMUX_SUB);
         m_SelectionStreams.Update(NULL, m_pSubtitleDemuxer);
+        
+        // Make sure the Plex streams are still linked.
+        RelinkPlexStreams();
+        
+        if (m_vobsubToDisplay != -1)
+        {
+          int count = m_SelectionStreams.Count(STREAM_SUBTITLE);
+          for (int i = 0; i<count; i++)
+          {
+            SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
+            if (s.plexID == m_vobsubToDisplay && OpenSubtitleStream(s.id, s.source))
+            {
+              OpenSubtitleStream(s.id, s.source);
+              break;
+            }
+          }
+          
+          m_vobsubToDisplay = -1;
+        }
       }
       return true;
     }
@@ -828,6 +870,42 @@ bool CDVDPlayer::IsValidStream(CCurrentStream& stream)
   return false;
 }
 
+void CDVDPlayer::RelinkPlexStreams()
+{
+  MediaPartPtr part = GetMediaPart();
+  if (part)
+  {          
+    BOOST_FOREACH(MediaStreamPtr stream, part->mediaStreams)
+    {
+      StreamType type = STREAM_NONE;
+      
+      if (stream->streamType == PLEX_STREAM_SUBTITLE)
+        type = STREAM_SUBTITLE;
+      else if (stream->streamType == PLEX_STREAM_AUDIO)
+        type = STREAM_AUDIO;
+      
+      if (type != STREAM_NONE)
+      {
+        // Look for the right index and set the Plex stream ID.
+        int count = m_SelectionStreams.Count(type);
+        for (int i=0; i<count; i++)
+        {
+          SelectionStream& s = m_SelectionStreams.Get(type, i);
+          
+          if (s.id == stream->index || s.id == stream->subIndex)
+          {
+            s.plexID = stream->id;
+            s.language = stream->language;
+            
+            if (stream->streamType == PLEX_STREAM_SUBTITLE)
+              s.name = stream->language;
+          }
+        }
+      }
+    }
+  }
+}
+
 bool CDVDPlayer::IsBetterStream(CCurrentStream& current, CDemuxStream* stream)
 {
   // Do not reopen non-video streams if we're in video-only mode
@@ -898,7 +976,9 @@ class PlexAsyncUrlResolver
   }
   
   PlexAsyncUrlResolver(const CFileItem& item)
-    : m_item(item) {}
+    : m_item(item)
+    , m_bSuccess(true)
+    , m_bStop(false) {}
   
   bool WaitForCompletion(int ms)
   {
@@ -908,6 +988,11 @@ class PlexAsyncUrlResolver
   CStdString GetFinalPath()
   {
     return m_finalPath;
+  }
+  
+  bool Success()
+  {
+    return m_bSuccess;
   }
   
   void Cancel()
@@ -925,18 +1010,27 @@ class PlexAsyncUrlResolver
     // See if we need to send data to resolve the indirect.
     if (m_item.HasProperty("postURL"))
     {
-      // Go get the page, FIXME, respect headers.
+      // Go get the page, clearing cookies (b/c we want to get all needed ones back in the headers.
+      // FIXME, we should look at postHeaders as well.
+      //
       CFileCurl curl;
-      curl.Get(m_item.GetProperty("postURL"), body);
-      
-      // Get the headers and prepend them to the request.
-      CHttpHeader header = curl.GetHttpHeader();
-      body = header.GetHeaders() + body;
-      
-      // Add the postURL to the request.
-      CStdString param = m_item.GetProperty("postURL");
-      CUtil::URLEncode(param);
-      url = url + "&postURL=" + param;
+      curl.ClearCookies();
+      if (curl.Get(m_item.GetProperty("postURL"), body))
+      {
+        // Get the headers and prepend them to the request.
+        CHttpHeader header = curl.GetHttpHeader();
+        body = header.GetHeaders() + body;
+        
+        // Add the postURL to the request.
+        CStdString param = m_item.GetProperty("postURL");
+        CUtil::URLEncode(param);
+        url = url + "&postURL=" + param;
+      }
+      else
+      {
+        m_bSuccess = false;
+        m_bStop = true;
+      }
     }
 
     if (m_bStop == false)
@@ -945,19 +1039,27 @@ class PlexAsyncUrlResolver
       CPlexDirectory plexDir(true, false);
       
       plexDir.SetBody(body);
-      plexDir.GetDirectory(url, fileItems);
-      if (fileItems.Size() == 1)
+      if (plexDir.GetDirectory(url, fileItems))
       {
-        if (m_bStop == false)
+        if (fileItems.Size() == 1)
         {
-          CFileItemPtr finalFile = fileItems.Get(0);
-          g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
-          g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
-          g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
-          
-          // Set the final path, by reference.
-          m_finalPath = finalFile->m_strPath;
+          if (m_bStop == false)
+          {
+            CFileItemPtr finalFile = fileItems.Get(0);
+            printf("Final path: %s\n", finalFile->m_strPath.c_str());
+            
+            g_application.CurrentFileItem().m_strPath = finalFile->m_strPath;
+            g_application.CurrentFileItem().SetProperty("httpCookies", finalFile->GetProperty("httpCookies"));
+            g_application.CurrentFileItem().SetProperty("userAgent", finalFile->GetProperty("userAgent"));
+            
+            // Set the final path, by reference.
+            m_finalPath = finalFile->m_strPath;
+          }
         }
+      }
+      else
+      {
+        m_bSuccess = false;
       }
     }
 
@@ -968,6 +1070,7 @@ class PlexAsyncUrlResolver
  private:
   
   CEvent     m_downloadEvent;
+  bool       m_bSuccess;
   bool       m_bStop;
   CStdString m_finalPath;
   CFileItem  m_item;
@@ -992,7 +1095,7 @@ void CDVDPlayer::Process()
       done = resolver->WaitForCompletion(100);
 
     // If we cancelled, stop it.
-    if (m_bAbortRequest == true)
+    if (m_bAbortRequest == true && resolver->Success() == false)
     {
       resolver->Cancel();
       m_bAbortRequest = true;
@@ -1018,11 +1121,75 @@ void CDVDPlayer::Process()
       // Save it.
       m_itemWithDetails = items[0];
     }
+    
+    // If it's remote, see if we're transcoding.
+    if (m_item.IsRemotePlexMediaServerLibrary() && g_guiSettings.GetInt("videogeneral.remoteplexquality") != -1)
+    {
+      printf("TRANSCODING.\n");
+
+      // Build the media URL.
+      CURL mediaURL(m_filename);
+      mediaURL.SetHostName("127.0.0.1");
+      mediaURL.SetPort(32400);
+      mediaURL.SetOptions("");
+      printf(" -> Media URL: %s\n", mediaURL.Get().c_str());
+      
+      CStdString encodedMediaURL = mediaURL.Get();
+      CUtil::URLEncode(encodedMediaURL);
+      
+      CURL transcodeURL(m_filename);
+      transcodeURL.SetFileName("video/:/transcode/segmented/start.m3u8");
+      
+      CStdString options;
+      options += "?url=" + encodedMediaURL;
+      options += "&quality=" + lexical_cast<string>(g_guiSettings.GetInt("videogeneral.remoteplexquality"));
+      
+      printf(" -> Full URL: %s\n", transcodeURL.Get().c_str());
+      
+      // Sign it with the public key.
+      time_t time = ::time(0);
+      string apiKey = "KQMIY6GATPC63AIMC4R2";
+      string secretKey = CBase64::Decode("k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0=");
+
+      // Compute the message.
+      string message = "/" + transcodeURL.GetFileName() + options;
+      message += "@" + lexical_cast<string>(time);
+      printf("Message: [%s]\n", message.c_str());
+      
+      // Compute the HMAC.
+      unsigned char mac[32];
+      hmac_sha256((unsigned char* )secretKey.c_str(), secretKey.size(), (unsigned char* )message.c_str(), message.size(), mac, 32);
+      string sig = CBase64::Encode((unsigned char *)mac, 32);
+      boost::replace_all(sig, "/", "%2F");
+      boost::replace_all(sig, "=", "%3D");
+
+      options += "&" + transcodeURL.GetOptions().substr(1);
+      options += "&X-Plex-Access-Key=" + apiKey;
+      options += "&X-Plex-Access-Time=" + lexical_cast<string>(time);
+      options += "&X-Plex-Access-Code=" + sig;
+       
+      transcodeURL.SetOptions(options);
+
+      // We need to re-open the file because it's a "playlist"
+      g_application.getApplicationMessenger().RestartWithNewPlayer(0, transcodeURL.Get());
+      m_bFileOpenComplete = true;
+      return;
+    }
   }
   
-  if (!OpenInputStream())
+  try
   {
-    m_bAbortRequest = true;
+    if (!OpenInputStream())
+    {
+      m_bAbortRequest = true;
+      return;
+    }
+  }
+  catch (CRedirectToNewPlayerException* ex)
+  {
+    g_application.getApplicationMessenger().RestartWithNewPlayer(0, ex->m_newURL);
+    delete ex;
+    m_bFileOpenComplete = true;
     return;
   }
 
@@ -1058,7 +1225,7 @@ void CDVDPlayer::Process()
   if (m_CurrentVideo.id >= 0 && m_CurrentVideo.hint.fpsrate > 0 && m_CurrentVideo.hint.fpsscale > 0)
   {
     fFramesPerSecond = (float)m_CurrentVideo.hint.fpsrate / (float)m_CurrentVideo.hint.fpsscale;
-    m_Edl.ReadEditDecisionLists(m_filename, fFramesPerSecond, m_CurrentVideo.hint.height);
+    //m_Edl.ReadEditDecisionLists(m_filename, fFramesPerSecond, m_CurrentVideo.hint.height);
   }
 
   /*
