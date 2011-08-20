@@ -85,6 +85,8 @@ public:
   void SetStaticContent(const std::vector<CGUIListItemPtr> &items);
   
   std::vector<CGUIListItemPtr>& GetStaticItems() { return m_staticItems; };
+  std::vector< CGUIListItemPtr >& GetItems() { return m_items; }
+  
   CGUIListItem* GetLastItem() const { return m_lastItem; }
   void SetLastItem(CGUIListItem* lastItem) { m_lastItem = lastItem; }
   
@@ -119,7 +121,7 @@ protected:
   virtual unsigned int GetNumItems() const { return m_items.size(); };
   virtual int GetCurrentPage() const;
   bool InsideLayout(const CGUIListItemLayout *layout, const CPoint &point) const;
-
+  
   inline float Size() const;
   void MoveToRow(int row);
   void FreeMemory(int keepStart, int keepEnd);
