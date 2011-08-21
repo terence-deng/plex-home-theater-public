@@ -576,12 +576,12 @@
 		<keyboard>
 			<left>SkipPrevious</left>
     	<right>SkipNext</right>
-	<return>Pause</return>
-	<f7>Stop</f7>
-        <f2>Rewind</f2>
-        <f3>FastForward</f3>
-	<f4>VolumeUp</f4>
-        <f5>VolumeDown</f5>
+	    <return>Pause</return>
+	    <f7>Stop</f7>
+      <f2>Rewind</f2>
+      <f3>FastForward</f3>
+	    <f4>VolumeUp</f4>
+      <f5>VolumeDown</f5>
 		</keyboard>
 	</NowPlaying>
 </keymap>
