@@ -23,6 +23,7 @@
 #define __COREAUDIO_RENDERER_H__
 
 #include <osx/CoreAudio.h>
+#include <CoreServices/CoreServices.h>
 #include "IAudioRenderer.h"
 #include <utils/LockFree.h>
 

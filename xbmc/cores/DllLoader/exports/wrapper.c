@@ -461,7 +461,7 @@ int __wrap___printf_chk(int flag, const char *format, ...)
   return res;
 }
 
-int __wrap___vfprintf_chk(FILE* stream, int flag, const char *format, _G_va_list ap)
+int __wrap___vfprintf_chk(FILE* stream, int flag, const char *format, va_list ap)
 {
   return dll_vfprintf(stream, format, ap);
 }
