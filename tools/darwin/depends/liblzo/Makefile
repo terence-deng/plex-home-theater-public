@@ -1,32 +1,34 @@
 include ../Makefile.include
 
 # lib name, version
-LIBNAME=SDL
-VERSION=1.2.14
+LIBNAME=lzo
+VERSION=1.08
 SOURCE=$(LIBNAME)-$(VERSION)
+# download location and format
+BASE_URL=http://mirrors.xbmc.org/build-deps/darwin-libs
 ARCHIVE=$(SOURCE).tar.gz
-BASE_URL=http://www.libsdl.org/release
 
 # configuration settings
-CONFIGURE=./configure --prefix=$(PREFIX) \
-  --without-x --disable-video-x11
+CONFIGURE=./configure --prefix=$(PREFIX) --host=$(HOST) --enable-shared=yes
 
-LIBDYLIB=$(SOURCE)/.libs/$(LIBNAME).dylib
+LIBDYLIB=$(SOURCE)/src/.libs/lib$(LIBNAME).dylib
+
+CLEAN_FILES=$(ARCHIVE) $(SOURCE)
 
 all: $(LIBDYLIB) .installed
 
 $(TARBALLS_LOCATION)/$(ARCHIVE):
 	$(RETRIEVE_TOOL) $(RETRIEVE_TOOL_FLAGS) $(BASE_URL)/$(ARCHIVE)
-	echo $(ARCHIVE) > .gitignore
 
 $(SOURCE): $(TARBALLS_LOCATION)/$(ARCHIVE)
-	rm -rf $(SOURCE)
+	-rm -rf $(SOURCE)
 	$(ARCHIVE_TOOL) $(ARCHIVE_TOOL_FLAGS) $(TARBALLS_LOCATION)/$(ARCHIVE)
 	echo $(SOURCE) > .gitignore
+	cd $(SOURCE); patch -p1 < ../01-liblzo-only-build-lib.patch
 	cd $(SOURCE); $(CONFIGURE)
 
 $(LIBDYLIB): $(SOURCE)
-	make -j $(MAKE_JOBS) -C $(SOURCE)
+	make -C $(SOURCE)
 
 .installed:
 	make -C $(SOURCE) install
@@ -34,7 +36,7 @@ $(LIBDYLIB): $(SOURCE)
 
 clean:
 	make -C $(SOURCE) clean
-	rm -f .installed
+	rm  .installed
 
 distclean::
 	rm -rf $(SOURCE) .installed

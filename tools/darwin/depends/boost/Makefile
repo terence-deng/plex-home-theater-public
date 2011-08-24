@@ -2,10 +2,11 @@ include ../Makefile.include
 include ../config.site.mk
 
 LIBNAME=boost
-VERSION=1_44_0
-LIBVERSION=1.44.0
+VERSION=1_47_0
+LIBVERSION=1.47.0
 SOURCE=$(LIBNAME)_$(VERSION)
 ARCHIVE=$(SOURCE).tar.bz2
+BASE_URL=http://downloads.sourceforge.net/project/boost/boost/1.47.0
 
 all: .installed
 
@@ -19,7 +20,8 @@ $(TARBALLS_LOCATION)/$(ARCHIVE):
 	sed -e "s?@boost_flags@?$(boost_flags)?g" \
             -e "s?@platform_gcc_version@?$(platform_gcc_version)?g" \
             user-config.jam.in >> $(SOURCE)/tools/build/v2/user-config.jam
-	cd $(SOURCE); ./bootstrap.sh --prefix=$(PREFIX) --with-libraries=thread,date_time
+	cd $(SOURCE); echo $(PREFIX) | sed 's/\//\\\\\//g' | xargs -I '%' sed -i '' -e's/-install_name "/-install_name "%\/lib\//' tools/build/v2/tools/darwin.jam
+	cd $(SOURCE); ./bootstrap.sh --prefix=$(PREFIX) --with-libraries=thread,date_time,system
 	cd $(SOURCE); ./bjam --prefix=$(PREFIX) $(bjam_args) install
 	# boost builds .so instead of .dylib for iphone, fix it.
 	if test "$(DARWIN)" = "ios"; then \

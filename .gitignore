@@ -386,6 +386,11 @@ xcuserdata
 /tools/Changelog/Release
 /tools/Changelog/Debug
 
+# /tools/darwin
+/tools/darwin/depends/config.site
+/tools/darwin/depends/config.site.mk
+/tools/darwin/depends/Makefile.include
+
 # /tools/EventClients/
 /tools/EventClients/*.pyc
 /tools/EventClients/Clients/OSXRemote/Makefile

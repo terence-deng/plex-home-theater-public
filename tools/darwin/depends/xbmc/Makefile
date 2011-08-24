@@ -5,8 +5,7 @@ SOURCE=../../../../
 # configuration settings
 export PATH:=$(TOOLCHAIN)/bin:$(PREFIX)/bin:$(PATH)
 CONFIGURE=./configure --prefix=$(PREFIX) \
-  PKG_CONFIG_PATH=$(PREFIX)/lib/pkgconfig \
-  PYTHON=$(PREFIX)/bin/python
+  PKG_CONFIG_PATH=$(PREFIX)/lib/pkgconfig
 
 all: configure
 

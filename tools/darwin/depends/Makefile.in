@@ -4,19 +4,19 @@ BUILDTOOLS = gas-preprocessor help2man autoconf automake libtool pkg-config yasm
 
 SUBDIRS := \
 	Backrow pcre expat gettext readline sqlite3 \
-	liblzo2 freetype2 fontconfig \
+	liblzo liblzo2 freetype2 fontconfig \
 	openssl libssh libssh2 curl \
 	jpeg tiff libpng libogg \
 	libvorbis libflac libmad fribidi libmpeg2 \
 	libass libcdio libsamplerate librtmp libcrystalhd libnfs \
 	libGLEW libsdl libsdl_mixer libsdl_image \
 	libmicrohttpd libmodplug libbluray libyajl \
-	samba python26 mysqlclient boost \
+	samba python26 mysqlclient boost libwavpack \
 
 ifeq ($(DARWIN), ios)
   EXCLUDED = libcrystalhd libGLEW libsdl libsdl_mixer libsdl_image
 else
-  EXCLUDED = Backrow
+  EXCLUDED = Backrow python26 samba libbluray libyajl
 endif
 SUBDIRS := $(filter-out $(EXCLUDED),$(SUBDIRS))
 

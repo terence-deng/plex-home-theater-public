@@ -13,6 +13,7 @@ import os
 
 
 VERBOSE=False
+SDK="10.6"
 
 
 class BootstrapError(RuntimeError):
@@ -39,8 +40,9 @@ def run_cmd(args, message = None, stderr = False, **kwargs):
     if message:
         print bcolors.OKBLUE + ("-> %s" % message) + bcolors.ENDC
     env = get_exe_environ() if "env" not in kwargs else kwargs["env"]
-    cmd = subprocess.Popen(
-        args, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, env = env)
+    cwd = kwargs.get("cwd", None)
+    cmd = subprocess.Popen(args, env = env, cwd = cwd,
+                           stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
     output = ''
     while True:
         out = cmd.stdout.read(1)
@@ -59,7 +61,8 @@ def get_exe_environ():
     env_path = get_env_path()
     env = os.environ
     local_env = {
-        'PATH': "%s/bin:/usr/bin:/usr/sbin:/bin:/sbin" % env_path,
+        'PATH': "%s/../toolchain/bin:%s/bin:/usr/bin:/usr/sbin:/bin:/sbin" % (
+            env_path, env_path),
         'CFLAGS': "-I%s/include" % env_path,
         'CXXFLAGS': "-I%s/include" % env_path,
         'ACLOCAL': "aclocal -I \"%s/share/aclocal\"" % env_path,
@@ -72,7 +75,7 @@ def get_exe_environ():
 def get_env_path():
     '''Returns the path to the build environ'''
     script_path = os.path.abspath(os.path.dirname(__file__))
-    return os.path.join(script_path, 'vendor', 'build')
+    return os.path.join(script_path, "vendor", "osx-%s_i386" % SDK)
 
 
 def update_submodules():
@@ -85,7 +88,7 @@ def configure_internal_libs(debug):
     '''Configure the internal vendor libraries'''
     clean = ['find', '.', '-name', 'config.cache', '-exec', 'rm', '{}', ';']
     run_cmd(clean, "Cleaning caches")
-    run_cmd('./bootstrap', "Regenerating configure scripts")
+    run_cmd(["./bootstrap"], "Bootstrapping internal libs")
     configure = ['./configure', '--with-arch=i386']
     if not debug:
         configure.append('--disable-debug')
@@ -99,7 +102,17 @@ def build_internal_libs():
 
 
 def bootstrap_dependencies():
-    run_cmd(['make', '-C', 'tools/osx/osx-depends'], "Building dependencies")
+    root_dir = os.path.abspath(".")
+    working_dir = os.path.join(root_dir, "tools", "darwin", "depends")
+    vendor_dir = os.path.join(root_dir, "vendor")
+    os.system("cd %s && ./bootstrap" % working_dir)
+    run_cmd(["./configure",
+             "--with-staging=%s" % vendor_dir,
+             "--with-darwin=osx",
+             "--with-sdk=%s" % SDK],
+            "Configuring vendor dependencies",
+            cwd = working_dir)
+    run_cmd("make", "Building vendor dependencies", cwd = working_dir)
 
 
 def usage():
