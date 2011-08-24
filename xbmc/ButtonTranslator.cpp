@@ -284,7 +284,9 @@ static const ActionMapping windows[] =
         {"musicoverlay"             , WINDOW_MUSIC_OVERLAY},
         {"videooverlay"             , WINDOW_VIDEO_OVERLAY},
         {"startwindow"              , WINDOW_START},
-        {"startup"                  , WINDOW_STARTUP_ANIM}};
+        {"startup"                  , WINDOW_STARTUP_ANIM},
+        {"nowplaying"               , WINDOW_NOW_PLAYING},
+       };
 
 
 CButtonTranslator& CButtonTranslator::GetInstance()

@@ -620,8 +620,13 @@ class PlexMediaNode
        tm t;
        memset(&t, 0, sizeof(t));
 
+       string strDate = originallyAvailableAt;
+       size_t space = strDate.find(" ");
+       if (space != string::npos)
+         strDate = strDate.substr(0, space-1);         
+       
        vector<string> parts;
-       boost::split(parts, originallyAvailableAt, boost::is_any_of("-"));
+       boost::split(parts, strDate, boost::is_any_of("-"));
        if (parts.size() == 3)
        {
          t.tm_year = boost::lexical_cast<int>(parts[0]) - 1900;

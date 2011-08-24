@@ -34,8 +34,6 @@ bool CSaveFileStateJob::DoWork()
     {
       CLog::Log(LOGDEBUG, "%s - Saving file state for video item %s", __FUNCTION__, progressTrackingFile.c_str());
 
-      CVideoDatabase videodatabase;
-      if (videodatabase.Open())
       {
         bool updateListing = false;
         // No resume & watched status for livetv
@@ -77,7 +75,6 @@ bool CSaveFileStateJob::DoWork()
           //videodatabase.SetStreamDetailsForFile(m_item.GetVideoInfoTag()->m_streamDetails,progressTrackingFile);
           updateListing = true;
         }
-        videodatabase.Close();
 
         if (updateListing)
         {
