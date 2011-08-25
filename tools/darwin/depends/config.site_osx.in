@@ -1,18 +1,6 @@
-# setup the host_alias, gcc version based on sdk and arch
-if test "@use_sdk@" = "10.4" ; then
-  if test "@use_arch@" = "ppc" ; then
-    host_alias=powerpc-apple-darwin8
-  else
-    host_alias=i386-apple-darwin8
-  fi
-  platform_gcc_version=4.0
-  platform_sdk_version=@use_sdk@u
-else
-  host_alias=i686-apple-darwin
-  platform_gcc_version=4.2
-  platform_sdk_version=@use_sdk@
-fi
-
+platform_gcc_version=4.2
+platform_sdk_version=@use_sdk@
+host_alias=i686-apple-darwin
 platform_min_version=macosx-version-min=10.4
 platform_path="/Developer"
 platform_os_cflags="-arch @use_arch@ -no_compact_linkedit"
@@ -20,14 +8,14 @@ platform_os_ldflags="-arch @use_arch@ -Wl,-arch,@use_arch@ -no_compact_linkedit"
 platform_sdk_path="${platform_path}/SDKs/MacOSX${platform_sdk_version}.sdk"
 
 export NM=/usr/bin/nm
-export CPP=/usr/bin/cpp-${platform_gcc_version}
+export CPP=/usr/bin/llvm-cpp-${platform_gcc_version}
 export CXXCPP=${CPP}
 export CPPFLAGS="-no-cpp-precomp -I${prefix}/include"
-export CC=/usr/bin/gcc-${platform_gcc_version}
+export CC=/usr/bin/llvm-gcc-${platform_gcc_version}
 export CFLAGS="-std=gnu89 -no-cpp-precomp -m${platform_min_version} -isysroot ${platform_sdk_path} ${platform_os_cflags}"
 export LD=${platform_path}/usr/bin/ld
 export LDFLAGS="-m${platform_min_version} -isysroot ${platform_sdk_path} ${platform_os_ldflags} -L${prefix}/lib"
-export CXX=/usr/bin/g++-${platform_gcc_version}
+export CXX=/usr/bin/llvm-g++-${platform_gcc_version}
 export CXXFLAGS="-m${platform_min_version} -isysroot ${platform_sdk_path} ${platform_os_cflags}"
 export AR=${platform_path}/usr/bin/ar
 export AS=${platform_path}/usr/bin/as
@@ -57,4 +45,9 @@ fi
 # tweaks for python
 if test "${PACKAGE_NAME}" = "python" ; then
   export OPT="${CFLAGS}"
+fi
+
+# tweaks for libogg / libvorbis
+if test "${PACKAGE_NAME}" = "libogg" || test "${PACKAGE_NAME}" = "libvorbis" ; then
+  export CFLAGS="${CFLAGS} -O"
 fi

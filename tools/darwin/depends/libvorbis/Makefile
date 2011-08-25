@@ -2,13 +2,15 @@ include ../Makefile.include
 
 # lib name, version
 LIBNAME=libvorbis
-VERSION=1.2.3
+VERSION=1.3.2
 SOURCE=$(LIBNAME)-$(VERSION)
 ARCHIVE=$(SOURCE).tar.gz
+BASE_URL=http://downloads.xiph.org/releases/vorbis
+PACKAGE_NAME=libvorbis
 
 # configuration settings
 CONFIGURE=./configure --prefix=$(PREFIX) \
-  --disable-oggtest --disable-docs --disable-examples
+  --disable-oggtest --disable-docs --disable-examples PACKAGE_NAME=$(PACKAGE_NAME)
 
 LIBDYLIB=$(SOURCE)/.libs/$(LIBNAME).dylib
 
