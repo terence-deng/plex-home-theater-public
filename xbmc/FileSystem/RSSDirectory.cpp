@@ -487,7 +487,7 @@ static void ParseItem(CFileItem* item, TiXmlElement* root)
       {
         if(best == resources.end())
           best = it;
-        else if(it->width && it->height || best->width && best->height)
+        else if((it->width && it->height) || (best->width && best->height))
         {
           if(it->width*it->height > best->width*best->height)
             best = it;

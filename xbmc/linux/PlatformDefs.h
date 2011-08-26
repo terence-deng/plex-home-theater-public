@@ -442,6 +442,12 @@ typedef struct _MEMORYSTATUS
 #ifndef NOERROR
 #define NOERROR           (0L)
 #endif
+
+#undef S_OK
+#undef E_FAIL
+#undef E_OUTOFMEMORY
+#undef FAILED
+
 #define S_OK            (0L)
 #define E_FAIL            (0x80004005L)
 #define E_OUTOFMEMORY         (0x8007000EL)

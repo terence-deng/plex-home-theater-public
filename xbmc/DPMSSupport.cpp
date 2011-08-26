@@ -266,6 +266,8 @@ bool DPMSSupport::PlatformSpecificEnablePowerSaving(PowerSavingMode mode)
     // Set display to low power
     status = (IORegistryEntrySetCFProperty(r, CFSTR("IORequestIdle"), kCFBooleanTrue) == 0);
     break;
+  default: 
+    break;
   }
   return status;
 }

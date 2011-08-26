@@ -295,9 +295,9 @@ void CCdg::TileBlock(bool IsXor)
     return ;
   BYTE mask[6] = {0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 
-  switch (IsXor)
+  if (IsXor)
   {
-  case TRUE:
+
     for (int i = 0;i < 12;i++)
     {
       BYTE bTemp = tile->tilePixels[i] & 0x3F;
@@ -309,8 +309,9 @@ void CCdg::TileBlock(bool IsXor)
           m_PixelMap[row_offset + i][col_offset + j] ^= color_0;
       }
     }
-    break;
-  case FALSE:
+  }
+  else
+  {
     for (int i = 0;i < 12;i++)
     {
       BYTE bTemp = tile->tilePixels[i] & 0x3F;
@@ -322,7 +323,6 @@ void CCdg::TileBlock(bool IsXor)
           m_PixelMap[row_offset + i][col_offset + j] = color_0;
       }
     }
-    break;
   }
 }
 

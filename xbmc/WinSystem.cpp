@@ -152,7 +152,7 @@ static void AddRefreshRate(vector<REFRESHRATE> &refreshrates, unsigned int addin
 static bool rrSortPredicate (REFRESHRATE i, REFRESHRATE j)
 {
   return (   i.RefreshRate < j.RefreshRate
-          || i.RefreshRate == j.RefreshRate && !i.Interlaced);
+          || (i.RefreshRate == j.RefreshRate && !i.Interlaced));
 }
 
 vector<REFRESHRATE> CWinSystemBase::RefreshRates(int screen, int width, int height)

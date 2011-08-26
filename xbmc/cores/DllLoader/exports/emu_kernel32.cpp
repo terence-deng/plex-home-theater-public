@@ -446,7 +446,7 @@ extern "C" void WINAPI dllInitializeCriticalSection(LPCRITICAL_SECTION cs)
   CLog::Log(LOGDEBUG, "InitializeCriticalSection(0x%x)", cs);
 #endif
   LPCRITICAL_SECTION cs_new = new CRITICAL_SECTION;
-  memset(cs_new, 0, sizeof(CRITICAL_SECTION));
+  memset((void*)cs_new, 0, sizeof(CRITICAL_SECTION));
   InitializeCriticalSection(cs_new);
 
   // just take the first member of the CRITICAL_SECTION to save ourdata in, this will be used to

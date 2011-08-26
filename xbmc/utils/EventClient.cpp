@@ -66,7 +66,7 @@ struct ButtonStateFinder
 /************************************************************************/
 void CEventButtonState::Load()
 {
-  if ( (m_iKeyCode == 0) )
+  if (m_iKeyCode == 0)
   {
     if ( (m_mapName.length() > 0) && (m_buttonName.length() > 0) )
     {

@@ -822,7 +822,7 @@ bool CCoreAudioRenderer::InitializePCMEncoded(UInt32 sampleRate)
   // Set the Sample Rate as defined by the spec.
   m_AudioDevice.SetNominalSampleRate((float)sampleRate);
 
-  if (!InitializePCM(2, sampleRate, 16, false))
+  if (!InitializePCM(2, sampleRate, 16, NULL))
     return false;
 
   m_EnableVolumeControl = false; // Prevent attempts to change the output volume. It is not possible with encoded audio

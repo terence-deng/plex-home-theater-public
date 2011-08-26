@@ -51,7 +51,7 @@ CImageLoader::~CImageLoader()
 bool CImageLoader::DoWork()
 {
   CFileItem file(m_path, false);
-  if (file.IsPlexMediaServer() || file.IsPicture() && !(file.IsZIP() || file.IsRAR() || file.IsCBR() || file.IsCBZ())) // ignore non-pictures
+  if (file.IsPlexMediaServer() || (file.IsPicture() && !(file.IsZIP() || file.IsRAR() || file.IsCBR() || file.IsCBZ()))) // ignore non-pictures
   { // check for filename only (i.e. lookup in skin/media/)
     CStdString loadPath = g_TextureManager.GetTexturePath(m_path);
 
