@@ -6,8 +6,6 @@ std::string GetHostName();
 
 #ifdef _WIN32
 
-#include <string>
-
 bool Cocoa_IsHostLocal(const std::string& host);
 
 struct timezone
@@ -17,5 +15,10 @@ struct timezone
 };
  
 int gettimeofday(struct timeval *tv, struct timezone *tz);
+
+#ifndef usleep
+typedef unsigned int useconds_t;
+int usleep(useconds_t useconds);
+#endif
 
 #endif

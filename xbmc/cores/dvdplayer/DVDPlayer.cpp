@@ -71,6 +71,7 @@
 #include "GUIDialogBusy.h"
 #include "PlexDirectory.h"
 
+#include <boost/algorithm/string/replace.hpp>
 #include <boost/foreach.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/thread.hpp>
