@@ -2980,6 +2980,9 @@ bool CFileItem::CacheLocalFanart() const
 
 CStdString CFileItem::GetLocalFanart() const
 {
+  // Fuck off.
+  return "";
+  
   if (IsVideoDb())
   {
     if (!HasVideoInfoTag())
