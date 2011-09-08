@@ -469,16 +469,20 @@ class PlexMediaNode
      CFileItemPtr pItem(new CFileItem());
      pItem->m_bIsFolder = true;
 
-     const char* key = el.Attribute("key");
-     if (key == 0 || strlen(key) == 0)
-       return CFileItemPtr();
-
      // Compute the new path.
+     const char* key = el.Attribute("key");
+     if (key == 0)
+       key = "";
+     
      pItem->m_strPath = CPlexDirectory::ProcessUrl(parentPath, key, true);
 
      // Let subclass finish.
      DoBuildFileItem(pItem, string(parentPath), el);
 
+     // If we don't a key *or* media items, get out.
+     if (strlen(key)== 0 && pItem->m_mediaItems.empty() == true)
+       return CFileItemPtr();
+     
      // Parent path.
      if (el.Attribute("parentKey"))
        pItem->SetProperty("parentPath", CPlexDirectory::ProcessUrl(parentPath, el.Attribute("parentKey"), true));
