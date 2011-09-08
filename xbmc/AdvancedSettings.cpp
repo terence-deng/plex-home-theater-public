@@ -72,7 +72,7 @@ void CAdvancedSettings::Initialize()
   m_videoSmallStepBackDelay = 300;
   m_videoUseTimeSeeking = true;
   m_videoTimeSeekForward = 30;
-  m_videoTimeSeekBackward = -30;
+  m_videoTimeSeekBackward = -15;
   m_videoTimeSeekForwardBig = 600;
   m_videoTimeSeekBackwardBig = -600;
   m_videoPercentSeekForward = 2;
