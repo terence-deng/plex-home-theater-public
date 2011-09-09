@@ -197,6 +197,12 @@ void Reconfigure(int nSignal)
 int main (int argc,  char * argv[]) {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
+  // We need to close (reasonably) all the file descriptors that the parent may have had open,
+  // otherwise we end up with port stealing (possibly only on evil Lion).
+  //
+  for (int i=0; i<1024; i++)
+    close(i);
+  
   ParseOptions(argc,argv);
 
   NSLog(@"%s %s starting up...", PROGNAME, PROGVERS);
