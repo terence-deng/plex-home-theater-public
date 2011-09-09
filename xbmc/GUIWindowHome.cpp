@@ -280,14 +280,14 @@ void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
 
       // Recently accessed.
       m_contentLists[CONTENT_LIST_RECENTLY_ACCESSED] = Group(kVIDEO_LOADER);
-      m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/channels/recentlyViewed?filter=" + filter, CONTENT_LIST_RECENTLY_ACCESSED);
+      m_workerManager->enqueue(WINDOW_HOME, "http://127.0.0.1:32400/channels/recentlyViewed?filter=" + filter, CONTENT_LIST_RECENTLY_ACCESSED);
     }
 
     // If we need to, load global art.
     if (globalArt && m_globalArt == false)
     {
       m_globalArt = true;
-      m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/library/arts", CONTENT_LIST_FANART);
+      m_workerManager->enqueue(WINDOW_HOME, "http://127.0.0.1:32400/library/arts", CONTENT_LIST_FANART);
     }
     
     // Remember what the last one was.
@@ -558,7 +558,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       }
       else
       {
-        m_workerManager->enqueue(WINDOW_HOME, "http://localhost:32400/library/arts", CONTENT_LIST_FANART);
+        m_workerManager->enqueue(WINDOW_HOME, "http://127.0.0.1:32400/library/arts", CONTENT_LIST_FANART);
       }
     }
   }
