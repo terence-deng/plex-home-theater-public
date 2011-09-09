@@ -70,5 +70,9 @@ private:
   int                        m_selectedContainerID;
   bool                       m_globalArt;
   
+  CGUIListItemPtr            m_videoChannelItem;
+  CGUIListItemPtr            m_musicChannelItem;
+  CGUIListItemPtr            m_photoChannelItem;
+  
   PlexContentWorkerManager*  m_workerManager;
 };

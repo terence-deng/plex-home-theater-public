@@ -37,6 +37,7 @@
 #include "GUIDialogYesNo.h"
 #include "GUIWindowManager.h"
 #include "GUIUserMessages.h"
+#include "MediaSource.h"
 #include "AlarmClock.h"
 #include "Key.h"
 
@@ -55,6 +56,10 @@ using namespace boost;
 #define SLEEP_ITEM         112
 #define SHUTDOWN_ITEM      113
 #define SLEEP_DISPLAY_ITEM 114
+
+#define CHANNELS_VIDEO 1
+#define CHANNELS_MUSIC 2
+#define CHANNELS_PHOTO 3
 
 #define SLIDESHOW_MULTIIMAGE 10101
 
@@ -459,10 +464,18 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
     {
       vector<CGUIListItemPtr>& oldList = control->GetStaticItems();
       
-      // First collect all the real items.
+      // First collect all the real items, minus the channel entries.
       BOOST_FOREACH(CGUIListItemPtr item, oldList)
       {
-        if (item->HasProperty("plex") == false)
+        // Collect the channel items. They may get removed after that, so we'll keep them around.
+        CFileItem* fileItem = (CFileItem* )item.get();
+        if (fileItem->m_iprogramCount == CHANNELS_VIDEO)
+          m_videoChannelItem = item;
+        else if (fileItem->m_iprogramCount == CHANNELS_MUSIC)
+          m_musicChannelItem = item;
+        else if (fileItem->m_iprogramCount == CHANNELS_PHOTO)
+          m_photoChannelItem = item;
+        else if (item->HasProperty("plex") == false)
           newList.push_back(item);
       }
       
@@ -472,6 +485,11 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       map<string, int> nameCounts;
       map<string, HostSourcesPtr>& map = CPlexSourceScanner::GetMap();
       list<CFileItemPtr> newItems;
+      
+      int numVideo = 0;
+      int numPhoto = 0;
+      int numMusic = 0;
+      
       BOOST_FOREACH(string_sources_pair nameSource, map)
       {
         for (int i=0; i<nameSource.second->librarySections.Size(); i++)
@@ -480,8 +498,13 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           CStdString sectionName = nameSource.second->librarySections[i]->GetLabel();
           ++nameCounts[sectionName.ToLower()];
         }
+        
+        // Keep track of how many channels.
+        numVideo += nameSource.second->videoSources.size();
+        numPhoto += nameSource.second->pictureSources.size();
+        numMusic += nameSource.second->musicSources.size();
       }
-
+      
       CPlexSourceScanner::Unlock();
       
       // Now sort them according to name.
@@ -530,7 +553,27 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         if (newItem->m_strPath == m_lastSelectedItemKey)
           itemStillExists = true;
       }
+      
+      // See what channel entries to add.
+      printf("SEEing what channel items to add.\n");
+      if (numPhoto > 0)
+      {
+        printf("Adding Photo.\n");
+        newList.insert(newList.begin(), m_photoChannelItem);
+      }
 
+      if (numMusic > 0)
+      {
+        printf("Adding Music.\n");
+        newList.insert(newList.begin(), m_musicChannelItem);
+      }
+
+      if (numVideo > 0)
+      {
+        printf("Adding Video.\n");
+        newList.insert(newList.begin(), m_videoChannelItem);
+      }
+      
       // Replace 'em.
       control->SetStaticContent(newList);
       
