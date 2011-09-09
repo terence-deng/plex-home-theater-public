@@ -283,6 +283,9 @@ void CGUIWindowMusicSongs::UpdateButtons()
 
 void CGUIWindowMusicSongs::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
+  if (m_vecItems->GetContent() == "secondary")
+    return;
+  
   CFileItemPtr item;
   if (itemNumber >= 0 && itemNumber < m_vecItems->Size())
     item = m_vecItems->Get(itemNumber);
@@ -316,16 +319,16 @@ void CGUIWindowMusicSongs::GetContextButtons(int itemNumber, CContextButtons &bu
         return;
       if (!item->IsPlayList())
       {
+#if 0
         if (item->IsAudio() && !item->IsLastFM())
           buttons.Add(CONTEXT_BUTTON_SONG_INFO, 658); // Song Info
         else if (!item->IsParentFolder() && !item->IsLastFM() &&
                  !item->m_strPath.Left(3).Equals("new") && item->m_bIsFolder)
         {
-#if 0
-          if (m_musicdatabase.GetAlbumIdByPath(item->m_strPath) > -1)
-#endif
+          if (item->IsPlexMediaServerMusic())
             buttons.Add(CONTEXT_BUTTON_INFO, 13351); // Album Info
         }
+#endif
       }
 
 #ifdef HAS_DVD_DRIVE

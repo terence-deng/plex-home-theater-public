@@ -991,6 +991,9 @@ void CGUIWindowVideoBase::OnStreamDetails(const CStreamDetails &details, const C
 
 void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
+  if (m_vecItems->GetContent() == "secondary")
+    return;
+  
   CFileItemPtr item;
   if (itemNumber >= 0 && itemNumber < m_vecItems->Size())
     item = m_vecItems->Get(itemNumber);
@@ -1037,8 +1040,10 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
         }
         else
           CPlayerCoreFactory::GetPlayers(*item, vecCores);
+#if 0
         if (vecCores.size() > 1)
           buttons.Add(CONTEXT_BUTTON_PLAY_WITH, 15213);
+#endif
       }
       if (item->IsSmartPlayList())
       {

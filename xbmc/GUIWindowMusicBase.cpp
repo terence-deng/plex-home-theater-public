@@ -279,100 +279,19 @@ void CGUIWindowMusicBase::OnInfo(int iItem, bool bShowInfo)
 
 void CGUIWindowMusicBase::OnInfo(CFileItem *pItem, bool bShowInfo)
 {
-  if ((pItem->IsMusicDb() && !pItem->HasMusicInfoTag()) || pItem->IsParentFolder() ||
-       CUtil::IsSpecial(pItem->m_strPath) || pItem->m_strPath.Left(14).Equals("musicsearch://"))
-    return; // nothing to do
-
+#if 0
   if (!pItem->m_bIsFolder)
-  { // song lookup
+  { 
+    // song lookup
     ShowSongInfo(pItem);
     return;
   }
 
-  CStdString strPath = pItem->m_strPath;
-
-  // Try to find an album to lookup from the current item
-  CAlbum album;
-  CArtist artist;
-  bool foundAlbum = false;
-
-  album.idAlbum = -1;
-
-  // we have a folder
-  if (pItem->IsMusicDb())
-  {
-    CQueryParams params;
-    CDirectoryNode::GetDatabaseInfo(pItem->m_strPath, params);
-    if (params.GetAlbumId() == -1)
-    { // artist lookup
-      artist.idArtist = params.GetArtistId();
-      artist.strArtist = pItem->GetMusicInfoTag()->GetArtist();
-    }
-    else
-    { // album lookup
-      album.idAlbum = params.GetAlbumId();
-      album.strAlbum = pItem->GetMusicInfoTag()->GetAlbum();
-      album.strArtist = pItem->GetMusicInfoTag()->GetArtist();
-
-      // we're going to need it's path as well (we assume that there's only one) - this is for
-      // assigning thumbs to folders, and obtaining the local folder.jpg
-      m_musicdatabase.GetAlbumPath(album.idAlbum, strPath);
-    }
-  }
-  else
-  { // from filemode, so find the albums in the folder
-    CFileItemList items;
-    GetDirectory(strPath, items);
-
-    // show dialog box indicating we're searching the album name
-    if (m_dlgProgress && bShowInfo)
-    {
-      m_dlgProgress->SetHeading(185);
-      m_dlgProgress->SetLine(0, 501);
-      m_dlgProgress->SetLine(1, "");
-      m_dlgProgress->SetLine(2, "");
-      m_dlgProgress->StartModal();
-      m_dlgProgress->Progress();
-      if (m_dlgProgress->IsCanceled())
-        return;
-    }
-    // check the first song we find in the folder, and grab it's album info
-    for (int i = 0; i < items.Size() && !foundAlbum; i++)
-    {
-      CFileItemPtr pItem = items[i];
-      pItem->LoadMusicTag();
-      if (pItem->HasMusicInfoTag() && pItem->GetMusicInfoTag()->Loaded() &&
-         !pItem->GetMusicInfoTag()->GetAlbum().IsEmpty())
-      {
-        // great, have a song - use it.
-        CSong song(*pItem->GetMusicInfoTag());
-        // this function won't be needed if/when the tag has idSong information
-        if (!m_musicdatabase.GetAlbumFromSong(song, album))
-        { // album isn't in the database - construct it from the tag info we have
-          CMusicInfoTag *tag = pItem->GetMusicInfoTag();
-          album.strAlbum = tag->GetAlbum();
-          album.strArtist = tag->GetAlbumArtist().IsEmpty() ? tag->GetArtist() : tag->GetAlbumArtist();
-          album.idAlbum = -1; // the -1 indicates it's not in the database
-        }
-        foundAlbum = true;
-      }
-    }
-    if (!foundAlbum)
-    {
-      CLog::Log(LOGINFO, "%s called on a folder containing no songs with tag info - nothing can be done", __FUNCTION__);
-      if (m_dlgProgress && bShowInfo)
-        m_dlgProgress->Close();
-      return;
-    }
-
-    if (m_dlgProgress && bShowInfo)
-      m_dlgProgress->Close();
-  }
-
-  if (album.idAlbum == -1 && foundAlbum == false)
+  if (pItem->GetProperty("type") == "artist")
     ShowArtistInfo(artist, pItem->m_strPath, false, bShowInfo);
   else
     ShowAlbumInfo(album, strPath, false, bShowInfo);
+#endif
 }
 
 void CGUIWindowMusicBase::OnManualAlbumInfo()
@@ -941,8 +860,11 @@ void CGUIWindowMusicBase::GetContextButtons(int itemNumber, CContextButtons &but
         { // check what players we have, if we have multiple display play with option
           VECPLAYERCORES vecCores;
           CPlayerCoreFactory::GetPlayers(*item, vecCores);
+          
+#if 0
           if (vecCores.size() >= 1)
             buttons.Add(CONTEXT_BUTTON_PLAY_WITH, 15213); // Play With...
+#endif
         }
         if (item->IsSmartPlayList())
         {
@@ -965,7 +887,7 @@ void CGUIWindowMusicBase::GetNonContextButtons(CContextButtons &buttons)
   //  buttons.Add(CONTEXT_BUTTON_GOTO_ROOT, 20128);
   if (g_playlistPlayer.GetPlaylist(PLAYLIST_MUSIC).size() > 0)
     buttons.Add(CONTEXT_BUTTON_NOW_PLAYING, 13350);
-  buttons.Add(CONTEXT_BUTTON_SETTINGS, 5);
+  //buttons.Add(CONTEXT_BUTTON_SETTINGS, 5);
 }
 
 bool CGUIWindowMusicBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
@@ -1037,7 +959,8 @@ bool CGUIWindowMusicBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
     }
 
   case CONTEXT_BUTTON_NOW_PLAYING:
-    g_windowManager.ActivateWindow(WINDOW_MUSIC_PLAYLIST);
+    if (g_application.IsPlayingAudio())
+      g_windowManager.ActivateWindow(WINDOW_NOW_PLAYING);
     return true;
 
   //case CONTEXT_BUTTON_GOTO_ROOT:
