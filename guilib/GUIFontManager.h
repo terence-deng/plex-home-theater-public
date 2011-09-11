@@ -64,7 +64,7 @@ public:
 
   void Unload(const CStdString& strFontName);
   void LoadFonts(const CStdString& strFontSet);
-  CGUIFont* LoadTTF(const CStdString& strFontName, const CStdString& strFilename, color_t textColor, color_t shadowColor, const int iSize, const int iStyle, bool border = false, float lineSpacing = 1.0f, float aspect = 1.0f, RESOLUTION res = RES_INVALID, bool preserveAspect = false, const CStdString& variant = "");
+  CGUIFont* LoadTTF(const CStdString& strFontName, const CStdString& strFilename, color_t textColor, color_t shadowColor, const int iSize, int iStyle, bool border = false, float lineSpacing = 1.0f, float aspect = 1.0f, RESOLUTION res = RES_INVALID, bool preserveAspect = false, const CStdString& variant = "");
   CGUIFont* GetFont(const CStdString& strFontName, bool fallback = true);
   std::vector<std::string> GetSystemFontNames();
 
@@ -88,8 +88,9 @@ protected:
   CGUIFontTTFBase* GetFontFile(const CStdString& strFontFile);
   bool OpenFontFile(TiXmlDocument& xmlDoc);
   bool FindSystemFontPath(const CStdString& strFilename, CStdString *fontPath);
-  bool GetFontAlias(const CStdString& strFontName, const CStdString& strVariant, CStdString& strAlias );
+  bool GetFontAlias(const CStdString& strFontName, const CStdString& strVariant, CStdString& strAlias, int& aliasStyle);
 
+  std::map<std::string, std::pair<std::string, int> > m_fontAliasMap;
   std::vector<CGUIFont*> m_vecFonts;
   std::vector<CGUIFontTTFBase*> m_vecFontFiles;
   std::vector<OrigFontInfo> m_vecFontInfo;

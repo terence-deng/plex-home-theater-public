@@ -144,7 +144,7 @@ std::vector<std::string> GUIFontManager::GetSystemFontNames()
 #endif
 }
 
-CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdString& strFilename, color_t textColor, color_t shadowColor, const int iSize, const int iStyle, bool border, float lineSpacing, float aspect, RESOLUTION sourceRes, bool preserveAspect, const CStdString& variant)
+CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdString& strFilename, color_t textColor, color_t shadowColor, const int iSize, int iStyle, bool border, float lineSpacing, float aspect, RESOLUTION sourceRes, bool preserveAspect, const CStdString& variant)
 {
   float originalAspect = aspect;
 
@@ -206,7 +206,8 @@ CGUIFont* GUIFontManager::LoadTTF(const CStdString& strFontName, const CStdStrin
       delete pFontFile;
 
       CStdString fontAlias;
-      if (GetFontAlias(strFilename, variant, fontAlias)) 
+      CLog::Log(LOGINFO, "Looking for alias...");
+      if (GetFontAlias(strFilename, variant, fontAlias, iStyle)) 
         return LoadTTF(strFontName, fontAlias, textColor, shadowColor, iSize, iStyle, border, lineSpacing, originalAspect);
 
       // font could not be loaded - try Arial.ttf, which we distribute
@@ -409,46 +410,20 @@ void GUIFontManager::Clear()
   m_vecFonts.clear();
   m_vecFontFiles.clear();
   m_vecFontInfo.clear();
+  m_fontAliasMap.clear();
   m_fontsetUnicode=false;
 }
 
-bool GUIFontManager::GetFontAlias(const CStdString& strFontName, const CStdString& strVariant, CStdString& strAlias )
+bool GUIFontManager::GetFontAlias(const CStdString& strFontName, const CStdString& strVariant, CStdString& strAlias, int& aliasStyle)
 {
-  TiXmlDocument xmlDoc;
-  if (!OpenFontFile(xmlDoc))
-    return false;
-
-  TiXmlElement* pRootElement = xmlDoc.RootElement();
-  const TiXmlNode *pChild = pRootElement->FirstChild();
-
-  while (pChild)
+  string key = strFontName + "/" + strVariant;
+  if (m_fontAliasMap.find(key) != m_fontAliasMap.end())
   {
-    if (CStdString(pChild->Value()) == "aliases")
-      break;
-	pChild = pChild->NextSibling();
-  }
+    pair<string, int> aliasPair = m_fontAliasMap[key];
+    strAlias = aliasPair.first;
+    aliasStyle = aliasPair.second;
 
-  if (!pChild)
-    return false;
-
-  pChild = pChild->FirstChild();
-  while (pChild)
-  {
-	const TiXmlNode *pCheckAlias = pChild;
-    pChild = pChild->NextSibling();
-
-    if (CStdString(pCheckAlias->Value()) == "alias")
-	{
-      if (CStdString(((TiXmlElement*) pCheckAlias)->Attribute("font")) != strFontName )
-        continue;
- 
-      if (CStdString(((TiXmlElement*) pCheckAlias)->Attribute("variant")) != strVariant )
-        continue;
-
-      strAlias = ((TiXmlElement*) pCheckAlias)->Attribute("alias");
-      if (strAlias.length())
-        return true;
-	}
+    return true;
   }
 
   return false;
@@ -496,7 +471,43 @@ void GUIFontManager::LoadFonts(const CStdString& strFontSet)
             break;
           }
         }
+      }
+      else if (strValue == "aliases")
+      {
+        const TiXmlNode* pAliasChild = pChild->FirstChild();
+        while (pAliasChild)
+        {
+  	      const TiXmlNode *pCheckAlias = pAliasChild;
+          pAliasChild = pAliasChild->NextSibling();
 
+          if (CStdString(pCheckAlias->Value()) == "alias")
+	        {
+            const char* font = ((TiXmlElement*) pCheckAlias)->Attribute("font");
+            const char* variant = ((TiXmlElement*) pCheckAlias)->Attribute("variant");
+            const char* alias = ((TiXmlElement*) pCheckAlias)->Attribute("alias");
+            const char* aliasStyle = ((TiXmlElement *)pCheckAlias)->Attribute("aliasStyle");
+
+            if (font && variant && alias)
+            {
+              string key = string(font) + "/" + string(variant);
+
+              int iAliasStyle = FONT_STYLE_NORMAL;
+              if (aliasStyle)
+              {
+                CStdString style(aliasStyle);
+                if (style == "bold")
+                  iAliasStyle = FONT_STYLE_BOLD;
+                else if (style == "italics")
+                  iAliasStyle = FONT_STYLE_ITALICS;
+                else if (style == "bolditalics")
+                  iAliasStyle = FONT_STYLE_BOLD_ITALICS;
+              }
+
+              CLog::Log(LOGINFO, "Adding alias %s -> %s:%d", key.c_str(), alias, iAliasStyle);
+              m_fontAliasMap[key] = pair<string, int>(alias, iAliasStyle);
+            }
+          }
+        }
       }
 
       pChild = pChild->NextSibling();
