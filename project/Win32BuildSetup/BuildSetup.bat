@@ -139,6 +139,7 @@ set EXE= "..\VS2010Express\Plex\%buildconfig%\Plex.exe"
   Echo asound.conf>>exclude.txt
   Echo voicemasks.xml>>exclude.txt
   Echo Lircmap.xml>>exclude.txt
+  Echo addons\skin.confluence>>exclude.txt
   
   md BUILD_WIN32\Plex
 
