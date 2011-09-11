@@ -252,7 +252,7 @@ int Win32DllLoader::ResolveExport(const char* symbol, void** f, bool logging)
 
 bool Win32DllLoader::IsSystemDll()
 {
-  return false;
+  return true;
 }
 
 HMODULE Win32DllLoader::GetHModule()
