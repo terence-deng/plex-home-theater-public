@@ -1286,7 +1286,10 @@ void CGUIWindowVideoBase::MarkUnWatched(const CFileItemPtr &item)
   
   item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED);
   if (item->GetVideoInfoTag())
+  {
     item->GetVideoInfoTag()->m_playCount = 0;
+    item->ClearProperty("viewOffset");
+  }
   
   // Fix numbers.
   if (item->HasProperty("watchedepisodes"))
@@ -1306,7 +1309,10 @@ void CGUIWindowVideoBase::MarkWatched(const CFileItemPtr &item)
   // Change the item.
   item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_WATCHED);
   if (item->GetVideoInfoTag())
+  {
     item->GetVideoInfoTag()->m_playCount++;
+    item->ClearProperty("viewOffset");
+  }
   
   // Fix numbers.
   if (item->HasProperty("watchedepisodes"))
