@@ -555,24 +555,14 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       }
       
       // See what channel entries to add.
-      printf("SEEing what channel items to add.\n");
       if (numPhoto > 0)
-      {
-        printf("Adding Photo.\n");
         newList.insert(newList.begin(), m_photoChannelItem);
-      }
 
       if (numMusic > 0)
-      {
-        printf("Adding Music.\n");
         newList.insert(newList.begin(), m_musicChannelItem);
-      }
 
       if (numVideo > 0)
-      {
-        printf("Adding Video.\n");
         newList.insert(newList.begin(), m_videoChannelItem);
-      }
       
       // Replace 'em.
       control->SetStaticContent(newList);
