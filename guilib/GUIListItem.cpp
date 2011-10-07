@@ -111,9 +111,23 @@ void CGUIListItem::SetThumbnailImage(const CStdString& strThumbnail)
   SetInvalid();
 }
 
+void CGUIListItem::SetGrandparentThumbnailImage(const CStdString& strThumbnail)
+{
+  if (m_strGrandparentThumbnailImage == strThumbnail)
+    return;
+  
+  m_strGrandparentThumbnailImage = strThumbnail;
+  SetInvalid();
+}
+
 const CStdString& CGUIListItem::GetThumbnailImage() const
 {
   return m_strThumbnailImage;
+}
+
+const CStdString& CGUIListItem::GetGrandparentThumbnailImage() const
+{
+  return m_strGrandparentThumbnailImage;
 }
 
 void CGUIListItem::SetIconImage(const CStdString& strIcon)
@@ -179,6 +193,11 @@ bool CGUIListItem::HasIcon() const
 bool CGUIListItem::HasThumbnail() const
 {
   return (m_strThumbnailImage.size() != 0);
+}
+
+bool CGUIListItem::HasGrandparentThumbnail() const
+{
+  return (m_strGrandparentThumbnailImage.size() != 0);
 }
 
 bool CGUIListItem::HasOverlay() const

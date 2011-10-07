@@ -74,11 +74,14 @@ public:
   const CStdString& GetIconImage() const;
 
   void SetThumbnailImage(const CStdString& strThumbnail);
+  void SetGrandparentThumbnailImage(const CStdString& strThumbnail);
   const CStdString& GetThumbnailImage() const;
+  const CStdString& GetGrandparentThumbnailImage() const;
 
   void SetOverlayImage(GUIIconOverlay icon, bool bOnOff=false);
   CStdString GetOverlayImage() const;
-
+  int GetOverlayImageID() const { return m_overlayIcon; }
+  
   void SetSortLabel(const CStdString &label);
   const CStdString &GetSortLabel() const;
 
@@ -87,6 +90,7 @@ public:
 
   bool HasIcon() const;
   bool HasThumbnail() const;
+  bool HasGrandparentThumbnail() const;
   bool HasOverlay() const;
   virtual bool IsFileItem() const { return false; };
 
@@ -129,6 +133,7 @@ public:
 protected:
   CStdString m_strLabel2;     // text of column2
   CStdString m_strThumbnailImage; // filename of thumbnail
+  CStdString m_strGrandparentThumbnailImage;
   CStdString m_strIcon;      // filename of icon
   GUIIconOverlay m_overlayIcon; // type of overlay icon
 

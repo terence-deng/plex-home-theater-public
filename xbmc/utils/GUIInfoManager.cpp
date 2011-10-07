@@ -901,6 +901,7 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
 int CGUIInfoManager::TranslateListItem(const CStdString &info)
 {
   if (info.Equals("thumb")) return LISTITEM_THUMB;
+  else if (info.Equals("grandparentthumb")) return LISTITEM_GRANDPARENT_THUMB;
   else if (info.Equals("icon")) return LISTITEM_ICON;
 else if (info.Equals("banner")) return LISTITEM_BANNER;
   else if (info.Equals("actualicon")) return LISTITEM_ACTUAL_ICON;
@@ -2773,7 +2774,7 @@ CStdString CGUIInfoManager::GetImage(int info, int contextWindow)
     if (window)
       return ((CGUIMediaWindow *)window)->CurrentDirectory().GetProperty("seasonthumb");
   }
-  else if (info == LISTITEM_THUMB || info == LISTITEM_ICON || info == LISTITEM_ACTUAL_ICON ||
+  else if (info == LISTITEM_THUMB || info == LISTITEM_GRANDPARENT_THUMB || info == LISTITEM_ICON || info == LISTITEM_ACTUAL_ICON ||
           info == LISTITEM_OVERLAY || info == LISTITEM_RATING || info == LISTITEM_STAR_RATING)
   {
     CGUIWindow *window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_HAS_LIST_ITEMS);
@@ -4046,6 +4047,8 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
     return item->GetOverlayImage();
   case LISTITEM_THUMB:
     return item->GetThumbnailImage();
+  case LISTITEM_GRANDPARENT_THUMB:
+    return item->GetGrandparentThumbnailImage();
   case LISTITEM_FOLDERNAME:
   case LISTITEM_PATH:
     {

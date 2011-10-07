@@ -253,6 +253,7 @@ public:
   CStdString GetCachedActorThumb() const;
   CStdString GetCachedProgramFanart() const;
   
+  CStdString GetCachedVideoGrandparentThumb() const;
   CStdString GetCachedPlexMediaServerThumb() const;
   static CStdString GetCachedPlexMediaServerThumb(const CStdString& path);
   

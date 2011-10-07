@@ -53,6 +53,26 @@ CThumbLoader::~CThumbLoader()
 {
 }
 
+bool CThumbLoader::LoadRemoteGrandparentThumb(CFileItem *pItem)
+{
+  // look for remote thumbs
+  CStdString thumb(pItem->GetGrandparentThumbnailImage());
+  if (!g_TextureManager.CanLoad(thumb) || CUtil::IsPlexMediaServer(thumb))
+  {
+    CStdString cachedThumb(pItem->GetCachedVideoGrandparentThumb());
+    if (CFile::Exists(cachedThumb))
+      pItem->SetGrandparentThumbnailImage(cachedThumb);
+    else
+    {
+      if (CPicture::CreateThumbnail(thumb, cachedThumb))
+        pItem->SetGrandparentThumbnailImage(cachedThumb);
+      else
+        pItem->SetGrandparentThumbnailImage("");
+    }
+  }
+  return pItem->HasGrandparentThumbnail();  
+}
+
 bool CThumbLoader::LoadRemoteThumb(CFileItem *pItem)
 {
   // look for remote thumbs

@@ -2712,6 +2712,16 @@ void CFileItem::SetUserMusicThumb(bool alwaysCheckRemote /* = false */)
   SetCachedMusicThumb();
 }
 
+CStdString CFileItem::GetCachedVideoGrandparentThumb() const
+{
+  CStdString path = m_strPath;
+  
+  if (IsPlexMediaServer() && m_strGrandparentThumbnailImage.size() > 0)
+    return GetCachedThumb(m_strGrandparentThumbnailImage, g_settings.GetPlexMediaServerThumbFolder(),true);
+  
+  return "";
+}
+
 CStdString CFileItem::GetCachedVideoThumb() const
 {
   CStdString path = m_strPath;
