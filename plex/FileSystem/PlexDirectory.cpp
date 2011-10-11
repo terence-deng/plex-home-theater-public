@@ -1101,6 +1101,9 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         CFileItemPtr theMediaItem(new CFileItem(theVideoInfo));
         theMediaItem->m_mediaParts = mediaParts;
 
+        if (pDuration)
+          theMediaItem->SetProperty("duration", pDuration);
+        
         // Check for indirect.
         if (media->Attribute("indirect") && strcmp(media->Attribute("indirect"), "1") == 0)
         {
