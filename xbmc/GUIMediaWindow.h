@@ -52,7 +52,7 @@ public:
   virtual CFileItemPtr GetCurrentListItem(int offset = 0);
   const CGUIViewState *GetViewState() const;
 
-  void SetUpdatedItem(const CFileItemPtr& updatedItem) 
+  void UpdateSelectedItem(const CFileItemPtr& updatedItem) 
   { 
     CFileItem* pItem = new CFileItem();
     (*pItem) = *(updatedItem.get());

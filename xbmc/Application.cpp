@@ -261,7 +261,6 @@
 
 #include "MediaManager.h"
 #include "utils/JobManager.h"
-#include "utils/SaveFileStateJob.h"
 #include "utils/AlarmClock.h"
 
 #ifdef _LINUX
@@ -277,6 +276,7 @@
 
 #include "plex/PlexApplication.h"
 #include "PlexMediaServerPlayer.h"
+#include "PlexMediaServerQueue.h"
 
 using namespace std;
 using namespace ADDON;
@@ -4094,112 +4094,86 @@ bool CApplication::IsPlayingFullScreenVideo() const
   return IsPlayingVideo() && g_graphicsContext.IsFullScreenVideo();
 }
 
-void CApplication::SaveFileState()
-{
-  if (!g_settings.GetCurrentProfile().canWriteDatabases())
+void CApplication::UpdateFileState(const string& aState)
+{  
+  if (!m_itemCurrentFile)
     return;
-  CJob* job = new CSaveFileStateJob(*m_progressTrackingItem,
-      m_progressTrackingVideoResumeBookmark,
-      m_progressTrackingPlayCountUpdate);
-  CJobManager::GetInstance().AddJob(job, NULL);
+  
+  // Update the media server as needed.
+  static time_t lastUpdated = 0;
+  static string lastState;
+  static double lastTime = 0.0;
+  static double latestTime = 0.0;
+  static bool   hasScrobbled = false;
+  static string lastKey;
+  
+  // Compute the state if not passed on.
+  string state = aState;
+  if (state.empty())
+    state = IsBuffering() ? "buffering" : IsPaused() ? "paused" : "playing";
 
-  UpdateViewOffset();
-}
+  // Keep latest time.
+  double nowTime = GetTime();
+  if (nowTime > 0.0)
+    latestTime = nowTime;
 
-void CApplication::UpdateFileState()
-{
-  // Did the file change?
-  if (m_progressTrackingItem->m_strPath != "" && m_progressTrackingItem->m_strPath != CurrentFile())
+  // If the item changed, reset things.
+  if (lastKey != m_itemCurrentFile->GetProperty("key"))
   {
-    SaveFileState();
-
-    // Reset tracking item
-    m_progressTrackingItem->Reset();
+    hasScrobbled = false;
+    latestTime = 0.0;
   }
-  else
+  
+  if (state == "stopped" || IsPlayingVideo() || IsPlayingAudio())
   {
-    // Update the media server as needed.
-    static time_t lastUpdated = 0;
-    static string lastState;
-    static float  lastTime = 0;
-    static string lastKey;
-    
-    time_t now = time(0);
-    string state = IsBuffering() ? "buffering" : IsPaused() ? "paused" : "playing";
-    
     // Enough time has passed, we changed state, we skipped, or we're playing something different.
-    if (now - lastUpdated > 5           || 
-        lastState != state              || 
-        fabs(lastTime-GetTime()) > 10.0 ||
-        lastKey != m_progressTrackingItem->GetProperty("key"))
+    time_t now = time(0);
+    if (now - lastUpdated > 5         || 
+        lastState != state            || 
+        fabs(lastTime-nowTime) > 10.0 ||
+        lastKey != m_itemCurrentFile->GetProperty("key"))
     {      
+      // Update state.
       lastUpdated = time(0);
       lastState = state;
-      lastTime = GetTime();
-      lastKey = m_progressTrackingItem->GetProperty("key");
-
-      m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(GetTime()*1000)));
-      PlexMediaServerQueue::Get().onPlayingProgress(m_progressTrackingItem, GetTime()*1000, state);
+      lastTime = nowTime;
+      lastKey = m_itemCurrentFile->GetProperty("key");
+      
+      // If we've stopped, use the most up to date time possible.
+      double t = nowTime;
+      if (state == "stopped")
+        t = latestTime;
+      
+      // Update progress.
+      if (hasScrobbled == false)
+      {
+        m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(t*1000)));
+        m_itemCurrentFile->SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
+        
+        PlexMediaServerQueue::Get().onPlayingProgress(m_itemCurrentFile, t*1000, state);
+      }
+      else
+      {
+        PlexMediaServerQueue::Get().onPlayTimeline(m_itemCurrentFile, t*1000, state);
+      }
     }
 
-    if (IsPlayingVideo() || IsPlayingAudio())
+    // See if we should scrobble.
+    if (hasScrobbled == false && GetPercentage() >= g_advancedSettings.m_videoPlayCountMinimumPercent)
     {
-      if (m_progressTrackingItem->m_strPath == "")
-      {
-        // Init some stuff
-        *m_progressTrackingItem = CurrentFileItem();
-        m_progressTrackingPlayCountUpdate = false;
-      }
-
-      if ((m_progressTrackingItem->IsAudio() && g_advancedSettings.m_audioPlayCountMinimumPercent > 0 &&
-          GetPercentage() >= g_advancedSettings.m_audioPlayCountMinimumPercent) ||
-          (m_progressTrackingItem->IsVideo() && g_advancedSettings.m_videoPlayCountMinimumPercent > 0 &&
-          GetPercentage() >= g_advancedSettings.m_videoPlayCountMinimumPercent))
-      {
-        m_progressTrackingPlayCountUpdate = true;
-      }
-
-      if (m_progressTrackingItem->IsVideo())
-      {
-        if ((m_progressTrackingItem->IsDVDImage() ||
-             m_progressTrackingItem->IsDVDFile()    ) &&
-            m_pPlayer->GetTotalTime() > 15*60)
-
-        {
-          m_progressTrackingItem->GetVideoInfoTag()->m_streamDetails.Reset();
-          m_pPlayer->GetStreamDetails(m_progressTrackingItem->GetVideoInfoTag()->m_streamDetails);
-        }
-        
-        // Update bookmark for save
-        m_progressTrackingVideoResumeBookmark.player = CPlayerCoreFactory::GetPlayerName(m_eCurrentPlayer);
-        m_progressTrackingVideoResumeBookmark.playerState = m_pPlayer->GetPlayerState();
-        m_progressTrackingVideoResumeBookmark.thumbNailImage.Empty();
-
-        if (g_advancedSettings.m_videoIgnorePercentAtEnd > 0 &&
-            GetTotalTime() - GetTime() < 0.01f * g_advancedSettings.m_videoIgnorePercentAtEnd * GetTotalTime())
-        {
-          // Delete the bookmark
-          m_progressTrackingVideoResumeBookmark.timeInSeconds = -1.0f;
-        }
-        else if (GetTime() > g_advancedSettings.m_videoIgnoreSecondsAtStart)
-        {
-          // Update the bookmark
-          m_progressTrackingVideoResumeBookmark.timeInSeconds = GetTime();
-          m_progressTrackingVideoResumeBookmark.totalTimeInSeconds = GetTotalTime();
-        }
-        else
-        {
-          // Do nothing
-          m_progressTrackingVideoResumeBookmark.timeInSeconds = 0.0f;
-        }
-        
-        CGUIMediaWindow* mediaWindow = (CGUIMediaWindow* )g_windowManager.GetWindow(WINDOW_VIDEO_FILES);
-        if (mediaWindow)
-        {
-          mediaWindow->SetUpdatedItem(m_itemCurrentFile);
-        }
-      }
+      hasScrobbled = true;
+      
+      // Scrobble.
+      m_itemCurrentFile->GetVideoInfoTag()->m_playCount++;
+      m_itemCurrentFile->SetOverlayImage(CGUIListItem::ICON_OVERLAY_WATCHED);
+      m_itemCurrentFile->ClearProperty("viewOffset");
+      PlexMediaServerQueue::Get().onViewed(m_itemCurrentFile, true);
     }
+
+    // Update the item in place.
+    CGUIMediaWindow* mediaWindow = (CGUIMediaWindow* )g_windowManager.GetWindow(WINDOW_VIDEO_FILES);
+    if (mediaWindow)
+      mediaWindow->UpdateSelectedItem(m_itemCurrentFile);
   }
 }
 
@@ -4209,7 +4183,7 @@ void CApplication::UpdateViewOffset()
     m_progressTrackingItem->ClearProperty("viewOffset");
 
   else if (m_progressTrackingVideoResumeBookmark.timeInSeconds > 0.0f)
-    m_progressTrackingItem->SetProperty("viewOffset", boost::lexical_cast<string>(m_progressTrackingVideoResumeBookmark.timeInSeconds));
+    m_progressTrackingItem->SetProperty("viewOffset", boost::lexical_cast<string>((int)m_progressTrackingVideoResumeBookmark.timeInSeconds));
 }
 
 void CApplication::StopPlaying()
@@ -4632,6 +4606,10 @@ bool CApplication::OnMessage(CGUIMessage& message)
         m_pKaraokeMgr->Stop();
 #endif
 
+      // User initiated the stop.
+      if (message.GetMessage() == GUI_MSG_PLAYBACK_STOPPED)
+        UpdateFileState("stopped");
+      
       // first check if we still have items in the stack to play
       if (message.GetMessage() == GUI_MSG_PLAYBACK_ENDED)
       {
@@ -4639,6 +4617,10 @@ bool CApplication::OnMessage(CGUIMessage& message)
         { // just play the next item in the stack
           PlayFile(*(*m_currentStack)[++m_currentStackPosition], true);
           return true;
+        }
+        else
+        {
+          UpdateFileState("stopped");
         }
       }
 
@@ -5027,7 +5009,7 @@ void CApplication::Restart(bool bSamePosition)
   if( !m_pPlayer )
     return ;
 
-  SaveFileState();
+  UpdateFileState("playing");
 
   // do we want to return to the current position in the file
   if (false == bSamePosition)
