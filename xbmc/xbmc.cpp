@@ -174,9 +174,14 @@ int main(int argc, char* argv[])
       g_application.Run();
     }
   }
+  catch(std::exception& ex)
+  {
+    fprintf(stderr, "ERROR: Exception caught on main loop (%s) Exiting.\n", ex.what());
+    return -1;
+  }
   catch(...)
   {
-    fprintf(stderr, "ERROR: Exception caught on main loop. Exiting\n");
+    fprintf(stderr, "ERROR: Unknown exception caught on main loop. Exiting.\n");
     return -1;
   }
 
