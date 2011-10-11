@@ -511,6 +511,7 @@ typedef boost::shared_ptr < CFileItem > CFileItemPtr;
 
 #define LISTITEM_TYPE               (LISTITEM_START + 150)
 #define LISTITEM_GRANDPARENT_THUMB  (LISTITEM_START + 151)
+#define LISTITEM_STATUS             (LISTITEM_START + 152)
 
 #define LISTITEM_PROPERTY_START     (LISTITEM_START + 200)
 #define LISTITEM_PROPERTY_END       (LISTITEM_PROPERTY_START + 1000)
