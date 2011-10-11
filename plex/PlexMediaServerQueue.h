@@ -74,6 +74,29 @@ class PlexMediaServerQueue : public CThread
     }
   }
   
+  /// New timeline event.
+  void onPlayTimeline(const CFileItemPtr& item, int ms, const string& state="playing")
+  {
+    if (item->HasProperty("ratingKey") && item->HasProperty("containerKey"))
+    {
+      // Encode the key.
+      CStdString encodedKey = item->GetProperty("ratingKey");
+      CUtil::URLEncode(encodedKey);
+      
+      // Figure out the identifier.
+      string identifier = item->GetProperty("pluginIdentifier");
+      
+      string url = "/:/timeline";
+      url = buildUrl(item, url);
+      url += "?ratingKey=" + encodedKey;
+      url += "&identifier=" + identifier;
+      url += "&state=" + state;
+      url += "&time=" + lexical_cast<string>(ms);
+      
+      // Duration. TBD.
+    }
+  }
+  
   /// Play progress.
   void onPlayingProgress(const CFileItemPtr& item, int ms, const string& state="playing")
   { enqueue("progress", item, "&time=" + boost::lexical_cast<string>(ms) + "&state=" + state); }
@@ -132,7 +155,6 @@ class PlexMediaServerQueue : public CThread
       
       // Figure out the identifier.
       string identifier = item->GetProperty("pluginIdentifier");
-      CURL theURL(item->GetProperty("key"));
       
       // Build the URL.
       string url = "/:/" + verb;
