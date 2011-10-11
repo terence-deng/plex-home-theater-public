@@ -1718,6 +1718,8 @@ void CPlexDirectory::Process()
   m_http.SetRequestHeader("X-Plex-Client-Platform", "Windows");
 #endif
   
+  m_http.SetRequestHeader("X-Plex-Client-Identifier", g_guiSettings.GetString("system.uuid"));
+  
   // Build an audio codecs description.
 #ifdef _WIN32
   CStdString protocols = "protocols=shoutcast,http-video;audioDecoders=mp3,aac";
