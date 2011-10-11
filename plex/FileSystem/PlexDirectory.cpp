@@ -642,7 +642,7 @@ class PlexMediaNode
          t.tm_mon  = boost::lexical_cast<int>(parts[1]) - 1;
          t.tm_mday = boost::lexical_cast<int>(parts[2]);
 
-         strftime(date, 128, "%B %d, %Y", &t);
+         strftime(date, 128, "%b %d, %Y", &t);
          pItem->SetProperty("originallyAvailableAt", date);
        }
      }
