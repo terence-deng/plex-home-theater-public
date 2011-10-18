@@ -26,6 +26,7 @@
  
 #include "CocoaUtils.h"
 #include "PlexMediaServerPlayer.h"
+#include "PlexUtils.h"
 #include "FileItem.h"
 #include "GUIFontManager.h"
 #include "GUIWindowManager.h"

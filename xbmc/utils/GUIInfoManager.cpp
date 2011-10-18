@@ -638,7 +638,7 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
       int offset = atoi(info.Mid(9, info.GetLength() - 10));
       ret = TranslateListItem(info.Mid(info.Find(".")+1));
 
-      if (ret == LISTITEM_TYPE)
+      if (ret == LISTITEM_TYPE || ret == LISTITEM_STATUS)
       {
         CStdString param = info.Mid(info.Find(".")+6);
         param = param.Left(param.size()-1);
@@ -727,6 +727,9 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
     if (info.Left(5).Equals("type("))
       return AddMultiInfo(GUIInfo(bNegate ? -LISTITEM_TYPE : LISTITEM_TYPE, ConditionalStringParameter(info.Mid(5,info.GetLength()-6)), offset));
 
+    if (info.Left(7).Equals("status("))
+      return AddMultiInfo(GUIInfo(bNegate ? -LISTITEM_STATUS : LISTITEM_STATUS, ConditionalStringParameter(info.Mid(7,info.GetLength()-8)), offset));
+    
     ret = TranslateListItem(strTest.Mid(strCategory.GetLength() + 1));
     if (offset || ret == LISTITEM_ISSELECTED || ret == LISTITEM_ISPLAYING || ret == LISTITEM_IS_FOLDER)
       return AddMultiInfo(GUIInfo(bNegate ? -ret : ret, 0, offset, INFOFLAG_LISTITEM_WRAP));
@@ -901,8 +904,9 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
 int CGUIInfoManager::TranslateListItem(const CStdString &info)
 {
   if (info.Equals("thumb")) return LISTITEM_THUMB;
+  else if (info.Equals("grandparentthumb")) return LISTITEM_GRANDPARENT_THUMB;
   else if (info.Equals("icon")) return LISTITEM_ICON;
-else if (info.Equals("banner")) return LISTITEM_BANNER;
+  else if (info.Equals("banner")) return LISTITEM_BANNER;
   else if (info.Equals("actualicon")) return LISTITEM_ACTUAL_ICON;
   else if (info.Equals("overlay")) return LISTITEM_OVERLAY;
   else if (info.Equals("label")) return LISTITEM_LABEL;
@@ -960,6 +964,7 @@ else if (info.Equals("banner")) return LISTITEM_BANNER;
   else if (info.Equals("originaltitle")) return LISTITEM_ORIGINALTITLE;
   else if (info.Equals("stardiffuse")) return LISTITEM_STAR_DIFFUSE;
   else if (info.Left(5).Equals("type(")) return LISTITEM_TYPE;
+  else if (info.Left(5).Equals("status(")) return LISTITEM_STATUS;
   else if (info.Left(9).Equals("property(")) return AddListItemProp(info.Mid(9, info.GetLength() - 10));
   return 0;
 }
@@ -2147,7 +2152,7 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
     }
 
     // Simple ListItem.Type(xxx)
-    if (!itemPtr && item && condition == LISTITEM_TYPE)
+    if (!itemPtr && item && (condition == LISTITEM_TYPE || condition == LISTITEM_STATUS))
       bReturn = GetItemBool(item, condition, info.GetData1());
     
     else if (itemPtr) // If we got a valid item, do the lookup
@@ -2773,7 +2778,7 @@ CStdString CGUIInfoManager::GetImage(int info, int contextWindow)
     if (window)
       return ((CGUIMediaWindow *)window)->CurrentDirectory().GetProperty("seasonthumb");
   }
-  else if (info == LISTITEM_THUMB || info == LISTITEM_ICON || info == LISTITEM_ACTUAL_ICON ||
+  else if (info == LISTITEM_THUMB || info == LISTITEM_GRANDPARENT_THUMB || info == LISTITEM_ICON || info == LISTITEM_ACTUAL_ICON ||
           info == LISTITEM_OVERLAY || info == LISTITEM_RATING || info == LISTITEM_STAR_RATING)
   {
     CGUIWindow *window = GetWindowWithCondition(contextWindow, WINDOW_CONDITION_HAS_LIST_ITEMS);
@@ -4046,6 +4051,8 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info) const
     return item->GetOverlayImage();
   case LISTITEM_THUMB:
     return item->GetThumbnailImage();
+  case LISTITEM_GRANDPARENT_THUMB:
+    return item->GetGrandparentThumbnailImage();
   case LISTITEM_FOLDERNAME:
   case LISTITEM_PATH:
     {
@@ -4246,6 +4253,20 @@ bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition, int s
   {
     uint32_t param = secondCondition > 0 ? secondCondition : condition;
     return item->GetProperty("type").Equals(m_stringParameters[param]);
+  }
+  else if (condition == LISTITEM_STATUS)
+  {
+    CStdString lhs;
+    switch (item->GetOverlayImageID())
+    {
+    case CGUIListItem::ICON_OVERLAY_IN_PROGRESS: lhs = "inprogress"; break;
+    case CGUIListItem::ICON_OVERLAY_UNWATCHED: lhs = "unwatched"; break;
+    case CGUIListItem::ICON_OVERLAY_WATCHED: lhs = "watched"; break;
+    default: break;
+    }
+    
+    uint32_t param = secondCondition > 0 ? secondCondition : condition;
+    return lhs.Equals(m_stringParameters[param]);
   }
   else if (condition == LISTITEM_ISSELECTED)
     return item->IsSelected();

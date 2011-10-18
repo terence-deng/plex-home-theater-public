@@ -241,70 +241,6 @@ void CGUIWindowVideoBase::OnInfo(const CFileItemPtr& pItem, const ADDON::Scraper
     Update(m_vecItems->m_strPath);
     m_viewControl.SetSelectedItem(itemNumber);
   }
-#if 0
-  if (!pItem)
-    return;
-
-  if (pItem->IsParentFolder() || pItem->m_bIsShareOrDrive || pItem->m_strPath.Equals("add"))
-    return;
-
-  // ShowIMDB can kill the item as this window can be closed while we do it,
-  // so take a copy of the item now
-  CFileItem item(*pItem);
-  if (item.IsVideoDb() && item.HasVideoInfoTag())
-  {
-    if (item.GetVideoInfoTag()->m_strFileNameAndPath.IsEmpty())
-      item.m_strPath = item.GetVideoInfoTag()->m_strPath;
-    else
-      item.m_strPath = item.GetVideoInfoTag()->m_strFileNameAndPath;
-  }
-  else
-  {
-    if (item.m_bIsFolder && scraper && scraper->Content() != CONTENT_TVSHOWS)
-    {
-      CFileItemList items;
-      CDirectory::GetDirectory(item.m_strPath, items,"",true,false,DIR_CACHE_ONCE,true,true);
-      items.Stack();
-
-      // check for media files
-      bool bFoundFile(false);
-      for (int i = 0; i < items.Size(); ++i)
-      {
-        CFileItemPtr item2 = items[i];
-
-        if (item2->IsVideo() && !item2->IsPlayList() &&
-            !CUtil::ExcludeFileOrFolder(item2->m_strPath, g_advancedSettings.m_moviesExcludeFromScanRegExps))
-        {
-          item.m_strPath = item2->m_strPath;
-          item.m_bIsFolder = false;
-          bFoundFile = true;
-          break;
-        }
-      }
-
-      // no video file in this folder
-      if (!bFoundFile)
-      {
-        CGUIDialogOK::ShowAndGetInput(13346,20349,20022,20022);
-        return;
-      }
-    }
-  }
-
-  // we need to also request any thumbs be applied to the folder item
-  if (pItem->m_bIsFolder)
-    item.SetProperty("set_folder_thumb", pItem->m_strPath);
-
-  bool modified = ShowIMDB(&item, scraper);
-  if (modified &&
-     (g_windowManager.GetActiveWindow() == WINDOW_VIDEO_FILES ||
-      g_windowManager.GetActiveWindow() == WINDOW_VIDEO_NAV)) // since we can be called from the music library we need this check
-  {
-    int itemNumber = m_viewControl.GetSelectedItem();
-    Update(m_vecItems->m_strPath);
-    m_viewControl.SetSelectedItem(itemNumber);
-  }
-#endif
 }
 
 // ShowIMDB is called as follows:
@@ -914,7 +850,7 @@ void CGUIWindowVideoBase::OnRestartItem(int iItem)
   CGUIMediaWindow::OnClick(iItem);
 }
 
-CStdString CGUIWindowVideoBase::GetResumeString(CFileItem item) 
+CStdString CGUIWindowVideoBase::GetResumeString(CFileItem& item) 
 {
   CStdString resumeString;
   
@@ -991,6 +927,9 @@ void CGUIWindowVideoBase::OnStreamDetails(const CStreamDetails &details, const C
 
 void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
+  if (m_vecItems->GetContent() == "secondary")
+    return;
+  
   CFileItemPtr item;
   if (itemNumber >= 0 && itemNumber < m_vecItems->Size())
     item = m_vecItems->Get(itemNumber);
@@ -1037,8 +976,10 @@ void CGUIWindowVideoBase::GetContextButtons(int itemNumber, CContextButtons &but
         }
         else
           CPlayerCoreFactory::GetPlayers(*item, vecCores);
+#if 0
         if (vecCores.size() > 1)
           buttons.Add(CONTEXT_BUTTON_PLAY_WITH, 15213);
+#endif
       }
       if (item->IsSmartPlayList())
       {
@@ -1345,7 +1286,10 @@ void CGUIWindowVideoBase::MarkUnWatched(const CFileItemPtr &item)
   
   item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED);
   if (item->GetVideoInfoTag())
+  {
     item->GetVideoInfoTag()->m_playCount = 0;
+    item->ClearProperty("viewOffset");
+  }
   
   // Fix numbers.
   if (item->HasProperty("watchedepisodes"))
@@ -1365,7 +1309,10 @@ void CGUIWindowVideoBase::MarkWatched(const CFileItemPtr &item)
   // Change the item.
   item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_WATCHED);
   if (item->GetVideoInfoTag())
+  {
     item->GetVideoInfoTag()->m_playCount++;
+    item->ClearProperty("viewOffset");
+  }
   
   // Fix numbers.
   if (item->HasProperty("watchedepisodes"))

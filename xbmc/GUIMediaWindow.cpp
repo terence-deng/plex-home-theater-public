@@ -898,7 +898,11 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
     else
       item->ClearProperty("viewOffset");
     
+    // Play count.
     item->GetVideoInfoTag()->m_playCount = m_updatedItem->GetVideoInfoTag()->m_playCount;
+    
+    // Icon.
+    item->SetOverlayImage((CGUIListItem::GUIIconOverlay)m_updatedItem->GetOverlayImageID());
     
     m_updatedItem = CFileItemPtr();
   }

@@ -93,7 +93,7 @@ protected:
    \param item selected item
    \return string containing the resume position or an empty string if there is no resume position
    */
-  static CStdString GetResumeString(CFileItem item);
+  static CStdString GetResumeString(CFileItem& item);
   void OnRestartItem(int iItem);
   bool OnResumeItem(int iItem);
   void PlayItem(int iItem);

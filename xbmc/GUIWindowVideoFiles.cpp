@@ -381,6 +381,9 @@ void CGUIWindowVideoFiles::LoadPlayList(const CStdString& strPlayList)
 
 void CGUIWindowVideoFiles::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
+  if (m_vecItems->GetContent() == "secondary")
+    return;
+  
   CFileItemPtr item;
   if (itemNumber >= 0 && itemNumber < m_vecItems->Size())
     item = m_vecItems->Get(itemNumber);

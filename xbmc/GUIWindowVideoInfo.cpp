@@ -236,6 +236,7 @@ void CGUIWindowVideoInfo::SetMovie(const CFileItemPtr& item)
     }
     
     url.SetFileName("library/metadata/" + item->GetProperty("ratingKey"));
+    url.SetOptions("?skipRefresh=1");
     
     // Download the data.
     CFileCurl set;

@@ -151,8 +151,7 @@ public:
   bool ProcessAndStartPlaylist(const CStdString& strPlayList, PLAYLIST::CPlayList& playlist, int iPlaylist);
   bool PlayFile(const CFileItem& item, bool bRestart = false);
   void FinishPlayingFile(bool bResult, const CStdString& error=""); 
-  void SaveFileState();
-  void UpdateFileState();
+  void UpdateFileState(const std::string& state="");
   void UpdateViewOffset();
   void StopPlaying();
   void Restart(bool bSamePosition = true);

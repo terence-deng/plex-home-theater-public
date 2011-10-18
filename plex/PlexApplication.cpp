@@ -13,6 +13,8 @@
 #include "BackgroundMusicPlayer.h"
 #include "GUIUserMessages.h"
 
+BackgroundMusicPlayerPtr bgMusicPlayer;
+
 ////////////////////////////////////////////////////////////////////////////////
 PlexApplicationPtr PlexApplication::Create()
 {
@@ -26,8 +28,9 @@ PlexApplicationPtr PlexApplication::Create()
 ////////////////////////////////////////////////////////////////////////////////
 PlexApplication::PlexApplication()
 {
+  // We don't want the background music player whacked on exit (destructor issues), so we'll keep a reference.
   m_serviceListener = PlexServiceListener::Create();
-  m_bgMusicPlayer = BackgroundMusicPlayer::Create();
+  bgMusicPlayer = m_bgMusicPlayer = BackgroundMusicPlayer::Create();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

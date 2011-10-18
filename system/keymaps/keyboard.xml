@@ -145,6 +145,11 @@
       <r>Rename</r>
     </keyboard>
   </MyFiles>
+  <MyPictures>
+    <keyboard>
+      <escape>ParentDir</escape>
+    </keyboard>
+  </MyPictures>
   <MyMusicPlaylist>
     <keyboard>
       <space>Playlist</space>      <!-- Close playlist -->

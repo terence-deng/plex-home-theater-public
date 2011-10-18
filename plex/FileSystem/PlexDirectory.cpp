@@ -469,16 +469,20 @@ class PlexMediaNode
      CFileItemPtr pItem(new CFileItem());
      pItem->m_bIsFolder = true;
 
-     const char* key = el.Attribute("key");
-     if (key == 0 || strlen(key) == 0)
-       return CFileItemPtr();
-
      // Compute the new path.
+     const char* key = el.Attribute("key");
+     if (key == 0)
+       key = "";
+     
      pItem->m_strPath = CPlexDirectory::ProcessUrl(parentPath, key, true);
 
      // Let subclass finish.
      DoBuildFileItem(pItem, string(parentPath), el);
 
+     // If we don't a key *or* media items, get out.
+     if (strlen(key)== 0 && pItem->m_mediaItems.empty() == true)
+       return CFileItemPtr();
+     
      // Parent path.
      if (el.Attribute("parentKey"))
        pItem->SetProperty("parentPath", CPlexDirectory::ProcessUrl(parentPath, el.Attribute("parentKey"), true));
@@ -541,6 +545,11 @@ class PlexMediaNode
        if (strThumb.size() > 0)
          pItem->SetThumbnailImage(strThumb);
 
+       // Grandparent thumb.
+       string strGrandparentThumb = CPlexDirectory::ProcessMediaElement(parentPath, el.Attribute("grandparentThumb"), MAX_THUMBNAIL_AGE, localServer);
+       if (strGrandparentThumb.size() > 0)
+         pItem->SetGrandparentThumbnailImage(strGrandparentThumb);
+       
        // Fanart.
        string strArt = CPlexDirectory::ProcessMediaElement(parentPath, el.Attribute("art"), MAX_FANART_AGE, localServer);
        if (strArt.size() > 0)
@@ -632,10 +641,10 @@ class PlexMediaNode
          t.tm_year = boost::lexical_cast<int>(parts[0]) - 1900;
          t.tm_mon  = boost::lexical_cast<int>(parts[1]) - 1;
          t.tm_mday = boost::lexical_cast<int>(parts[2]);
-       }
 
-       strftime(date, 128, "%B %d, %Y", &t);
-       pItem->SetProperty("originallyAvailableAt", date);
+         strftime(date, 128, "%b %d, %Y", &t);
+         pItem->SetProperty("originallyAvailableAt", date);
+       }
      }
 
      // Extra attributes for prefixes.
@@ -1092,6 +1101,9 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         CFileItemPtr theMediaItem(new CFileItem(theVideoInfo));
         theMediaItem->m_mediaParts = mediaParts;
 
+        if (pDuration)
+          theMediaItem->SetProperty("duration", pDuration);
+        
         // Check for indirect.
         if (media->Attribute("indirect") && strcmp(media->Attribute("indirect"), "1") == 0)
         {
@@ -1644,6 +1656,7 @@ void CPlexDirectory::Parse(const CURL& url, TiXmlElement* root, CFileItemList &i
         ParseTags(element, item, "Writer");
         ParseTags(element, item, "Director");
         ParseTags(element, item, "Role");
+        ParseTags(element, item, "Country");
 
         items.Add(item);
       }
@@ -1708,6 +1721,8 @@ void CPlexDirectory::Process()
 #elif defined (_WIN32)
   m_http.SetRequestHeader("X-Plex-Client-Platform", "Windows");
 #endif
+  
+  m_http.SetRequestHeader("X-Plex-Client-Identifier", g_guiSettings.GetString("system.uuid"));
   
   // Build an audio codecs description.
 #ifdef _WIN32

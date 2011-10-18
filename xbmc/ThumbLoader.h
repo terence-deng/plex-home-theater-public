@@ -68,6 +68,7 @@ public:
   virtual ~CThumbLoader();
 
   bool LoadRemoteThumb(CFileItem *pItem);
+  bool LoadRemoteGrandparentThumb(CFileItem *pItem);
 
   /*! \brief Checks whether the given item has a thumb that needs caching, and if so caches it.
    \param item CFileItem to check for a cachable thumb.

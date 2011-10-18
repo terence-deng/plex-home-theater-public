@@ -110,10 +110,10 @@
       <button id="4">StepForward</button>
       <button id="5">Pause</button>
       <button id="6">OSD</button>
-      <button id="9">BigStepBack</button>                               <!--- Hold Left --->
-      <button id="10">BigStepForward</button>                           <!--- Hold Right --->
-      <button id="11">Stop</button>                                     <!--- Hold Menu --->
-      <button id="12">Info</button>                                     <!--- Hold Play --->
+      <button id="9">BigStepBack</button>                             <!--- Hold Left --->
+      <button id="10">BigStepForward</button>                         <!--- Hold Right --->
+      <button id="8">Stop</button>                                    <!--- Hold Menu --->
+      <button id="12">Pause</button>                                  <!--- Play/Pause -->
     </joystick>
   </FullscreenVideo>
   <FullscreenInfo>
@@ -286,7 +286,7 @@
       <button id="6">PreviousMenu</button>                              <!--- Menu --->
       <button id="9">Rewind</button>                                    <!--- Hold Left --->
       <button id="10">FastForward</button>                              <!--- Hold Right --->
-      <button id="11">Stop</button>                                     <!--- Hold Menu --->
+      <button id="8">Stop</button>                                     <!--- Hold Menu --->
     </joystick>
   </NowPlaying>
 </keymap>
