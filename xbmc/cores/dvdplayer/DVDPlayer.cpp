@@ -1164,7 +1164,9 @@ void CDVDPlayer::Process()
       boost::replace_all(sig, "/", "%2F");
       boost::replace_all(sig, "=", "%3D");
 
-      options += "&" + transcodeURL.GetOptions().substr(1);
+      if (transcodeURL.GetOptions().empty() == false)
+        options += "&" + transcodeURL.GetOptions().substr(1);
+      
       options += "&X-Plex-Access-Key=" + apiKey;
       options += "&X-Plex-Access-Time=" + lexical_cast<string>(time);
       options += "&X-Plex-Access-Code=" + sig;
