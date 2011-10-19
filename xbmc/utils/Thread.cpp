@@ -421,11 +421,11 @@ void CThread::SetName( LPCTSTR szThreadName )
   info.dwThreadID = m_ThreadId;
   info.dwFlags = 0;
 
-  try
+  __try
   {
     RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR *)&info);
   }
-  catch(...)
+  __except(EXCEPTION_EXECUTE_HANDLER)
   {
   }
 #endif
