@@ -25,6 +25,8 @@
 #include "Codecs/DllAvFormat.h"
 #include "Codecs/DllAvCodec.h"
 
+#define MAX_STREAMS 128
+
 class CDVDDemuxFFmpeg;
 
 class CDemuxStreamVideoFFmpeg
