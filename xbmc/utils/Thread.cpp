@@ -407,26 +407,29 @@ int CThread::GetNormalPriority(void)
 void CThread::SetName( LPCTSTR szThreadName )
 {
 #ifdef _WIN32
-  const unsigned int MS_VC_EXCEPTION = 0x406d1388;
-  struct THREADNAME_INFO
+  if (IsDebuggerPresent())
   {
-    DWORD dwType;     // must be 0x1000
-    LPCSTR szName;    // pointer to name (in same addr space)
-    DWORD dwThreadID; // thread ID (-1 caller thread)
-    DWORD dwFlags;    // reserved for future use, most be zero
-  } info;
+    const unsigned int MS_VC_EXCEPTION = 0x406d1388;
+    struct THREADNAME_INFO
+    {
+      DWORD dwType;     // must be 0x1000
+      LPCSTR szName;    // pointer to name (in same addr space)
+      DWORD dwThreadID; // thread ID (-1 caller thread)
+      DWORD dwFlags;    // reserved for future use, most be zero
+    } info;
 
-  info.dwType = 0x1000;
-  info.szName = szThreadName;
-  info.dwThreadID = m_ThreadId;
-  info.dwFlags = 0;
+    info.dwType = 0x1000;
+    info.szName = szThreadName;
+    info.dwThreadID = m_ThreadId;
+    info.dwFlags = 0;
 
-  __try
-  {
-    RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR *)&info);
-  }
-  __except(EXCEPTION_EXECUTE_HANDLER)
-  {
+    __try
+    {
+      RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR *)&info);
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+    }
   }
 #endif
 }
