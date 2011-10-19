@@ -120,9 +120,6 @@
 #include "utils/IoSupport.h"
 #include "Zeroconf.h"
 #include "ZeroconfBrowser.h"
-#ifndef _LINUX
-#include "utils/Win32Exception.h"
-#endif
 #ifdef HAS_EVENT_SERVER
 #include "utils/EventServer.h"
 #endif
@@ -482,10 +479,6 @@ bool CApplication::Create()
 #ifndef _LINUX
   //floating point precision to 24 bits (faster performance)
   _controlfp(_PC_24, _MCW_PC);
-
-  /* install win32 exception translator, win32 exceptions
-   * can now be caught using c++ try catch */
-  win32_exception::install_handler();
 #endif
 
   // only the InitDirectories* for the current platform should return true

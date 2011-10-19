@@ -21,7 +21,6 @@
 #include "Thread.h"
 #ifndef _LINUX
 #include <process.h>
-#include "win32exception.h"
 #ifndef _MT
 #pragma message( "Please compile using multithreaded run-time libraries" )
 #endif
@@ -148,10 +147,7 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
 
   CLog::Log(LOGDEBUG,"thread start, auto delete: %d",pThread->IsAutoDelete());
 
-#ifndef _LINUX
-  /* install win32 exception translator */
-  win32_exception::install_handler();
-#else
+#ifdef _LINUX
 #ifndef __APPLE__
   pLocalThread = pThread;
 #endif
@@ -173,18 +169,6 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
   {
     pThread->OnStartup();
   }
-#ifndef _LINUX
-  catch (const win32_exception &e)
-  {
-    e.writelog(__FUNCTION__);
-    if( pThread->IsAutoDelete() )
-    {
-      delete pThread;
-      _endthreadex(123);
-      return 0;
-    }
-  }
-#endif
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Unhandled exception caught in thread startup, aborting. auto delete: %d", __FUNCTION__, pThread->IsAutoDelete());
@@ -202,16 +186,6 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
   {
     pThread->Process();
   }
-#ifndef _LINUX
-  catch (const access_violation &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-  catch (const win32_exception &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-#endif
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Unhandled exception caught in thread process, attemping cleanup in OnExit", __FUNCTION__);
@@ -221,16 +195,6 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
   {
     pThread->OnExit();
   }
-#ifndef _LINUX
-  catch (const access_violation &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-  catch (const win32_exception &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-#endif
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Unhandled exception caught in thread exit", __FUNCTION__);

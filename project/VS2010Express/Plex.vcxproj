@@ -745,7 +745,6 @@
     <ClCompile Include="..\..\xbmc\VideoReferenceClock.cpp" />
     <ClCompile Include="..\..\xbmc\utils\Weather.cpp" />
     <ClCompile Include="..\..\xbmc\utils\WebServer.cpp" />
-    <ClCompile Include="..\..\xbmc\utils\Win32Exception.cpp" />
     <ClCompile Include="..\..\xbmc\XBApplicationEx.cpp" />
     <ClCompile Include="..\..\xbmc\Zeroconf.cpp" />
     <ClCompile Include="..\..\xbmc\Album.cpp" />
@@ -1746,7 +1745,6 @@
     <ClInclude Include="..\..\xbmc\Util.h" />
     <ClInclude Include="..\..\xbmc\FileSystem\VirtualDirectory.h" />
     <ClInclude Include="..\..\xbmc\utils\Weather.h" />
-    <ClInclude Include="..\..\xbmc\utils\Win32Exception.h" />
     <ClInclude Include="..\..\xbmc\XBApplicationEx.h" />
     <ClInclude Include="..\..\xbmc\lib\libPython\XBPython.h" />
     <ClInclude Include="..\..\xbmc\lib\libPython\XBPythonDll.h" />
