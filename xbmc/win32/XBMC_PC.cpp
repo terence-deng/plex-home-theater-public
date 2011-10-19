@@ -96,6 +96,30 @@ LONG WINAPI CreateMiniDump( EXCEPTION_POINTERS* pEp )
   return pEp->ExceptionRecord->ExceptionCode;;
 }
 
+void CRT_invalid_parameter(const wchar_t* expression, const wchar_t* function, const wchar_t* file, 
+                           unsigned int line, uintptr_t pReserved)
+{
+  if (function && file)
+  {
+    CStdString strUTF8function, strUTF8file;
+    g_charsetConverter.wToUTF8(CStdStringW(function), strUTF8function);
+    g_charsetConverter.wToUTF8(CStdStringW(file), strUTF8file);
+
+    CLog::Log(LOGSEVERE,"CRT_invalid_parameter: function %s. File: %s Line: %d", strUTF8function.c_str(), strUTF8file.c_str(), line);
+
+    if (expression)
+    {
+      CStdString strUTF8expression;
+      g_charsetConverter.wToUTF8(CStdStringW(expression), strUTF8expression);
+      CLog::Log(LOGSEVERE,"CRT_invalid_parameter: expression: %s", strUTF8expression.c_str());
+    }
+  }
+  else
+  {
+    CLog::Log(LOGSEVERE,"CRT_invalid_parameter: no function or file provided");
+  }
+}
+
 //-----------------------------------------------------------------------------
 // Name: WinMain()
 // Desc: The application's entry point
@@ -113,10 +137,21 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
 #endif
 
   // Initializes CreateMiniDump to handle exceptions.
-  SetUnhandledExceptionFilter( CreateMiniDump );
+  // SetUnhandledExceptionFilter(CreateMiniDump);
+  //
+  // We don't do this anymore...
+  // It is generally a bad idea for a process to continue executing when an unhandled exception is thrown.
+  // It's generally much better to simply let the system handle creating dumps as per system policy.
+  // A classic example is heap corruption. CreateMiniDump could crash again allocating strings, thus obscuring the original issue.
+
+  // we don't want to see the "no disc in drive" windows message box
+  SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
+
+  // Turn off CRT auto-termination behavior
+  _set_invalid_parameter_handler(CRT_invalid_parameter);
 
   // check if XBMC is already running
-  CreateMutex(NULL, FALSE, "Plex Media Center");
+  CreateMutex(NULL, FALSE, "9034bd65-6bec-49be-bb42-4943c9776295");
   if(GetLastError() == ERROR_ALREADY_EXISTS)
   {
     HWND m_hwnd = FindWindow("XBMC","Plex");
@@ -189,11 +224,6 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
     MessageBox(NULL, errorMsg.c_str(), "Plex: Error", MB_OK|MB_ICONERROR);
     return 0;
   }
-
-#ifndef _DEBUG
-  // we don't want to see the "no disc in drive" windows message box
-  SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
-#endif
 
   g_application.Run();
   
