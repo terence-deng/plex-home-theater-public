@@ -1118,7 +1118,11 @@ void CDVDDemuxFFmpeg::AddStream(int iId)
         {
           std::string fileName = "special://temp/fonts/";
           XFILE::CDirectory::Create(fileName);
-          fileName += pStream->filename;
+          
+          AVMetadataTag* streamFile = m_dllAvFormat.av_metadata_get(pStream->metadata, "filename", NULL, 0);
+          if (streamFile && streamFile->value[0])
+            fileName += streamFile->value;
+
           XFILE::CFile file;
           if(pStream->codec->extradata && file.OpenForWrite(fileName))
           {
@@ -1157,7 +1161,9 @@ void CDVDDemuxFFmpeg::AddStream(int iId)
     m_streams[iId]->pPrivate = pStream;
     m_streams[iId]->flags = (CDemuxStream::EFlags)pStream->disposition;
 
-    strcpy( m_streams[iId]->language, pStream->language );
+    AVMetadataTag* lang = m_dllAvFormat.av_metadata_get(pStream->metadata, "language", NULL, 0);
+    if (lang && lang->value[0])
+      strcpy(m_streams[iId]->language, lang->value);
 
     if( pStream->codec->extradata && pStream->codec->extradata_size > 0 )
     {

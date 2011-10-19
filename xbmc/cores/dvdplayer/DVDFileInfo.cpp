@@ -48,6 +48,7 @@
 #include "Codecs/DllSwScale.h"
 #include "FileSystem/File.h"
 
+static DllAvFormat dllAvFormat;
 
 bool CDVDFileInfo::GetFileDuration(const CStdString &path, int& duration)
 {
@@ -262,6 +263,9 @@ void CDVDFileInfo::GetFileMetaData(const CStdString &strPath, CFileItem *pItem)
 {
   if (!pItem)
     return;
+  
+  if (!dllAvFormat.Load()) 
+    return;
 
   CDVDInputStream *pInputStream = CDVDFactoryInputStream::CreateInputStream(NULL, strPath, "");
   if (!pInputStream)
@@ -298,6 +302,11 @@ void CDVDFileInfo::GetFileMetaData(const CStdString &strPath, CFileItem *pItem)
     return ;
   }
 
+#define COPY_PROPERTY(str) \
+  entry = dllAvFormat.av_metadata_get(pContext->metadata, #str, NULL, 0); \
+  if (entry->value[0]) pItem->SetProperty(#str, entry->value);
+  
+  AVDictionaryEntry *entry = 0;
   AVFormatContext *pContext = pDemuxer->m_pFormatContext;
   if (pContext)
   {
@@ -310,16 +319,14 @@ void CDVDFileInfo::GetFileMetaData(const CStdString &strPath, CFileItem *pItem)
     pItem->SetProperty("duration-msec", strDuration);
     strDuration.Format("%02d:%02d:%02d", nHours, nMinutes, nSec);
     pItem->SetProperty("duration-str", strDuration);
-    pItem->SetProperty("title", pContext->title);
-    pItem->SetProperty("author", pContext->author);
-    pItem->SetProperty("copyright", pContext->copyright);
-    pItem->SetProperty("comment", pContext->comment);
-    pItem->SetProperty("album", pContext->album);
-    strDuration.Format("%d", pContext->year);
-    pItem->SetProperty("year", strDuration);
-    strDuration.Format("%d", pContext->track);
-    pItem->SetProperty("track", strDuration);
-    pItem->SetProperty("genre", pContext->genre);
+    COPY_PROPERTY(title);
+    COPY_PROPERTY(author);
+    COPY_PROPERTY(copyright);
+    COPY_PROPERTY(comment)
+    COPY_PROPERTY(album);
+    COPY_PROPERTY(genre);
+    COPY_PROPERTY(year);
+    COPY_PROPERTY(track);
   }
 
   delete pDemuxer;
