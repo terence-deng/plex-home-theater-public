@@ -1345,10 +1345,6 @@ std::string CDVDDemuxFFmpeg::GetErrorString(int code)
       return g_localizeStrings.Get(42002); // Could not read file header.
       break;
       
-    case AVERROR_NOFMT:
-      return g_localizeStrings.Get(42003); // Unknown format.
-      break;
-      
     case AVERROR(EIO):
       return g_localizeStrings.Get(42004); // Could not read data from file.
       
