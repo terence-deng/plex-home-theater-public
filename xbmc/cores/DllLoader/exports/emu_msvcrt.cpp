@@ -489,7 +489,7 @@ extern "C"
       EmuFileObject* object = g_emuFileWrapper.RegisterFileObject(pFile);
       if (object == NULL)
       {
-        VERIFY(0);
+        //VERIFY(0);
         pFile->Close();
         delete pFile;
         return -1;
