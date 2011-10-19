@@ -388,6 +388,9 @@ xcuserdata
 
 # /tools/darwin
 /tools/darwin/depends/config.site
+/tools/darwin/depends/Makefile
+/tools/darwin/depends/configure
+/tools/darwin/depends/python26/Makefile
 /tools/darwin/depends/config.site.mk
 /tools/darwin/depends/Makefile.include
 /tools/darwin/depends/sqlite3/sqlite-3.6.11/
