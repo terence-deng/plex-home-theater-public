@@ -163,6 +163,24 @@ void CLog::Log(int loglevel, const char *format, ... )
 #endif
 }
 
+void CLog::FatalError(const char* format, ...)
+{
+  char msg[2048];
+  va_list va;
+  va_start(va, format);
+  vsprintf(msg, format, va);
+  va_end(va);
+
+  Log(LOGFATAL, "FATAL ERROR: %s", msg);
+#ifdef _WIN32
+  // Terminate the process while generating a crash dump
+  const DWORD STATUS_FATAL_ERROR = 0xc0dedead;
+  RaiseException(STATUS_FATAL_ERROR, EXCEPTION_NONCONTINUABLE, 0, NULL);
+#else
+  throw runtime_error(msg);
+#endif
+}
+
 bool CLog::Init(const char* path)
 {
   CSingleLock waitLock(critSec);

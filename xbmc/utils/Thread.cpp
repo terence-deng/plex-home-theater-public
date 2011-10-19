@@ -220,9 +220,9 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
 
 void CThread::Create(bool bAutoDelete, unsigned stacksize)
 {
-  if (m_ThreadHandle != NULL)
+  if (m_ThreadHandle)
   {
-    throw 1; //ERROR should not b possible!!!
+    CLog::FatalError("CThread::Create - m_ThreadHandle should be NULL");
   }
   m_iLastTime = CTimeUtils::GetTimeMS() * 10000;
   m_iLastUsage = 0;

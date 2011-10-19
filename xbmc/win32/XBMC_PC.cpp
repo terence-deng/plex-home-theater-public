@@ -140,7 +140,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
   // SetUnhandledExceptionFilter(CreateMiniDump);
   //
   // We don't do this anymore...
-  // It is generally a bad idea for a process to continue executing when an unhandled exception is thrown.
+  // It's generally a bad idea for a process to continue executing when an unhandled exception is thrown.
   // It's generally much better to simply let the system handle creating dumps as per system policy.
   // A classic example is heap corruption. CreateMiniDump could crash again allocating strings, thus obscuring the original issue.
 
@@ -150,8 +150,13 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
   // Turn off CRT auto-termination behavior
   _set_invalid_parameter_handler(CRT_invalid_parameter);
 
-  // check if XBMC is already running
-  CreateMutex(NULL, FALSE, "9034bd65-6bec-49be-bb42-4943c9776295");
+  // Check if XBMC is already running
+  // The mutex will be closed when the process exits
+  HANDLE hMutex = CreateMutex(NULL, FALSE, "9034bd65-6bec-49be-bb42-4943c9776295");
+  if (hMutex == NULL)
+  {
+    CLog::FatalError("CreateMutex failed: 0x%x", GetLastError());
+  }
   if(GetLastError() == ERROR_ALREADY_EXISTS)
   {
     HWND m_hwnd = FindWindow("XBMC","Plex");
@@ -174,7 +179,11 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
 #endif
 
   //Initialize COM
-  CoInitializeEx(NULL, COINIT_MULTITHREADED);
+  HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+  if (FAILED(hr))
+  {
+    CLog::FatalError("CoInitializeEx failed: 0x%x", hr);
+  }
 
   // parse the command line
   CStdStringW strcl(commandLine);
@@ -214,7 +223,11 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
   }
 
   WSADATA wd;
-  WSAStartup(MAKEWORD(2,2), &wd);
+  int wsaret = WSAStartup(MAKEWORD(2,2), &wd);
+  if (wsaret != 0)
+  {
+    CLog::FatalError("WSAStartup failed: 0x%x", wsaret);
+  }
 
   // Create and run the app
   if(!g_application.Create())

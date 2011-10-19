@@ -282,11 +282,6 @@ void CGUIWindowSlideShow::Render()
   if (!m_pBackgroundLoader)
   {
     m_pBackgroundLoader = new CBackgroundPicLoader();
-
-    if (!m_pBackgroundLoader)
-    {
-      throw 1;
-    }
     m_pBackgroundLoader->Create(this);
   }
 
