@@ -491,7 +491,7 @@ CStdString CWIN32Util::GetSystemPath()
 
 CStdString CWIN32Util::GetProfilePath()
 {
-  CStdString strProfilePath = GetSpecialFolder(CSIDL_APPDATA|CSIDL_FLAG_CREATE);
+  CStdString strProfilePath = GetSpecialFolder(CSIDL_LOCAL_APPDATA|CSIDL_FLAG_CREATE);
   
   if (strProfilePath.length() == 0)
     CUtil::GetHomePath(strProfilePath);
