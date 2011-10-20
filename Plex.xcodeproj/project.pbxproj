@@ -812,7 +812,6 @@
 		7486620312FBF5A600D8F899 /* WAVcodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E16390D25F9FA00618676 /* WAVcodec.cpp */; };
 		7486620412FBF5A600D8F899 /* WAVPackcodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E163D0D25F9FA00618676 /* WAVPackcodec.cpp */; };
 		7486620512FBF5A600D8F899 /* Weather.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1E8D0D25F9FD00618676 /* Weather.cpp */; };
-		7486620612FBF5A600D8F899 /* Win32Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38E1E8F0D25F9FD00618676 /* Win32Exception.cpp */; };
 		7486620712FBF5A600D8F899 /* WinEventsSDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C779E27104A57E500F444C4 /* WinEventsSDL.cpp */; };
 		7486620812FBF5A600D8F899 /* WinSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C779E29104A57E500F444C4 /* WinSystem.cpp */; };
 		7486620912FBF5A600D8F899 /* WinSystemOSX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7C779E2B104A57E500F444C4 /* WinSystemOSX.mm */; };
@@ -2563,8 +2562,6 @@
 		E38E1E8C0D25F9FD00618676 /* UdpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UdpClient.h; sourceTree = "<group>"; };
 		E38E1E8D0D25F9FD00618676 /* Weather.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Weather.cpp; sourceTree = "<group>"; };
 		E38E1E8E0D25F9FD00618676 /* Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Weather.h; sourceTree = "<group>"; };
-		E38E1E8F0D25F9FD00618676 /* Win32Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Win32Exception.cpp; sourceTree = "<group>"; };
-		E38E1E900D25F9FD00618676 /* Win32Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Win32Exception.h; sourceTree = "<group>"; };
 		E38E1E920D25F9FD00618676 /* WindowsShortcut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowsShortcut.h; sourceTree = "<group>"; };
 		E38E1E930D25F9FD00618676 /* VideoDatabase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoDatabase.cpp; sourceTree = "<group>"; };
 		E38E1E940D25F9FD00618676 /* VideoDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDatabase.h; sourceTree = "<group>"; };
@@ -5812,8 +5809,6 @@
 				E38E1E8E0D25F9FD00618676 /* Weather.h */,
 				74D7F386133F88A900DCE15F /* WebServer.h */,
 				74D7F385133F88A900DCE15F /* WebServer.cpp */,
-				E38E1E8F0D25F9FD00618676 /* Win32Exception.cpp */,
-				E38E1E900D25F9FD00618676 /* Win32Exception.h */,
 				E38E1E920D25F9FD00618676 /* WindowsShortcut.h */,
 			);
 			path = utils;
@@ -7013,7 +7008,6 @@
 				7486620312FBF5A600D8F899 /* WAVcodec.cpp in Sources */,
 				7486620412FBF5A600D8F899 /* WAVPackcodec.cpp in Sources */,
 				7486620512FBF5A600D8F899 /* Weather.cpp in Sources */,
-				7486620612FBF5A600D8F899 /* Win32Exception.cpp in Sources */,
 				7486620712FBF5A600D8F899 /* WinEventsSDL.cpp in Sources */,
 				7486620812FBF5A600D8F899 /* WinSystem.cpp in Sources */,
 				7486620912FBF5A600D8F899 /* WinSystemOSX.mm in Sources */,
