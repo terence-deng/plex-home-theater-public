@@ -19,6 +19,8 @@
  *
  */
 
+#include <stdexcept>
+
 #include "system.h"
 #include "log.h"
 #ifndef _LINUX
@@ -177,7 +179,7 @@ void CLog::FatalError(const char* format, ...)
   const DWORD STATUS_FATAL_ERROR = 0xc0dedead;
   RaiseException(STATUS_FATAL_ERROR, EXCEPTION_NONCONTINUABLE, 0, NULL);
 #else
-  throw runtime_error(msg);
+  throw std::runtime_error(msg);
 #endif
 }
 
