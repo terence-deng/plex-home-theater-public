@@ -119,8 +119,9 @@ bool CDVDAudioCodecPassthroughFFmpeg::SetupMuxer(CDVDStreamInfo &hints, CStdStri
   memset(&params, 0, sizeof(params));
   params.channels       = hints.channels;
   params.sample_rate    = hints.samplerate;
-  params.audio_codec_id = hints.codec;
   params.channel        = 0;
+  
+  muxer.m_pFormat->audio_codec_id = hints.codec;
   if (m_dllAvFormat.av_set_parameters(muxer.m_pFormat, &params) != 0)
   {
     CLog::Log(LOGERROR, "CDVDAudioCodecPassthroughFFmpeg::SetupMuxer - Failed to set the %s muxer parameters", muxerName.c_str());

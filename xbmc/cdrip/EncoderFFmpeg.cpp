@@ -98,8 +98,10 @@ bool CEncoderFFmpeg::Init(const char* strFile, int iInChannels, int iInRate, int
   memset(&params, 0, sizeof(params));
   params.channels       = iInChannels;
   params.sample_rate    = iInRate;
-  params.audio_codec_id = codec->id;
   params.channel        = 0;
+    
+  m_Format->audio_codec_id = codec->id;
+    
   if (m_dllAvFormat.av_set_parameters(m_Format, &params) != 0)
   {
     m_dllAvUtil.av_freep(&m_Format->pb);
