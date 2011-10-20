@@ -11,6 +11,7 @@
   <string id="7">Filemanager</string>
   <string id="8">Weather</string>
   <string id="9">Plex Media Center</string>
+  <string id="10">myPlex</string>
 
   <string id="11">Monday</string>
   <string id="12">Tuesday</string>
@@ -1574,6 +1575,14 @@
   <string id="18103">- Automatically Download Theme Music</string>
   <string id="18104">Enable Background Music</string>
 
+  <string id="19000">Email</string>
+  <string id="19001">Password</string>
+  <string id="19002">Sign in</string>
+  <string id="19003">Sign out</string>
+  <string id="19004"></string>
+  <string id="19005"></string>
+  <string id="19006"></string>
+
   <string id="20000">CDDA Rip Folder</string>
   <string id="20001">Use external DVD Player</string>
   <string id="20002">External DVD Player</string>
@@ -2170,16 +2179,19 @@
   <string id="42008">Error while opening file</string>
 
   <string id="42999">Direct Play</string>
-  <string id="43000">64kbps</string>
-  <string id="43001">96kbps</string>
-  <string id="43002">208kbps</string>
-  <string id="43003">320kbps</string>
-  <string id="43004">720kbps</string>
-  <string id="43005">1.5Mbps</string>
-  <string id="43006">2Mbps</string>
-  <string id="43007">3Mbps</string>
-  <string id="43008">4Mbps</string>
-  <string id="43009">8Mbps</string>
+  <string id="43000">64 kbps</string>
+  <string id="43001">96 kbps</string>
+  <string id="43002">208 kbps</string>
+  <string id="43003">320 kbps</string>
+  <string id="43004">720 kbps</string>
+  <string id="43005">1.5 Mbps</string>
+  <string id="43006">2 Mbps</string>
+  <string id="43007">3 Mbps</string>
+  <string id="43008">4 Mbps</string>
+  <string id="43009">8 Mbps</string>
+  <string id="43010">10 Mbps</string>
+  <string id="43011">12 Mbps</string>
+  <string id="43012">20 Mbps</string>
 
 </strings>
 

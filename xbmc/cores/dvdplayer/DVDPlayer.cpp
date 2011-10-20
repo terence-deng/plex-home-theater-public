@@ -1124,7 +1124,7 @@ void CDVDPlayer::Process()
     }
     
     // If it's remote, see if we're transcoding.
-    if (m_item.IsRemotePlexMediaServerLibrary() && g_guiSettings.GetInt("videogeneral.remoteplexquality") != -1)
+    if (m_item.IsRemotePlexMediaServerLibrary() && g_guiSettings.GetInt("myplex.remoteplexquality") != -1)
     {
       printf("TRANSCODING.\n");
 
@@ -1143,7 +1143,7 @@ void CDVDPlayer::Process()
       
       CStdString options;
       options += "?url=" + encodedMediaURL;
-      options += "&quality=" + lexical_cast<string>(g_guiSettings.GetInt("videogeneral.remoteplexquality"));
+      options += "&quality=" + lexical_cast<string>(g_guiSettings.GetInt("myplex.remoteplexquality"));
       
       printf(" -> Full URL: %s\n", transcodeURL.Get().c_str());
       

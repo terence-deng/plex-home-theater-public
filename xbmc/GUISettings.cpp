@@ -370,6 +370,20 @@ void CGUISettings::Initialize()
 
   // System settings
   AddGroup(4, 13000);
+  
+  CSettingsCategory* myPlex = AddCategory(4, "myPlex", 10);
+  AddString(myPlex, "myplex.email", 19000, "", EDIT_CONTROL_INPUT, true, 19000);
+  AddString(myPlex, "myplex.password", 19001, "", EDIT_CONTROL_HIDDEN_INPUT, true, 19000);
+  
+  //   -> Remote myPlex library quality.
+  map<int,int> transcodeQualityMap;
+  for (int i=-1; i<=12; i++)
+    transcodeQualityMap.insert(make_pair(43000+i,i));
+  
+  AddInt(myPlex, "myplex.remoteplexquality", 13149, -1, transcodeQualityMap, SPIN_CONTROL_TEXT);
+  
+  AddString(myPlex, "myplex.signin", 19002, "", BUTTON_CONTROL_STANDARD);
+  
   CSettingsCategory* vs = AddCategory(4, "videoscreen", 21373);
   // this setting would ideally not be saved, as its value is systematically derived from videoscreen.screenmode.
   // contains a DISPLAYMODE
@@ -542,7 +556,7 @@ void CGUISettings::Initialize()
   */
 
   // video settings
-  AddGroup(5, 3);
+  //AddGroup(5, 3);
   //CSettingsCategory* vdl = AddCategory(5, "videolibrary", 14022);
   AddBool(NULL, "videolibrary.enabled", 418, true);
   AddBool(NULL, "videolibrary.showunwatchedplots", 20369, true);
@@ -570,14 +584,7 @@ void CGUISettings::Initialize()
   quality.insert(make_pair(13184,MEDIA_QUALITY_480P));
   quality.insert(make_pair(13185,MEDIA_QUALITY_SD));
   AddInt(vgen, "videogeneral.onlinemediaquality", 13180, MEDIA_QUALITY_ALWAYS_ASK, quality, SPIN_CONTROL_TEXT);
-  
-  //   -> Remote Plex library quality.
-  map<int,int> transcodeQualityMap;
-  for (int i=-1; i<=9; i++)
-    transcodeQualityMap.insert(make_pair(43000+i,i));
-  
-  AddInt(vgen, "videogeneral.remoteplexquality", 13149, -1, transcodeQualityMap, SPIN_CONTROL_TEXT);
-  
+    
   CSettingsCategory* vp = AddCategory(5, "videoplayer", 16003);
 
   map<int, int> renderers;
