@@ -42,6 +42,14 @@ using namespace DXVA;
 using namespace AUTOPTR;
 using namespace std;
 
+// For reasons of its own, ffmpeg #defines SampleFormat as AVSampleFormat in avcodec.h
+// This breaks the DXVA2_VideoDesc structure from <dxva2api.h>, which happens to have a field named SampleFormat
+#ifdef _WIN32
+#ifdef SampleFormat
+#undef SampleFormat
+#endif
+#endif
+
 typedef HRESULT (__stdcall *DXVA2CreateVideoServicePtr)(IDirect3DDevice9* pDD, REFIID riid, void** ppService);
 static DXVA2CreateVideoServicePtr g_DXVA2CreateVideoService;
 
