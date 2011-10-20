@@ -556,7 +556,7 @@ void CGUISettings::Initialize()
   */
 
   // video settings
-  //AddGroup(5, 3);
+  AddGroup(5, 3);
   //CSettingsCategory* vdl = AddCategory(5, "videolibrary", 14022);
   AddBool(NULL, "videolibrary.enabled", 418, true);
   AddBool(NULL, "videolibrary.showunwatchedplots", 20369, true);
