@@ -43,7 +43,6 @@ typedef struct _UNICODE_STRING {
   PWSTR  Buffer;
 } UNICODE_STRING, *PUNICODE_STRING;
 #endif
-#include "utils/Win32Exception.h"
 
 #ifdef min
 #undef min
@@ -825,11 +824,6 @@ bool DllLoader::Load()
       CLog::Log(LOGDEBUG, "EntryPoint with DLL_PROCESS_ATTACH called - Dll: %s", sName);
 #endif
 
-    }
-    catch(win32_exception &e)
-    {
-      e.writelog(__FUNCTION__);
-      return false;
     }
     catch(...)
     {

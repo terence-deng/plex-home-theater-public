@@ -58,6 +58,7 @@ public:
   virtual ~CLog(void);
   static void Close();
   static void Log(int loglevel, const char *format, ... ) ATTRIB_LOG_FORMAT;
+  static void FatalError(const char* format, ...);
   static void DebugLog(const char *format, ...);
   static void MemDump(char *pData, int length);
   static void DebugLogMemory();

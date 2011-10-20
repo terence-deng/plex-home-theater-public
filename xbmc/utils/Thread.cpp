@@ -21,9 +21,8 @@
 #include "Thread.h"
 #ifndef _LINUX
 #include <process.h>
-#include "win32exception.h"
 #ifndef _MT
-#pragma message( "Please compile using multithreaded run-time libraries" )
+#pragma message(__WARNING__"Please compile using multithreaded run-time libraries" )
 #endif
 typedef unsigned (WINAPI *PBEGINTHREADEX_THREADFUNC)(LPVOID lpThreadParameter);
 #else
@@ -148,10 +147,7 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
 
   CLog::Log(LOGDEBUG,"thread start, auto delete: %d",pThread->IsAutoDelete());
 
-#ifndef _LINUX
-  /* install win32 exception translator */
-  win32_exception::install_handler();
-#else
+#ifdef _LINUX
 #ifndef __APPLE__
   pLocalThread = pThread;
 #endif
@@ -173,18 +169,6 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
   {
     pThread->OnStartup();
   }
-#ifndef _LINUX
-  catch (const win32_exception &e)
-  {
-    e.writelog(__FUNCTION__);
-    if( pThread->IsAutoDelete() )
-    {
-      delete pThread;
-      _endthreadex(123);
-      return 0;
-    }
-  }
-#endif
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Unhandled exception caught in thread startup, aborting. auto delete: %d", __FUNCTION__, pThread->IsAutoDelete());
@@ -202,16 +186,6 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
   {
     pThread->Process();
   }
-#ifndef _LINUX
-  catch (const access_violation &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-  catch (const win32_exception &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-#endif
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Unhandled exception caught in thread process, attemping cleanup in OnExit", __FUNCTION__);
@@ -221,16 +195,6 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
   {
     pThread->OnExit();
   }
-#ifndef _LINUX
-  catch (const access_violation &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-  catch (const win32_exception &e)
-  {
-    e.writelog(__FUNCTION__);
-  }
-#endif
   catch(...)
   {
     CLog::Log(LOGERROR, "%s - Unhandled exception caught in thread exit", __FUNCTION__);
@@ -256,9 +220,9 @@ DWORD WINAPI CThread::staticThread(LPVOID* data)
 
 void CThread::Create(bool bAutoDelete, unsigned stacksize)
 {
-  if (m_ThreadHandle != NULL)
+  if (m_ThreadHandle)
   {
-    throw 1; //ERROR should not b possible!!!
+    CLog::FatalError("CThread::Create - m_ThreadHandle should be NULL");
   }
   m_iLastTime = CTimeUtils::GetTimeMS() * 10000;
   m_iLastUsage = 0;
@@ -407,26 +371,29 @@ int CThread::GetNormalPriority(void)
 void CThread::SetName( LPCTSTR szThreadName )
 {
 #ifdef _WIN32
-  const unsigned int MS_VC_EXCEPTION = 0x406d1388;
-  struct THREADNAME_INFO
+  if (IsDebuggerPresent())
   {
-    DWORD dwType;     // must be 0x1000
-    LPCSTR szName;    // pointer to name (in same addr space)
-    DWORD dwThreadID; // thread ID (-1 caller thread)
-    DWORD dwFlags;    // reserved for future use, most be zero
-  } info;
+    const unsigned int MS_VC_EXCEPTION = 0x406d1388;
+    struct THREADNAME_INFO
+    {
+      DWORD dwType;     // must be 0x1000
+      LPCSTR szName;    // pointer to name (in same addr space)
+      DWORD dwThreadID; // thread ID (-1 caller thread)
+      DWORD dwFlags;    // reserved for future use, most be zero
+    } info;
 
-  info.dwType = 0x1000;
-  info.szName = szThreadName;
-  info.dwThreadID = m_ThreadId;
-  info.dwFlags = 0;
+    info.dwType = 0x1000;
+    info.szName = szThreadName;
+    info.dwThreadID = m_ThreadId;
+    info.dwFlags = 0;
 
-  try
-  {
-    RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR *)&info);
-  }
-  catch(...)
-  {
+    __try
+    {
+      RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR *)&info);
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+    }
   }
 #endif
 }

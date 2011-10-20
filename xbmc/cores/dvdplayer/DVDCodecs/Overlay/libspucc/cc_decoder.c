@@ -64,8 +64,7 @@ static int  rowdata[] = {10, -1, 0, 1, 2, 3, 11, 12, 13, 14, 4, 5, 6,
 			 7, 8, 9};
 /* FIXME: do real TM */
 /* must be mapped as a music note in the captioning font */ 
-static char specialchar[] = {'®','°','½','¿','T','¢','£','¶','à',
-			     TRANSP_SPACE,'è','â','ê','î','ô','û'};
+static int specialchar[] = {'®','°','½','¿','T','¢','£','¶','à', TRANSP_SPACE,'è','â','ê','î','ô','û'};
 
 /* character translation table - EIA 608 codes are not all the same as ASCII */
 static char chartbl[128];
@@ -119,16 +118,16 @@ static void build_char_table(void)
   for (i = 0; i < 128; i++)
     chartbl[i] = (char) i;
   /* now the special codes */
-  chartbl[0x2a] = 'á';
-  chartbl[0x5c] = 'é';
-  chartbl[0x5e] = 'í';
-  chartbl[0x5f] = 'ó';
-  chartbl[0x60] = 'ú';
-  chartbl[0x7b] = 'ç';
-  chartbl[0x7c] = '÷';
-  chartbl[0x7d] = 'Ñ';
-  chartbl[0x7e] = 'ñ';
-  chartbl[0x7f] = '¤';    /* FIXME: this should be a solid block */
+  chartbl[0x2a] = char('á');
+  chartbl[0x5c] = char('é');
+  chartbl[0x5e] = char('í');
+  chartbl[0x5f] = char('ó');
+  chartbl[0x60] = char('ú');
+  chartbl[0x7b] = char('ç');
+  chartbl[0x7c] = char('÷');
+  chartbl[0x7d] = char('Ñ');
+  chartbl[0x7e] = char('ñ');
+  chartbl[0x7f] = char('¤');    /* FIXME: this should be a solid block */
 }
 
 /*
@@ -352,9 +351,9 @@ static void cc_decode_special_char(cc_decoder_t *dec, int channel,
   cc_set_channel(dec, channel);
   buf = active_ccbuffer(dec);
 #ifdef LOG_DEBUG
-  printf("cc_decoder: cc_decode_special_char: Mapping %x to %x\n", c2, specialchar[c2 & 0xf]);
+  printf("cc_decoder: cc_decode_special_char: Mapping %x to %x\n", c2, char(specialchar[c2 & 0xf]));
 #endif
-  ccbuf_add_char(buf, specialchar[c2 & 0xf]);
+  ccbuf_add_char(buf, char(specialchar[c2 & 0xf]));
 }
 
 

@@ -636,7 +636,11 @@ bool CGUIWindowMusicNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       return true;
     }
 
+#ifdef _MSC_VER
+#pragma message(__WARNING__"port plex functionality")
+#else
 #pragma warning port plex functionality
+#endif
 #if 0
   case CONTEXT_BUTTON_MARK_WATCHED:
     CGUIWindowVideoBase::MarkWatched(item,true);

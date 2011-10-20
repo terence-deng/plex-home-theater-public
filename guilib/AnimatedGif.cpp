@@ -215,8 +215,7 @@ int CAnimatedGifSet::LoadGIF (const char * szFileName)
     unsigned char SubBlockLength; //15      0x3
     unsigned char reserved;       //16      0x1
     unsigned short iIterations ;    //17..18  number of iterations (lo-hi)
-  }
-  gifnetscape;
+  };
 
   int GraphicExtensionFound = 0;
 
@@ -328,7 +327,7 @@ int CAnimatedGifSet::LoadGIF (const char * szFileName)
           if (nBlockLength == 0x0b)
           {
             struct GIFNetscapeTag tag;
-            if (fread((char*)&tag, 1, sizeof(gifnetscape), fd) == sizeof(gifnetscape))
+            if (fread((char*)&tag, 1, sizeof(GIFNetscapeTag), fd) == sizeof(GIFNetscapeTag))
             {
               SWAP16(tag.iIterations);
               nLoops = tag.iIterations;

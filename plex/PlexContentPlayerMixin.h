@@ -127,7 +127,7 @@ class PlexContentPlayerMixin
 
       CContextButtons choices;
       CStdString resumeString;
-      CStdString time = StringUtils::SecondsToTimeString(seconds);
+      CStdString time = StringUtils::SecondsToTimeString(long(seconds));
       resumeString.Format(g_localizeStrings.Get(12022).c_str(), time.c_str());
       choices.Add(1, resumeString);
       choices.Add(2, g_localizeStrings.Get(12021));

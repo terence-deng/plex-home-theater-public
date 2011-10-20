@@ -1009,8 +1009,7 @@ bool CGUIWindowVideoInfo::AsyncDownloadMedia(const string& remoteFile, const str
   CStdString tempFile = "special://temp/media_download.jpg";
   CAsyncFileCopy downloader;
   bool success = downloader.Copy(remoteFile, tempFile, g_localizeStrings.Get(13413));
-  CPicture pic;
-  pic.CacheImage(tempFile, localFile);
+  CPicture::CacheImage(tempFile, localFile);
   CFile::Delete(tempFile);
   
   return success;

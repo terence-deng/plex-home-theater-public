@@ -35,7 +35,6 @@
 #include "DVDInputStreams/DVDInputStreamBluray.h"
 #include "DVDDemuxUtils.h"
 #include "DVDClock.h" // for DVD_TIME_BASE
-#include "utils/Win32Exception.h"
 #include "AdvancedSettings.h"
 #include "GUISettings.h"
 #include "FileSystem/File.h"
@@ -666,16 +665,7 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
 
     // timeout reads after 100ms
     m_timeout = CTimeUtils::GetTimeMS() + 20000;
-    int result = 0;
-    try
-    {
-      result = m_dllAvFormat.av_read_frame(m_pFormatContext, &pkt);
-    }
-    catch(const win32_exception &e)
-    {
-      e.writelog(__FUNCTION__);
-      result = AVERROR(EFAULT);
-    }
+    int result = m_dllAvFormat.av_read_frame(m_pFormatContext, &pkt);
     m_timeout = 0;
 
     if (result == AVERROR(EINTR) || result == AVERROR(EAGAIN))

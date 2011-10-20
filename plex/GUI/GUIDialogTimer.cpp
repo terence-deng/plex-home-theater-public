@@ -13,6 +13,7 @@
 #include "guiImage.h"
 #include "Key.h"
 #include <boost/lexical_cast.hpp>
+#include "Util.h"
 
 #define TIMER_MAX 720
 
@@ -165,7 +166,11 @@ void CGUIDialogTimer::Render()
   dateTime += CDateTimeSpan(0, 0, time, 0);
   if (m_lastDateTime != dateTime)
   {
+#ifdef _MSC_VER
+#pragma message(__WARNING__"do we need to support the short time format here? TIME_FORMAT_SHORT")
+#else
 #pragma warning do we need to support the short time format here? TIME_FORMAT_SHORT
+#endif
     CStdString strTime = g_infoManager.LocalizeTime(dateTime, TIME_FORMAT_HH_MM_SS);
     SetControlLabel(31, strTime);
     m_lastDateTime = dateTime;

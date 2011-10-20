@@ -382,7 +382,7 @@ bool CGUIWindowHome::OnPopupMenu()
     
     // Start a new alarm
     if (iTime > 0)
-      g_alarmClock.Start(sAlarmName, iTime*60, sAction, false);
+      g_alarmClock.Start(sAlarmName, float(iTime*60), sAction, false);
     
     // Focus the main menu again
     CGUIMessage msg(GUI_MSG_SETFOCUS, GetID(), MAIN_MENU);
