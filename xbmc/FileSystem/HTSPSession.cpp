@@ -27,10 +27,11 @@
 #ifdef _MSC_VER
 #include <winsock2.h>
 #define SHUT_RDWR SD_BOTH
-#define ETIMEDOUT WSAETIMEDOUT
+#define HTSP_ETIMEDOUT WSAETIMEDOUT
 #else
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#define HTSP_ETIMEDOUT ETIMEDOUT
 #endif
 
 extern "C" {
@@ -310,7 +311,7 @@ htsmsg_t* CHTSPSession::ReadMessage(int timeout)
   }
 
   x = htsp_tcp_read_timeout(m_fd, &l, 4, timeout);
-  if(x == ETIMEDOUT)
+  if(x == HTSP_ETIMEDOUT)
     return htsmsg_create_map();
 
   if(x)

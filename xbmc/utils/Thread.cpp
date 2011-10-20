@@ -22,7 +22,7 @@
 #ifndef _LINUX
 #include <process.h>
 #ifndef _MT
-#pragma message( "Please compile using multithreaded run-time libraries" )
+#pragma message(__WARNING__"Please compile using multithreaded run-time libraries" )
 #endif
 typedef unsigned (WINAPI *PBEGINTHREADEX_THREADFUNC)(LPVOID lpThreadParameter);
 #else

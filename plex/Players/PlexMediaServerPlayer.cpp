@@ -342,7 +342,7 @@ void CPlexMediaServerPlayer::SeekPercentage(float iPercent)
 
 float CPlexMediaServerPlayer::GetPercentage()
 {
-  return m_pct; 
+  return float(m_pct); 
 }
 
 // This is how much audio is delayed to video, we count the opposite in the dvdplayer.

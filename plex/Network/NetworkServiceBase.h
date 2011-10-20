@@ -55,7 +55,7 @@ class NetworkServiceBase
     
     // Join the multicast group after leaving it (just in case).
     try { socket->set_option(boost::asio::ip::multicast::leave_group(groupAddr)); } 
-    catch (std::exception& ex) { }
+    catch (std::exception&) { }
     try { socket->set_option(boost::asio::ip::multicast::join_group(groupAddr)); }
     catch (std::exception& ex) { eprintf("NetworkService: Couldn't join multicast group: %s", ex.what()); }
     
@@ -65,7 +65,7 @@ class NetworkServiceBase
       boost::asio::ip::address_v4 localInterface = boost::asio::ip::address_v4::from_string(bindAddress);
       boost::asio::ip::multicast::outbound_interface option(localInterface);
       try { socket->set_option(option); }
-      catch (std::exception& ex) { eprintf("NetworkService: Unable to set option on socket."); }
+      catch (std::exception&) { eprintf("NetworkService: Unable to set option on socket."); }
     }
   }
 

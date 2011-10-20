@@ -3151,7 +3151,11 @@ CStdString CUtil::GetCachedAlbumThumb(const CStdString& album, const CStdString&
 
 CStdString CUtil::GetCachedMusicThumb(const CStdString& path)
 {
+#ifdef _MSC_VER
+#pragma message(__WARNING__"this needs fixing")
+#else
 #pragma warning this needs fixing
+#endif
   /*
    // For Plex Media Server thumbs, use the thumb path, because multiple items can refer to the same thumb.
    if (IsPlexMediaServer() || CUtil::IsPlexMediaServer(m_strThumbnailImage))

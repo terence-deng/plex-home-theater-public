@@ -360,7 +360,7 @@ protected:
         partIndex = boost::lexical_cast<int>(m_item.GetProperty("partIndex"));
       
       // Get the part if we have it.
-      if (partIndex < m_itemWithDetails->m_mediaParts.size())
+      if (partIndex >= 0 && size_t(partIndex) < m_itemWithDetails->m_mediaParts.size())
         part = m_itemWithDetails->m_mediaParts[partIndex];
     }
     

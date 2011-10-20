@@ -255,7 +255,7 @@ bool CFile::Open(const CStdString& strFileName, unsigned int flags)
         }
       }
     }
-    catch (CRedirectToNewPlayerException* pRedirectEx)
+    catch (CRedirectToNewPlayerException*)
     {
       // Keep it going.
       throw;
@@ -279,7 +279,7 @@ bool CFile::Open(const CStdString& strFileName, unsigned int flags)
     m_bitStreamStats.Start();
     return true;
   }
-  catch (CRedirectToNewPlayerException* pRedirectEx)
+  catch (CRedirectToNewPlayerException*)
   {
     throw;
   }

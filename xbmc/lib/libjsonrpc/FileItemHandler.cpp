@@ -148,7 +148,7 @@ void CFileItemHandler::HandleFileItemList(const char *id, bool allowFile, const 
   result["end"]   = end;
   result["total"] = size;
 
-  for (unsigned int i = start; i < end; i++)
+  for (int i = start; i < end; i++)
   {
     Value object;
     CFileItemPtr item = items.Get(i);
@@ -179,12 +179,12 @@ void CFileItemHandler::HandleFileItemList(const char *id, bool allowFile, const 
 
     const Json::Value fields = parameterObject.isMember("fields") && parameterObject["fields"].isArray() ? parameterObject["fields"] : Value(arrayValue);
 
-    for (unsigned int i = 0; i < fields.size(); i++)
+    for (unsigned int j = 0; j < fields.size(); j++)
     {
-      if (!fields[i].isString())
+      if (!fields[j].isString())
         continue;
 
-      CStdString field = fields[i].asString();
+      CStdString field = fields[j].asString();
 
       if (item->HasVideoInfoTag())
         FillVideoDetails(item->GetVideoInfoTag(), field, object);

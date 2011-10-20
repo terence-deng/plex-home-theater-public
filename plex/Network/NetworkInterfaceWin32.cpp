@@ -402,7 +402,7 @@ void NetworkInterface::GetAll(vector<NetworkInterface>& interfaces)
         struct sockaddr_in* ifa_addr = (struct sockaddr_in *)ifa->ifa_addr;
         string address = inet_ntoa(ifa_addr->sin_addr);
       
-        interfaces.push_back(NetworkInterface(ifa->ifa_extra.index, ifa->ifa_name, address, ifa->ifa_flags & IFF_LOOPBACK));
+        interfaces.push_back(NetworkInterface(ifa->ifa_extra.index, ifa->ifa_name, address, (ifa->ifa_flags & IFF_LOOPBACK) != 0));
       }
 		}
 	}

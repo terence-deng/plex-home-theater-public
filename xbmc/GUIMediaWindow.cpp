@@ -1687,7 +1687,7 @@ bool CGUIMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
     
     if (newRating >= 0 && newRating <= 10)
     {
-      PlexMediaServerQueue::Get().onRate(item, newRating);
+      PlexMediaServerQueue::Get().onRate(item, float(newRating));
       item->SetProperty("userRating", newRating);
     }
     

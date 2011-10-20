@@ -46,8 +46,8 @@ void CRenderSystemBase::GetRenderVersion(unsigned int& major, unsigned int& mino
 bool CRenderSystemBase::SupportsNPOT(bool dxt) const
 {
   if (dxt)
-    return (m_renderCaps & RENDER_CAPS_DXT_NPOT);
-  return m_renderCaps & RENDER_CAPS_NPOT;
+    return (m_renderCaps & RENDER_CAPS_DXT_NPOT) != 0;
+  return (m_renderCaps & RENDER_CAPS_NPOT) != 0;
 }
 
 bool CRenderSystemBase::SupportsDXT() const

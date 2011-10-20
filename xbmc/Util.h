@@ -36,6 +36,12 @@
 
 #include "MediaSource.h"
 
+#ifdef _MSC_VER
+#define __STR2__(x) #x
+#define __STR1__(x) __STR2__(x)
+#define __WARNING__ __FILE__ "("__STR1__(__LINE__)") : Warning: "
+#endif
+
 // A list of filesystem types for LegalPath/FileName
 #define LEGAL_NONE            0
 #define LEGAL_WIN32_COMPAT    1

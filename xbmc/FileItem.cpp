@@ -378,7 +378,12 @@ void CFileItem::Reset()
   m_strSearchPrompt = "";
   m_iBitrate = 0;
   m_includeStandardContextItems = true;
+
+#ifdef _MSC_VER
+#pragma message(__WARNING__"fix this")
+#else
 #pragma warning fix this
+#endif
   ClearProperties();
   
   
@@ -2968,11 +2973,11 @@ bool CFileItem::CacheLocalFanart() const
     if (CFile::Exists(localFanart) == false)
     {
       CPicture::CacheFanart(m_strFanartUrl, localFanart);
-      return localFanart;
+      return localFanart.c_str() != NULL;
     }
     else
     {
-      return localFanart;
+      return localFanart.c_str() != NULL;
     }
   }
   
@@ -3067,7 +3072,11 @@ CStdString CFileItem::GetLocalFanart() const
   return "";
 }
 
+#ifdef _MSC_VER
+#pragma message(__WARNING__"We need to put back this code")
+#else
 #pragma warning "We need to put back this code"
+#endif
 #if 0
 
 if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)

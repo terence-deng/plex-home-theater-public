@@ -430,7 +430,7 @@ case TMSG_POWERDOWN:
       break;
       
     case TMSG_MEDIA_OPEN_COMPLETE:
-      g_application.FinishPlayingFile(pMsg->dwParam1, pMsg->strParam);
+      g_application.FinishPlayingFile(pMsg->dwParam1 != 0, pMsg->strParam);
       break;
 
     case TMSG_SWITCHTOFULLSCREEN:

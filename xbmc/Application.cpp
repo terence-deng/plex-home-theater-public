@@ -4143,11 +4143,11 @@ void CApplication::UpdateFileState(const string& aState)
         m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(t*1000)));
         m_itemCurrentFile->SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
         
-        PlexMediaServerQueue::Get().onPlayingProgress(m_itemCurrentFile, t*1000, state);
+        PlexMediaServerQueue::Get().onPlayingProgress(m_itemCurrentFile, int(t*1000), state);
       }
       else
       {
-        PlexMediaServerQueue::Get().onPlayTimeline(m_itemCurrentFile, t*1000, state);
+        PlexMediaServerQueue::Get().onPlayTimeline(m_itemCurrentFile, int(t*1000), state);
       }
     }
 

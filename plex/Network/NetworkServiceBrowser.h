@@ -38,7 +38,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
   {
     // Add a timer which we'll use to send out search requests.
     try { m_timer.async_wait(boost::bind(&NetworkServiceBrowser::handleTimeout, this)); }
-    catch (std::exception& ex) { eprintf("Unable to create timer."); }
+    catch (std::exception&) { eprintf("Unable to create timer."); }
   }
   
   // Destructor.

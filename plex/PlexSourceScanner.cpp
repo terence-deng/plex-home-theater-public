@@ -264,8 +264,7 @@ void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCE
         }
         else
         {
-          CPicture pic;
-          if(pic.CreateThumbnail(thumb, cachedThumb))
+          if(CPicture::CreateThumbnail(thumb, cachedThumb))
             item->SetThumbnailImage(cachedThumb);
           else
             item->SetThumbnailImage("");

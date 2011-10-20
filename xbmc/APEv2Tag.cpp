@@ -49,7 +49,7 @@ int CAPEv2Tag::fseek_callback(void *fp, long int offset, int whence)
 long CAPEv2Tag::ftell_callback(void *fp)
 {
   CFile *file = (CFile *)fp;
-  return file->GetPosition();
+  return long(file->GetPosition());
 }
 
 CAPEv2Tag::CAPEv2Tag()
