@@ -11,6 +11,8 @@
   !include "nsDialogs.nsh"
   !include "LogicLib.nsh"
 ;--------------------------------
+  !include "shlobj.nsh"
+
 ;General
 
   ;Name and file
@@ -36,7 +38,8 @@
   Var RunArgs
   Var DirectXSetupError
   Var VSRedistSetupError
-  
+  Var LocalAppDataFolder
+
 ;--------------------------------
 ;Interface Settings
 
@@ -87,7 +90,17 @@
 InstType "Full"
 InstType "Minimal" 
 
+; Unfortunately NSIS makes it impossible to share code between install and uninstall.
+; This code is duplicated in un.onInit
+Function .onInit
+  Push $0
+  System::Call 'shell32::SHGetFolderPathA(i, i, i, i, t) i(0, ${CSIDL_LOCAL_APPDATA}|${CSIDL_FLAG_CREATE}, 0, ${SHGFP_TYPE_DEFAULT}, .r0).r1'
+  StrCpy $LocalAppDataFolder $0
+  Pop $0
+FunctionEnd
+
 Section "Plex" SecPlex
+
   SetShellVarContext current
   SectionIn RO
   SectionIn 1 2 #section is in installtype Full and Minimal
@@ -218,6 +231,15 @@ Var UnPageProfileCheckbox
 Var UnPageProfileCheckbox_State
 Var UnPageProfileEditBox
 
+; Unfortunately NSIS makes it impossible to share code between install and uninstall.
+; This code is duplicated in .onInit
+Function un.onInit
+  Push $0
+  System::Call 'shell32::SHGetFolderPathA(i, i, i, i, t) i(0, ${CSIDL_LOCAL_APPDATA}|${CSIDL_FLAG_CREATE}, 0, ${SHGFP_TYPE_DEFAULT}, .r0).r1'
+  StrCpy $LocalAppDataFolder $0
+  Pop $0
+FunctionEnd
+
 Function un.UnPageProfile
     !insertmacro MUI_HEADER_TEXT "Uninstall Plex" "Remove Plex's profile folder from your computer."
   nsDialogs::Create /NOUNLOAD 1018
@@ -230,7 +252,7 @@ Function un.UnPageProfile
   ${NSD_CreateLabel} 0 0 100% 12u "Do you want to delete the profile folder?"
   Pop $0
 
-  ${NSD_CreateText} 0 13u 100% 12u "$APPDATA\Plex\"
+  ${NSD_CreateText} 0 13u 100% 12u "$LocalAppDataFolder\Plex\"
   Pop $UnPageProfileEditBox
     SendMessage $UnPageProfileEditBox ${EM_SETREADONLY} 1 0
 
@@ -283,9 +305,9 @@ Section "Uninstall"
   ${If} $UnPageProfileCheckbox_State == ${BST_CHECKED}
     RMDir /r "$INSTDIR\userdata"  
     RMDir "$INSTDIR"
-    RMDir /r "$APPDATA\Plex\"
+    RMDir /r "$LocalAppDataFolder\Plex\"
   ${Else}
-;Even if userdata is kept in %appdata%\plex\userdata, the $INSTDIR\userdata should be cleaned up on uninstall if not used
+;Even if userdata is kept in %LocalAppData%\plex\userdata, the $INSTDIR\userdata should be cleaned up on uninstall if not used
 ;If guisettings.xml exists in the Plex\userdata directory, do not delete Plex\userdata directory
 ;If that file does not exists, then delete that folder and $INSTDIR
     IfFileExists $INSTDIR\userdata\guisettings.xml +3
