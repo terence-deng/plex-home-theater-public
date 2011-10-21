@@ -70,5 +70,7 @@ string Cocoa_GetMyCountry();
 //
 string Cocoa_GetMachineSerialNumber();
 string Cocoa_GetPrimaryMacAddress();
+string Cocoa_GetMachinePlatform();
+string Cocoa_GetMachinePlatformVersion();
 
 #endif
