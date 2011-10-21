@@ -7,14 +7,15 @@
 //
 #pragma once
 
+#include <string>
+
+using namespace std;
+
 #ifdef __APPLE__
 
 #include <vector>
-#include <string>
 #include <sys/types.h>
 #include "MediaSource.h"
-
-using namespace std;
 
 //
 // Initialization
@@ -70,6 +71,11 @@ string Cocoa_GetMyCountry();
 //
 string Cocoa_GetMachineSerialNumber();
 string Cocoa_GetPrimaryMacAddress();
+string Cocoa_GetMachinePlatform();
+string Cocoa_GetMachinePlatformVersion();
+
+#else
+
 string Cocoa_GetMachinePlatform();
 string Cocoa_GetMachinePlatformVersion();
 
