@@ -52,8 +52,8 @@ IF EXIST BUILD_WIN32\Plex\scripts (
     ECHO SectionIn 1 #section is in installtype Full >> scripts.nsi
     ECHO ${If} $PageProfileState == "0" >> scripts.nsi
     ECHO SetOverwrite off >> scripts.nsi
-    ECHO CreateDirectory "$APPDATA\Plex\scripts\%%S" >> scripts.nsi
-    ECHO SetOutPath "$APPDATA\Plex\scripts\%%S" >> scripts.nsi
+    ECHO CreateDirectory "$LocalAppDataFolder\Plex\scripts\%%S" >> scripts.nsi
+    ECHO SetOutPath "$LocalAppDataFolder\Plex\scripts\%%S" >> scripts.nsi
     ECHO File /r "${plex_root}\Plex\scripts\%%S\*.*" >> scripts.nsi
     ECHO SetOverwrite on >> scripts.nsi  
     ECHO ${Else} >> scripts.nsi
@@ -81,8 +81,8 @@ IF EXIST BUILD_WIN32\Plex\plugins (
         ECHO SectionIn 1 #section is in installtype Full >> plugins.nsi
         ECHO ${If} $PageProfileState == "0" >> plugins.nsi
         ECHO SetOverwrite off >> plugins.nsi
-        ECHO CreateDirectory "$APPDATA\Plex\plugins\%%a\%%S" >> plugins.nsi
-        ECHO SetOutPath "$APPDATA\Plex\plugins\%%a\%%S" >> plugins.nsi
+        ECHO CreateDirectory "$LocalAppDataFolder\Plex\plugins\%%a\%%S" >> plugins.nsi
+        ECHO SetOutPath "$LocalAppDataFolder\Plex\plugins\%%a\%%S" >> plugins.nsi
         ECHO File /r "${plex_root}\Plex\plugins\%%a\%%S\*.*" >> plugins.nsi
         ECHO SetOverwrite on >> plugins.nsi
         ECHO ${Else} >> plugins.nsi
