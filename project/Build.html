@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Untitled Page</title>
+</head>
+<body>
+
+    <h1>
+        Building Plex Media Center</h1>
+    <h2>
+        Windows</h2>
+    <h3>
+        Repository maintenance</h3>
+    <p>
+        Ensure your PMC repository is up to date, by running the following commands from 
+        the root of the repo:</p>
+    <ul>
+        <li>git submodule init</li>
+        <li>git submodule update</li>
+    </ul>
+    <h3>
+        Building PMC</h3>
+    <ul>
+        <li>Open a Visual Studio command prompt and run project\BuildDependencies\ong>DownloadBuildDeps.bat</strong>. 
+            Let it complete.<ul>
+                <li>This generally only needs to be done once.</li>
+            </ul>
+        </li>
+        <li>Using Visual C++ 2010, open the solution file located at project\VS2010Express\<strong>Plex 
+            for Windows.sln</strong>.</li>
+        <li>Cmpile the Release (Direct X) or Debug (DirectX) projects</li>
+    </ul>
+    <h3>
+        Building a setup package</h3>
+    <ul>
+        <li>Open a Visual Studio command prompt.</li>
+        <li>Run project\Win32BuildSetup\<strong>BuildSetup.bat</strong></li>
+    </ul>
+    <h3>
+        Building ffmpeg for PMC:</h3>
+    <ul>
+        <li>Open an msys command prompt</li>
+        <li>./configure-windows.sh</li>
+        <li>./make</li>
+    </ul>
+    <p>
+        WhenWhen a new build of ffmpeg is generated, the following files must be copied into 
+        the system\players\dvdplayer directory.</p>
+    <ul>
+        <li><strong>avcodec-53.dll</strong></li>
+        <li><strong>avformat-53.dll</strong></li>
+        <li><strong>avutil-51.dll</strong></li>
+        <li><strong>postproc-51.dll</strong></li>
+        <li><strong>swscale-2.dll</strong></li>
+    </ul>
+    <p>
+        In addition, the libavutil\<strong>avconfig.h</strong> header must be copied 
+        into the lib\ffmpeg\libavutil directory.</p>
+
+</body>
+</html>
