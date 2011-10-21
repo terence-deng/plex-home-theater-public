@@ -371,7 +371,15 @@ void CGUISettings::Initialize()
   // System settings
   AddGroup(4, 13000);
   
+  // myPlex settings.
   CSettingsCategory* myPlex = AddCategory(4, "myPlex", 10);
+  
+  AddString(myPlex, "myplex.status", 15000, "", EDIT_CONTROL_INPUT, true);
+  
+  SetString("myplex.status", g_localizeStrings.Get(19010));
+  AddString(0, "myplex.token", 99999, "", EDIT_CONTROL_INPUT);
+  
+  AddSeparator(NULL,"myplex.separator");
   AddString(myPlex, "myplex.email", 19000, "", EDIT_CONTROL_INPUT, true, 19000);
   AddString(myPlex, "myplex.password", 19001, "", EDIT_CONTROL_HIDDEN_INPUT, true, 19000);
   
@@ -382,7 +390,11 @@ void CGUISettings::Initialize()
   
   AddInt(myPlex, "myplex.remoteplexquality", 13149, -1, transcodeQualityMap, SPIN_CONTROL_TEXT);
   
-  AddString(myPlex, "myplex.signin", 19002, "", BUTTON_CONTROL_STANDARD);
+  // Initial status.
+  SetString("myplex.status", g_localizeStrings.Get(GetString("myplex.token").empty() ? 19011 : 21000));
+  
+  // Button.
+  AddString(myPlex, "myplex.signin", GetString("myplex.token").empty() ? 19002 : 19003, "", BUTTON_CONTROL_STANDARD);
   
   CSettingsCategory* vs = AddCategory(4, "videoscreen", 21373);
   // this setting would ideally not be saved, as its value is systematically derived from videoscreen.screenmode.

@@ -102,6 +102,8 @@
 #include "StringUtils.h"
 #include "WindowingFactory.h"
 
+#include "MyPlexManager.h"
+
 #if defined(HAVE_LIBCRYSTALHD)
 #include "cores/dvdplayer/DVDCodecs/Video/CrystalHD.h"
 #endif
@@ -402,6 +404,12 @@ void CGUIWindowSettingsCategory::CreateSettings()
     {
       CBaseSettingControl *control = GetSetting(pSetting->GetSetting());
       control->SetDelayed();
+    }
+    else if (strSetting.Equals("myplex.status"))
+    {
+      CGUIControl *pControl = (CGUIControl *)GetControl(GetSetting(strSetting)->GetID());
+      if (pControl)
+        pControl->SetEnabled(false);
     }
     else if (strSetting.Equals("subtitles.style"))
     {
@@ -1152,6 +1160,49 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
   {
     g_playlistPlayer.SetRepeat(PLAYLIST_MUSIC_TEMP, g_guiSettings.GetBool("musicfiles.repeat") ? PLAYLIST::REPEAT_ALL : PLAYLIST::REPEAT_NONE);
   }*/
+  else if (strSetting.Equals("myplex.status"))
+  {
+    CGUIControl *pControl = (CGUIControl *)GetControl(pSettingControl->GetID());
+    if (pControl)
+      pControl->SetEnabled(false);
+  }
+  else if (strSetting.Equals("myplex.signin"))
+  {
+    MyPlexManager myPlex;
+    CSettingString *pSettingString = (CSettingString *)pSettingControl->GetSetting();
+
+    if (g_guiSettings.GetString("myplex.token").empty())
+    {
+      // We're signing in.
+      if (myPlex.signIn())
+      {
+        // Change the status to show success.
+        g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19011));
+        
+        // Change button to "sign out"
+        pSettingString->SetData(g_localizeStrings.Get(19003));
+      }
+      else
+      {
+        // Change the status to reflect an error.
+        g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19012));
+      }
+    }
+    else
+    {
+      // We're signing out.
+      myPlex.signOut();
+      
+      // Change the status to show success.
+      g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19010));
+      
+      // Change the button to "sign in".
+      pSettingString->SetData(g_localizeStrings.Get(19002));
+      
+      // Nuke the password.
+      g_guiSettings.SetString("myplex.password", "");
+    }
+  }
   else if (strSetting.Equals("musiclibrary.cleanup"))
   {
     CMusicDatabase musicdatabase;

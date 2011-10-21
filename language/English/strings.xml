@@ -1579,9 +1579,10 @@
   <string id="19001">Password</string>
   <string id="19002">Sign in</string>
   <string id="19003">Sign out</string>
-  <string id="19004"></string>
-  <string id="19005"></string>
-  <string id="19006"></string>
+  
+  <string id="19010">Not signed in</string>
+  <string id="19011">Signed in</string>
+  <string id="19012">Error signing in</string>
 
   <string id="20000">CDDA Rip Folder</string>
   <string id="20001">Use external DVD Player</string>
