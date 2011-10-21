@@ -10,9 +10,10 @@
     <h2>
         Windows</h2>
     <h3>
-        Repository maintenance</h3>
+        Repository</h3>
     <p>
-        Ensure your PMC repository is up to date, by running the following commands from 
+        Ensure your repository is up to date, 
+        and submodules have been populated by running the following commands from 
         the root of the repo:</p>
     <ul>
         <li>git submodule init</li>
@@ -20,32 +21,53 @@
     </ul>
     <h3>
         Building PMC</h3>
+    <p>
+        Prerequisites:</p>
     <ul>
-        <li>Open a Visual Studio command prompt and run project\BuildDependencies\ong>DownloadBuildDeps.bat</strong>. 
-            Let it complete.<ul>
-                <li>This generally only needs to be done once.</li>
-            </ul>
-        </li>
-        <li>Using Visual C++ 2010, open the solution file located at project\VS2010Express\<strong>Plex 
+        <li>Install the <a href="http://www.microsoft.com/download/en/details.aspx?id=6812">
+            DirectX SDK</a>.</li>
+        <li>Open a Visual Studio command prompt and run <strong>project\BuildDependencies\DownloadBuildDeps.bat</strong></strong>. 
+            Let it complete.</li>
+    </ul>
+    <p>
+        To build a new Plex.exe:</p>
+    <ul>
+        <li>Using Visual C++ 2010, open the solution file located at <strong>project\VS2010Express\Plex 
             for Windows.sln</strong>.</li>
-        <li>Cmpile the Release (Direct X) or Debug (DirectX) projects</li>
+        <li>Compile the <strong>Release (Direct X)</strong> and/or <strong>Debug (DirectX)</strong> projects</li>
     </ul>
     <h3>
         Building a setup package</h3>
+    <p>
+        Prerequisites:</p>
+    <ul>
+        <li>Install NSIS from <a href="http://nsis.sourceforge.net/download/">
+            http://nsis.sourceforge.net/Download/</a></li>
+    </ul>
+    <p>
+        To generate a new setup package:</p>
     <ul>
         <li>Open a Visual Studio command prompt.</li>
-        <li>Run project\Win32BuildSetup\<strong>BuildSetup.bat</strong></li>
+        <li>Run <strong>project\Win32BuildSetup\BuildSetup.bat</strong></li>
     </ul>
     <h3>
-        Building ffmpeg for PMC:</h3>
+        Building ffmpeg for PMC</h3>
+    <p>
+        Prerequisites:</p>
+    <ul>
+        <li>Install MSYS and YASM.</li>
+    </ul>
+    <p>
+        To build new ffmpeg libraries:</p>
     <ul>
         <li>Open an msys command prompt</li>
+        <li>cd to <strong>xbmc\cores\dvdplayer\Codecs\ffmpeg</strong></li>
         <li>./configure-windows.sh</li>
         <li>./make</li>
     </ul>
     <p>
-        WhenWhen a new build of ffmpeg is generated, the following files must be copied into 
-        the system\players\dvdplayer directory.</p>
+        When a new build of ffmpeg is generated, the following libraries must be copied into 
+        the <strong>system\players\dvdplayer</strong> directory.</p>
     <ul>
         <li><strong>avcodec-53.dll</strong></li>
         <li><strong>avformat-53.dll</strong></li>
@@ -54,8 +76,8 @@
         <li><strong>swscale-2.dll</strong></li>
     </ul>
     <p>
-        In addition, the libavutil\<strong>avconfig.h</strong> header must be copied 
-        into the lib\ffmpeg\libavutil directory.</p>
+        In addition, the <strong>libavutil\avconfig.h</strong> header must be copied 
+        into the <strong>lib\ffmpeg\libavutil</strong> directory.</p>
 
 </body>
 </html>
