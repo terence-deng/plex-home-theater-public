@@ -153,6 +153,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\plex\CocoaUtils.cpp" />
+    <ClCompile Include="..\..\plex\CocoaUtilsPlus.cpp" />
     <ClCompile Include="..\..\plex\FileSystem\PlexDirectory.cpp" />
     <ClCompile Include="..\..\plex\GUI\GUIDialogPlexPluginSettings.cpp" />
     <ClCompile Include="..\..\plex\GUI\GUIDialogRating.cpp" />
@@ -872,6 +874,8 @@
     <ClCompile Include="..\..\lib\jsoncpp\jsoncpp\src\lib_json\json_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\plex\CocoaUtils.h" />
+    <ClInclude Include="..\..\plex\CocoaUtilsPlus.h" />
     <ClInclude Include="..\..\plex\FileSystem\PlexDirectory.h" />
     <ClInclude Include="..\..\plex\GUI\GUIDialogPlexPluginSettings.h" />
     <ClInclude Include="..\..\plex\GUI\GUIDialogRating.h" />
