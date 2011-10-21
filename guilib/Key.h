@@ -322,8 +322,8 @@
 #define WINDOW_VIDEO_PLAYLIST             10028
 
 #define WINDOW_LOGIN_SCREEN               10029
+#define WINDOW_SHARED_CONTENT             10030
 #define WINDOW_SETTINGS_PROFILES          10034
-
 
 #define WINDOW_ADDON_BROWSER              10040
 

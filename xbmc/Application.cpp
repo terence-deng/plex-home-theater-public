@@ -149,6 +149,7 @@
 #include "GUIWindowMusicSongs.h"
 #include "GUIWindowMusicNav.h"
 #include "GUIWindowMusicPlaylistEditor.h"
+#include "GUIWindowSharedContent.h"
 #include "GUIWindowVideoPlaylist.h"
 #include "GUIWindowMusicInfo.h"
 #include "GUIWindowVideoInfo.h"
@@ -1028,6 +1029,7 @@ bool CApplication::Initialize()
   g_windowManager.Add(new CGUIWindowPictures);                 // window id = 2
   g_windowManager.Add(new CGUIWindowFileManager);      // window id = 3
   g_windowManager.Add(new CGUIWindowVideoFiles);          // window id = 6
+  g_windowManager.Add(new CGUIWindowSharedContent);
   g_windowManager.Add(new CGUIWindowSettings);                 // window id = 4
   g_windowManager.Add(new CGUIWindowSystemInfo);               // window id = 7
 #ifdef HAS_GL
@@ -3150,6 +3152,7 @@ bool CApplication::Cleanup()
     g_windowManager.Delete(WINDOW_MUSIC_INFO);
     g_windowManager.Delete(WINDOW_VIDEO_INFO);
     g_windowManager.Delete(WINDOW_VIDEO_FILES);
+    g_windowManager.Delete(WINDOW_SHARED_CONTENT);
     g_windowManager.Delete(WINDOW_VIDEO_PLAYLIST);
     g_windowManager.Delete(WINDOW_VIDEO_NAV);
     g_windowManager.Delete(WINDOW_FILES);
