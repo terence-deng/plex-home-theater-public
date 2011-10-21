@@ -3393,7 +3393,7 @@ void CApplication::Stop()
 #endif
 
     CLog::Log(LOGNOTICE, "unload skin");
-    UnloadSkin();
+    //UnloadSkin();
 
 #ifdef __APPLE__
     if (PlexHelper::GetInstance().IsAlwaysOn() == false)
