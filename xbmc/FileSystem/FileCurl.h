@@ -61,6 +61,7 @@ namespace XFILE
       void Reset();
       void SetUserAgent(CStdString sUserAgent)                   { m_userAgent = sUserAgent; }
       void SetProxy(CStdString &proxy)                           { m_proxy = proxy; }
+      void SetUserAndPassword(const CStdString& user, const CStdString& pass) { m_basicUser = user; m_basicPass = pass; m_basicAuth = true; }
       void SetProxyUserPass(CStdString &proxyuserpass)           { m_proxyuserpass = proxyuserpass; }
       void SetCustomRequest(CStdString &request)                 { m_customrequest = request; }
       void UseOldHttpVersion(bool bUse)                          { m_useOldHttpVersion = bUse; }
@@ -147,6 +148,10 @@ namespace XFILE
       CStdString      m_username;
       CStdString      m_password;
       CStdString      m_httpauth;
+      CStdString      m_basicUser;
+      CStdString      m_basicPass;
+      bool            m_basicAuth;
+      bool            m_post;
       bool            m_ftppasvip;
       int             m_connecttimeout;
       int             m_lowspeedtime;

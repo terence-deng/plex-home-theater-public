@@ -343,6 +343,8 @@ CFileCurl::CFileCurl()
   m_state = new CReadState();
   m_skipshout = false;
   m_clearCookies = false;
+  m_post = false;
+  m_basicAuth = false;
 }
 
 //Has to be called before Open()
@@ -387,8 +389,14 @@ void CFileCurl::SetCommonOptions(CReadState* state)
   g_curlInterface.easy_setopt(h, CURLOPT_WRITEDATA, state);
   g_curlInterface.easy_setopt(h, CURLOPT_WRITEFUNCTION, write_callback);
 
+  if (m_basicAuth)
+  {
+    g_curlInterface.easy_setopt(h, CURLOPT_USERNAME, m_basicUser.c_str());
+    g_curlInterface.easy_setopt(h, CURLOPT_PASSWORD, m_basicPass.c_str());
+  }
+  
   // set username and password for current handle
-  if (m_username.length() > 0 && m_password.length() > 0)
+  else if (m_username.length() > 0 && m_password.length() > 0)
   {
     CStdString userpwd = m_username + ":" + m_password;
     g_curlInterface.easy_setopt(h, CURLOPT_USERPWD, userpwd.c_str());
@@ -448,9 +456,10 @@ void CFileCurl::SetCommonOptions(CReadState* state)
   g_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TRANSFERTEXT, FALSE);
 
   // setup POST data if it exists
-  if (!m_postdata.IsEmpty())
+  if (!m_postdata.IsEmpty() || m_post == true)
   {
     g_curlInterface.easy_setopt(h, CURLOPT_POST, 1 );
+    
     g_curlInterface.easy_setopt(h, CURLOPT_POSTFIELDSIZE, m_postdata.length());
     g_curlInterface.easy_setopt(h, CURLOPT_POSTFIELDS, m_postdata.c_str());
   }
@@ -768,6 +777,7 @@ void CFileCurl::ParseAndCorrectUrl(CURL &url2)
 
 bool CFileCurl::Post(const CStdString& strURL, const CStdString& strPostData, CStdString& strHTML)
 {
+  m_post = true;
   return Service(strURL, strPostData, strHTML);
 }
 
