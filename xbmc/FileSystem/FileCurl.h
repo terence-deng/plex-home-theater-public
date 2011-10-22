@@ -104,6 +104,7 @@ namespace XFILE
           int64_t         m_filePos;
           bool            m_bFirstLoop;
           CStdString      m_strDeadEndUrl;    // If we can't redirect, this holds the last URL.
+          int             m_ticklePipe[2];
 
           /* returned http header */
           CHttpHeader m_httpheader;
@@ -119,6 +120,9 @@ namespace XFILE
 
           long         Connect(unsigned int size);
           void         Disconnect();
+        
+        
+          void         Cancel() { ::write(m_ticklePipe[1], "Q", 1); m_cancelled = true; }
       };
 
     protected:

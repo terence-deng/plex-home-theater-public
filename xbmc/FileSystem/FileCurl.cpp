@@ -213,6 +213,7 @@ CFileCurl::CReadState::CReadState()
   m_cancelled = false;
   m_bFirstLoop = true;
   m_headerdone = false;
+  ::pipe(m_ticklePipe);
 }
 
 CFileCurl::CReadState::~CReadState()
@@ -221,6 +222,11 @@ CFileCurl::CReadState::~CReadState()
 
   if(m_easyHandle)
     g_curlInterface.easy_release(&m_easyHandle, &m_multiHandle);
+  
+  ::shutdown(m_ticklePipe[0], 2);
+  ::close(m_ticklePipe[0]);
+  ::shutdown(m_ticklePipe[1], 2);
+  ::close(m_ticklePipe[1]);
 }
 
 bool CFileCurl::CReadState::Seek(int64_t pos)
@@ -860,7 +866,8 @@ bool CFileCurl::IsInternet(bool checkDNS /* = true */)
 
 void CFileCurl::Cancel()
 {
-  m_state->m_cancelled = true;
+  m_state->Cancel();
+  
   while (m_opened)
     Sleep(1);
 }
@@ -1375,6 +1382,11 @@ bool CFileCurl::CReadState::FillBuffer(unsigned int want)
 
         struct timeval t = { timeout / 1000, (timeout % 1000) * 1000 };
 
+        // Add the tickle pipe.
+        FD_SET(m_ticklePipe[0], &fdread);
+        if (m_ticklePipe[0] > maxfd)
+          maxfd = m_ticklePipe[0];
+        
         /* Wait until data is available or a timeout occurs.
            We call dllselect(maxfd + 1, ...), specially in case of (maxfd == -1),
            we call dllselect(0, ...), which is basically equal to sleep. */
@@ -1382,6 +1394,14 @@ bool CFileCurl::CReadState::FillBuffer(unsigned int want)
         {
           CLog::Log(LOGERROR, "%s - curl failed with socket error", __FUNCTION__);
           return false;
+        }
+        
+        // Read the byte from the tickle socket if there was one.
+        if (FD_ISSET(m_ticklePipe[0], &fdread))
+        {
+          CLog::Log(LOGINFO, "The curl loop was woken up.");
+          char theTickleByte;
+          ::read(m_ticklePipe[0], &theTickleByte, 1);
         }
       }
       break;
