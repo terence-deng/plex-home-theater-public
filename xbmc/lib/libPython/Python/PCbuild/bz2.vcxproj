@@ -30,10 +30,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\..\project\VS2010Express\Plex for Windows.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\..\project\VS2010Express\Plex for Windows.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -110,13 +112,14 @@ nmake /nologo /f makefile.msc
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system\python\DLLs" md "$(DeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\python\DLLs\$(TargetFileName)"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\python\DLLs\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -174,13 +177,17 @@ nmake /nologo /f makefile.msc lib
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)"</Command>
+      <Command>if not exist "$(ReleaseDeployDir)\system\python\DLLs" md "$(ReleaseDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\DLLs\$(TargetFileName)"
+
+if not exist "$(DebugDeployDir)\system\python\DLLs" md "$(DebugDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\DLLs\$(TargetFileName)"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\python\DLLs\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>

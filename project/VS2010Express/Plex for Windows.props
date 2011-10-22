@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <DeployDir>$(SolutionDir)..\..\Build\Windows\$(Platform)\$(Configuration)\Deploy</DeployDir>
+    <DebugDeployDir>$(SolutionDir)..\..\Build\Windows\$(Platform)\Debug\Deploy</DebugDeployDir>
+    <ReleaseDeployDir>$(SolutionDir)..\..\Build\Windows\$(Platform)\Release\Deploy</ReleaseDeployDir>
+  </PropertyGroup>
   <PropertyGroup>
     <IncludePath>$(SolutionDir)\..\BuildDependencies\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -10,5 +14,18 @@
     <ExecutablePath>$(SolutionDir)\..\..\tools\win32buildtools;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <BuildMacro Include="DeployDir">
+      <Value>$(DeployDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="DebugDeployDir">
+      <Value>$(DebugDeployDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="ReleaseDeployDir">
+      <Value>$(ReleaseDeployDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
 </Project>
