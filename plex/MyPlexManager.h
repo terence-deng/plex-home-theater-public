@@ -13,6 +13,7 @@
 #include "CocoaUtilsPlus.h"
 #include "Log.h"
 #include "FileCurl.h"
+#include "PlexDirectory.h"
 
 using namespace std;
 using namespace XFILE;
@@ -35,12 +36,12 @@ class MyPlexManager
   bool signIn()
   {
     CFileCurl http;
+    SetupRequestHeaders(http);
     http.SetUserAndPassword(g_guiSettings.GetString("myplex.email"), g_guiSettings.GetString("myplex.password"));
-    setRequestHeaders(http);
     
     // Issue the sign-in request.
     CStdString res;
-    string request = getMyPlexBaseUrl(false) + "/users/sign_in.xml";
+    string request = GetBaseUrl(true) + "/users/sign_in.xml";
     bool success = http.Post(request, "", res);
     
     if (success && res.empty() == false)
@@ -79,20 +80,39 @@ class MyPlexManager
   }
   
   /// Get the contents of a playlist.
-  void getPlaylist(const string& playlist)
+  bool getPlaylist(CFileItemList& list, const string& playlist)
   {
-    
+    string request = GetBaseUrl(true) + "/pms/playlists/" + playlist;
+    return fetchList(request, list);
   }
   
   /// Get all sections.
-  void getSections()
+  bool getSections(CFileItemList& list)
   {
-    
+    string request = GetBaseUrl(true) + "/pms/system/library/sections";
+    return fetchList(request, list);
   }
   
  protected:
   
-  void setRequestHeaders(CFileCurl& http)
+  /// Fetch a list from myPlex.
+  bool fetchList(const string& url, CFileItemList& list)
+  {
+    if (g_guiSettings.GetString("myplex.token").empty() == false)
+    {
+      // Add the token to the request.
+      string request = url;
+      request += "?auth_token=" + g_guiSettings.GetString("myplex.token");
+      
+      CPlexDirectory plexDir(true, false);
+      return plexDir.GetDirectory(request, list);
+    }
+    
+    return false;
+  }
+
+  /// Utility method for myPlex to setup request headers.
+  static void SetupRequestHeaders(CFileCurl& http)
   {
     // Initialize headers.
     http.SetRequestHeader("Content-Type", "application/xml");
@@ -104,7 +124,8 @@ class MyPlexManager
     http.SetRequestHeader("X-Plex-Platform-Version", Cocoa_GetMachinePlatformVersion());
   }
   
-  string getMyPlexBaseUrl(bool secure=true)
+  /// Utility method to retrieve the myPlex URL.
+  static string GetBaseUrl(bool secure=true)
   {
     string ret;
     
