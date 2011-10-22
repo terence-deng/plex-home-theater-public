@@ -95,7 +95,6 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)_socket_d.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1e1D0000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -105,8 +104,13 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>if not exist "$(DeployDir)\system\python\DLLs" md "$(DeployDir)\system\python\DLLs"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\python\DLLs\$(TargetFileName)"</Command>
+      <Command>if not exist "$(ReleaseDeployDir)\system\python\DLLs" md "$(ReleaseDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python\DLLs"
+
+if not exist "$(DebugDeployDir)\system\python\DLLs" md "$(DebugDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python\DLLs"</Command>
       <Message>Copy output</Message>
       <Outputs>$(DeployDir)\system\python\DLLs\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
@@ -151,7 +155,6 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\python\DLLs\$(TargetFileName)"</
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)_socket.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1e1D0000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -163,9 +166,11 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\python\DLLs\$(TargetFileName)"</
     <CustomBuildStep>
       <Command>if not exist "$(ReleaseDeployDir)\system\python\DLLs" md "$(ReleaseDeployDir)\system\python\DLLs"
 copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python\DLLs"
 
 if not exist "$(DebugDeployDir)\system\python\DLLs" md "$(DebugDeployDir)\system\python\DLLs"
-copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\DLLs\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python\DLLs"</Command>
       <Message>Copy output</Message>
       <Outputs>$(DeployDir)\system\python\DLLs\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>

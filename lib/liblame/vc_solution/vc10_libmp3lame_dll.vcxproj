@@ -93,10 +93,13 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>..\include\lame.def</ModuleDefinitionFile>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\cdrip\lame_enc.dll</Outputs>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\cdrip\lame_enc.dll"</Command>
+      <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
+      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
@@ -124,11 +127,13 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>..\include\lame.def</ModuleDefinitionFile>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
       <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
       <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
@@ -159,7 +164,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"</Comman
     <CustomBuildStep>
       <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
       <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>

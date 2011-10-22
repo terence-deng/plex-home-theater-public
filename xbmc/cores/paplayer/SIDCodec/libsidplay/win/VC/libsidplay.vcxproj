@@ -95,7 +95,6 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <ProgramDatabaseFile>.\Release/libsidplay2.pdb</ProgramDatabaseFile>
       <SubSystem>NotSet</SubSystem>
       <ProfileGuidedDatabase>
       </ProfileGuidedDatabase>
@@ -105,6 +104,7 @@
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)libsidplay2.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -112,7 +112,8 @@
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
@@ -158,7 +159,6 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileNam
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/libsidplay2.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <ProfileGuidedDatabase>
       </ProfileGuidedDatabase>
@@ -174,7 +174,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileNam
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>

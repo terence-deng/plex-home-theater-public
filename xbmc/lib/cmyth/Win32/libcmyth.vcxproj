@@ -75,6 +75,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -82,7 +83,8 @@
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
@@ -113,6 +115,7 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"</Command>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -120,7 +123,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>

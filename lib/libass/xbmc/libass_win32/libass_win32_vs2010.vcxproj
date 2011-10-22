@@ -71,7 +71,6 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <IgnoreSpecificDefaultLibraries>LIBCMTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>Debug/libass_win32.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -84,7 +83,8 @@
     </Link>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
       <Message>Copy Output</Message>
       <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
@@ -108,7 +108,6 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileNa
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <IgnoreSpecificDefaultLibraries>libcmt;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>Release/$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -123,7 +122,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileNa
     </Link>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
       <Message>Copy Output</Message>
       <Inputs>$(TargetPath)</Inputs>
       <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>

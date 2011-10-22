@@ -80,6 +80,7 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>libmad.def</ModuleDefinitionFile>
       <ImportLibrary>$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -87,7 +88,8 @@
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
       <Message>Copy output</Message>
       <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
@@ -120,6 +122,7 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileNa
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -127,7 +130,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileNa
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
       <Message>Copy output</Message>
       <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>

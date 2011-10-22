@@ -75,7 +75,6 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)\$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <ProfileGuidedDatabase>
       </ProfileGuidedDatabase>
@@ -93,7 +92,8 @@
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
@@ -117,7 +117,6 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileNam
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)\$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -135,7 +134,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileNam
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>

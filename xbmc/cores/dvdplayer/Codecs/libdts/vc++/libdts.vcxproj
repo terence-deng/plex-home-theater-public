@@ -85,6 +85,7 @@
       <ProfileGuidedDatabase>
       </ProfileGuidedDatabase>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -92,7 +93,8 @@
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
@@ -132,6 +134,7 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileNa
       <ProfileGuidedDatabase>
       </ProfileGuidedDatabase>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -139,7 +142,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileNa
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>

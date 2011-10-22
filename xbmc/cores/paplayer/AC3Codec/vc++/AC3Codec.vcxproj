@@ -95,6 +95,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -102,7 +103,8 @@
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
@@ -145,6 +147,7 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileNam
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -152,7 +155,8 @@ copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileNam
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>

@@ -98,7 +98,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)python24.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1e000000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -112,9 +111,11 @@
     <CustomBuildStep>
       <Command>if not exist "$(ReleaseDeployDir)\system\python" md "$(ReleaseDeployDir)\system\python"
 copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python"
 
 if not exist "$(DebugDeployDir)\system\python" md "$(DebugDeployDir)\system\python"
-copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\$(TargetFileName)"</Command>
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
@@ -162,7 +163,6 @@ copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\$(TargetFileName)"</
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)python24.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1e000000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -172,8 +172,13 @@ copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\$(TargetFileName)"</
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>if not exist "$(DeployDir)\system\python" md "$(DeployDir)\system\python"
-copy /b /y "$(TargetPath)" "$(DeployDir)\system\python\$(TargetFileName)"</Command>
+      <Command>if not exist "$(ReleaseDeployDir)\system\python" md "$(ReleaseDeployDir)\system\python"
+copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python"
+
+if not exist "$(DebugDeployDir)\system\python" md "$(DebugDeployDir)\system\python"
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>

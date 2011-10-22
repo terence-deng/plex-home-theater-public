@@ -115,7 +115,7 @@ Section "Plex" SecPlex
   SetOutPath "$INSTDIR\sounds"
   File /r /x *.so "${plex_deploy_root}\sounds\*.*"
   SetOutPath "$INSTDIR\system"
-  File /r /x *.so /x mplayer "${plex_deploy_root}\system\*.*"
+  File /r /x *.so /x *.pdb /x mplayer "${plex_deploy_root}\system\*.*"
   
   ; delete  msvc?90.dll's in INSTDIR, we use the vcredist installer later
   Delete "$INSTDIR\msvcr90.dll"
