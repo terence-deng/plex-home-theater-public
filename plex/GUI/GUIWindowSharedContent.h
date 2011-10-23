@@ -32,4 +32,18 @@ class CGUIWindowSharedContent : public CGUIWindowVideoBase
   {
   }
   
+  bool OnClick(int iItem)
+  {
+    if (iItem < 0 || iItem >= (int)m_vecItems->Size()) 
+      return true;
+    
+    CFileItemPtr pItem = m_vecItems->Get(iItem);
+    string type = pItem->GetProperty("type");
+    
+    CStdString strWindow = (type == "movie" || type == "show") ? "MyVideoFiles" : (type == "artist") ? "MyMusicFiles" : "MyPictures";
+    CStdString cmd = "XBMC.ActivateWindow(" + strWindow + "," + pItem->m_strPath + ",return)";
+    g_application.ExecuteXBMCAction(cmd);
+
+    return true;
+  }
 };
