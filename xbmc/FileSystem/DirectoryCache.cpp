@@ -139,22 +139,31 @@ void CDirectoryCache::ClearDirectory(const CStdString& strPath)
     Delete(i);
 }
 
+CStdString Normalize(const CStdString& strPath)
+{
+  CStdString ret = strPath;
+  size_t q = ret.find("?");
+  if (q != string::npos)
+    ret = ret.substr(0, q);
+  
+  return ret;
+}
+
 void CDirectoryCache::ClearSubPaths(const CStdString& strPath)
 {
   CSingleLock lock (m_cs);
 
-  CStdString storedPath = strPath;
-  CUtil::RemoveSlashAtEnd(storedPath);
-
+  CStdString storedPath = Normalize(strPath);
+  
   iCache i = m_cache.begin();
   while (i != m_cache.end())
   {
-    CStdString path = i->first;
-    if (strncmp(path.c_str(), storedPath.c_str(), storedPath.GetLength()) == 0)
+    CStdString path = Normalize(i->first);
+    if (strncmp(path.c_str(), storedPath.c_str(), storedPath.GetLength()) == 0 && path.size() > storedPath.size())
       Delete(i++);
     else
       i++;
-  }
+  }  
 }
 
 void CDirectoryCache::AddFile(const CStdString& strFile)
