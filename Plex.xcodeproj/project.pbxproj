@@ -1081,7 +1081,6 @@
 		74332DA212FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIDialogPlexPluginSettings.cpp; path = plex/GUI/GUIDialogPlexPluginSettings.cpp; sourceTree = "<group>"; };
 		74332DA312FB4F0500F2A5BE /* GUIDialogPlexPluginSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIDialogPlexPluginSettings.h; path = plex/GUI/GUIDialogPlexPluginSettings.h; sourceTree = "<group>"; };
 		7434156C1379D4920028671C /* PlexHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PlexHelper.xcodeproj; path = tools/EventClients/Clients/OSXRemote/PlexHelper.xcodeproj; sourceTree = "<group>"; };
-		743415771379D4BA0028671C /* PlexHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = PlexHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		743A74EE12F8BFCD00040C63 /* GUIWindowNowPlaying.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIWindowNowPlaying.cpp; path = plex/GUI/GUIWindowNowPlaying.cpp; sourceTree = "<group>"; };
 		743A74EF12F8BFCD00040C63 /* GUIWindowNowPlaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIWindowNowPlaying.h; path = plex/GUI/GUIWindowNowPlaying.h; sourceTree = "<group>"; };
 		74462EE612E37BF600C8B41F /* libwavpack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwavpack.a; path = "vendor/osx-10.6_i386/lib/libwavpack.a"; sourceTree = SOURCE_ROOT; };
@@ -1331,6 +1330,7 @@
 		E33979950D62FD47004ECDDA /* DVDInputStreamTV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDInputStreamTV.h; sourceTree = "<group>"; };
 		E34B56AB1452237C004A7CCE /* CocoaUtilsPlus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CocoaUtilsPlus.cpp; path = plex/CocoaUtilsPlus.cpp; sourceTree = "<group>"; };
 		E34B56AC1452237C004A7CCE /* CocoaUtilsPlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaUtilsPlus.h; path = plex/CocoaUtilsPlus.h; sourceTree = "<group>"; };
+		E34B56B114524E2C004A7CCE /* PlexLibrarySectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexLibrarySectionManager.h; path = plex/PlexLibrarySectionManager.h; sourceTree = "<group>"; };
 		E35EF2540D380C3D00DB5CD5 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		E35EF3230D380E1E00DB5CD5 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		E36578860D3AA7B40033CC1C /* DVDPlayerCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDPlayerCodec.cpp; sourceTree = "<group>"; };
@@ -2595,6 +2595,7 @@
 		E38E25BF0D263DC100618676 /* DVDFactoryDemuxer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDFactoryDemuxer.cpp; sourceTree = "<group>"; };
 		E38E25C20D263DE200618676 /* DVDDemuxFFmpeg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDDemuxFFmpeg.cpp; sourceTree = "<group>"; };
 		E38F12C10D29FF200035C331 /* FileShoutcast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileShoutcast.cpp; sourceTree = "<group>"; };
+		E3957ED714525C5900D31C95 /* MyPlexManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyPlexManager.h; path = plex/MyPlexManager.h; sourceTree = "<group>"; };
 		E3A478090D29029A00F3C3A6 /* dlgcache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dlgcache.cpp; sourceTree = "<group>"; };
 		E3A478150D29030100F3C3A6 /* GUIMultiSelectText.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIMultiSelectText.cpp; sourceTree = "<group>"; };
 		E3A478190D29032C00F3C3A6 /* GUIDialogAccessPoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIDialogAccessPoints.cpp; sourceTree = "<group>"; };
@@ -2607,6 +2608,7 @@
 		E3D87AEA0D3182F4000CF031 /* XCriticalSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCriticalSection.h; sourceTree = "<group>"; };
 		E3DAAF8A0D6E1B0500F17647 /* FileSmb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSmb.cpp; sourceTree = "<group>"; };
 		E3DAAF8B0D6E1B0500F17647 /* SMBDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMBDirectory.cpp; sourceTree = "<group>"; };
+		E3E7C1CC1453979E0014B435 /* GUIWindowSharedContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIWindowSharedContent.h; path = plex/GUI/GUIWindowSharedContent.h; sourceTree = "<group>"; };
 		E3E91FFA0D8C61DF002BF43D /* EventPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventPacket.cpp; sourceTree = "<group>"; };
 		E3E91FFB0D8C61DF002BF43D /* EventServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventServer.cpp; sourceTree = "<group>"; };
 		E3E91FFC0D8C61DF002BF43D /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
@@ -2932,7 +2934,6 @@
 				749502F412FBF5300039DE17 /* Frameworks */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				19C28FBDFE9D53C911CA2CBB /* Products */,
-				743415771379D4BA0028671C /* PlexHelper */,
 			);
 			name = Plex;
 			sourceTree = "<group>";
@@ -3043,6 +3044,10 @@
 		746469DE12E827B500B2FF1E /* plex */ = {
 			isa = PBXGroup;
 			children = (
+				E3957ED714525C5900D31C95 /* MyPlexManager.h */,
+				E34B56B114524E2C004A7CCE /* PlexLibrarySectionManager.h */,
+				7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */,
+				7482B23212E8C1470077A38C /* PlexSourceScanner.h */,
 				E34B56AB1452237C004A7CCE /* CocoaUtilsPlus.cpp */,
 				E34B56AC1452237C004A7CCE /* CocoaUtilsPlus.h */,
 				E329D64213F3668D00AFCC3E /* Players */,
@@ -3062,8 +3067,6 @@
 				746469F212E82AD700B2FF1E /* PlexApplication.cpp */,
 				74FB20E112ECBC4200876EB5 /* PlexMediaServerQueue.h */,
 				74FB20E012ECBC4200876EB5 /* PlexMediaServerQueue.cpp */,
-				7482B23212E8C1470077A38C /* PlexSourceScanner.h */,
-				7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */,
 			);
 			name = plex;
 			sourceTree = "<group>";
@@ -3148,6 +3151,7 @@
 		74F034C112F2B08D00040736 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				E3E7C1CC1453979E0014B435 /* GUIWindowSharedContent.h */,
 				74F034C212F2B0A500040736 /* GUIDialogRating.h */,
 				74F034C312F2B0A500040736 /* GUIDialogRating.cpp */,
 				74756A9912F450DF0001203D /* GUIDialogTimer.h */,
