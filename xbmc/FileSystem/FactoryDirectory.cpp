@@ -119,10 +119,12 @@ IDirectory* CFactoryDirectory::Create(const CStdString& strPath)
 
   if (strProtocol.size() == 0 || strProtocol == "file") return new CHDDirectory();
   
-  // Three cases for Plex.
+  // Cases for Plex.
   if (strProtocol == "plex") return new CPlexDirectory();
   if (strPath.find("X-Plex-Token=") != -1) return new CPlexDirectory();
   if (strProtocol == "http" && url.GetPort() == 32400) return new CPlexDirectory();
+  if (url.GetHostName().find(".plexapp.com") != string::npos) return new CPlexDirectory();
+  if (url.GetFileName().find("/library/sections/") == 0) return new CPlexDirectory();
   
   if (strProtocol == "special") return new CSpecialProtocolDirectory();
   if (strProtocol == "addons") return new CAddonsDirectory();
