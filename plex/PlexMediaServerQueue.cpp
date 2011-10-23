@@ -1,3 +1,4 @@
+#include "GUISettings.h"
 #include "log.h"
 #include "PlexMediaServerQueue.h"
 #include "HTTP.h"
@@ -28,10 +29,19 @@ void PlexMediaServerQueue::Process()
       m_queue.pop();
       m_mutex.unlock();
       
-      // Hit the Plex Media Server.
-      CHTTP http;
-      http.Open(pair.second, pair.first.c_str(), 0);
-      CLog::Log(LOGNOTICE, "Plex Media Server Queue: %s", pair.second.c_str());
+      // If this is going to a remote shared server, don't do it, until we finish profiles.
+      if (pair.second.find("X-Plex-Token") != string::npos && 
+          pair.second.find(g_guiSettings.GetString("myplex.token")) == string::npos)
+      {
+        dprintf("We're not going to send a status message, because it's a shared server.");
+      }
+      else
+      {
+        // Hit the Plex Media Server.
+        CHTTP http;
+        http.Open(pair.second, pair.first.c_str(), 0);
+        CLog::Log(LOGNOTICE, "Plex Media Server Queue: %s", pair.second.c_str());
+      }
 
       m_mutex.lock();
     }
