@@ -61,7 +61,11 @@ void CGUIDialogProgress::SetCanCancel(bool bCanCancel)
 void CGUIDialogProgress::StartModal()
 {
   CSingleLock lock(g_graphicsContext);
-
+  
+  // If we're already running, don't bother.
+  if (m_bRunning)
+    return;
+  
   CLog::DebugLog("DialogProgress::StartModal called %s", m_bRunning ? "(already running)!" : "");
   m_bCanceled = false;
 
