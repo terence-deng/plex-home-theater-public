@@ -3782,8 +3782,6 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
 
 void CApplication::FinishPlayingFile(bool bResult, const CStdString& error)
 {
-  HideBusyIndicator();
-
   if(bResult)
   {
     if (m_iPlaySpeed != 1)
@@ -4612,7 +4610,10 @@ bool CApplication::OnMessage(CGUIMessage& message)
 
       // User initiated the stop.
       if (message.GetMessage() == GUI_MSG_PLAYBACK_STOPPED)
+      {
         UpdateFileState("stopped");
+        HideBusyIndicator();
+      }
       
       // first check if we still have items in the stack to play
       if (message.GetMessage() == GUI_MSG_PLAYBACK_ENDED)
@@ -5313,6 +5314,8 @@ void CApplication::SeekPercentage(float percent)
 // SwitchToFullScreen() returns true if a switch is made, else returns false
 bool CApplication::SwitchToFullScreen()
 {
+  HideBusyIndicator();
+  
   // if playing from the video info window, close it first!
   if (g_windowManager.HasModalDialog() && g_windowManager.GetTopMostModalDialogID() == WINDOW_VIDEO_INFO)
   {
