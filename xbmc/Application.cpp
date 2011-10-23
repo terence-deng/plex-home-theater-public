@@ -275,6 +275,7 @@
 #include "plex/PlexApplication.h"
 #include "PlexMediaServerPlayer.h"
 #include "PlexMediaServerQueue.h"
+#include "MyPlexManager.h"
 
 using namespace std;
 using namespace ADDON;
@@ -1191,6 +1192,10 @@ bool CApplication::Initialize()
 
   // reset our screensaver (starts timers etc.)
   ResetScreenSaver();
+  
+  // Scan myPlex.
+  MyPlexManager::Get().scanAsync();
+  
   return true;
 }
 
