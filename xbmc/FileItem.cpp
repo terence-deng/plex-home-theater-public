@@ -2506,6 +2506,7 @@ bool CFileItemList::Load(int windowID)
 
 bool CFileItemList::Save(int windowID)
 {
+#if 0
   int iSize = Size();
   if (iSize <= 0)
     return false;
@@ -2522,6 +2523,7 @@ bool CFileItemList::Save(int windowID)
     file.Close();
     return true;
   }
+#endif
 
   return false;
 }
