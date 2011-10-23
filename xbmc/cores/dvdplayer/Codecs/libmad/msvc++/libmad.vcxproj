@@ -80,15 +80,18 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>libmad.def</ModuleDefinitionFile>
       <ImportLibrary>$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
       <Message>Copy output</Message>
-      <Outputs>$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -119,15 +122,18 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
       <Message>Copy output</Message>
-      <Outputs>$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>

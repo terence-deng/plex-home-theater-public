@@ -612,9 +612,4 @@
       <Filter>Rendering\GL</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\xbmc\win32\PlatformInclude.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-  </ItemGroup>
 </Project>

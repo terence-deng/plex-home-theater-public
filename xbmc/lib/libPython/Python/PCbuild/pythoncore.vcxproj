@@ -30,10 +30,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\..\project\VS2010Express\Plex for Windows.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\..\project\VS2010Express\Plex for Windows.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -96,7 +98,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)python24.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1e000000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -108,13 +109,19 @@
       </FixedBaseAddress>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\python\$(TargetFileName)"</Command>
+      <Command>if not exist "$(ReleaseDeployDir)\system\python" md "$(ReleaseDeployDir)\system\python"
+copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python"
+
+if not exist "$(DebugDeployDir)\system\python" md "$(DebugDeployDir)\system\python"
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\python\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\python\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -156,7 +163,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)python24.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1e000000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -166,13 +172,19 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\python\$(TargetFileName)"</Command>
+      <Command>if not exist "$(ReleaseDeployDir)\system\python" md "$(ReleaseDeployDir)\system\python"
+copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python"
+
+if not exist "$(DebugDeployDir)\system\python" md "$(DebugDeployDir)\system\python"
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\python\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\python\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>

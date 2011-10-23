@@ -30,10 +30,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\..\project\VS2010Express\Plex for Windows.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\..\project\VS2010Express\Plex for Windows.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -100,7 +102,6 @@ nmake /nologo /f makefile.msc
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>LIBCMTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\./bz2_d.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1D170000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -110,13 +111,19 @@ nmake /nologo /f makefile.msc
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)"</Command>
+      <Command>if not exist "$(ReleaseDeployDir)\system\python\DLLs" md "$(ReleaseDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python\DLLs"
+
+if not exist "$(DebugDeployDir)\system\python\DLLs" md "$(DebugDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python\DLLs"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\python\DLLs\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -164,7 +171,6 @@ nmake /nologo /f makefile.msc lib
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;LIBCMT;LIBCMTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)bz2.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <BaseAddress>0x1D170000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -174,13 +180,19 @@ nmake /nologo /f makefile.msc lib
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)"</Command>
+      <Command>if not exist "$(ReleaseDeployDir)\system\python\DLLs" md "$(ReleaseDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(ReleaseDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(ReleaseDeployDir)\system\python\DLLs"
+
+if not exist "$(DebugDeployDir)\system\python\DLLs" md "$(DebugDeployDir)\system\python\DLLs"
+copy /b /y "$(TargetPath)" "$(DebugDeployDir)\system\python\DLLs\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DebugDeployDir)\system\python\DLLs"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\python\DLLs\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\python\DLLs\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>

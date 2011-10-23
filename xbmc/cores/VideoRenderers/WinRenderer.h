@@ -195,11 +195,14 @@ public:
 
   void                 RenderUpdate(bool clear, DWORD flags = 0, DWORD alpha = 255);
 
+  void                 SetRGB32Image(const char *image, int nHeight, int nWidth, int nPitch);
+
   static void          CropSource(RECT& src, RECT& dst, const D3DSURFACE_DESC& desc);
 
 protected:
   virtual void Render(DWORD flags);
   void         RenderSW(DWORD flags);
+  void         RenderRGB();
   void         RenderPS(DWORD flags);
   void         Stage1(DWORD flags);
   void         Stage2(DWORD flags);
@@ -237,6 +240,12 @@ protected:
   // Software rendering
   D3DTEXTUREFILTERTYPE m_TextureFilter;
   CD3DTexture          m_SWTarget;
+
+  // RGB rendering
+  BYTE                *m_rgbBuffer;
+  int                  m_rgbBufferSize;
+  bool                 m_bRGBImageSet;
+  LPDIRECT3DTEXTURE9   m_rgbTexture;
 
   // PS rendering
   bool                 m_bUseHQScaler;

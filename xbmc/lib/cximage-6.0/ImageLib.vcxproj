@@ -123,7 +123,6 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Unicode_Debug/cximagecrtdu.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -131,13 +130,15 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -175,7 +176,6 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(Configuration)\vs2010\ImageLib.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -187,13 +187,15 @@
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -233,7 +235,6 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <ProgramDatabaseFile>$(Configuration)\vs2010\cximagecrt.pdb</ProgramDatabaseFile>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
@@ -241,19 +242,22 @@
       </DataExecutionPrevention>
       <ImportLibrary>$(Configuration)\vs2010\cximagecrt.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -290,21 +294,23 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <ProgramDatabaseFile>.\Unicode_Release/cximagecrtu.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>.\Unicode_Release/cximagecrtu.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>

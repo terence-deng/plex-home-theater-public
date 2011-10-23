@@ -72,9 +72,11 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
       <Message>Copy Output</Message>
-      <Outputs>$(SolutionDir)..\..\system\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -103,9 +105,11 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system" md "$(DeployDir)\system"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system"</Command>
       <Message>Copy Output</Message>
-      <Outputs>$(SolutionDir)..\..\system\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>

@@ -85,19 +85,22 @@
       <ProfileGuidedDatabase>
       </ProfileGuidedDatabase>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -131,19 +134,22 @@
       <ProfileGuidedDatabase>
       </ProfileGuidedDatabase>
       <ImportLibrary>$(Configuration)\vs2010\$(TargetName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>copy /B /Y "$(TargetPath)" "$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\system\players\dvdplayer" md "$(DeployDir)\system\players\dvdplayer"
+copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\dvdplayer\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\dvdplayer"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copy output</Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(SolutionDir)..\..\system\players\dvdplayer\$(TargetFileName)</Outputs>
+      <Outputs>$(DeployDir)\system\players\dvdplayer\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
