@@ -1144,6 +1144,7 @@ void CDVDPlayer::Process()
       CStdString options;
       options += "?url=" + encodedMediaURL;
       options += "&quality=" + lexical_cast<string>(g_guiSettings.GetInt("myplex.remoteplexquality"));
+      options += "&session=" + g_guiSettings.GetString("system.uuid");
       
       printf(" -> Full URL: %s\n", transcodeURL.Get().c_str());
       
