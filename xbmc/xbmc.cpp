@@ -85,6 +85,11 @@ int main(int argc, char* argv[])
       {
         g_advancedSettings.m_startFullScreen = true;
       }
+      else if (strcmp(argv[i], "-NSDocumentRevisionsDebugMode") == 0)
+      {
+        // Skip.
+        i++;
+      }
       else if (strnicmp(argv[i], "-h", 2) == 0 || strnicmp(argv[i], "--help", 6) == 0)
       {
         printf("Usage: %s [OPTION]... [FILE]...\n\n", argv[0]);
