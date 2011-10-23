@@ -1219,7 +1219,7 @@ int CDVDDemuxFFmpeg::GetChapterCount()
 
   if(m_pFormatContext == NULL)
     return 0;
-  #if (LIBAVFORMAT_VERSION_MAJOR == 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
+  #if (LIBAVFORMAT_VERSION_MAJOR >= 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
     return m_pFormatContext->nb_chapters;
   #else
     return 0;
@@ -1236,7 +1236,7 @@ int CDVDDemuxFFmpeg::GetChapter()
   || m_iCurrentPts == DVD_NOPTS_VALUE)
     return 0;
 
-  #if (LIBAVFORMAT_VERSION_MAJOR == 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
+  #if (LIBAVFORMAT_VERSION_MAJOR >= 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
     for(unsigned i = 0; i < m_pFormatContext->nb_chapters; i++)
     {
       AVChapter *chapter = m_pFormatContext->chapters[i];
@@ -1255,10 +1255,15 @@ void CDVDDemuxFFmpeg::GetChapterName(std::string& strChapterName)
     ich->GetChapterName(strChapterName);
   else
   {
-    #if (LIBAVFORMAT_VERSION_MAJOR == 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
+    #if (LIBAVFORMAT_VERSION_MAJOR >= 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
       int chapterIdx = GetChapter();
-      if(chapterIdx > 0 && m_pFormatContext->chapters[chapterIdx-1]->title)
-        strChapterName = m_pFormatContext->chapters[chapterIdx-1]->title;
+      if(chapterIdx > 0)
+      {
+        AVChapter* chapter = m_pFormatContext->chapters[chapterIdx-1];
+        AVMetadataTag* title = m_dllAvFormat.av_metadata_get(chapter->metadata, "title", NULL, 0);
+        if (title && title->value)
+          strChapterName = title->value;
+      }
     #endif
   }
 }
@@ -1285,7 +1290,7 @@ bool CDVDDemuxFFmpeg::SeekChapter(int chapter, double* startpts)
   if(m_pFormatContext == NULL)
     return false;
 
-    #if (LIBAVFORMAT_VERSION_MAJOR == 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
+    #if (LIBAVFORMAT_VERSION_MAJOR >= 52) && (LIBAVFORMAT_VERSION_MINOR >= 14)
         if(chapter < 1 || chapter > (int)m_pFormatContext->nb_chapters)
             return false;
 
