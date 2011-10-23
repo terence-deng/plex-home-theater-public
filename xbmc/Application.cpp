@@ -4148,8 +4148,11 @@ void CApplication::UpdateFileState(const string& aState)
       // Update progress.
       if (hasScrobbled == false)
       {
-        m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(t*1000)));
-        m_itemCurrentFile->SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
+        if (t>5.0)
+        {
+          m_itemCurrentFile->SetProperty("viewOffset", boost::lexical_cast<string>((int)(t*1000)));
+          m_itemCurrentFile->SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
+        }
         
         PlexMediaServerQueue::Get().onPlayingProgress(m_itemCurrentFile, int(t*1000), state);
       }
