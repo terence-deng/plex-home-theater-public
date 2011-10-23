@@ -121,7 +121,6 @@ namespace XFILE
           long         Connect(unsigned int size);
           void         Disconnect();
         
-        
           void         Cancel() { ::write(m_ticklePipe[1], "Q", 1); m_cancelled = true; }
       };
 
