@@ -893,7 +893,8 @@ class PlexMediaNodeLibrary : public PlexMediaNode
     vector<string> localPaths;
 
     // Collect the URLs.
-    for (TiXmlElement* part = media->FirstChildElement(); part; part=part->NextSiblingElement())
+    int partIndex = 0;
+    for (TiXmlElement* part = media->FirstChildElement(); part; part=part->NextSiblingElement(), partIndex++)
     {
       if (part->Attribute("key"))
       {
@@ -916,7 +917,14 @@ class PlexMediaNodeLibrary : public PlexMediaNode
       if (part->Attribute("id"))
         partID = boost::lexical_cast<int>(part->Attribute("id"));
 
-      MediaPartPtr mediaPart(new MediaPart(partID, part->Attribute("key")));
+      int duration = 0;
+      if (part->Attribute("duration") && strlen(part->Attribute("duration")) > 0)
+      {
+        duration = boost::lexical_cast<int>(part->Attribute("duration"));
+        pItem->SetProperty("part::duration::" + boost::lexical_cast<string>(partIndex), duration);
+      }
+      
+      MediaPartPtr mediaPart(new MediaPart(partID, part->Attribute("key"), duration));
       mediaParts.push_back(mediaPart);
 
       // Parse the streams.

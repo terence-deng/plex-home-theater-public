@@ -3546,12 +3546,18 @@ bool CApplication::PlayStack(const CFileItem& item, bool bRestart)
       (*m_currentStack)[i]->m_lEndOffset = times[i];
     else
     {
-      int duration;
-      if (!CDVDFileInfo::GetFileDuration((*m_currentStack)[i]->m_strPath, duration))
+      int duration = 0;
+      
+      if (item.m_mediaParts.size() > i && item.m_mediaParts[i]->duration > 0)
+      {
+        duration = item.m_mediaParts[i]->duration;
+      }
+      else if (!CDVDFileInfo::GetFileDuration((*m_currentStack)[i]->m_strPath, duration))
       {
         m_currentStack->Clear();
         return false;
       }
+      
       totalTime += duration / 1000;
       (*m_currentStack)[i]->m_lEndOffset = totalTime;
       times.push_back(totalTime);

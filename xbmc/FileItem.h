@@ -99,10 +99,11 @@ typedef boost::shared_ptr<MediaStream> MediaStreamPtr;
 class MediaPart
 {
 public:
-  MediaPart(int id, const std::string& key)
-  : id(id), key(key) {}
+  MediaPart(int id, const std::string& key, int duration)
+  : id(id), key(key), duration(duration) {}
   
   int id;
+  int duration;
   std::string key;
   std::vector<MediaStreamPtr> mediaStreams;
 };
