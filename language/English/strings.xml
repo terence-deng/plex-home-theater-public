@@ -1583,6 +1583,9 @@
   <string id="19010">Not signed in</string>
   <string id="19011">Signed in</string>
   <string id="19012">Error signing in</string>
+  
+  <string id="19020">Shared Content</string>
+  <string id="19021">Queue</string>
 
   <string id="20000">CDDA Rip Folder</string>
   <string id="20001">Use external DVD Player</string>
