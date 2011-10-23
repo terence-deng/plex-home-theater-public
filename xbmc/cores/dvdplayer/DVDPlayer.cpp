@@ -368,7 +368,7 @@ void CDVDPlayer::OpenFileComplete()
     m_bFileOpenComplete = true;
     
     bool ret = true;
-    if (m_bStop || m_bAbortRequest)
+    if (m_bStop)
       ret = false;
     
     CStdString err;
