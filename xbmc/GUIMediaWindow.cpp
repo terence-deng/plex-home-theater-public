@@ -363,9 +363,7 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
         CGUIBaseContainer* control = (CGUIBaseContainer* )GetControl(CONTENT_LIST_FILTERS);
         
         int selected = control->GetSelectedItem();
-        CFileItemPtr filterItem = CPlexDirectory::GetFilterList()->Get(selected);
-        
-        printf("Selected: %s (%s)\n", filterItem->GetLabel().c_str(), filterItem->m_strPath.c_str());
+        CFileItemPtr filterItem = CPlexDirectory::GetFilterList()->Get(selected);        
         Update(filterItem->m_strPath);
       }
       else if (m_viewControl.HasControl(iControl))  // list/thumb control
