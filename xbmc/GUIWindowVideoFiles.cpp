@@ -381,9 +381,6 @@ void CGUIWindowVideoFiles::LoadPlayList(const CStdString& strPlayList)
 
 void CGUIWindowVideoFiles::GetContextButtons(int itemNumber, CContextButtons &buttons)
 {
-  if (m_vecItems->GetContent() == "secondary")
-    return;
-  
   CFileItemPtr item;
   if (itemNumber >= 0 && itemNumber < m_vecItems->Size())
     item = m_vecItems->Get(itemNumber);
@@ -395,8 +392,7 @@ void CGUIWindowVideoFiles::GetContextButtons(int itemNumber, CContextButtons &bu
     if (m_vecItems->IsVirtualDirectoryRoot())
     {
       // get the usual shares, and anything for all media windows
-      //CMediaSource *share = CGUIDialogContextMenu::GetShare("video", item.get());
-      //CGUIDialogContextMenu::GetContextButtons("video", share, buttons);
+      CGUIDialogContextMenu::GetContextButtons("video", item, buttons);
       CGUIMediaWindow::GetContextButtons(itemNumber, buttons);
     }
     
