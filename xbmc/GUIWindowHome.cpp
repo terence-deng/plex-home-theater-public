@@ -26,6 +26,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include <list>
+#include <map>
 #include <vector>
 
 #include "FileSystem/File.h"
@@ -41,9 +42,11 @@
 #include "AlarmClock.h"
 #include "Key.h"
 
+#include "MyPlexManager.h"
 #include "PlexContentWorker.h"
 #include "PlexDirectory.h"
 #include "PlexSourceScanner.h"
+#include "PlexLibrarySectionManager.h"
 
 using namespace std;
 using namespace XFILE;
@@ -258,7 +261,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
       {
         // Queue.
         m_contentLists[CONTENT_LIST_QUEUE] = Group(kVIDEO_LOADER);
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/unwatched", CONTENT_LIST_QUEUE);
+        m_workerManager->enqueue(WINDOW_HOME, MyPlexManager::Get().getPlaylistUrl("queue/unwatched"), CONTENT_LIST_QUEUE);
       }
       else if (boost::ends_with(sectionUrl, "shared") == false)
       {
@@ -482,34 +485,55 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       // Now collect all the added items.
       CPlexSourceScanner::Lock();
       
-      map<string, int> nameCounts;
-      map<string, HostSourcesPtr>& map = CPlexSourceScanner::GetMap();
-      list<CFileItemPtr> newItems;
-      
+      map<string, HostSourcesPtr>& sourcesMap = CPlexSourceScanner::GetMap();
+
+      // Collect the channels, keeping track of how many there are.
       int numVideo = 0;
       int numPhoto = 0;
       int numMusic = 0;
       
-      BOOST_FOREACH(string_sources_pair nameSource, map)
+      BOOST_FOREACH(string_sources_pair nameSource, sourcesMap)
       {
-        for (int i=0; i<nameSource.second->librarySections.Size(); i++)
-        {
-          newItems.push_back(nameSource.second->librarySections[i]);
-          CStdString sectionName = nameSource.second->librarySections[i]->GetLabel();
-          ++nameCounts[sectionName.ToLower()];
-        }
-        
-        // Keep track of how many channels.
         numVideo += nameSource.second->videoSources.size();
         numPhoto += nameSource.second->pictureSources.size();
         numMusic += nameSource.second->musicSources.size();
       }
       
       CPlexSourceScanner::Unlock();
+
+      // Now collect the library sections.
+      vector<CFileItemPtr> newSections;
+      PlexLibrarySectionManager::Get().getOwnedSections(newSections);
       
-      // Now sort them according to name.
-      newItems.sort(compare);
+      // Count the names.
+      map<string, int> nameCounts;
+      BOOST_FOREACH(CFileItemPtr section, newSections)
+      {
+        CStdString sectionName = section->GetLabel();
+        ++nameCounts[sectionName.ToLower()];
+      }
       
+      // Add the queue if needed.
+      CFileItemList queue;
+      if (MyPlexManager::Get().getPlaylist(queue, "queue", true) && queue.Size() > 0)
+      {
+        CFileItemPtr queue = CFileItemPtr(new CFileItem(g_localizeStrings.Get(19021)));
+        queue->SetProperty("type", "mixed");
+        queue->SetProperty("typeNumber", PLEX_METADATA_MIXED);
+        queue->SetProperty("key", MyPlexManager::Get().getPlaylistUrl("queue"));
+        queue->m_strPath = queue->GetProperty("key");
+        newSections.push_back(queue);
+      }
+      
+      // Add the shared content menu if needed.
+      if (PlexLibrarySectionManager::Get().getNumSharedSections() > 0)
+      {
+        CFileItemPtr shared = CFileItemPtr(new CFileItem(g_localizeStrings.Get(19020)));
+        shared->SetProperty("key", "plex://shared");
+        shared->m_strPath = shared->GetProperty("key");
+        newSections.push_back(shared);
+      }
+            
       // Clear the maps.
       m_idToSectionUrlMap.clear();
       m_idToSectionTypeMap.clear();
@@ -517,7 +541,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       // Now add the new ones.
       bool itemStillExists = false;
       int id = 1000;
-      BOOST_FOREACH(CFileItemPtr item, newItems)
+      BOOST_FOREACH(CFileItemPtr item, newSections)
       {
         CFileItemPtr newItem = CFileItemPtr(new CGUIStaticItem());
         newItem->SetLabel(item->GetLabel());
@@ -531,7 +555,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         m_idToSectionUrlMap[id] = item->GetProperty("key");
         m_idToSectionTypeMap[id] = item->GetPropertyInt("typeNumber");
         
-        if (item->GetProperty("type") == "artist")
+        if (item->GetProperty("key").find("/shared") != string::npos)
+          newItem->m_strPath = "XBMC.ActivateWindow(MySharedContent," + item->m_strPath + ",return)";
+        else if (item->GetProperty("type") == "artist")
           newItem->m_strPath = "XBMC.ActivateWindow(MyMusicFiles," + item->m_strPath + ",return)";
         else if (item->GetProperty("type") == "photo")
           newItem->m_strPath = "XBMC.ActivateWindow(MyPictures," + item->m_strPath + ",return)";

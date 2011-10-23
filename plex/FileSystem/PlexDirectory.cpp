@@ -32,6 +32,7 @@
 #include "GUIViewState.h"
 #include "GUIDialogOK.h"
 #include "Picture.h"
+#include "PlexLibrarySectionManager.h"
 
 using namespace std;
 using namespace XFILE;
@@ -65,6 +66,18 @@ CPlexDirectory::~CPlexDirectory()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items)
 {
+  // Hackish, but a few special directories.
+  if (strPath == "plex://shared")
+  {
+    vector<CFileItemPtr> list;
+    PlexLibrarySectionManager::Get().getSharedSections(list);
+    
+    BOOST_FOREACH(CFileItemPtr item, list)
+      items.Add(item);
+    
+    return true;
+  }
+  
   // Get the directory.
   bool ret = CPlexDirectory::ReallyGetDirectory(strPath, items);
   
@@ -504,8 +517,9 @@ class PlexMediaNode
        mediaItem->SetProperty("key", pItem->GetProperty("key"));
      }
      
-     // Source title.
+     // Source title and owned.
      SetProperty(pItem, el, "sourceTitle");
+     SetProperty(pItem, el, "owned");
 
      // Date.
      SetProperty(pItem, el, "subtitle");
@@ -1288,6 +1302,13 @@ class PlexMediaDirectory : public PlexMediaNode
       if (strSettings == "1")
         pItem->m_bIsSettingsDir = true;
     }
+    
+    // Sections.
+    SetProperty(pItem, el, "machineIdentifier");
+    SetProperty(pItem, el, "owned");
+    SetProperty(pItem, el, "accessToken");
+    SetProperty(pItem, el, "serverName");
+    SetProperty(pItem, el, "sourceTitle");
   }
 };
 
@@ -1791,6 +1812,21 @@ string CPlexDirectory::ProcessMediaElement(const string& parentPath, const char*
   return "";
 }
 
+string CheckAuthToken(map<CStdString, CStdString>& options, string finalURL, const string& parameterName)
+{
+  if (options.find(parameterName) != options.end())
+  {
+    if (finalURL.find("?") == string::npos)
+      finalURL += "?";
+    else
+      finalURL += "&";
+    
+    finalURL += parameterName + "=" + string(options[parameterName]);
+  }
+  
+  return finalURL;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool isDirectory)
 {
@@ -1838,15 +1874,8 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
 
   // If we have an auth token, make sure it gets propagated.
   map<CStdString, CStdString> options = theFullURL.GetOptionsAsMap();
-  if (options.find("X-Plex-Token") != options.end())
-  {
-    if (finalURL.find("?") == string::npos)
-      finalURL += "?";
-    else
-      finalURL += "&";
-      
-    finalURL += "X-Plex-Token=" + options["X-Plex-Token"];
-  }
+  finalURL = CheckAuthToken(options, finalURL, "X-Plex-Token");
+  finalURL = CheckAuthToken(options, finalURL, "auth_token");
   
   //CLog::Log(LOGNOTICE, "Processed [%s] + [%s] => [%s]\n", parent.c_str(), url.c_str(), finalURL.c_str());
   return finalURL;

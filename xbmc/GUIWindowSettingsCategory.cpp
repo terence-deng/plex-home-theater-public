@@ -1168,19 +1168,18 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
   }
   else if (strSetting.Equals("myplex.signin"))
   {
-    MyPlexManager myPlex;
     CSettingString *pSettingString = (CSettingString *)pSettingControl->GetSetting();
 
     if (g_guiSettings.GetString("myplex.token").empty())
     {
       // We're signing in.
-      if (myPlex.signIn())
+      if (MyPlexManager::Get().signIn())
       {
         // Change the status to show success.
         g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19011));
         
         // Change button to "sign out"
-        pSettingString->SetData(g_localizeStrings.Get(19003));
+        pSettingString->SetData(g_localizeStrings.Get(19003));        
       }
       else
       {
@@ -1191,7 +1190,7 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
     else
     {
       // We're signing out.
-      myPlex.signOut();
+      MyPlexManager::Get().signOut();
       
       // Change the status to show success.
       g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19010));

@@ -18,6 +18,7 @@
 #include "GUIWindowManager.h"
 #include "GUIUserMessages.h"
 #include "CocoaUtilsPlus.h"
+#include "PlexLibrarySectionManager.h"
 
 map<std::string, HostSourcesPtr> CPlexSourceScanner::g_hostSourcesMap;
 CCriticalSection CPlexSourceScanner::g_lock;
@@ -76,12 +77,18 @@ void CPlexSourceScanner::Process()
     plexDir.GetDirectory(path, sources->librarySections);
     
     // Edit for friendly name.
+    vector<CFileItemPtr> sections;
     for (int i=0; i<sources->librarySections.Size(); i++)
     {
       CFileItemPtr item = sources->librarySections[i];
       item->SetLabel2(m_hostLabel);
-      CLog::Log(LOGNOTICE, " -> Section '%s' found.", item->GetLabel().c_str());
+      item->SetProperty("machineIdentifier", m_uuid);
+      CLog::Log(LOGNOTICE, " -> Local section '%s' found.", item->GetLabel().c_str());
+      sections.push_back(item);
     }
+    
+    // Add the sections.
+    PlexLibrarySectionManager::Get().addLocalSections(m_uuid, sections);
     
     { // Add the entry to the map.
       CSingleLock lock(g_lock);
@@ -117,6 +124,9 @@ void CPlexSourceScanner::RemoveHost(const std::string& uuid)
     g_hostSourcesMap.erase(uuid);
   }
   
+  // Notify the library section manager.
+  PlexLibrarySectionManager::Get().removeLocalSections(uuid);
+    
   // Notify the UI.
   CLog::Log(LOGNOTICE, "Notifying remote remove host on %s", uuid.c_str());
   CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE_REMOTE_SOURCES);
@@ -318,4 +328,3 @@ void CPlexSourceScanner::RemovePlexSources(CStdString strPlexPath, VECSOURCES& d
       dstSources.erase(dstSources.begin()+i);
   }
 }
-
