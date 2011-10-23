@@ -75,21 +75,27 @@ bool CThumbLoader::LoadRemoteGrandparentThumb(CFileItem *pItem)
 
 bool CThumbLoader::LoadRemoteThumb(CFileItem *pItem)
 {
-  // look for remote thumbs
-  CStdString thumb(pItem->GetThumbnailImage());
-  if (!g_TextureManager.CanLoad(thumb) || CUtil::IsPlexMediaServer(thumb))
+  for (size_t i=0; i<pItem->GetNumThumbnails(); i++)
   {
-    CStdString cachedThumb(pItem->GetCachedVideoThumb());
-    if (CFile::Exists(cachedThumb))
-      pItem->SetThumbnailImage(cachedThumb);
-    else
+    // look for remote thumbs.
+    CStdString thumb(pItem->GetThumbnailImage(i));
+    
+    if (!g_TextureManager.CanLoad(thumb) || CUtil::IsPlexMediaServer(thumb))
     {
-      if (CPicture::CreateThumbnail(thumb, cachedThumb))
-        pItem->SetThumbnailImage(cachedThumb);
+      CStdString cachedThumb(pItem->GetCachedVideoThumb(i));
+      
+      if (CFile::Exists(cachedThumb))
+        pItem->SetThumbnailImage(cachedThumb, i);
       else
-        pItem->SetThumbnailImage("");
+      {
+        if (CPicture::CreateThumbnail(thumb, cachedThumb))
+          pItem->SetThumbnailImage(cachedThumb, i);
+        else
+          pItem->SetThumbnailImage("", i);
+      }
     }
   }
+  
   return pItem->HasThumbnail();
 }
 

@@ -559,6 +559,11 @@ class PlexMediaNode
        if (strThumb.size() > 0)
          pItem->SetThumbnailImage(strThumb);
 
+       // Multiple thumbs?
+       int i=0;
+       for (TiXmlElement* thumbEl = el.FirstChildElement("Thumb"); thumbEl; thumbEl=thumbEl->NextSiblingElement("Thumb"))
+         pItem->SetThumbnailImage(thumbEl->Attribute("key"), i++);
+
        // Grandparent thumb.
        string strGrandparentThumb = CPlexDirectory::ProcessMediaElement(parentPath, el.Attribute("grandparentThumb"), MAX_THUMBNAIL_AGE, localServer);
        if (strGrandparentThumb.size() > 0)

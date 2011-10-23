@@ -76,7 +76,7 @@ CFileItem::CFileItem(const CSong& song)
   GetMusicInfoTag()->SetSong(song);
   m_lStartOffset = song.iStartOffset;
   m_lEndOffset = song.iEndOffset;
-  m_strThumbnailImage = song.strThumb;
+  SetThumbnailImage(song.strThumb);
 }
 
 CFileItem::CFileItem(const CStdString &path, const CAlbum& album)
@@ -92,9 +92,9 @@ CFileItem::CFileItem(const CStdString &path, const CAlbum& album)
   CUtil::AddSlashAtEnd(m_strPath);
   GetMusicInfoTag()->SetAlbum(album);
   if (album.thumbURL.m_url.size() > 0)
-    m_strThumbnailImage = album.thumbURL.m_url[0].m_url;
+    SetThumbnailImage(album.thumbURL.m_url[0].m_url);
   else
-    m_strThumbnailImage.clear();
+    m_strThumbnailImageList.clear();
   m_bIsAlbum = true;
   CMusicDatabase::SetPropertiesFromAlbum(*this,album);
 }
@@ -233,7 +233,7 @@ CFileItem::CFileItem(const CMediaSource& share)
   m_iHasLock = share.m_iHasLock;
   m_iBadPwdCount = share.m_iBadPwdCount;
   m_iDriveType = share.m_iDriveType;
-  m_strThumbnailImage = share.m_strThumbnailImage;
+  SetThumbnailImage(share.m_strThumbnailImage);
   SetLabelPreformated(true);
 }
 
@@ -2727,13 +2727,13 @@ CStdString CFileItem::GetCachedVideoGrandparentThumb() const
   return "";
 }
 
-CStdString CFileItem::GetCachedVideoThumb() const
+CStdString CFileItem::GetCachedVideoThumb(size_t i) const
 {
   CStdString path = m_strPath;
   
-  if (IsPlexMediaServer() && m_strThumbnailImage.size() > 0)
+  if (IsPlexMediaServer() && m_strThumbnailImageList.size() > i+1)
   {
-    return GetCachedThumb(m_strThumbnailImage, g_settings.GetPlexMediaServerThumbFolder(),true);
+    return GetCachedThumb(m_strThumbnailImageList[i], g_settings.GetPlexMediaServerThumbFolder(),true);
   }
   else if (IsStack())
   {
@@ -3114,7 +3114,10 @@ CStdString CFileItem::GetCachedPlexMediaServerFanart(const CStdString &path)
 
 CStdString CFileItem::GetCachedPlexMediaServerThumb() const
 {
-  return GetCachedPlexMediaServerThumb(m_strThumbnailImage);
+  if (m_strThumbnailImageList.size() > 0)
+    return GetCachedPlexMediaServerThumb(m_strThumbnailImageList[0]);
+  
+  return "";
 }
 
 CStdString CFileItem::GetCachedPlexMediaServerThumb(const CStdString& path)

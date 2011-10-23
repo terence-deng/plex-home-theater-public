@@ -38,7 +38,6 @@ CGUIListItem::CGUIListItem(void)
   m_strLabel = "";
   m_bSelected = false;
   m_strIcon = "";
-  m_strThumbnailImage = "";
   m_overlayIcon = ICON_OVERLAY_NONE;
   m_layout = NULL;
   m_focusedLayout = NULL;
@@ -52,7 +51,6 @@ CGUIListItem::CGUIListItem(const CStdString& strLabel)
   m_sortLabel = strLabel;
   m_bSelected = false;
   m_strIcon = "";
-  m_strThumbnailImage = "";
   m_overlayIcon = ICON_OVERLAY_NONE;
   m_layout = NULL;
   m_focusedLayout = NULL;
@@ -103,12 +101,16 @@ const CStdString& CGUIListItem::GetSortLabel() const
   return m_sortLabel;
 }
 
-void CGUIListItem::SetThumbnailImage(const CStdString& strThumbnail)
+void CGUIListItem::SetThumbnailImage(const CStdString& strThumbnail, size_t index)
 {
-  if (m_strThumbnailImage == strThumbnail)
-    return;
-  m_strThumbnailImage = strThumbnail;
-  SetInvalid();
+  if (m_strThumbnailImageList.size() < index+1)
+    m_strThumbnailImageList.resize(index+1);
+
+  if (m_strThumbnailImageList[index] != strThumbnail)
+  {
+    m_strThumbnailImageList[index] = strThumbnail;
+    SetInvalid();
+  }
 }
 
 void CGUIListItem::SetGrandparentThumbnailImage(const CStdString& strThumbnail)
@@ -120,9 +122,13 @@ void CGUIListItem::SetGrandparentThumbnailImage(const CStdString& strThumbnail)
   SetInvalid();
 }
 
-const CStdString& CGUIListItem::GetThumbnailImage() const
+const CStdString& CGUIListItem::GetThumbnailImage(size_t index) const
 {
-  return m_strThumbnailImage;
+  if (index < m_strThumbnailImageList.size())
+    return m_strThumbnailImageList[index];
+
+  static CStdString blank;
+  return blank;
 }
 
 const CStdString& CGUIListItem::GetGrandparentThumbnailImage() const
@@ -189,10 +195,9 @@ bool CGUIListItem::HasIcon() const
   return (m_strIcon.size() != 0);
 }
 
-
-bool CGUIListItem::HasThumbnail() const
+bool CGUIListItem::HasThumbnail(size_t index) const
 {
-  return (m_strThumbnailImage.size() != 0);
+  return (m_strThumbnailImageList.size() > index && m_strThumbnailImageList[index].size() != 0);
 }
 
 bool CGUIListItem::HasGrandparentThumbnail() const
@@ -218,8 +223,8 @@ const CGUIListItem& CGUIListItem::operator =(const CGUIListItem& item)
   m_sortLabel = item.m_sortLabel;
   FreeMemory();
   m_bSelected = item.m_bSelected;
-  m_strIcon = item.m_strIcon;
-  m_strThumbnailImage = item.m_strThumbnailImage;
+  m_strIcon = item.m_strIcon;  
+  m_strThumbnailImageList.assign(item.m_strThumbnailImageList.begin(), item.m_strThumbnailImageList.end());
   m_overlayIcon = item.m_overlayIcon;
   m_bIsFolder = item.m_bIsFolder;
   m_mapProperties = item.m_mapProperties;
@@ -235,7 +240,7 @@ void CGUIListItem::Serialize(CArchive &ar)
     ar << m_strLabel;
     ar << m_strLabel2;
     ar << m_sortLabel;
-    ar << m_strThumbnailImage;
+    //ar << m_strThumbnailImage;
     ar << m_strIcon;
     ar << m_bSelected;
     ar << m_overlayIcon;
@@ -252,7 +257,7 @@ void CGUIListItem::Serialize(CArchive &ar)
     ar >> m_strLabel;
     ar >> m_strLabel2;
     ar >> m_sortLabel;
-    ar >> m_strThumbnailImage;
+    //ar >> m_strThumbnailImage;
     ar >> m_strIcon;
     ar >> m_bSelected;
 
@@ -275,7 +280,7 @@ void CGUIListItem::Serialize(CArchive &ar)
 void CGUIListItem::FreeIcons()
 {
   FreeMemory();
-  m_strThumbnailImage = "";
+  m_strThumbnailImageList.clear();
   m_strIcon = "";
   SetInvalid();
 }

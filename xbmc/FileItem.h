@@ -246,7 +246,8 @@ public:
   CPictureInfoTag* GetPictureInfoTag();
 
   // Gets the cached thumb filename (no existence checks)
-  CStdString GetCachedVideoThumb() const;
+  CStdString GetCachedVideoThumb() const { return GetCachedVideoThumb(0); }
+  CStdString GetCachedVideoThumb(size_t i) const;
   CStdString GetCachedEpisodeThumb() const;
   CStdString GetCachedArtistThumb() const;
   CStdString GetCachedSeasonThumb() const;
