@@ -1080,6 +1080,8 @@ class PlexAsyncUrlResolver
 
 void CDVDPlayer::Process()
 {
+  CStdString stopURL;
+  
   // See if we can find the file locally.
   string localPath = m_item.GetProperty("localPath");
   if (localPath.size() > 0 && CFile::Exists(localPath))
@@ -1126,14 +1128,11 @@ void CDVDPlayer::Process()
     // If it's remote, see if we're transcoding.
     if (m_item.IsRemotePlexMediaServerLibrary() && g_guiSettings.GetInt("myplex.remoteplexquality") != -1)
     {
-      printf("TRANSCODING.\n");
-
       // Build the media URL.
       CURL mediaURL(m_filename);
       mediaURL.SetHostName("127.0.0.1");
       mediaURL.SetPort(32400);
       mediaURL.SetOptions("");
-      printf(" -> Media URL: %s\n", mediaURL.Get().c_str());
       
       CStdString encodedMediaURL = mediaURL.Get();
       CUtil::URLEncode(encodedMediaURL);
@@ -1146,8 +1145,16 @@ void CDVDPlayer::Process()
       options += "&quality=" + lexical_cast<string>(g_guiSettings.GetInt("myplex.remoteplexquality"));
       options += "&session=" + g_guiSettings.GetString("system.uuid");
       
-      printf(" -> Full URL: %s\n", transcodeURL.Get().c_str());
+      // Doesn't work yet.
+      //if (m_PlayerOptions.starttime > 0)
+      //  options += "&offset=" + lexical_cast<string>((int)m_PlayerOptions.starttime);
       
+      // Build the stop URL while we're here.
+      CURL stopTranscodeURL(m_filename);
+      stopTranscodeURL.SetFileName("video/:/transcode/segmented/stop");
+      stopTranscodeURL.SetOptions("?session=" + g_guiSettings.GetString("system.uuid"));
+      stopURL = stopTranscodeURL.Get();
+            
       // Sign it with the public key.
       time_t time = ::time(0);
       string apiKey = "KQMIY6GATPC63AIMC4R2";
@@ -1156,7 +1163,6 @@ void CDVDPlayer::Process()
       // Compute the message.
       string message = "/" + transcodeURL.GetFileName() + options;
       message += "@" + lexical_cast<string>(time);
-      printf("Message: [%s]\n", message.c_str());
       
       // Compute the HMAC.
       unsigned char mac[32];
@@ -1173,11 +1179,8 @@ void CDVDPlayer::Process()
       options += "&X-Plex-Access-Code=" + sig;
        
       transcodeURL.SetOptions(options);
-
-      // We need to re-open the file because it's a "playlist"
-      g_application.getApplicationMessenger().RestartWithNewPlayer(0, transcodeURL.Get());
-      m_bFileOpenComplete = true;
-      return;
+      m_filename = transcodeURL.Get();
+      dprintf("Transcode URL: %s", m_filename.c_str());
     }
   }
   
@@ -1201,7 +1204,6 @@ void CDVDPlayer::Process()
   {
     CLog::Log(LOGNOTICE, "DVDPlayer: playing a dvd with menu's");
     m_PlayerOptions.starttime = 0;
-
 
     if(m_PlayerOptions.state.size() > 0)
       ((CDVDInputStreamNavigator*)m_pInputStream)->SetNavigatorState(m_PlayerOptions.state);
@@ -1486,6 +1488,14 @@ void CDVDPlayer::Process()
 
     // check if in a cut or commercial break that should be automatically skipped
     CheckAutoSceneSkip();
+  }
+  
+  // We're done, if we have a URL to hit on exit, do so now.
+  if (stopURL.empty() == false)
+  {
+    CFileCurl http;
+    CStdString out;
+    http.Get(stopURL, out);
   }
 }
 
