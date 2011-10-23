@@ -724,7 +724,7 @@ class PlexMediaNode
          string localFile = CFileItem::GetCachedPlexMediaServerThumb(url);
          if (CFile::Exists(localFile))
            mediaItem->SetProperty("mediaTag::" + attr, localFile);
-         else
+         else if (url.find("plexapp.com") == string::npos)
            mediaItem->SetProperty("cache$mediaTag::" + attr, url);
        }
 
@@ -773,7 +773,6 @@ class PlexMediaNode
 
      return "";
    }
-
 
    void SetProperty(const CFileItemPtr& item, const TiXmlElement& el, const string& attrName, const string& propertyName="")
    {
