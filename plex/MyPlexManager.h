@@ -191,11 +191,13 @@ class MyPlexManager
         CFileItemPtr section = sections[i];
         
         // Make sure it has the token.
-        section->m_strPath += "?X-Plex-Token=";
-        if (section->GetProperty("accessToken").empty() == false)
-          section->m_strPath += section->GetProperty("accessToken");
-        else
-          section->m_strPath += g_guiSettings.GetString("myplex.token");
+        string token = section->GetProperty("accessToken");
+        if (token.empty())
+          token = g_guiSettings.GetString("myplex.token");
+        
+        // Add token to path and to fanart.
+        section->m_strPath = addArgument(section->m_strPath, "X-Plex-Token=" + token);
+        section->SetQuickFanart(addArgument(section->GetQuickFanart(), "X-Plex-Token=" + token));
         
         // Separate 'em into shared and owned.
         if (section->GetProperty("owned") == "1")
@@ -232,6 +234,15 @@ class MyPlexManager
   {
   }
   
+  /// Smartly append an arg to a URL.
+  string addArgument(const string& url, const string& arg)
+  {
+    if (url.find("?") != string::npos)
+      return url + "&" + arg;
+    
+    return url + "?" + arg;
+  }                              
+                                
   /// Fetch a list from myPlex.
   bool fetchList(const string& url, CFileItemList& list)
   {
