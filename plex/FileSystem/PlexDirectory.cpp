@@ -1824,6 +1824,7 @@ string CPlexDirectory::ProcessMediaElement(const string& parentPath, const char*
   return "";
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 string CheckAuthToken(map<CStdString, CStdString>& options, string finalURL, const string& parameterName)
 {
   if (options.find(parameterName) != options.end())
