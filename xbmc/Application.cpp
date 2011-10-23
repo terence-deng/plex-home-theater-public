@@ -3239,6 +3239,7 @@ bool CApplication::Cleanup()
     g_windowManager.Remove(WINDOW_DIALOG_SEEK_BAR);
     g_windowManager.Remove(WINDOW_DIALOG_VOLUME_BAR);
 
+#if 0
     CAddonMgr::Get().DeInit();
 
     CLog::Log(LOGNOTICE, "unload sections");
@@ -3275,6 +3276,7 @@ bool CApplication::Cleanup()
     g_settings.Clear();
     g_guiSettings.Clear();
     g_advancedSettings.Clear();
+#endif
 
 #ifdef _LINUX
     CXHandle::DumpObjectTracker();
