@@ -847,6 +847,20 @@ bool CFileItem::IsPlexMediaServer() const
   return CUtil::IsPlexMediaServer(m_strPath);
 }
 
+bool CFileItem::IsRemoteSharedPlexMediaServerLibrary() const
+{
+  CURL url(m_strPath);
+  
+  if (IsRemotePlexMediaServerLibrary() &&                                              // It's a remote PMS
+      g_guiSettings.GetString("myplex.token").empty() == false &&                      // We're logged into myPlex
+      url.GetOptions().find(g_guiSettings.GetString("myplex.token")) == string::npos)  // Our token isn't there
+  {
+    return true;
+  }
+    
+  return false;
+}
+
 bool CFileItem::IsRemotePlexMediaServerLibrary() const
 {
   CURL url(m_strPath);
