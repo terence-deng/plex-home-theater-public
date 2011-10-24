@@ -1098,7 +1098,9 @@ class PlexMediaNodeLibrary : public PlexMediaNode
 
     // Views.
     int viewCount = 0;
-    SetValue(el, viewCount, "viewCount");
+
+    if (pItem->IsRemoteSharedPlexMediaServerLibrary() == false)
+      SetValue(el, viewCount, "viewCount");
 
     vector<CFileItemPtr> mediaItems;
     for (TiXmlElement* media = el.FirstChildElement(); media; media=media->NextSiblingElement())
@@ -1149,12 +1151,15 @@ class PlexMediaNodeLibrary : public PlexMediaNode
         theMediaItem->m_bIsFolder = false;
         theMediaItem->m_strPath = url;
 
-        // See if the item has been played or is in progress.
-        if (el.Attribute("viewOffset") != 0 && strlen(el.Attribute("viewOffset")) > 0)
-          theMediaItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
-        else
-          theMediaItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, viewCount > 0);
-
+        // See if the item has been played or is in progress. Don't do this for remote PMS libraries.
+        if (theMediaItem->IsRemoteSharedPlexMediaServerLibrary() == false)
+        {
+          if (el.Attribute("viewOffset") != 0 && strlen(el.Attribute("viewOffset")) > 0)
+            theMediaItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_IN_PROGRESS);
+          else
+            theMediaItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, viewCount > 0);
+        }
+        
         // Bitrate.
         SetValue(*media, theMediaItem->m_iBitrate, "bitrate");
 
@@ -1254,8 +1259,12 @@ class PlexMediaDirectory : public PlexMediaNode
     {
       int count = boost::lexical_cast<int>(el.Attribute("leafCount"));
       int watchedCount = boost::lexical_cast<int>(el.Attribute("viewedLeafCount"));
-      pItem->SetEpisodeData(count, watchedCount);
 
+      // If we're browsing through a shared library, it's all unwatched.
+      if (pItem->IsRemoteSharedPlexMediaServerLibrary() == true)
+        watchedCount = 0;
+      
+      pItem->SetEpisodeData(count, watchedCount);
       pItem->GetVideoInfoTag()->m_iEpisode = count;
       pItem->GetVideoInfoTag()->m_playCount = (count == watchedCount) ? 1 : 0;
       pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, pItem->GetVideoInfoTag()->m_playCount > 0);
