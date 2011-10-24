@@ -411,6 +411,14 @@ void CGUIWindowSettingsCategory::CreateSettings()
       if (pControl)
         pControl->SetEnabled(false);
     }
+    else if (strSetting.Equals("myplex.signin"))
+    {
+      int label = g_guiSettings.GetString("myplex.token").empty() ? 19002 : 19003;
+      
+      CGUIButtonControl *pControl = (CGUIButtonControl *)GetControl(GetSetting(strSetting)->GetID());
+      pControl->SetLabel(g_localizeStrings.Get(label));
+      //pSettingString->SetLabel(19003);
+    }
     else if (strSetting.Equals("subtitles.style"))
     {
       CSettingInt *pSettingInt = (CSettingInt*)pSetting;
@@ -1168,8 +1176,9 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
   }
   else if (strSetting.Equals("myplex.signin"))
   {
-    CSettingString *pSettingString = (CSettingString *)pSettingControl->GetSetting();
-
+    CGUIButtonControl* pControl = (CGUIButtonControl *)GetControl(pSettingControl->GetID());
+    CSettingString*    pSettingString = (CSettingString* )pSettingControl->GetSetting();
+    
     if (g_guiSettings.GetString("myplex.token").empty())
     {
       // We're signing in.
@@ -1179,7 +1188,8 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
         g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19011));
         
         // Change button to "sign out"
-        pSettingString->SetData(g_localizeStrings.Get(19003));        
+        pControl->SetLabel(g_localizeStrings.Get(19003));
+        pSettingString->SetLabel(19003);
       }
       else
       {
@@ -1196,7 +1206,8 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
       g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19010));
       
       // Change the button to "sign in".
-      pSettingString->SetData(g_localizeStrings.Get(19002));
+      pControl->SetLabel(g_localizeStrings.Get(19002));
+      pSettingString->SetLabel(19002);
       
       // Nuke the password.
       g_guiSettings.SetString("myplex.password", "");

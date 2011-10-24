@@ -226,6 +226,7 @@ public:
   virtual CStdString ToString() { return ""; };
   const char *GetSetting() { return m_strSetting.c_str(); };
   int GetLabel() { return m_iLabel; };
+  void SetLabel(int label) { m_iLabel = label; };
   int GetOrder() const { return m_iOrder; };
   void SetAdvanced() { m_advanced = true; };
   bool IsAdvanced() { return m_advanced; };
