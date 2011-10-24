@@ -552,7 +552,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           newItem->SetLabel2(item->GetLabel2());
 
         // Save the map from ID to library section ID.
-        m_idToSectionUrlMap[id] = item->GetProperty("key");
+        m_idToSectionUrlMap[id] = item->m_strPath;
         m_idToSectionTypeMap[id] = item->GetPropertyInt("typeNumber");
         
         if (item->GetProperty("key").find("/shared") != string::npos)
