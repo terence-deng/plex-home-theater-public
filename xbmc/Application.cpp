@@ -507,7 +507,7 @@ bool CApplication::Create()
 
   CLog::Log(LOGNOTICE, "-----------------------------------------------------------------------");
 #if defined(__APPLE__)
-  CLog::Log(LOGNOTICE, "Starting Plex, Platform: Mac OS X (%s). Built on %s (Git:%s)", g_sysinfo.GetUnameVersion().c_str(), __DATE__, GIT_REV);
+  CLog::Log(LOGNOTICE, "Starting Plex, Platform: Mac OS X (%s). Built on %s (Git:%s)", Cocoa_GetMachinePlatformVersion().c_str(), __DATE__, GIT_REV);
 #elif defined(_LINUX)
   CLog::Log(LOGNOTICE, "Starting Plex, Platform: Linux (%s, %s). Built on %s (Git:%s)", g_sysinfo.GetLinuxDistro().c_str(), g_sysinfo.GetUnameVersion().c_str(), __DATE__, GIT_REV);
 #elif defined(_WIN32)
