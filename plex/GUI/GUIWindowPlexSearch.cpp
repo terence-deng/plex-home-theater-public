@@ -437,7 +437,7 @@ void CGUIWindowPlexSearch::StartSearch(const string& search)
   else
   {
     // Issue the root of the new search, and note that when we receive results, clear out the old ones.
-    m_workerManager->enqueue(WINDOW_PLEX_SEARCH, BuildSearchUrl("http://localhost:32400/search", search), 0);
+    m_workerManager->enqueue(WINDOW_PLEX_SEARCH, BuildSearchUrl("http://127.0.0.1:32400/search", search), 0);
     m_resetOnNextResults = true;
   }
 }
