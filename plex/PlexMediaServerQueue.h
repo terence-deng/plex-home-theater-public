@@ -35,7 +35,7 @@ class PlexMediaServerQueue : public CThread
   /// View mode changed.
   void onViewModeChanged(const string& identifier, const string& rootURL, const string& viewGroup, int viewMode, int sortMode, int sortAsc)
   {
-    if (identifier.size() > 0 && viewGroup.size() > 0)
+    if (identifier.size() > 0 && viewGroup.size() > 0 && rootURL.find(".plexapp.com") == string::npos)
     {
       string url = "/:/viewChange";
       url = CPlexDirectory::ProcessUrl(rootURL, url, false);
