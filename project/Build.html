@@ -74,24 +74,25 @@
     <ul>
         <li>Open a Visual Studio command prompt.</li>
         <li>cd <strong>project</strong></li>
-        <li>Type <strong>makedrop release</strong> to build a release package, or <strong>
-            makedrop debug</strong> 
-            to build a debug package.</li>
+        <li>Type <strong>makedrop </strong>or <strong>makedrop release</strong> to build a 
+            release package</li>
+        <li>Type <strong>makedrop debug</strong> to build a debug package.</li>
     </ul>
     <h3>
         Building ffmpeg for PMC</h3>
     <p>
         Prerequisites:</p>
     <ul>
-        <li>Install MSYS and YASM.</li>
+        <li>Install <a href="http://mingw.org/wiki/msys">MSYS</a> and
+            <a href="http://yasm.tortall.net/">YASM</a>.</li>
     </ul>
     <p>
         To build new ffmpeg libraries:</p>
     <ul>
         <li>Open an msys command prompt</li>
         <li>cd to <strong>xbmc/cores/dvdplayer/Codecs/ffmpeg</strong></li>
-        <li>./configure-windows.sh</li>
-        <li>./make</li>
+        <li>Type ./configure-windows.sh</li>
+        <li>Type ./make</li>
     </ul>
     <p>
         When a new build of ffmpeg is generated, run <strong>project\copyffmpeg.bat</strong> 
