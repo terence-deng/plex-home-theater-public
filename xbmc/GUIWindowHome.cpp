@@ -231,10 +231,13 @@ static string AppendPathToURL(const string& baseURL, const string& relativePath)
   ret += relativePath;
   
   // Add arguments.
-  if (ret.find("?") == string::npos)
-    ret += "?" + args;
-  else
-    ret += "&" + args;
+  if (args.empty() == false)
+  {
+    if (ret.find("?") == string::npos)
+      ret += "?" + args;
+    else
+      ret += "&" + args;
+  }
   
   return ret;
 }
