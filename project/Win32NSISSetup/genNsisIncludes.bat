@@ -1,4 +1,4 @@
-@ECHO OFF
+rem @ECHO OFF
 rem Plex for Windows install script
 rem Copyright (C) 2005-2008 Team XBMC
 rem http://xbmc.org
