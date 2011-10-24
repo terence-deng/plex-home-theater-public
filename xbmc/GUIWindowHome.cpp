@@ -210,6 +210,36 @@ int CGUIWindowHome::LookupIDFromKey(const std::string& key)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+static string AppendPathToURL(const string& baseURL, const string& relativePath)
+{
+  string ret = baseURL;
+  string args;
+  
+  // If there are arguments, strip them for now.
+  size_t q = ret.find("?");
+  if (q != string::npos)
+  {
+    args = ret.substr(q+1);
+    ret = ret.substr(0, q);
+  }
+  
+  // Make sure there is a trailing slash.
+  if (boost::ends_with(ret, "/") == false)
+    ret += "/";
+  
+  // Add the path.
+  ret += relativePath;
+  
+  // Add arguments.
+  if (ret.find("?") == string::npos)
+    ret += "?" + args;
+  else
+    ret += "&" + args;
+  
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
 {
   // Hide lists.
@@ -256,7 +286,7 @@ void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
       // A library section.
       string sectionUrl = m_idToSectionUrlMap[itemID];
       int typeID = m_idToSectionTypeMap[itemID];
-
+      
       if (typeID == PLEX_METADATA_MIXED)
       {
         // Queue.
@@ -267,19 +297,19 @@ void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
       {
         // Recently added.
         m_contentLists[CONTENT_LIST_RECENTLY_ADDED] = Group(typeID == PLEX_METADATA_ALBUM ? kMUSIC_LOADER : kVIDEO_LOADER);
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/recentlyAdded?unwatched=1", CONTENT_LIST_RECENTLY_ADDED);
+        m_workerManager->enqueue(WINDOW_HOME, AppendPathToURL(sectionUrl, "recentlyAdded?unwatched=1"), CONTENT_LIST_RECENTLY_ADDED);
 
         if (typeID == PLEX_METADATA_SHOW || typeID == PLEX_METADATA_MOVIE)
         {
           // On deck.
           m_contentLists[CONTENT_LIST_ON_DECK] = Group(kVIDEO_LOADER);
-          m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/onDeck", CONTENT_LIST_ON_DECK);
+          m_workerManager->enqueue(WINDOW_HOME, AppendPathToURL(sectionUrl, "onDeck"), CONTENT_LIST_ON_DECK);
         }
 
         // Asynchronously fetch the fanart for the section.
         globalArt = false;
         m_globalArt = false;
-        m_workerManager->enqueue(WINDOW_HOME, sectionUrl + "/arts", CONTENT_LIST_FANART);
+        m_workerManager->enqueue(WINDOW_HOME, AppendPathToURL(sectionUrl, "arts"), CONTENT_LIST_FANART);
       }
     }
     else if (itemID >= 1 && itemID <= 3)
