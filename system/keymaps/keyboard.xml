@@ -187,8 +187,8 @@
       <comma>StepBack</comma>
       <backspace>SmallStepBack</backspace>
       <quote>SmallStepBack</quote>
-      <opensquarebracket>BigStepForward</opensquarebracket>
-      <closesquarebracket>BigStepBack</closesquarebracket>
+      <opensquarebracket>BigStepBack</opensquarebracket>
+      <closesquarebracket>BigStepForward</closesquarebracket>
       <return>Pause</return>
       <m>OSD</m>
       <i>CodecInfo</i>
@@ -358,8 +358,8 @@
   </VideoOSD>
   <VideoMenu>
     <keyboard>
-      <opensquarebracket>BigStepForward</opensquarebracket>
-      <closesquarebracket>BigStepBack</closesquarebracket>
+      <opensquarebracket>BigStepBack</opensquarebracket>
+      <closesquarebracket>BigStepForward</closesquarebracket>
       <m>OSD</m>
       <i>Info</i>
       <o>CodecInfo</o>
