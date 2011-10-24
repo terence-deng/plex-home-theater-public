@@ -13,8 +13,9 @@
         Repository</h3>
     <p>
         Ensure your repository is up to date, 
-        and submodules have been populated by running the following commands from 
-        the root of the repo:</p>
+        and submodules have been populated. The following commands should be added to 
+        your script, and run from 
+        the root of the repository:</p>
     <ul>
         <li>git submodule init</li>
         <li>git submodule update</li>
@@ -30,11 +31,35 @@
             Let it complete.</li>
     </ul>
     <p>
+        To create a build layout for your Plex build:</p>
+    <ul>
+        <li>Open a Visual Studio command prompt, cd <strong>project </strong>and run <strong>
+            makedrop.bat</strong>.<ul>
+                <li>If you want a debug layout, type <strong>makedrop debug</strong>. This will 
+                    allow you to build debug and then hit F5 to debug what you just built.</li>
+                <li>If you want a release layout, type <strong>makedrop release</strong>. This is 
+                    the default for makedrop, and is useful for generating a setup package or 
+                    testing release bits without the need to run setup.</li>
+            </ul>
+        </li>
+        <li>The build layout will be generated in <strong>
+            Build\Windows\($Platform)\$(Configuration)\Deploy</strong>. You can double-click 
+            on plex.exe from there to launch PMC.</li>
+    </ul>
+    <p>
         To build a new Plex.exe:</p>
     <ul>
-        <li>Using Visual C++ 2010, open the solution file located at <strong>project\VS2010Express\Plex 
-            for Windows.sln</strong>.</li>
-        <li>Compile the <strong>Release (Direct X)</strong> and/or <strong>Debug (DirectX)</strong> projects</li>
+        <li>Open the solution file located at <strong>project\VS2010Express\Plex 
+            for Windows.sln</strong> in Visual C++ 2010.<ul>
+                <li>Compile the <strong>Release </strong>and/or <strong>Debug </strong>projects.</li>
+            </ul>
+        </li>
+        <li>Alternatively, to build PMC from a Visual Studio command prompt, type the 
+            following command from the root of the repository:<ul>
+                <li>&nbsp;<strong>msbuild -p:Configuration=Release;Platform=Win32 &quot;project\VS2010Express\Plex 
+            for Windows.sln&quot;</strong></li>
+            </ul>
+        </li>
     </ul>
     <h3>
         Building a setup package</h3>
@@ -48,7 +73,10 @@
         To generate a new setup package:</p>
     <ul>
         <li>Open a Visual Studio command prompt.</li>
-        <li>Run <strong>project\Win32BuildSetup\BuildSetup.bat</strong></li>
+        <li>cd <strong>project</strong></li>
+        <li>Type <strong>makedrop release</strong> to build a release package, or <strong>
+            makedrop debug</strong> 
+            to build a debug package.</li>
     </ul>
     <h3>
         Building ffmpeg for PMC</h3>
@@ -61,23 +89,28 @@
         To build new ffmpeg libraries:</p>
     <ul>
         <li>Open an msys command prompt</li>
-        <li>cd to <strong>xbmc\cores\dvdplayer\Codecs\ffmpeg</strong></li>
+        <li>cd to <strong>xbmc/cores/dvdplayer/Codecs/ffmpeg</strong></li>
         <li>./configure-windows.sh</li>
         <li>./make</li>
     </ul>
     <p>
-        When a new build of ffmpeg is generated, the following libraries must be copied into 
-        the <strong>system\players\dvdplayer</strong> directory.</p>
+        When a new build of ffmpeg is generated, run <strong>project\copyffmpeg.bat</strong> 
+        to copy the resulting files to their appropriate location. At the time of 
+        writing, ffmpeg files are placed as follows:</p>
     <ul>
-        <li><strong>avcodec-53.dll</strong></li>
-        <li><strong>avformat-53.dll</strong></li>
-        <li><strong>avutil-51.dll</strong></li>
-        <li><strong>postproc-51.dll</strong></li>
-        <li><strong>swscale-2.dll</strong></li>
+        <li>lib\ffmpeg\libavutil<ul>
+            <li>libavutil\avconfig.h</li>
+            </ul>
+        </li>
+        <li>system\players\dvdplayer<ul>
+            <li>avcodec-53.dll</li>
+            <li>avformat-53.dll</li>
+            <li>avutil-51.dll</li>
+            <li>postproc-51.dll</li>
+            <li>swscale-2.dll</li>
+            </ul>
+        </li>
     </ul>
-    <p>
-        In addition, the <strong>libavutil\avconfig.h</strong> header must be copied 
-        into the <strong>lib\ffmpeg\libavutil</strong> directory.</p>
 
 </body>
 </html>
