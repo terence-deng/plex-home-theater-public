@@ -213,7 +213,9 @@ CFileCurl::CReadState::CReadState()
   m_cancelled = false;
   m_bFirstLoop = true;
   m_headerdone = false;
+#ifndef _WIN32
   ::pipe(m_ticklePipe);
+#endif
 }
 
 CFileCurl::CReadState::~CReadState()
@@ -223,10 +225,12 @@ CFileCurl::CReadState::~CReadState()
   if(m_easyHandle)
     g_curlInterface.easy_release(&m_easyHandle, &m_multiHandle);
   
+#ifndef _WIN32
   ::shutdown(m_ticklePipe[0], 2);
   ::close(m_ticklePipe[0]);
   ::shutdown(m_ticklePipe[1], 2);
   ::close(m_ticklePipe[1]);
+#endif
 }
 
 bool CFileCurl::CReadState::Seek(int64_t pos)
@@ -1382,10 +1386,12 @@ bool CFileCurl::CReadState::FillBuffer(unsigned int want)
 
         struct timeval t = { timeout / 1000, (timeout % 1000) * 1000 };
 
+#ifndef _WIN32
         // Add the tickle pipe.
         FD_SET(m_ticklePipe[0], &fdread);
         if (m_ticklePipe[0] > maxfd)
           maxfd = m_ticklePipe[0];
+#endif
         
         /* Wait until data is available or a timeout occurs.
            We call dllselect(maxfd + 1, ...), specially in case of (maxfd == -1),
@@ -1396,6 +1402,7 @@ bool CFileCurl::CReadState::FillBuffer(unsigned int want)
           return false;
         }
         
+#ifndef _WIN32
         // Read the byte from the tickle socket if there was one.
         if (FD_ISSET(m_ticklePipe[0], &fdread))
         {
@@ -1403,6 +1410,7 @@ bool CFileCurl::CReadState::FillBuffer(unsigned int want)
           char theTickleByte;
           ::read(m_ticklePipe[0], &theTickleByte, 1);
         }
+#endif
       }
       break;
       case CURLM_CALL_MULTI_PERFORM:

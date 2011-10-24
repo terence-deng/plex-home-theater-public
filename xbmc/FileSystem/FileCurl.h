@@ -121,7 +121,13 @@ namespace XFILE
           long         Connect(unsigned int size);
           void         Disconnect();
         
-          void         Cancel() { ::write(m_ticklePipe[1], "Q", 1); m_cancelled = true; }
+          void         Cancel() 
+          { 
+#ifndef _WIN32
+            write(m_ticklePipe[1], "Q", 1); 
+#endif
+            m_cancelled = true; 
+          }
       };
 
     protected:
