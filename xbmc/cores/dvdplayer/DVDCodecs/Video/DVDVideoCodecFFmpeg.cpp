@@ -257,10 +257,43 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
 
 #if defined(_LINUX) || defined(_WIN32)
   int num_threads = std::min(8 /*MAX_THREADS*/, g_cpuInfo.getCPUCount());
-  if( num_threads > 1 && !hints.software && m_pHardware == NULL // thumbnail extraction fails when run threaded
-  && ( pCodec->id == CODEC_ID_H264
-    || pCodec->id == CODEC_ID_MPEG4 ))
+  if (num_threads > 1)
+  {
+    //
+    // Reasons to disable libavcodec multithreading...
+    //
+
+    if (g_guiSettings.GetBool("videoplayer.usedxva2") && pCodec->id == CODEC_ID_H264)
+    {
+      // DXVA2 appears to deadlock when running threaded
+      CLog::Log(LOGDEBUG,"Disabling libavcodec multithreading because DXVA2 is enabled and the codec is H264");
+      num_threads = 1;
+    }
+    else if (hints.software)
+    {
+      // thumbnail extraction fails when run threaded
+      CLog::Log(LOGDEBUG,"Disabling libavcodec multithreading because software decoding was forced");
+      num_threads = 1;
+    }
+    else if (m_pHardware)
+    {
+      // thumbnail extraction fails when run threaded
+      CLog::Log(LOGDEBUG,"Disabling libavcodec multithreading because an IHardwareDecoder is in use");
+      num_threads = 1;
+    }
+    else if (pCodec->id != CODEC_ID_H264 && pCodec->id != CODEC_ID_MPEG4)
+    {
+      // Only multithread with H264 or MPEG4
+      CLog::Log(LOGDEBUG,"Disabling libavcodec multithreading because the codec is not H264 or MPEG4");
+      num_threads = 1;
+    }
+  }
+
+  if (num_threads > 1)
+  {
+    CLog::Log(LOGDEBUG,"CDVDVideoCodecFFmpeg::Open() calling avcodec_thread_init with %d threads", num_threads);
     m_dllAvCodec.avcodec_thread_init(m_pCodecContext, num_threads);
+  }
 #endif
 
   if (m_dllAvCodec.avcodec_open(m_pCodecContext, pCodec) < 0)
