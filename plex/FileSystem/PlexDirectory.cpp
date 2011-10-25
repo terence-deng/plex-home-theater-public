@@ -534,7 +534,8 @@ class PlexMediaNode
        pItem->m_iBitrate = boost::lexical_cast<int>(bitrate);
 
      // View offset.
-     SetProperty(pItem, el, "viewOffset");
+     if (pItem->IsRemoteSharedPlexMediaServerLibrary() == false)
+       SetProperty(pItem, el, "viewOffset");
 
      const char* label2;
      label2 = el.Attribute("infolabel");
