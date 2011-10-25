@@ -77,7 +77,6 @@
       <AdditionalDependencies>D3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)Plugin.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -86,7 +85,9 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.milkdrop\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\addons\visualization.milkdrop" md "$(DeployDir)\addons\visualization.milkdrop"
+copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.milkdrop\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.milkdrop"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,7 +106,7 @@
       <AdditionalDependencies>D3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(TargetName).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -116,7 +117,9 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.milkdrop\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\addons\visualization.milkdrop" md "$(DeployDir)\addons\visualization.milkdrop"
+copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.milkdrop\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.milkdrop"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

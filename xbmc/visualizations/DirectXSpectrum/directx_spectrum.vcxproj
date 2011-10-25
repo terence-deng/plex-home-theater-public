@@ -72,7 +72,6 @@
       <AdditionalDependencies>d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)Spectrum_win32dx.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -81,7 +80,9 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.dxspectrum\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\addons\visualization.dxspectrum" md "$(DeployDir)\addons\visualization.dxspectrum"
+copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.dxspectrum\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.dxspectrum"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -99,7 +100,7 @@
       <AdditionalDependencies>winmm.lib;ws2_32.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)Spectrum_win32dx.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -110,7 +111,9 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.dxspectrum\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\addons\visualization.dxspectrum" md "$(DeployDir)\addons\visualization.dxspectrum"
+copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.dxspectrum\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.dxspectrum"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

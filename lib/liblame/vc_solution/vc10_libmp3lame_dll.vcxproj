@@ -66,9 +66,9 @@
     </CustomBuildAfterTargets>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">
     </CustomBuildAfterTargets>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libmp3lame</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libmp3lame</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">libmp3lame</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lame_enc</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lame_enc</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">lame_enc</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">
     <Midl>
@@ -97,7 +97,7 @@
     </Link>
     <CustomBuildStep>
       <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
-      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
+      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
@@ -131,7 +131,7 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
     </Link>
     <CustomBuildStep>
       <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
-      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
+      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
@@ -163,7 +163,7 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
     </Link>
     <CustomBuildStep>
       <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
-      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
+      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>

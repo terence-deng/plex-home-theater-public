@@ -68,7 +68,6 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)Waveform.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -77,7 +76,9 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.waveform\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\addons\visualization.waveform" md "$(DeployDir)\addons\visualization.waveform"
+copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.waveform\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.waveform"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,9 +103,12 @@
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)Waveform.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)..\..\addons\visualization.waveform\$(TargetFileName)"</Command>
+      <Command>if not exist "$(DeployDir)\addons\visualization.waveform" md "$(DeployDir)\addons\visualization.waveform"
+copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.waveform\$(TargetFileName)"
+copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.waveform"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
