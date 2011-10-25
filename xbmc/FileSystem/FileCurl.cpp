@@ -474,6 +474,10 @@ void CFileCurl::SetCommonOptions(CReadState* state)
     g_curlInterface.easy_setopt(h, CURLOPT_POSTFIELDS, m_postdata.c_str());
   }
 
+  // Another verb?
+  if (m_verb.empty() == false)
+    g_curlInterface.easy_setopt(h, CURLOPT_CUSTOMREQUEST, m_verb.c_str());
+  
   // setup Referer header if needed
   if (!m_referer.IsEmpty())
     g_curlInterface.easy_setopt(h, CURLOPT_REFERER, m_referer.c_str());
@@ -793,6 +797,12 @@ bool CFileCurl::Post(const CStdString& strURL, const CStdString& strPostData, CS
 
 bool CFileCurl::Get(const CStdString& strURL, CStdString& strHTML)
 {
+  return Service(strURL, "", strHTML);
+}
+
+bool CFileCurl::Put(const CStdString& strURL, CStdString& strHTML)
+{
+  m_verb = "PUT";
   return Service(strURL, "", strHTML);
 }
 
