@@ -38,8 +38,14 @@ void PlexMediaServerQueue::Process()
       else
       {
         // Hit the Plex Media Server.
-        CHTTP http;
-        http.Open(pair.second, pair.first.c_str(), 0);
+        CFileCurl  http;
+        CStdString resp;
+        
+        if (pair.first == "PUT")
+          http.Put(pair.second, resp);
+        else
+          http.Get(pair.second, resp);
+        
         CLog::Log(LOGNOTICE, "Plex Media Server Queue: %s", pair.second.c_str());
       }
 

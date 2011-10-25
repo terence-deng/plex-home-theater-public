@@ -54,6 +54,7 @@ namespace XFILE
 
       bool Post(const CStdString& strURL, const CStdString& strPostData, CStdString& strHTML);
       bool Get(const CStdString& strURL, CStdString& strHTML);
+      bool Put(const CStdString& strURL, CStdString& strHTML);
       bool ReadData(CStdString& strHTML);
       bool Download(const CStdString& strURL, const CStdString& strFileName, LPDWORD pdwSize = NULL);
       bool IsInternet(bool checkDNS = true);
@@ -159,6 +160,7 @@ namespace XFILE
       CStdString      m_httpauth;
       CStdString      m_basicUser;
       CStdString      m_basicPass;
+      CStdString      m_verb;
       bool            m_basicAuth;
       bool            m_post;
       bool            m_ftppasvip;
