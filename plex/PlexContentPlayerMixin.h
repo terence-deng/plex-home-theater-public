@@ -13,6 +13,7 @@
 #include "GUIBaseContainer.h"
 #include "GUIDialogContextMenu.h"
 #include "GUIWindowManager.h"
+#include "GUIWindowSlideShow.h"
 #include "LocalizeStrings.h"
 #include "PlayListPlayer.h"
 #include "PlexDirectory.h"
@@ -84,6 +85,29 @@ class PlexContentPlayerMixin
           g_playlistPlayer.Add(PLAYLIST_MUSIC, fileItems);
           g_playlistPlayer.SetCurrentPlaylist(PLAYLIST_MUSIC);
           g_playlistPlayer.Play(itemIndex);
+        }
+        else if (type == "photo")
+        {
+          // Attempt to get the slideshow window
+          CGUIWindowSlideShow *pSlideShow = (CGUIWindowSlideShow *)g_windowManager.GetWindow(WINDOW_SLIDESHOW);
+          if (!pSlideShow)
+            return;
+          
+          // Stop playing video
+          if (g_application.IsPlayingVideo())
+            g_application.StopPlaying();
+          
+          // Reset the window and add each item from the container
+          pSlideShow->Reset();
+          BOOST_FOREACH(CGUIListItemPtr child, container->GetItems())
+            pSlideShow->Add((CFileItem *)child.get());
+          
+          // Set the currently selected photo
+          pSlideShow->Select(file->m_strPath);
+          
+          // Start the slideshow and show the window
+          pSlideShow->StartSlideShow();
+          g_windowManager.ActivateWindow(WINDOW_SLIDESHOW);
         }
         else if (type == "channel")
         {
