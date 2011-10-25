@@ -48,7 +48,6 @@ rem ************************************
 echo Signing drop binaries...
 rem ************************************
 call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\Plex.exe"
-call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\glew32.dll"
 call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\sdl.dll"
 call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\WinSparkle.dll"
 call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\zlib1.dll"
