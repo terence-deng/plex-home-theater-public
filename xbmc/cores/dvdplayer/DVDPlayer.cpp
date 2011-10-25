@@ -1083,9 +1083,12 @@ void CDVDPlayer::Process()
   CStdString stopURL;
   
   // See if we can find the file locally.
-  string localPath = m_item.GetProperty("localPath");
-  if (localPath.size() > 0 && CFile::Exists(localPath))
-    m_item.m_strPath = localPath;
+  if (m_item.IsRemotePlexMediaServerLibrary() == false)
+  {
+    string localPath = m_item.GetProperty("localPath");
+    if (localPath.size() > 0 && CFile::Exists(localPath))
+      m_item.m_strPath = localPath;
+  }
 
   // See if we need to resolve an indirect item.
   if (m_item.GetPropertyInt("indirect") == 1)
