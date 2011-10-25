@@ -45,6 +45,43 @@ set TimeStamp=%Year%-%Month%-%Day%--%Hour%-%Minute%-%Second%
 set SetupDir=%BuildRoot%\Windows\%TargetPlatform%\%TargetConfig%\Setup\%TimeStamp%
 
 rem ************************************
+echo Signing drop binaries...
+rem ************************************
+call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\Plex.exe"
+call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\glew32.dll"
+call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\sdl.dll"
+call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\WinSparkle.dll"
+call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\zlib1.dll"
+
+for %%f in ("%DeployDir%\system\*.dll") do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
+for %%f in ("%DeployDir%\system\cdrip\*.dll") do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
+for %%f in ("%DeployDir%\system\players\dvdplayer\*.dll") do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
+for %%f in ("%DeployDir%\system\players\paplayer\*.dll") do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
+for %%f in ("%DeployDir%\python\*.dll") do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
+for %%f in ("%DeployDir%\python\DLLs\*.pyd") do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
+for %%f in ("%DeployDir%\system\webserver\*.dll") do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
+rem ************************************
 echo Generating installer includes...
 rem ************************************
 call genNsisIncludes.bat "%DeployDir%"
@@ -114,6 +151,11 @@ if not exist "%PLEX_SETUP_PACKAGE%" (
   goto :End
 )
 echo %PLEX_SETUP_PACKAGE% created successfully
+
+rem ************************************
+echo Signing setup package...
+rem ************************************
+call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%PLEX_SETUP_PACKAGE%"
 
 rem ************************************
 echo Creating symbols package...
