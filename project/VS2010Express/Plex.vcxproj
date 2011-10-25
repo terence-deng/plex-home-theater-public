@@ -92,7 +92,8 @@
       <EnableDPIAwareness>true</EnableDPIAwareness>
     </Manifest>
     <PostBuildEvent>
-      <Command>copy /Y "..\..\plex\Windows\winsparkle\WinSparkle-0.3\WinSparkle.dll" "$(OutDir)\WinSparkle.dll"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -144,7 +145,8 @@
       <EnableDPIAwareness>true</EnableDPIAwareness>
     </Manifest>
     <PostBuildEvent>
-      <Command>copy /Y "..\..\plex\Windows\winsparkle\WinSparkle-0.3\WinSparkle.dll" "$(OutDir)\WinSparkle.dll"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
