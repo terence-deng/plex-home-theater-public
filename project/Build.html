@@ -62,6 +62,17 @@
         </li>
     </ul>
     <h3>
+        Debugging PMC</h3>
+    <p>
+        To debug PMC from Visual Studio, open the properties page for the Debug project 
+        and set the following under Configuration Properties / Debugging:</p>
+    <ul>
+        <li>Command = <strong>
+            ..\..\Build\Windows\$(Platform)\$(Configuration)\Deploy\plex.exe</strong></li>
+        <li>Working Directory = <strong>
+            ..\..\Build\Windows\$(Platform)\$(Configuration)\Deploy</strong></li>
+    </ul>
+    <h3>
         Building a setup package</h3>
     <p>
         Prerequisites:</p>
