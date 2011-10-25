@@ -849,11 +849,9 @@ bool CFileItem::IsPlexMediaServer() const
 
 bool CFileItem::IsRemoteSharedPlexMediaServerLibrary() const
 {
-  CURL url(m_strPath);
-  
   if (IsRemotePlexMediaServerLibrary() &&                                              // It's a remote PMS
       g_guiSettings.GetString("myplex.token").empty() == false &&                      // We're logged into myPlex
-      url.GetOptions().find(g_guiSettings.GetString("myplex.token")) == string::npos)  // Our token isn't there
+      m_strPath.find(g_guiSettings.GetString("myplex.token")) == string::npos)  // Our token isn't there
   {
     return true;
   }
@@ -863,13 +861,9 @@ bool CFileItem::IsRemoteSharedPlexMediaServerLibrary() const
 
 bool CFileItem::IsRemotePlexMediaServerLibrary() const
 {
-  CURL url(m_strPath);
-  
-  if (boost::starts_with(url.GetFileName(), "library/"))
-  {
-    if (url.GetOptions().find("X-Plex-Token") != -1)
+  if (m_strPath.find("library/") != string::npos &&
+      m_strPath.find("X-Plex-Token") != string::npos)
       return true;
-  }
   
   return false;
 }
