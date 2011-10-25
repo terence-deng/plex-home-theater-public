@@ -25,6 +25,7 @@ class HostSources
   VECSOURCES    videoSources;
   VECSOURCES    musicSources;
   VECSOURCES    pictureSources;
+  VECSOURCES    applicationSources;
   CFileItemList librarySections;
 };
 

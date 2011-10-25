@@ -68,7 +68,9 @@ void CPlexSourceScanner::Process()
     
     path.Format("%s/photos/", m_url);
     AutodetectPlexSources(path, sources->pictureSources, realHostLabel, onlyShared);
-
+      
+    path.Format("%s/applications/", m_url);
+    AutodetectPlexSources(path, sources->applicationSources, realHostLabel, onlyShared);
     // Library sections.
     path.Format("%s/library/sections", m_url);
     CPlexDirectory plexDir(true, false);
@@ -162,6 +164,12 @@ void CPlexSourceScanner::MergeSourcesForWindow(int windowId)
       CheckForRemovedSources(g_settings.m_videoSources, windowId);
       break;
       
+    case WINDOW_PROGRAMS:
+      BOOST_FOREACH(StringSourcesPair pair, g_hostSourcesMap)
+        MergeSource(g_settings.m_programSources, pair.second->applicationSources);
+      CheckForRemovedSources(g_settings.m_programSources, windowId);
+      break;
+      
     default:
       break;   
   }
@@ -207,6 +215,8 @@ void CPlexSourceScanner::CheckForRemovedSources(VECSOURCES& sources, int windowI
           case WINDOW_VIDEO_FILES:
             remoteSources = pair.second->videoSources;
             break;
+          case WINDOW_PROGRAMS:
+            remoteSources = pair.second->applicationSources;
           default:
             return;
         }

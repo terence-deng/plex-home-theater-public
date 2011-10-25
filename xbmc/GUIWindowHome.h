@@ -73,6 +73,7 @@ private:
   CGUIListItemPtr            m_videoChannelItem;
   CGUIListItemPtr            m_musicChannelItem;
   CGUIListItemPtr            m_photoChannelItem;
+  CGUIListItemPtr            m_applicationChannelItem;
   
   PlexContentWorkerManager*  m_workerManager;
 };

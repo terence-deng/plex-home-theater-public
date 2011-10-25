@@ -63,6 +63,7 @@ using namespace boost;
 #define CHANNELS_VIDEO 1
 #define CHANNELS_MUSIC 2
 #define CHANNELS_PHOTO 3
+#define CHANNELS_APPLICATION 4
 
 #define SLIDESHOW_MULTIIMAGE 10101
 
@@ -315,9 +316,9 @@ void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
         m_workerManager->enqueue(WINDOW_HOME, AppendPathToURL(sectionUrl, "arts"), CONTENT_LIST_FANART);
       }
     }
-    else if (itemID >= 1 && itemID <= 3)
+    else if (itemID >= 1 && itemID <= 4)
     {
-      string filter = (itemID==1) ? "video" : (itemID==2) ? "music" : "photo";
+      string filter = (itemID==1) ? "video" : (itemID==2) ? "music" : (itemID==3) ? "photo" : "application";
 
       // Recently accessed.
       m_contentLists[CONTENT_LIST_RECENTLY_ACCESSED] = Group(kVIDEO_LOADER);
@@ -511,6 +512,8 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
           m_musicChannelItem = item;
         else if (fileItem->m_iprogramCount == CHANNELS_PHOTO)
           m_photoChannelItem = item;
+        else if (fileItem->m_iprogramCount == CHANNELS_APPLICATION)
+          m_applicationChannelItem = item;
         else if (item->HasProperty("plex") == false)
           newList.push_back(item);
       }
@@ -524,12 +527,14 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       int numVideo = 0;
       int numPhoto = 0;
       int numMusic = 0;
+      int numApplication = 0;
       
       BOOST_FOREACH(string_sources_pair nameSource, sourcesMap)
       {
         numVideo += nameSource.second->videoSources.size();
         numPhoto += nameSource.second->pictureSources.size();
         numMusic += nameSource.second->musicSources.size();
+        numApplication += nameSource.second->applicationSources.size();
       }
       
       CPlexSourceScanner::Unlock();
@@ -622,6 +627,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
 
       if (numVideo > 0)
         newList.insert(newList.begin(), m_videoChannelItem);
+      
+      if (numApplication > 0)
+        newList.insert(newList.begin(), m_applicationChannelItem);
       
       // Replace 'em.
       control->SetStaticContent(newList);

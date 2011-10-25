@@ -91,6 +91,8 @@ class PlexContentPlayerMixin
             ActivateWindow(WINDOW_VIDEO_FILES, file->m_strPath);
           else if (file->m_strPath.find("/music/") != string::npos)
             ActivateWindow(WINDOW_MUSIC_FILES, file->m_strPath);
+          else if (file->m_strPath.find("/applications/") != string::npos)
+            ActivateWindow(WINDOW_PROGRAMS, file->m_strPath);
           else
             ActivateWindow(WINDOW_PICTURES, file->m_strPath);
         }
@@ -243,7 +245,7 @@ class PlexContentPlayerMixin
   
   void ActivateWindow(int window, const CStdString& path)
   {
-    CStdString strWindow = (window == WINDOW_VIDEO_FILES) ? "MyVideoFiles" : (window == WINDOW_MUSIC_FILES) ? "MyMusicFiles" : "MyPictures";
+    CStdString strWindow = (window == WINDOW_VIDEO_FILES) ? "MyVideoFiles" : (window == WINDOW_MUSIC_FILES) ? "MyMusicFiles" : (window == WINDOW_PROGRAMS) ? "MyPrograms" : "MyPictures";
     CStdString cmd = "XBMC.ActivateWindow(" + strWindow + "," + path + ",return)";
     
     g_application.ExecuteXBMCAction(cmd);
