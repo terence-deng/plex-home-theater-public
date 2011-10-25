@@ -76,6 +76,8 @@ bool CViewDatabase::UpdateOldVersion(int version)
 
 bool CViewDatabase::GetViewState(const CStdString &path, int window, CViewState &state)
 {
+  return false;
+  
   try
   {
     if (NULL == m_pDB.get()) return false;
@@ -107,6 +109,8 @@ bool CViewDatabase::GetViewState(const CStdString &path, int window, CViewState 
 
 bool CViewDatabase::SetViewState(const CStdString &path, int window, const CViewState &state)
 {
+  return false;
+  
   try
   {
     if (NULL == m_pDB.get()) return false;

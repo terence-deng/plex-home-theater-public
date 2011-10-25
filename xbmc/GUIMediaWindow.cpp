@@ -524,7 +524,8 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
       
       // Notify the media server.
       PlexMediaServerQueue::Get().onViewModeChanged(m_vecItems->GetProperty("identifier"), m_vecItems->m_strPath, m_vecItems->GetProperty("viewGroup"), viewMode, -1, -1);
-
+      m_vecItems->SetDefaultViewMode(viewMode);
+      
       if (m_guiState.get())
         m_guiState->SaveViewAsControl(viewMode);
 
@@ -625,12 +626,8 @@ void CGUIMediaWindow::UpdateButtons()
         allowChange = false;
     }
     
-    // If the change is allowed, go ahead & set the view mode
-    if (allowChange)
-      m_viewControl.SetCurrentView(viewMode);
-    
-    // If not allowed, but we have a default view mode, use that instead
-    else if (CurrentDirectory().GetDefaultViewMode() > 0)
+    // If we have a default view mode, use that instead
+    if (CurrentDirectory().GetDefaultViewMode() > 0)
       m_viewControl.SetCurrentView(CurrentDirectory().GetDefaultViewMode());
     
     // Otherwise, use the global default
@@ -766,9 +763,7 @@ bool CGUIMediaWindow::GetDirectory(const CStdString &strDirectory, CFileItemList
   if (strDirectory.size() == 0)
   {
     int viewMode = 131131;
-    CGUIViewState* viewState = CGUIViewState::GetViewState(0, items);
-    if (viewState->GetViewAsControl() == 0x10000)
-      viewState->SaveViewAsControl(viewMode);
+    items.SetDefaultViewMode(viewMode);
   }
 
   if (m_guiState.get() && !m_guiState->HideParentDirItems() && !items.m_strPath.IsEmpty())
