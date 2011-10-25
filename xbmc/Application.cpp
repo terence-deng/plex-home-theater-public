@@ -4131,13 +4131,18 @@ void CApplication::UpdateFileState(const string& aState)
     latestTime = 0.0;
   }
   
+  // Every 5 seconds by default.
+  int cadence = 5;
+  if (m_itemCurrentFile->GetProperty("pluginIdentifier") == "com.plexapp.plugins.myplex")
+    cadence = 20;
+  
   if (state == "stopped" || IsPlayingVideo() || IsPlayingAudio())
   {
     // Enough time has passed, we changed state, we skipped, or we're playing something different.
     time_t now = time(0);
-    if (now - lastUpdated > 5         || 
-        lastState != state            || 
-        fabs(lastTime-nowTime) > 10.0 ||
+    if (now - lastUpdated > cadence        || 
+        lastState != state                 || 
+        fabs(lastTime-nowTime) > cadence*2 ||
         lastKey != m_itemCurrentFile->GetProperty("key"))
     {      
       // Update state.
