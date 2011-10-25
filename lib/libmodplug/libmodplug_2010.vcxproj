@@ -47,6 +47,8 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libmodplug</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libmodplug</TargetName>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Build</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -68,10 +70,23 @@
       <ModuleDefinitionFile>libmodplug.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copying Output...</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>$(DeployDir)\system\players\paplayer\$(TargetFileName)</Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -93,10 +108,23 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>if not exist "$(DeployDir)\system\players\paplayer" md "$(DeployDir)\system\players\paplayer"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\players\paplayer\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\players\paplayer"</Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copying Output...</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>$(DeployDir)\system\players\paplayer\$(TargetFileName)</Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\fastmix.cpp" />
