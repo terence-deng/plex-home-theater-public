@@ -4618,11 +4618,11 @@ bool CApplication::OnMessage(CGUIMessage& message)
 
       // User initiated the stop.
       if (message.GetMessage() == GUI_MSG_PLAYBACK_STOPPED)
-      {
         UpdateFileState("stopped");
-        HideBusyIndicator();
-      }
       
+      if (message.GetMessage() == GUI_MSG_PLAYBACK_STOPPED || message.GetMessage() == GUI_MSG_PLAYBACK_ENDED)
+        HideBusyIndicator();
+        
       // first check if we still have items in the stack to play
       if (message.GetMessage() == GUI_MSG_PLAYBACK_ENDED)
       {
