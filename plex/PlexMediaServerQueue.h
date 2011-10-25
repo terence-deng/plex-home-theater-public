@@ -39,8 +39,8 @@ class PlexMediaServerQueue : public CThread
     {
       string url = "/:/viewChange";
       url = CPlexDirectory::ProcessUrl(rootURL, url, false);
-      url += "?identifier=" + identifier + 
-             "&viewGroup=" + viewGroup + 
+      url = appendArgs(url, "identifier=" + identifier);
+      url += "&viewGroup=" + viewGroup + 
              "&viewMode=" + boost::lexical_cast<string>(viewMode) + 
              "&sortMode=" + boost::lexical_cast<string>(sortMode) +
              "&sortAsc=" + boost::lexical_cast<string>(sortAsc);
@@ -56,16 +56,19 @@ class PlexMediaServerQueue : public CThread
     {
       string url = "/library/parts/" + boost::lexical_cast<string>(partID);
       url = buildUrl(item, url);
+
+      if (subtitleStreamID != -1 || audioStreamID != -1)
+      url = appendArgs(url, "");
       
       if (subtitleStreamID != -1)
       {
-        url += "?subtitleStreamID=";
+        url += "subtitleStreamID=";
         if (subtitleStreamID != 0)
           url += boost::lexical_cast<string>(subtitleStreamID);
       }
       else if (audioStreamID != -1)
       {
-        url += "?audioStreamID=";
+        url += "audioStreamID=";
         if (audioStreamID != 0)
           url += boost::lexical_cast<string>(audioStreamID);
       }
@@ -88,7 +91,7 @@ class PlexMediaServerQueue : public CThread
       
       string url = "/:/timeline";
       url = buildUrl(item, url);
-      url += "?ratingKey=" + encodedKey;
+      url = appendArgs(url, "ratingKey=" + encodedKey);
       url += "&identifier=" + identifier;
       url += "&state=" + state;
       url += "&time=" + lexical_cast<string>(ms);
@@ -157,15 +160,28 @@ class PlexMediaServerQueue : public CThread
       string identifier = item->GetProperty("pluginIdentifier");
       
       // Build the URL.
-      string url = "/:/" + verb;
+      string url = (identifier == "com.plexapp.plugins.myplex" ? "/pms/:/" : "/:/") + verb;
       url = buildUrl(item, url);
-      url += "?key=" + encodedKey;
+      url = appendArgs(url, "key=" + encodedKey);
       url += "&identifier=" + identifier;
       url += options;
       
       // Queue it up!
       enqueue(url);
     }
+  }
+  
+  string appendArgs(const string& url, const string& args)
+  {
+    string ret = url;
+    
+    if (url.find("?") != string::npos)
+      ret += "&";
+    else
+      ret += "?";
+    
+    ret += args;
+    return ret;
   }
   
   string buildUrl(const CFileItemPtr& item, const string& url)
