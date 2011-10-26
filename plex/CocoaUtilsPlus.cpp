@@ -8,6 +8,13 @@
 
 #ifdef __APPLE__
 #include <CoreServices/CoreServices.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <netinet/in.h>
+#include "Settings.h"
 #endif
 
 #ifdef _WIN32
