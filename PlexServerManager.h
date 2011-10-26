@@ -13,9 +13,11 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread.hpp>
 
+#include "FileCurl.h"
 #include "CocoaUtilsPlus.h"
 
 using namespace std;
+using namespace XFILE;
 
 ////////////////////////////////////////////////////////////////////
 class PlexServer
@@ -35,7 +37,11 @@ class PlexServer
   /// Is it alive? Blocks, can take time.
   bool reachable()
   {
-    return true;
+    CFileCurl  http;
+    CStdString resp;
+    live = http.Get(url(), resp);
+    
+    return live;
   }
   
   /// Return the root URL.
@@ -50,7 +56,14 @@ class PlexServer
   
   int score()
   {
-    return 0;
+    int ret = 0;
+    
+    // Bonus for being alive, being localhost, and being detected.
+    if (live) ret += 50;
+    if (local) ret += 10;
+    if (detected()) ret += 10;
+    
+    return ret;
   }
   
   string key() const
@@ -100,11 +113,10 @@ public:
   }
   
   /// Get me the best server.
-  PlexServerPtr findBestServer()
+  PlexServerPtr bestServer()
   {
     boost::recursive_mutex::scoped_lock lk(m_mutex);
-    
-    return PlexServerPtr();
+    return m_bestServer;
   }
   
   /// Server appeared.
@@ -113,6 +125,8 @@ public:
     boost::recursive_mutex::scoped_lock lk(m_mutex);
     PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, addr, port, token));
     m_servers[server->key()] = server;
+    
+    updateBestServer();
     dump();
   }
   
@@ -122,6 +136,8 @@ public:
     boost::recursive_mutex::scoped_lock lk(m_mutex);
     PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, addr, port, ""));
     m_servers.erase(server->key());
+    
+    updateBestServer();
     dump();
   }
   
@@ -144,10 +160,34 @@ public:
     BOOST_FOREACH(PlexServerPtr server, remoteServers)
       m_servers[server->key()] = server;
     
+    updateBestServer();
     dump();
   }
   
  private:
+  
+  /// Figure out what the best server is.
+  void updateBestServer()
+  {
+    PlexServerPtr bestServer;
+    int bestScore = 0;
+    
+    BOOST_FOREACH(key_server_pair pair, m_servers)
+    {
+      if (pair.second->score() > bestScore)
+      {
+        bestScore = pair.second->score();
+        bestServer = pair.second;
+      }
+    }
+    
+    if (bestServer)
+      dprintf("PlexServerManager: Computed best server to be [%s] (%s:%d) with score %d.", bestServer->name.c_str(), bestServer->address.c_str(), bestServer->port, bestScore);
+    else
+      dprintf("PlexServerManager: There is no worthy server.");
+    
+    m_bestServer = bestServer;
+  }
   
   void dump()
   {
@@ -155,19 +195,34 @@ public:
     
     dprintf("SERVERS:");
     BOOST_FOREACH(key_server_pair pair, m_servers)
-      dprintf("  * %s [%s:%d] local: %d (%s)", pair.second->name.c_str(), pair.second->address.c_str(), pair.second->port, pair.second->local, pair.second->uuid.c_str());
+      dprintf("  * %s [%s:%d] local: %d live: %d (%s)", pair.second->name.c_str(), pair.second->address.c_str(), pair.second->port, pair.second->local, pair.second->live, pair.second->uuid.c_str());
   }
   
   void run()
   {
+    map<string, PlexServerPtr> servers;
+    
     while (true)
     {
+      // Get servers.
+      m_mutex.lock();
+      servers = m_servers;
+      m_mutex.unlock();
+      
       // Run connectivity checks.
+      dprintf("PlexServerManager: Running connectivity check.");
+      BOOST_FOREACH(key_server_pair pair, servers)
+        pair.second->reachable();
+      
+      updateBestServer();
+      dump();
       
       // Sleep.
+      boost::this_thread::sleep(boost::posix_time::seconds(30));
     }
   }
   
+  PlexServerPtr              m_bestServer;
   map<string, PlexServerPtr> m_servers;
   boost::recursive_mutex     m_mutex;
 };
