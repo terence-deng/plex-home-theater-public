@@ -1236,3 +1236,5 @@ xbmc/cdrip/Makefile
 xbmc/cores/paplayer/asap/Makefile
 xbmc/osx/Makefile
 
+Build/
+project/Win32BuildSetup/dependencies/SDL.dll
