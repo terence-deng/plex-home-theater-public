@@ -43,14 +43,14 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</LinkIncremental>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.vis</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.vis</TargetExt>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Waveform_win32</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Waveform_win32</TargetName>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Build</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -76,10 +76,19 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Message>Copying output...</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Inputs>$(TargetPath)</Inputs>
       <Command>if not exist "$(DeployDir)\addons\visualization.waveform" md "$(DeployDir)\addons\visualization.waveform"
 copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.waveform\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.waveform"</Command>
-    </PostBuildEvent>
+      <Outputs>$(DeployDir)\addons\visualization.waveform\$(TargetFileName)</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -106,10 +115,19 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.wavef
       <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Message>Copying output...</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Inputs>$(TargetPath)</Inputs>
       <Command>if not exist "$(DeployDir)\addons\visualization.waveform" md "$(DeployDir)\addons\visualization.waveform"
 copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.waveform\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.waveform"</Command>
-    </PostBuildEvent>
+      <Outputs>$(DeployDir)\addons\visualization.waveform\$(TargetFileName)</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

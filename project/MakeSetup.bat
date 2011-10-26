@@ -52,6 +52,10 @@ call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\sdl.dll"
 call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\WinSparkle.dll"
 call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\zlib1.dll"
 
+for /R "%DeployDir%\addons" %%f in (*.vis) do (
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+)
+
 for %%f in ("%DeployDir%\system\*.dll") do (
   call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
 )

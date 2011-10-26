@@ -45,10 +45,8 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
@@ -57,6 +55,8 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MilkDrop_win32dx</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MilkDrop_win32dx</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.vis</TargetExt>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Build</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -85,10 +85,19 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Message>Copying output...</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Inputs>$(TargetPath)</Inputs>
       <Command>if not exist "$(DeployDir)\addons\visualization.milkdrop" md "$(DeployDir)\addons\visualization.milkdrop"
 copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.milkdrop\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.milkdrop"</Command>
-    </PostBuildEvent>
+      <Outputs>$(DeployDir)\addons\visualization.milkdrop\$(TargetFileName)</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -117,10 +126,19 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.milkd
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Message>Copying output...</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Inputs>$(TargetPath)</Inputs>
       <Command>if not exist "$(DeployDir)\addons\visualization.milkdrop" md "$(DeployDir)\addons\visualization.milkdrop"
 copy /b /y "$(TargetPath)" "$(DeployDir)\addons\visualization.milkdrop\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\addons\visualization.milkdrop"</Command>
-    </PostBuildEvent>
+      <Outputs>$(DeployDir)\addons\visualization.milkdrop\$(TargetFileName)</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MilkdropXBMC.cpp" />
