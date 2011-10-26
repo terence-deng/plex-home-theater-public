@@ -801,7 +801,7 @@ bool CHTTP::Recv(int iLen, int theTimeout)
   WSAOVERLAPPED ovl;
   DWORD n, flags;
 #else
-  ssize_t n;
+  ssize_t n = 0;
 #endif
   bool bUnknown = (iLen < 0);
 
