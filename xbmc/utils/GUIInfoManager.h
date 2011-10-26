@@ -309,6 +309,8 @@ typedef boost::shared_ptr < CFileItem > CFileItemPtr;
 #define CONTAINER_FIRST_TITLE       5000
 #define CONTAINER_SECOND_TITLE      5001
 
+#define SYSTEM_SELECTED_PLEX_MEDIA_SERVER      5002
+
 #define MUSICPM_ENABLED             381
 #define MUSICPM_SONGSPLAYED         382
 #define MUSICPM_MATCHINGSONGS       383

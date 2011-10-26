@@ -81,6 +81,8 @@
 
 #include "addons/AddonManager.h"
 
+#include "PlexServerManager.h"
+
 #define SYSHEATUPDATEINTERVAL 60000
 
 using namespace std;
@@ -386,6 +388,7 @@ int CGUIInfoManager::TranslateSingleString(const CStdString &strCondition)
     else if (strTest.Equals("system.cpufrequency")) ret = SYSTEM_CPUFREQUENCY;
     else if (strTest.Equals("system.screenresolution")) ret = SYSTEM_SCREEN_RESOLUTION;
     else if (strTest.Equals("system.videoencoderinfo")) ret = SYSTEM_VIDEO_ENCODER_INFO;
+    else if (strTest.Equals("system.selectedplexmediaserver")) ret = SYSTEM_SELECTED_PLEX_MEDIA_SERVER;
     else if (strTest.Left(16).Equals("system.idletime("))
     {
       int time = atoi((strTest.Mid(16, strTest.GetLength() - 17).c_str()));
@@ -1276,6 +1279,16 @@ CStdString CGUIInfoManager::GetLabel(int info, int contextWindow)
     return GetSystemHeatInfo(info);
     break;
 
+  case SYSTEM_SELECTED_PLEX_MEDIA_SERVER:
+  {
+    CStdString ret;
+    PlexServerPtr server = PlexServerManager::Get().bestServer();
+    if (server)
+      ret = server->name;
+    
+    return ret;
+  }
+      
   case SYSTEM_VIDEO_ENCODER_INFO:
   case NETWORK_MAC_ADDRESS:
   case SYSTEM_KERNEL_VERSION:
