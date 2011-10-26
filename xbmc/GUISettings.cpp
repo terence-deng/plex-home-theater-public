@@ -619,7 +619,7 @@ void CGUISettings::Initialize()
   AddBool(vp, "videoplayer.usedxva2", 13427, false);
 #endif
 #ifdef HAVE_LIBCRYSTALHD
-  AddBool(vp, "videoplayer.usechd", 13428, true);
+  AddBool(vp, "videoplayer.usechd", 13428, false);
 #endif
 #ifdef HAVE_LIBVDADECODER
   AddBool(vp, "videoplayer.usevda", 13429, true);
