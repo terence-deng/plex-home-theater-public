@@ -10,8 +10,19 @@
 #include <CoreServices/CoreServices.h>
 #endif
 
+#ifdef _WIN32
+#include <WinSock.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#define close closesocket
+#define in_addr_t uint32_t
+#endif
+
+#include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
+
 #include "CocoaUtilsPlus.h"
+#include "Log.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 string Cocoa_GetMachinePlatform()
@@ -69,4 +80,121 @@ string Cocoa_GetMachinePlatformVersion()
 #endif
   
   return ver;
+}
+
+#ifdef __APPLE__
+#define SIZE(p) MAX((p).sa_len, sizeof(p))
+#endif
+
+vector<in_addr_t> Cocoa_GetLocalAddresses()
+{
+  vector<in_addr_t> ret;
+
+#ifdef __APPLE__
+
+  static struct ifreq ifreqs[128];
+  struct ifconf ifconf;
+  memset(&ifconf, 0, sizeof(ifconf));
+  memset(&ifreqs, 0, sizeof(ifreqs));
+  ifconf.ifc_req = ifreqs;
+  ifconf.ifc_len = sizeof(ifreqs);
+
+  int sd = socket(PF_INET, SOCK_STREAM, 0);
+  if (ioctl(sd, SIOCGIFCONF, (char *)&ifconf) == 0)
+  {
+    char* cp = (char *)ifconf.ifc_req;
+    char* cplim = cp+ifconf.ifc_len;
+    struct ifreq* ifr = ifconf.ifc_req;
+
+    for (; cp<cplim; cp+=(sizeof(ifr->ifr_name) + SIZE(ifr->ifr_addr)))
+    {
+      ifr = (struct ifreq *)cp;
+
+      struct sockaddr *sa = (struct sockaddr *)&(ifr->ifr_addr);
+      if (sa->sa_family == AF_INET || sa->sa_family == AF_LINK)
+      {
+        struct sockaddr_in* pa = (struct sockaddr_in *)sa;
+        ret.push_back(pa->sin_addr.s_addr);
+      }
+     }
+   }
+
+  close(sd);
+#endif
+
+#ifdef _WIN32
+  char ac[256];
+  if (gethostname(ac, sizeof(ac)) != SOCKET_ERROR)
+  {
+    struct hostent *phe = gethostbyname(ac);
+    if (phe)
+    {
+      for (int i = 0; phe->h_addr_list[i] != 0; ++i) 
+      {
+        struct in_addr addr;
+        memcpy(&addr, phe->h_addr_list[i], sizeof(struct in_addr));
+        ret.push_back(addr.S_un.S_addr);
+      }
+    }
+  }
+#endif
+
+  return ret;
+}
+
+bool Cocoa_IsHostLocal(const string& host)
+{
+  vector<in_addr_t> localAddresses = Cocoa_GetLocalAddresses();
+  bool ret = false;
+
+#ifdef __APPLE__
+  hostent* pHost = ::gethostbyname(host.c_str());
+  if (pHost)
+  {
+    BOOST_FOREACH(in_addr_t localAddr, localAddresses)
+    {
+      for (int x=0; pHost->h_addr_list[x]; x++)
+      {
+        struct in_addr* in = (struct in_addr *)pHost->h_addr_list[x];
+        if (in->s_addr == localAddr)
+        {
+          ret = true;
+          break;
+        }
+      }
+    }
+  }
+#endif
+
+#ifdef _WIN32
+  struct addrinfo hints;
+  ZeroMemory(&hints, sizeof(hints));
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_protocol = IPPROTO_TCP;
+
+  struct addrinfo *result = 0;
+  DWORD dwRetval = getaddrinfo(host.c_str(), 0, &hints, &result);
+  if (dwRetval == 0)
+  {
+    BOOST_FOREACH(in_addr_t localAddr, localAddresses)
+    {
+      for (struct addrinfo* ptr=result; ptr != 0; ptr=ptr->ai_next) 
+      {
+        if (ptr->ai_family == AF_INET)
+        {
+          struct sockaddr_in* addr = (struct sockaddr_in* )ptr->ai_addr;
+          if (addr->sin_addr.s_addr == localAddr)
+          {
+            ret = true;
+            break;
+          }
+        }
+      }
+    }
+  }
+#endif
+
+  CLog::Log(LOGINFO, "Asked to check whether [%s] is local => %d", host.c_str(), ret);
+  return ret;
 }
