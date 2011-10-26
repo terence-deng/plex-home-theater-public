@@ -78,7 +78,11 @@ bool CDirectoryCache::GetDirectory(const CStdString& strPath, CFileItemList &ite
     if (dir->m_cacheType == XFILE::DIR_CACHE_ALWAYS ||
        (dir->m_cacheType == XFILE::DIR_CACHE_ONCE && retrieveAll))
     {
+      // Preserve view mode, which may have been updated.
+      int defaultViewMode = items.GetDefaultViewMode();
       items.Copy(*dir->m_Items);
+      items.SetDefaultViewMode(defaultViewMode);      
+      
       dir->SetLastAccess(m_accessCounter);
 #ifdef _DEBUG
       m_cacheHits+=items.Size();
