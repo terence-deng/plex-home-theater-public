@@ -1520,13 +1520,11 @@ void CGUIMediaWindow::OnDeleteItem(int iItem)
     return;
   
   // Delete.
-  CHTTP set;
   CStdString strData;
-  int status = set.Open(item->GetProperty("key"), "DELETE", 0);
-  set.ReadData(strData);
-  set.Close();
+  CFileCurl http;
+  bool status = http.Delete(item->GetProperty("key"), strData);
   
-  if (status >= 400)
+  if (status == false)
   {
     // Show error.
     CGUIDialogOK::ShowAndGetInput(257, 16205, 0, 0);
