@@ -33,6 +33,7 @@
 #include "GUIDialogOK.h"
 #include "Picture.h"
 #include "PlexLibrarySectionManager.h"
+#include "PlexServerManager.h"
 
 using namespace std;
 using namespace XFILE;
@@ -64,8 +65,10 @@ CPlexDirectory::~CPlexDirectory()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items)
+bool CPlexDirectory::GetDirectory(const CStdString& path, CFileItemList &items)
 {
+  CStdString strPath = path;
+  
   // Hackish, but a few special directories.
   if (strPath == "plex://shared")
   {
@@ -76,6 +79,23 @@ bool CPlexDirectory::GetDirectory(const CStdString& strPath, CFileItemList &item
       items.Add(item);
     
     return true;
+  }
+  
+  // Additionally, if we're going to 127.0.0.1, this is actually an alias for "selected server".
+  // which historically was always 127.0.0.1 but now of course could be anywhere.
+  //
+  CURL url(strPath);
+  if (url.GetHostName() == "127.0.0.1")
+  {
+    PlexServerPtr server = PlexServerManager::Get().bestServer();
+    if (server)
+    {
+      url.SetHostName(server->address);
+      url.SetPort(server->port);
+      strPath = url.Get();
+      
+      dprintf("PlexServerManager: Using selected best server %s to make URL %s", server->name.c_str(), strPath.c_str());
+    }
   }
   
   // Get the directory.
@@ -1331,6 +1351,8 @@ class PlexMediaDirectory : public PlexMediaNode
     SetProperty(pItem, el, "accessToken");
     SetProperty(pItem, el, "serverName");
     SetProperty(pItem, el, "sourceTitle");
+    SetProperty(pItem, el, "address");
+    SetProperty(pItem, el, "port");
   }
 };
 

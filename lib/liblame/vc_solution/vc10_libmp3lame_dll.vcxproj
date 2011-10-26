@@ -60,15 +60,13 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    </CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build</CustomBuildAfterTargets>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     </CustomBuildAfterTargets>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">
-    </CustomBuildAfterTargets>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libmp3lame</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libmp3lame</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">libmp3lame</TargetName>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">Build</CustomBuildAfterTargets>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lame_enc</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lame_enc</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">lame_enc</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">
     <Midl>
@@ -96,8 +94,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
-      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
+      <Outputs>$(DeployDir)\system\cdrip\$(TargetFileName)</Outputs>
+      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
@@ -130,12 +128,12 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
-      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
+      <Outputs>$(DeployDir)\system\cdrip\$(TargetFileName)</Outputs>
+      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
-      <Inputs>$(TargetPath)</Inputs>
+      <Inputs>$(TargetPath);configMS.h</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -162,8 +160,8 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <CustomBuildStep>
-      <Outputs>$(DeployDir)\system\cdrip\lame_enc.dll</Outputs>
-      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip\lame_enc.dll"
+      <Outputs>$(DeployDir)\system\cdrip\$(TargetFileName)</Outputs>
+      <Command>if not exist "$(DeployDir)\system\cdrip" md "$(DeployDir)\system\cdrip"
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>

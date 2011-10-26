@@ -78,5 +78,6 @@ string Cocoa_GetMachinePlatformVersion();
 
 string Cocoa_GetMachinePlatform();
 string Cocoa_GetMachinePlatformVersion();
+bool Cocoa_IsHostLocal(const string& host);
 
 #endif

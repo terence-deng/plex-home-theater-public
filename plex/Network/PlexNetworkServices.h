@@ -13,6 +13,7 @@
 #include "Network/NetworkServiceBrowser.h"
 #include "PlexSourceScanner.h"
 #include "PlexNetworkServiceAdvertiser.h"
+#include "PlexServerManager.h"
 
 class PlexServiceListener;
 typedef boost::shared_ptr < PlexServiceListener > PlexServiceListenerPtr;
@@ -43,6 +44,7 @@ public:
     // Scan the host.
     dprintf("NetworkServiceBrowser: SERVICE arrived: %s", service->address().to_string().c_str());
     CPlexSourceScanner::ScanHost(service->getResourceIdentifier(), service->address().to_string(), service->getParam("Name"), service->getUrl());
+    PlexServerManager::Get().addServer(service->getResourceIdentifier(), service->getParam("Name"), service->address().to_string(), service->port());
   }
   
   /// Notify of a service going away.
@@ -50,6 +52,7 @@ public:
   {
     dprintf("NetworkServiceBrowser: SERVICE departed after not being seen for %f seconds: %s", service->timeSinceLastSeen(), service->address().to_string().c_str());
     CPlexSourceScanner::RemoveHost(service->getResourceIdentifier());
+    PlexServerManager::Get().removeServer(service->getResourceIdentifier(), service->getParam("Name"), service->address().to_string(), service->port());
   }
   
   /// Notify of a service update.

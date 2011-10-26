@@ -88,7 +88,18 @@ xcopy "%PlexRoot%\system" "%DeployDir%\system" /E /Q /I /Y /EXCLUDE:exclude.txt
 xcopy "%PlexRoot%\media" "%DeployDir%\media" /E /Q /I /Y /EXCLUDE:exclude.txt
 xcopy "%PlexRoot%\sounds" "%DeployDir%\sounds" /E /Q /I /Y /EXCLUDE:exclude.txt
 
-if exist exclude.txt del /f exclude.txt
+if not exist "%DeployDir%\system\webserver" md "%DeployDir%\system\webserver"
+xcopy "%PlexRoot%\lib\libmicrohttpd_win32\bin\*.dll" "%DeployDir%\system\webserver" /E /Q /I /Y
+
+del /f exclude.txt
+
+if not exist "%DeployDir%\system\python\Lib" md "%DeployDir%\system\python\Lib"
+echo .svn>py_exclude.txt
+echo test>>py_exclude.txt
+echo plat->>py_exclude.txt
+xcopy "%PlexRoot%\xbmc\lib\libPython\Python\Lib" "%DeployDir%\system\python\Lib" /E /Q /I /Y /EXCLUDE:py_exclude.txt
+
+del /f py_exclude.txt
 
 rem ************************************
 echo Building MediaStream skin...

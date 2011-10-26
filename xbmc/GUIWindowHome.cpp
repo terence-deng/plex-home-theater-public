@@ -619,17 +619,17 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       }
       
       // See what channel entries to add.
+      if (numApplication > 0)
+        newList.push_back(m_applicationChannelItem);
+      
+      if (numVideo > 0)
+        newList.push_back(m_videoChannelItem);
+
       if (numPhoto > 0)
-        newList.insert(newList.begin(), m_photoChannelItem);
+        newList.push_back(m_photoChannelItem);
 
       if (numMusic > 0)
-        newList.insert(newList.begin(), m_musicChannelItem);
-
-      if (numVideo > 0)
-        newList.insert(newList.begin(), m_videoChannelItem);
-      
-      if (numApplication > 0)
-        newList.insert(newList.begin(), m_applicationChannelItem);
+        newList.push_back(m_musicChannelItem);
       
       // Replace 'em.
       control->SetStaticContent(newList);

@@ -1342,6 +1342,7 @@
 		E36C29E70DA72486001F0C9D /* ScraperUrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScraperUrl.cpp; sourceTree = "<group>"; };
 		E36C29E80DA72486001F0C9D /* MusicArtistInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MusicArtistInfo.cpp; sourceTree = "<group>"; };
 		E36C29E90DA72486001F0C9D /* Fanart.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fanart.cpp; sourceTree = "<group>"; };
+		E385F6051457D6430030F848 /* PlexServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexServerManager.h; path = plex/PlexServerManager.h; sourceTree = "<group>"; };
 		E38A06CC0D95AA5500FF8227 /* GUIDialogKaiToast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIDialogKaiToast.cpp; sourceTree = "<group>"; };
 		E38A06CD0D95AA5500FF8227 /* GUIDialogKaiToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIDialogKaiToast.h; sourceTree = "<group>"; };
 		E38E138C0D25F9F900618676 /* AnimatedGif.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatedGif.cpp; sourceTree = "<group>"; };
@@ -3044,6 +3045,7 @@
 		746469DE12E827B500B2FF1E /* plex */ = {
 			isa = PBXGroup;
 			children = (
+				E385F6051457D6430030F848 /* PlexServerManager.h */,
 				E3957ED714525C5900D31C95 /* MyPlexManager.h */,
 				E34B56B114524E2C004A7CCE /* PlexLibrarySectionManager.h */,
 				7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */,
