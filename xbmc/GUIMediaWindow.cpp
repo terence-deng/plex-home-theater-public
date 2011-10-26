@@ -525,9 +525,6 @@ bool CGUIMediaWindow::OnMessage(CGUIMessage& message)
       // Notify the media server.
       PlexMediaServerQueue::Get().onViewModeChanged(m_vecItems->GetProperty("identifier"), m_vecItems->m_strPath, m_vecItems->GetProperty("viewGroup"), viewMode, -1, -1);
       m_vecItems->SetDefaultViewMode(viewMode);
-      
-      if (m_guiState.get())
-        m_guiState->SaveViewAsControl(viewMode);
 
       UpdateButtons();
       return true;
