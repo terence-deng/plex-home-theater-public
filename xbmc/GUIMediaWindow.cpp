@@ -1628,6 +1628,7 @@ void CGUIMediaWindow::GetContextButtons(int itemNumber, CContextButtons &buttons
     buttons.Add(CONTEXT_BUTTON_RATING, item->HasProperty("userRating") ? 40206 : 40205);
 
   if (item->IsPlexMediaServerLibrary() && 
+      (item->IsRemoteSharedPlexMediaServerLibrary() == false) &&
       (item->GetProperty("type") == "episode" || item->GetProperty("type") == "movie" || 
        item->GetProperty("type") == "track"   || item->GetProperty("type") == "photo"))
   {
