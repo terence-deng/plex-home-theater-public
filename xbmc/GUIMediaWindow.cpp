@@ -1624,7 +1624,7 @@ void CGUIMediaWindow::GetContextButtons(int itemNumber, CContextButtons &buttons
     return;
   
   // add rating options
-  if (item->HasProperty("ratingKey") && item->HasProperty("pluginIdentifier"))
+  if (item->HasProperty("ratingKey") && item->HasProperty("pluginIdentifier") && (item->IsRemoteSharedPlexMediaServerLibrary() == false))
     buttons.Add(CONTEXT_BUTTON_RATING, item->HasProperty("userRating") ? 40206 : 40205);
 
   if (item->IsPlexMediaServerLibrary() && 
