@@ -206,7 +206,7 @@ public:
     // If the server changed, notify the home screen, there may be repercussions.
     if ((!m_bestServer && bestServer) ||
         (m_bestServer && !bestServer) ||
-        (m_bestServer && bestServer && m_bestServer->equals(bestServer)))
+        (m_bestServer && bestServer && m_bestServer->equals(bestServer) == false))
     {
       // Notify the main menu.
       dprintf("PlexServerManager: Notifying home screen about change to best server.");
