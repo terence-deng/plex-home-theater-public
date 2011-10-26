@@ -13,11 +13,18 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread.hpp>
 
-#include "FileCurl.h"
 #include "CocoaUtilsPlus.h"
+#include "FileCurl.h"
+#include "GUIUserMessages.h"
+#include "GUIWindowManager.h"
+#include "Key.h"
 
 using namespace std;
 using namespace XFILE;
+
+class PlexServer;
+typedef boost::shared_ptr<PlexServer> PlexServerPtr;
+typedef pair<string, PlexServerPtr> key_server_pair;
 
 ////////////////////////////////////////////////////////////////////
 class PlexServer
@@ -28,9 +35,14 @@ class PlexServer
   PlexServer(const string& uuid, const string& name, const string& addr, unsigned short port, const string& token)
     : uuid(uuid), name(name), address(addr), port(port), token(token)
   {
+    // See if it's running on this machine.
     if (token.empty())
       local = Cocoa_IsHostLocal(addr);
     
+    // Default to live if we detected it.
+    live = detected();
+    
+    // Compute the key for the server.
     m_key = uuid + "-" + address + "-" + boost::lexical_cast<string>(port);
   }
   
@@ -54,6 +66,7 @@ class PlexServer
     return ret;
   }
   
+  /// The score for the server.
   int score()
   {
     int ret = 0;
@@ -66,6 +79,7 @@ class PlexServer
     return ret;
   }
   
+  /// The server key for hashing.
   string key() const
   {
     return m_key;
@@ -75,6 +89,12 @@ class PlexServer
   bool detected()
   {
     return token.empty();
+  }
+  
+  /// Equality operator.
+  bool equals(const PlexServerPtr& rhs)
+  {
+    return (uuid == rhs->uuid && address == rhs->address && port == rhs->port);
   }
   
   bool live;
@@ -89,9 +109,6 @@ class PlexServer
   
   string m_key;
 };
-
-typedef boost::shared_ptr<PlexServer> PlexServerPtr;
-typedef pair<string, PlexServerPtr> key_server_pair;
 
 ////////////////////////////////////////////////////////////////////
 class PlexServerManager
@@ -185,6 +202,17 @@ public:
       dprintf("PlexServerManager: Computed best server to be [%s] (%s:%d) with score %d.", bestServer->name.c_str(), bestServer->address.c_str(), bestServer->port, bestScore);
     else
       dprintf("PlexServerManager: There is no worthy server.");
+    
+    // If the server changed, notify the home screen, there may be repercussions.
+    if ((!m_bestServer && bestServer) ||
+        (m_bestServer && !bestServer) ||
+        (m_bestServer && bestServer && m_bestServer->equals(bestServer)))
+    {
+      // Notify the main menu.
+      dprintf("PlexServerManager: Notifying home screen about change to best server.");
+      CGUIMessage msg(GUI_MSG_UPDATE_MAIN_MENU, WINDOW_HOME, 300);
+      g_windowManager.SendThreadMessage(msg);
+    }
     
     m_bestServer = bestServer;
   }
