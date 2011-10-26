@@ -121,6 +121,7 @@
       <m mod="ctrl,shift">Notification(MCEKeypress, DVD menu, 3)</m>
       <u mod="ctrl">Notification(MCEKeypress, DVD subtitle, 3)</u>
       <a mod="ctrl,shift">Notification(MCEKeypress, DVD audio, 3)</a>
+      <h>ActivateWindow(Home)</h>
     </keyboard>
   </global>
   <LoginScreen>
