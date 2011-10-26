@@ -20,15 +20,12 @@
 #include "FileCurl.h"
 #include "PlexDirectory.h"
 #include "PlexLibrarySectionManager.h"
+#include "PlexServerManager.h"
 
 using namespace std;
 using namespace XFILE;
 
-#ifdef _DEBUG
 const string cMyPlexURL = "my.plexapp.com";
-#else
-const string cMyPlexURL = "my.plexapp.com";
-#endif
 
 #define kPlaylistCacheTime 10
 
@@ -104,6 +101,8 @@ class MyPlexManager
     
     // Remove all the myPlex sections, clear the queue.
     PlexLibrarySectionManager::Get().removeRemoteSections();
+    vector<PlexServerPtr> servers;
+    PlexServerManager::Get().setRemoteServers(servers);
     m_playlistCache.clear();
     
     // Notify.
@@ -178,9 +177,11 @@ class MyPlexManager
       m_firstRun = false;
     }
     
-    vector<CFileItemPtr> sharedSections;
-    vector<CFileItemPtr> ownedSections;
-    CFileItemList        sections;
+    vector<CFileItemPtr>  sharedSections;
+    vector<CFileItemPtr>  ownedSections;
+    CFileItemList         sections;
+    set<string>           uuids;
+    vector<PlexServerPtr> servers;
     
     // Get the list of sections.
     if (getSections(sections))
@@ -191,9 +192,13 @@ class MyPlexManager
         CFileItemPtr section = sections[i];
         
         // Make sure it has the token.
+        bool owned = false;
         string token = section->GetProperty("accessToken");
         if (token.empty())
+        {
           token = g_guiSettings.GetString("myplex.token");
+          owned = true;
+        }
         
         // Add token to path and to fanart.
         section->m_strPath = addArgument(section->m_strPath, "X-Plex-Token=" + token);
@@ -210,7 +215,21 @@ class MyPlexManager
           sharedSections.push_back(section);
           section->SetLabel2(section->GetProperty("sourceTitle"));
         }
+        
+        // If we own it and the server hasn't been added, do so now.
+        if (owned == true && uuids.count(section->GetProperty("machineIdentifier")) == 0)
+        {
+          string uuid = section->GetProperty("machineIdentifier");
+          string name = section->GetProperty("serverName");
+          string address = section->GetProperty("address");
+          unsigned short port = boost::lexical_cast<unsigned short>(section->GetProperty("port"));
+          
+          PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, address, port, token));
+          servers.push_back(server);
+        }
       }
+      
+      PlexServerManager::Get().setRemoteServers(servers);
     }
     
     // Get the queue.

@@ -1328,6 +1328,7 @@
 		E33466A50D2E5103005A65EC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E33979940D62FD47004ECDDA /* DVDInputStreamTV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDInputStreamTV.cpp; sourceTree = "<group>"; };
 		E33979950D62FD47004ECDDA /* DVDInputStreamTV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDInputStreamTV.h; sourceTree = "<group>"; };
+		E33C7FD41456A783003D6A26 /* PlexServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlexServerManager.h; sourceTree = "<group>"; };
 		E34B56AB1452237C004A7CCE /* CocoaUtilsPlus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CocoaUtilsPlus.cpp; path = plex/CocoaUtilsPlus.cpp; sourceTree = "<group>"; };
 		E34B56AC1452237C004A7CCE /* CocoaUtilsPlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaUtilsPlus.h; path = plex/CocoaUtilsPlus.h; sourceTree = "<group>"; };
 		E34B56B114524E2C004A7CCE /* PlexLibrarySectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexLibrarySectionManager.h; path = plex/PlexLibrarySectionManager.h; sourceTree = "<group>"; };
@@ -3045,6 +3046,7 @@
 			isa = PBXGroup;
 			children = (
 				E3957ED714525C5900D31C95 /* MyPlexManager.h */,
+				E33C7FD41456A783003D6A26 /* PlexServerManager.h */,
 				E34B56B114524E2C004A7CCE /* PlexLibrarySectionManager.h */,
 				7482B23112E8C1470077A38C /* PlexSourceScanner.cpp */,
 				7482B23212E8C1470077A38C /* PlexSourceScanner.h */,

@@ -1331,6 +1331,8 @@ class PlexMediaDirectory : public PlexMediaNode
     SetProperty(pItem, el, "accessToken");
     SetProperty(pItem, el, "serverName");
     SetProperty(pItem, el, "sourceTitle");
+    SetProperty(pItem, el, "address");
+    SetProperty(pItem, el, "port");
   }
 };
 
