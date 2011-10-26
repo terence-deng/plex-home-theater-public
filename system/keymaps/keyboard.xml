@@ -52,7 +52,7 @@
       <backspace>ParentDir</backspace>
       <m>ActivateWindow(PlayerControls)</m>
       <s>ActivateWindow(shutdownmenu)</s>
-      <escape>PreviousMenu</escape>
+      <escape>ParentDir</escape>
       <i>Info</i>
       <menu>ContextMenu</menu>
       <c>ContextMenu</c>
