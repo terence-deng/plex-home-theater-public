@@ -806,6 +806,12 @@ bool CFileCurl::Put(const CStdString& strURL, CStdString& strHTML)
   return Service(strURL, "", strHTML);
 }
 
+bool CFileCurl::Delete(const CStdString& strURL, CStdString& strHTML)
+{
+  m_verb = "DELETE";
+  return Service(strURL, "", strHTML);
+}
+
 bool CFileCurl::Service(const CStdString& strURL, const CStdString& strPostData, CStdString& strHTML)
 {
   m_postdata = strPostData;

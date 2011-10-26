@@ -55,6 +55,7 @@ namespace XFILE
       bool Post(const CStdString& strURL, const CStdString& strPostData, CStdString& strHTML);
       bool Get(const CStdString& strURL, CStdString& strHTML);
       bool Put(const CStdString& strURL, CStdString& strHTML);
+      bool Delete(const CStdString& strURL, CStdString& strHTML);
       bool ReadData(CStdString& strHTML);
       bool Download(const CStdString& strURL, const CStdString& strFileName, LPDWORD pdwSize = NULL);
       bool IsInternet(bool checkDNS = true);
