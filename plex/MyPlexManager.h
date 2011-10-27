@@ -226,6 +226,7 @@ class MyPlexManager
           
           PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, address, port, token));
           servers.push_back(server);
+          uuids.insert(uuid);
         }
       }
       
