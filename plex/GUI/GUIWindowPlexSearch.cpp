@@ -34,6 +34,7 @@
 #include "GUIUserMessages.h"
 #include "PlexContentWorker.h"
 #include "PlexDirectory.h"
+#include "PlexServerManager.h"
 #include "Settings.h"
 #include "Util.h"
 
@@ -43,6 +44,8 @@
 #define CTL_BUTTON_SPACE     32
 
 #define SEARCH_DELAY         750
+
+string AppendPathToURL(const string& baseURL, const string& relativePath);
 
 ///////////////////////////////////////////////////////////////////////////////
 CGUIWindowPlexSearch::CGUIWindowPlexSearch()
@@ -438,6 +441,20 @@ void CGUIWindowPlexSearch::StartSearch(const string& search)
   {
     // Issue the root of the new search, and note that when we receive results, clear out the old ones.
     m_workerManager->enqueue(WINDOW_PLEX_SEARCH, BuildSearchUrl("http://127.0.0.1:32400/search", search), 0);
+    
+    // If we have shared servers, search them too.
+    if (g_guiSettings.GetBool("myplex.searchsharedlibraries"))
+    {
+      vector<PlexServerPtr> sharedServers;
+      PlexServerManager::Get().getSharedServers(sharedServers);
+      
+      BOOST_FOREACH(PlexServerPtr server, sharedServers)
+      {
+        string url = AppendPathToURL(server->url(), "search");
+        m_workerManager->enqueue(WINDOW_PLEX_SEARCH, BuildSearchUrl(url, search), 0);
+      }
+    }
+    
     m_resetOnNextResults = true;
   }
 }
