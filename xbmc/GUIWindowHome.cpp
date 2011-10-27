@@ -211,7 +211,7 @@ int CGUIWindowHome::LookupIDFromKey(const std::string& key)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-static string AppendPathToURL(const string& baseURL, const string& relativePath)
+string AppendPathToURL(const string& baseURL, const string& relativePath)
 {
   string ret = baseURL;
   string args;
