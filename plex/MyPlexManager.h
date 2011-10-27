@@ -182,6 +182,7 @@ class MyPlexManager
     CFileItemList         sections;
     set<string>           uuids;
     vector<PlexServerPtr> servers;
+    vector<PlexServerPtr> sharedServers;
     
     // Get the list of sections.
     if (getSections(sections))
@@ -217,7 +218,7 @@ class MyPlexManager
         }
         
         // If we own it and the server hasn't been added, do so now.
-        if (owned == true && uuids.count(section->GetProperty("machineIdentifier")) == 0)
+        if (uuids.count(section->GetProperty("machineIdentifier")) == 0)
         {
           string uuid = section->GetProperty("machineIdentifier");
           string name = section->GetProperty("serverName");
@@ -225,12 +226,18 @@ class MyPlexManager
           unsigned short port = boost::lexical_cast<unsigned short>(section->GetProperty("port"));
           
           PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, address, port, token));
-          servers.push_back(server);
+          
+          if (owned == true)
+            servers.push_back(server);
+          else
+            sharedServers.push_back(server);
+          
           uuids.insert(uuid);
         }
       }
       
       PlexServerManager::Get().setRemoteServers(servers);
+      PlexServerManager::Get().setSharedServers(sharedServers);
     }
     
     // Get the queue.
