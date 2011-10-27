@@ -158,28 +158,30 @@ public:
     updateBestServer();
     dump();
   }
+
+  /// Set the shared servers.
+  void setSharedServers(const vector<PlexServerPtr>& sharedServers)
+  {
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
+    m_sharedServers.assign(sharedServers.begin(), sharedServers.end());
+  }
   
+  /// Get shared servers.
+  void getSharedServers(vector<PlexServerPtr>& sharedServers)
+  {
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
+    sharedServers.assign(m_sharedServers.begin(), m_sharedServers.end());
+  }
+
   /// Remove all non-detected servers.
-  void setRemoteServers(vector<PlexServerPtr>& remoteServers)
+  void setRemoteServers(const vector<PlexServerPtr>& remoteServers)
   {
     boost::recursive_mutex::scoped_lock lk(m_mutex);
 
     // See which ones are actually new.
     set<string> addedServers;
-    set<string> remoteServerKeys;
-    BOOST_FOREACH(PlexServerPtr server, remoteServers)
-    {
-      if (m_servers.find(server->key()) == m_servers.end())
-        addedServers.insert(server->key());
-      
-      remoteServerKeys.insert(server->key());
-    }
-    
-    // Find out which ones are deleted.
     set<PlexServerPtr> deletedServers;
-    BOOST_FOREACH(key_server_pair pair, m_servers)
-      if (pair.second->detected() == false && remoteServerKeys.find(pair.first) == remoteServerKeys.end())
-        deletedServers.insert(pair.second);
+    computeAddedAndRemoved(remoteServers, addedServers, deletedServers);
     
     // Whack existing detected servers.
     set<string> detected;
@@ -209,6 +211,24 @@ public:
   }
   
  private:
+  
+  /// Compute added and removed sets.
+  void computeAddedAndRemoved(const vector<PlexServerPtr>& remoteServers, set<string>& addedServers, set<PlexServerPtr>& deletedServers)
+  {
+    set<string> remoteServerKeys;
+    
+    BOOST_FOREACH(PlexServerPtr server, remoteServers)
+    {
+      if (m_servers.find(server->key()) == m_servers.end())
+        addedServers.insert(server->key());
+      remoteServerKeys.insert(server->key());
+    }
+    
+    // Find out which ones are deleted.
+    BOOST_FOREACH(key_server_pair pair, m_servers)
+    if (pair.second->detected() == false && remoteServerKeys.find(pair.first) == remoteServerKeys.end())
+      deletedServers.insert(pair.second);
+  }
   
   /// Figure out what the best server is.
   void updateBestServer()
@@ -279,5 +299,6 @@ public:
   
   PlexServerPtr              m_bestServer;
   map<string, PlexServerPtr> m_servers;
+  vector<PlexServerPtr>      m_sharedServers;
   boost::recursive_mutex     m_mutex;
 };
