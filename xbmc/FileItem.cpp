@@ -247,6 +247,8 @@ CFileItem::~CFileItem(void)
   m_videoInfoTag = NULL;
   m_pictureInfoTag = NULL;
   m_contextItems.clear();
+  m_mediaItems.clear();
+  m_mediaParts.clear();
 }
 
 const CFileItem& CFileItem::operator=(const CFileItem& item)
