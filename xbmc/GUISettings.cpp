@@ -387,6 +387,7 @@ void CGUISettings::Initialize()
     transcodeQualityMap.insert(make_pair(43000+i,i));
   
   AddInt(myPlex, "myplex.remoteplexquality", 13149, -1, transcodeQualityMap, SPIN_CONTROL_TEXT);
+  AddBool(myPlex, "myplex.searchsharedlibraries", 13143, true);
   
   // Button.
   AddString(myPlex, "myplex.signin", GetString("myplex.token").empty() ? 19002 : 19003, "", BUTTON_CONTROL_STANDARD);
