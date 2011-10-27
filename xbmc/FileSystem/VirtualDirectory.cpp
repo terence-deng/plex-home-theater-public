@@ -35,6 +35,7 @@
 #ifdef _WIN32
 #include "WIN32Util.h"
 #endif
+#include "boost/foreach.hpp"
 
 using namespace XFILE;
 
@@ -88,6 +89,9 @@ bool CVirtualDirectory::GetDirectory(const CStdString& strPath, CFileItemList &i
 
   // return the root listing
   items.m_strPath=strPath;
+  
+  // create a map to keep track of items with duplicate names
+  std::map<CStdString, std::vector<CFileItemPtr> > itemLists;
 
   // grab our shares
   for (unsigned int i = 0; i < shares.size(); ++i)
@@ -138,7 +142,30 @@ bool CVirtualDirectory::GetDirectory(const CStdString& strPath, CFileItemList &i
     else
       pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_NONE);
 
-    items.Add(pItem);
+    itemLists[pItem->GetLabel()].push_back(pItem);
+  }
+
+  // Iterate over the map of item lists and construct the final list
+  std::map<CStdString, std::vector<CFileItemPtr> >::iterator p;
+  for (p = itemLists.begin(); p != itemLists.end(); p++)
+  {
+    CStdString name = p->first;
+    std::vector<CFileItemPtr> allItems = p->second;
+    
+    // Iterate over each list of items with the same name
+    BOOST_FOREACH(CFileItemPtr item, allItems)
+    {
+      // If there are multiple items with this name, and the item has a source label, append it to the item's label
+      if (allItems.size() > 1 && item->HasProperty("SourceLabel"))
+      {
+        CStdString newLabel;
+        newLabel.Format("%s (%s)", item->GetLabel().c_str(), item->GetProperty("SourceLabel").c_str());
+        item->SetLabel(newLabel);
+      }
+      
+      // Add the item to the final list
+      items.Add(item);
+    }
   }
 
   return true;
