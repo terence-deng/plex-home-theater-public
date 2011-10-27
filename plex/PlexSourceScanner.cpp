@@ -9,6 +9,7 @@
 #include "Log.h"
 #include "File.h"
 #include "FileItem.h"
+#include "GUISettings.h"
 #include "Key.h"
 #include "Picture.h"
 #include "PlexDirectory.h"
@@ -21,81 +22,88 @@
 #include "PlexLibrarySectionManager.h"
 
 map<std::string, HostSourcesPtr> CPlexSourceScanner::g_hostSourcesMap;
-CCriticalSection CPlexSourceScanner::g_lock;
+boost::recursive_mutex CPlexSourceScanner::g_lock;
 int CPlexSourceScanner::g_activeScannerCount = 0;
 
 using namespace XFILE; 
 
+string AppendPathToURL(const string& baseURL, const string& relativePath);
+
+/////////////////////////////////////////////////////////////////////////////////////
 void CPlexSourceScanner::Process()
 {
   CStdString path;
   
-  CLog::Log(LOGNOTICE, "Plex Source Scanner starting...(%s) (uuid: %s)", m_host.c_str(), m_uuid.c_str());
-  
-  { // Make sure any existing entry is removed.
-    CSingleLock lock(g_lock);
-    g_hostSourcesMap.erase(m_uuid);
+  CLog::Log(LOGNOTICE, "Plex Source Scanner starting...(%s) (uuid: %s)", m_sources->host.c_str(), m_sources->uuid.c_str());
+
+  {
+    boost::recursive_mutex::scoped_lock lock(g_lock);
     g_activeScannerCount++;
   }
   
-  if (m_host.find("members.mac.com") != std::string::npos)
+  if (m_sources->host.find("members.mac.com") != std::string::npos)
   {
-    CLog::Log(LOGWARNING, "Skipping MobileMe address: %s", m_host.c_str());
+    CLog::Log(LOGWARNING, "Skipping MobileMe address: %s", m_sources->host.c_str());
   }
   else
   {
     // Compute the real host label (empty for local server).
-    std::string realHostLabel = m_hostLabel;
+    std::string realHostLabel = m_sources->hostLabel;
     bool onlyShared = false;
+    string url = m_sources->url();
 
     // Act a bit differently if we're talking to a local server.
-    if (Cocoa_IsHostLocal(m_host) == true)
+    bool remoteOwned = false;
+    if (g_guiSettings.GetString("myplex.token").empty() == false && 
+        url.find(g_guiSettings.GetString("myplex.token")) != string::npos)
+      remoteOwned = true;
+    
+    if (Cocoa_IsHostLocal(m_sources->host) == true || remoteOwned == true)
     {
       realHostLabel = "";
       onlyShared = false;
     }
     
     // Create a new entry.
-    HostSourcesPtr sources = HostSourcesPtr(new HostSources());
-    CLog::Log(LOGNOTICE, "Scanning remote server: %s", m_host.c_str());
+    CLog::Log(LOGNOTICE, "Scanning remote server: %s", m_sources->host.c_str());
     
     // Scan the server.
-    path.Format("%s/music/", m_url);
-    AutodetectPlexSources(path, sources->musicSources, realHostLabel, onlyShared);
+    path = AppendPathToURL(url, "music");
+    AutodetectPlexSources(path, m_sources->musicSources, realHostLabel, onlyShared);
+    dprintf("Plex Source Scanner for %s: found %d music channels.", m_sources->hostLabel.c_str(), m_sources->musicSources.size());
     
-    path.Format("%s/video/", m_url);
-    AutodetectPlexSources(path, sources->videoSources, realHostLabel, onlyShared);
+    path = AppendPathToURL(url, "video");
+    AutodetectPlexSources(path, m_sources->videoSources, realHostLabel, onlyShared);
+    dprintf("Plex Source Scanner for %s: found %d video channels.", m_sources->hostLabel.c_str(), m_sources->videoSources.size());
     
-    path.Format("%s/photos/", m_url);
-    AutodetectPlexSources(path, sources->pictureSources, realHostLabel, onlyShared);
+    path = AppendPathToURL(url, "photos");
+    AutodetectPlexSources(path, m_sources->pictureSources, realHostLabel, onlyShared);
+    dprintf("Plex Source Scanner for %s: found %d photo channels.", m_sources->hostLabel.c_str(), m_sources->pictureSources.size());
       
-    path.Format("%s/applications/", m_url);
-    AutodetectPlexSources(path, sources->applicationSources, realHostLabel, onlyShared);
+    path = AppendPathToURL(url, "applications");
+    AutodetectPlexSources(path, m_sources->applicationSources, realHostLabel, onlyShared);
+    dprintf("Plex Source Scanner for %s: found %d application channels.", m_sources->hostLabel.c_str(), m_sources->applicationSources.size());
+    
     // Library sections.
-    path.Format("%s/library/sections", m_url);
+    path = AppendPathToURL(url, "library/sections");
     CPlexDirectory plexDir(true, false);
     plexDir.SetTimeout(5);
-    sources->librarySections.ClearItems();
-    plexDir.GetDirectory(path, sources->librarySections);
+    m_sources->librarySections.ClearItems();
+    plexDir.GetDirectory(path, m_sources->librarySections);
     
     // Edit for friendly name.
     vector<CFileItemPtr> sections;
-    for (int i=0; i<sources->librarySections.Size(); i++)
+    for (int i=0; i<m_sources->librarySections.Size(); i++)
     {
-      CFileItemPtr item = sources->librarySections[i];
-      item->SetLabel2(m_hostLabel);
-      item->SetProperty("machineIdentifier", m_uuid);
+      CFileItemPtr item = m_sources->librarySections[i];
+      item->SetLabel2(m_sources->hostLabel);
+      item->SetProperty("machineIdentifier", m_sources->uuid);
       CLog::Log(LOGNOTICE, " -> Local section '%s' found.", item->GetLabel().c_str());
       sections.push_back(item);
     }
     
     // Add the sections.
-    PlexLibrarySectionManager::Get().addLocalSections(m_uuid, sections);
-    
-    { // Add the entry to the map.
-      CSingleLock lock(g_lock);
-      g_hostSourcesMap[m_uuid] = sources;
-    }
+    PlexLibrarySectionManager::Get().addLocalSections(m_sources->uuid, sections);
     
     // Notify the UI.
     CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE_REMOTE_SOURCES);
@@ -105,25 +113,61 @@ void CPlexSourceScanner::Process()
     CGUIMessage msg2(GUI_MSG_UPDATE_MAIN_MENU, WINDOW_HOME, 300);
     g_windowManager.SendThreadMessage(msg2);
   
-    CLog::Log(LOGNOTICE, "Scanning host %s is complete.", m_host.c_str());
+    CLog::Log(LOGNOTICE, "Scanning host %s is complete.", m_sources->host.c_str());
   }
   
-  CSingleLock lock(g_lock);
+  boost::recursive_mutex::scoped_lock lock(g_lock);
   g_activeScannerCount--;
   
-  CLog::Log(LOGNOTICE, "Plex Source Scanner finished for host %s (%d left)", m_host.c_str(), g_activeScannerCount);
+  CLog::Log(LOGNOTICE, "Plex Source Scanner finished for host %s (%d left)", m_sources->host.c_str(), g_activeScannerCount);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 void CPlexSourceScanner::ScanHost(const std::string& uuid, const std::string& host, const std::string& hostLabel, const std::string& url)
 {
-  new CPlexSourceScanner(uuid, host, hostLabel, url);
+  boost::recursive_mutex::scoped_lock lock(g_lock);
+  
+  // Find or create a new host sources.
+  HostSourcesPtr sources;
+  
+  dprintf("Plex Source Scanner: asked to scan host %s (%s)", host.c_str(), uuid.c_str());
+  if (g_hostSourcesMap.count(uuid) != 0)
+  {
+    // We have an addition source.
+    sources = g_hostSourcesMap[uuid];
+    sources->urls.insert(url);
+    
+    dprintf("Plex Source Scanner: got existing server %s (local: %d count: %d)", host.c_str(), Cocoa_IsHostLocal(host), sources->urls.size());
+  }
+  else
+  {
+    // New one.
+    sources = HostSourcesPtr(new HostSources(uuid, host, hostLabel, url));
+    g_hostSourcesMap[uuid] = sources;
+    dprintf("Plex Source Scanner: got new server %s (local: %d count: %d)", host.c_str(), Cocoa_IsHostLocal(host), sources->urls.size());
+  }
+  
+  new CPlexSourceScanner(sources);
 }
 
-void CPlexSourceScanner::RemoveHost(const std::string& uuid)
+/////////////////////////////////////////////////////////////////////////////////////
+void CPlexSourceScanner::RemoveHost(const std::string& uuid, const std::string& url, bool force)
 {
   { // Remove the entry from the map in case it was remote.
-    CSingleLock lock(g_lock);
-    g_hostSourcesMap.erase(uuid);
+    boost::recursive_mutex::scoped_lock lock(g_lock);
+    
+    HostSourcesPtr sources = g_hostSourcesMap[uuid];
+    if (sources)
+    {
+      // Remove the URL, and if we still have routes to the sources, get out.
+      sources->urls.erase(url);
+      dprintf("Plex Source Scanner: removing server %s (url: %s), %d urls left.", sources->hostLabel.c_str(), url.c_str(), sources->urls.size());
+      if (sources->urls.size() > 0 && force == false)
+        return;
+      
+      // If the count went down to zero, whack it.
+      g_hostSourcesMap.erase(uuid);
+    }    
   }
   
   // Notify the library section manager.
@@ -141,9 +185,11 @@ void CPlexSourceScanner::RemoveHost(const std::string& uuid)
   g_windowManager.SendThreadMessage(msg3);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 void CPlexSourceScanner::MergeSourcesForWindow(int windowId)
 {
-  CSingleLock lock(g_lock);
+  boost::recursive_mutex::scoped_lock lock(g_lock);
+  
   switch (windowId) 
   {
     case WINDOW_MUSIC_FILES:
@@ -175,6 +221,7 @@ void CPlexSourceScanner::MergeSourcesForWindow(int windowId)
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 void CPlexSourceScanner::MergeSource(VECSOURCES& sources, VECSOURCES& remoteSources)
 {
   BOOST_FOREACH(CMediaSource source, remoteSources)
@@ -189,6 +236,7 @@ void CPlexSourceScanner::MergeSource(VECSOURCES& sources, VECSOURCES& remoteSour
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 void CPlexSourceScanner::CheckForRemovedSources(VECSOURCES& sources, int windowId)
 {
   VECSOURCES::iterator iterSources = sources.begin();
@@ -233,6 +281,7 @@ void CPlexSourceScanner::CheckForRemovedSources(VECSOURCES& sources, int windowI
   }  
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCES& dstSources, CStdString strLabel, bool onlyShared)
 {
   bool bIsSourceName = true;
@@ -256,7 +305,7 @@ void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCE
         CMediaSource share;
         share.strName = item->GetLabel();
         
-        // Add the label (if provided
+        // Add the label (if provided).
         if (strLabel != "")
           share.strName.Format("%s (%s)", share.strName, strLabel);
         
@@ -329,6 +378,7 @@ void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCE
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 void CPlexSourceScanner::RemovePlexSources(CStdString strPlexPath, VECSOURCES& dstSources)
 {
   for ( int i = dstSources.size() - 1; i >= 0; i--)

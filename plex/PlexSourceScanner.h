@@ -11,7 +11,9 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 #include <boost/foreach.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 
+#include "CocoaUtilsPlus.h"
 #include "CriticalSection.h"
 #include "FileItem.h"
 #include "SingleLock.h"
@@ -22,6 +24,44 @@ class HostSources
 {
  public:
 
+  HostSources(const std::string& uuid, const std::string& host, const std::string& hostLabel, const std::string& url) 
+    : uuid(uuid), host(host), hostLabel(hostLabel)
+  {
+    urls.insert(url);
+  }
+    
+  void reset()
+  {
+    videoSources.clear();
+    musicSources.clear();
+    pictureSources.clear();
+    applicationSources.clear();
+    
+    librarySections.Clear();
+  }
+  
+  string url()
+  {
+    string ret;
+    
+    BOOST_FOREACH(string url, urls)
+    {
+      ret = url;
+
+      // If we found a local one, be happy.
+      if (Cocoa_IsHostLocal(url))
+        break;
+    }
+    
+    // If we have a local one, prefer it.
+    return ret;
+  }
+  
+  string        uuid;
+  string        host;
+  string        hostLabel;
+  set<string>   urls;
+  bool          localConnection;
   VECSOURCES    videoSources;
   VECSOURCES    musicSources;
   VECSOURCES    pictureSources;
@@ -40,13 +80,13 @@ public:
   virtual void Process();
   
   static void ScanHost(const std::string& uuid, const std::string& host, const std::string& hostLabel, const std::string& url);
-  static void RemoveHost(const std::string& uuid);
+  static void RemoveHost(const std::string& uuid, const std::string& url, bool force=false);
   
   static void MergeSourcesForWindow(int windowId);
   
-  static void Lock() { ::EnterCriticalSection(g_lock); }
+  static void Lock() { g_lock.lock(); }
   static std::map<std::string, HostSourcesPtr>& GetMap() { return g_hostSourcesMap; }
-  static void Unlock() { ::LeaveCriticalSection(g_lock); }
+  static void Unlock() { g_lock.unlock(); }
 
   static int GetActiveScannerCount() { return g_activeScannerCount; } 
   
@@ -58,11 +98,8 @@ protected:
   static void MergeSource(VECSOURCES& sources, VECSOURCES& remoteSources);
   static void CheckForRemovedSources(VECSOURCES& sources, int windowId);
   
-  CPlexSourceScanner(const std::string& uuid, const std::string& host, const std::string& hostLabel, const std::string& url)
-  : m_uuid(uuid)
-  , m_host(host)
-  , m_hostLabel(hostLabel)
-  , m_url(url)
+  CPlexSourceScanner(const HostSourcesPtr& sources)
+    : m_sources(sources)
   {
     Create(true);
   }
@@ -71,12 +108,9 @@ protected:
   
 private:
   
-  std::string m_uuid;
-  std::string m_host;
-  std::string m_hostLabel;
-  std::string m_url;
+  HostSourcesPtr m_sources;
   
   static std::map<std::string, HostSourcesPtr> g_hostSourcesMap;
-  static CCriticalSection g_lock;
+  static boost::recursive_mutex g_lock;
   static int g_activeScannerCount;
 };
