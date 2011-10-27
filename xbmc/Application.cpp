@@ -276,6 +276,7 @@
 #include "PlexMediaServerPlayer.h"
 #include "PlexMediaServerQueue.h"
 #include "MyPlexManager.h"
+#include "PlexServerManager.h"
 
 using namespace std;
 using namespace ADDON;
@@ -3670,9 +3671,16 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
     return false;
   }
 
+  PlexServerPtr bestServer = PlexServerManager::Get().bestServer();
   CPlayerOptions options;
   PLAYERCOREID eNewCore = EPC_NONE;
-  if( bRestart )
+  
+  if (bestServer->local == false && item.IsWebKit())
+  {
+    // We're playing WebKit content from a non-local server - use dvdplayer
+    eNewCore = EPC_DVDPLAYER;
+  }
+  else if( bRestart )
   {
     // have to be set here due to playstack using this for starting the file
     options.starttime = item.m_lStartOffset / 75.0;
