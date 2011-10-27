@@ -1240,7 +1240,10 @@ class PlexMediaDirectory : public PlexMediaNode
   {
     string type;
     if (el.Attribute("type"))
+    {
       type = el.Attribute("type");
+      pItem->SetProperty("type", type);
+    }
 
     pItem->SetLabel(GetLabel(el));
 
