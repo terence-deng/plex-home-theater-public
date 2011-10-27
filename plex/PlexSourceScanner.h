@@ -19,6 +19,7 @@
 #include "SingleLock.h"
 #include "Settings.h"
 #include "Thread.h"
+#include "URL.h"
 
 class HostSources
 {
@@ -46,11 +47,12 @@ class HostSources
     
     BOOST_FOREACH(string url, urls)
     {
+      CURL theURL(url);
       ret = url;
 
       // If we found a local one, be happy.
-      if (Cocoa_IsHostLocal(url))
-        break;
+      if (Cocoa_IsHostLocal(theURL.GetHostName()))
+        return url;
     }
     
     // If we have a local one, prefer it.
