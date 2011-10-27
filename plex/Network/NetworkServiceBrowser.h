@@ -175,25 +175,37 @@ class NetworkServiceBrowser : public NetworkServiceBase
 
       m_mutex.lock();
       
+      // Get the source address of the packet. If it's a local address (meaning coming from
+      // this machine), then replace it with 127.0.0.1. The reason for this is that we want
+      // communication with the server to use localhost or private address, and not a public
+      // address, which this address could potentially be, if the machine is acting as a gateway.
+      //
+      boost::asio::ip::address address = m_endpoint.address();
+      if (NetworkInterface::IsLocalAddress(address.to_string()))
+      {
+        dprintf("NetworkService: Changing %s to localhost.", address.to_string().c_str());
+        address = boost::asio::ip::address::from_string("127.0.0.1");
+      }
+      
       // Look up the service.
       NetworkServicePtr service;
-      if (m_services.find(m_endpoint.address()) != m_services.end())
-        service = m_services[m_endpoint.address()];
+      if (m_services.find(address) != m_services.end())
+        service = m_services[address];
       
       bool notifyAdd = false;
       bool notifyDel = false;
       bool notifyUpdate = boost::starts_with(cmd, "UPDATE");
       
-      if (m_ignoredAddresses.find(m_endpoint.address().to_string()) != m_ignoredAddresses.end())
+      if (m_ignoredAddresses.find(address.to_string()) != m_ignoredAddresses.end())
       {
         // Ignore this packet.
-        iprintf("NetworkService: Ignoring a packet from this uninteresting interface %s.", m_endpoint.address().to_string().c_str());
+        iprintf("NetworkService: Ignoring a packet from this uninteresting interface %s.", address.to_string().c_str());
       }
       else if (boost::starts_with(cmd, "BYE"))
       {
         // Whack it.
         notifyDel = true;
-        m_services.erase(m_endpoint.address());
+        m_services.erase(address);
       }
       else
       {
@@ -211,7 +223,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
           NetworkServicePtr oldService = findServiceByIdentifier(params["Resource-Identifier"]);
           if (oldService)
           {
-            dprintf("NetworkService: Have an old server at index %d and address %s (we just got packet from %s, index %d)", oldService->interfaceIndex(), oldService->address().to_string().c_str(), m_endpoint.address().to_string().c_str(), interfaceIndex);
+            dprintf("NetworkService: Have an old server at index %d and address %s (we just got packet from %s, index %d)", oldService->interfaceIndex(), oldService->address().to_string().c_str(), address.to_string().c_str(), interfaceIndex);
             
             // Whack the old one and treat it as an update.
             m_services.erase(oldService->address());
@@ -224,8 +236,8 @@ class NetworkServiceBrowser : public NetworkServiceBase
           }
           
           // Add the new mapping.
-          service = NetworkServicePtr(new NetworkService(m_endpoint.address(), interfaceIndex, params));
-          m_services[m_endpoint.address()] = service;
+          service = NetworkServicePtr(new NetworkService(address, interfaceIndex, params));
+          m_services[address] = service;
         }
       }
         

@@ -344,7 +344,7 @@
   <string id="417">View: Big Icons</string>
   <string id="418">Enable Library</string>
   <string id="419"></string>
-  <string id="420"></string>
+  <string id="420">HDMI</string>
   <string id="421"></string>
   <string id="422">Delete Albuminfo</string>
   <string id="423">Delete CDDB Info</string>
@@ -1007,6 +1007,7 @@
 
   <string id="13148">Allow Picking Alternate Library Media</string>
   <string id="13149">Quality From Remote Media Servers</string>
+  <string id="13143">Search Remote Libraries</string>
 
   <string id="13150">HDD Key:</string>
   <string id="13151">HDD Temp:</string>

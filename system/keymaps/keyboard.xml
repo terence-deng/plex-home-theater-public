@@ -590,4 +590,9 @@
       <f5>VolumeDown</f5>
 		</keyboard>
 	</NowPlaying>
+  <PlexSearch>
+    <keyboard>
+      <escape>PreviousMenu</escape>
+    </keyboard>
+  </PlexSearch>
 </keymap>

@@ -287,6 +287,7 @@ static const ActionMapping windows[] =
         {"startwindow"              , WINDOW_START},
         {"startup"                  , WINDOW_STARTUP_ANIM},
         {"nowplaying"               , WINDOW_NOW_PLAYING},
+        {"plexsearch"               , WINDOW_PLEX_SEARCH},
        };
 
 

@@ -51,7 +51,7 @@ public:
   virtual void handleServiceDeparture(NetworkServicePtr& service) 
   {
     dprintf("NetworkServiceBrowser: SERVICE departed after not being seen for %f seconds: %s", service->timeSinceLastSeen(), service->address().to_string().c_str());
-    CPlexSourceScanner::RemoveHost(service->getResourceIdentifier());
+    CPlexSourceScanner::RemoveHost(service->getResourceIdentifier(), service->getUrl(), true);
     PlexServerManager::Get().removeServer(service->getResourceIdentifier(), service->getParam("Name"), service->address().to_string(), service->port());
   }
   

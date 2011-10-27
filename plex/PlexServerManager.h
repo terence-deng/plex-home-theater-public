@@ -18,6 +18,7 @@
 #include "GUIUserMessages.h"
 #include "GUIWindowManager.h"
 #include "Key.h"
+#include "PlexSourceScanner.h"
 
 using namespace std;
 using namespace XFILE;
@@ -157,31 +158,77 @@ public:
     updateBestServer();
     dump();
   }
-  
-  /// Remove all non-detected servers.
-  void setRemoteServers(vector<PlexServerPtr>& remoteServers)
+
+  /// Set the shared servers.
+  void setSharedServers(const vector<PlexServerPtr>& sharedServers)
   {
     boost::recursive_mutex::scoped_lock lk(m_mutex);
+    m_sharedServers.assign(sharedServers.begin(), sharedServers.end());
+  }
+  
+  /// Get shared servers.
+  void getSharedServers(vector<PlexServerPtr>& sharedServers)
+  {
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
+    sharedServers.assign(m_sharedServers.begin(), m_sharedServers.end());
+  }
+
+  /// Remove all non-detected servers.
+  void setRemoteServers(const vector<PlexServerPtr>& remoteServers)
+  {
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
+
+    // See which ones are actually new.
+    set<string> addedServers;
+    set<PlexServerPtr> deletedServers;
+    computeAddedAndRemoved(remoteServers, addedServers, deletedServers);
     
-    // Set to whack.
-    set<string> whack;
+    // Whack existing detected servers.
+    set<string> detected;
     BOOST_FOREACH(key_server_pair pair, m_servers)
       if (pair.second->detected() == false)
-        whack.insert(pair.first);
+        detected.insert(pair.first);
     
-    // Whack 'em.
-    BOOST_FOREACH(string key, whack)
+    BOOST_FOREACH(string key, detected)
       m_servers.erase(key);
     
     // Add the new ones.
     BOOST_FOREACH(PlexServerPtr server, remoteServers)
       m_servers[server->key()] = server;
     
+    // Notify the source scanner.
+    BOOST_FOREACH(string s, addedServers)
+    {
+      PlexServerPtr server = m_servers[s];
+      CPlexSourceScanner::ScanHost(server->uuid, server->address, server->name, server->url());
+    }
+    
+    BOOST_FOREACH(PlexServerPtr server, deletedServers)
+      CPlexSourceScanner::RemoveHost(server->uuid, server->url());
+    
     updateBestServer();
     dump();
   }
   
  private:
+  
+  /// Compute added and removed sets.
+  void computeAddedAndRemoved(const vector<PlexServerPtr>& remoteServers, set<string>& addedServers, set<PlexServerPtr>& deletedServers)
+  {
+    set<string> remoteServerKeys;
+    
+    BOOST_FOREACH(PlexServerPtr server, remoteServers)
+    {
+      if (m_servers.find(server->key()) == m_servers.end())
+        addedServers.insert(server->key());
+      remoteServerKeys.insert(server->key());
+    }
+    
+    // Find out which ones are deleted.
+    BOOST_FOREACH(key_server_pair pair, m_servers)
+    if (pair.second->detected() == false && remoteServerKeys.find(pair.first) == remoteServerKeys.end())
+      deletedServers.insert(pair.second);
+  }
   
   /// Figure out what the best server is.
   void updateBestServer()
@@ -252,5 +299,6 @@ public:
   
   PlexServerPtr              m_bestServer;
   map<string, PlexServerPtr> m_servers;
+  vector<PlexServerPtr>      m_sharedServers;
   boost::recursive_mutex     m_mutex;
 };
