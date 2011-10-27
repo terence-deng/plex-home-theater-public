@@ -635,6 +635,9 @@ class PlexMediaNode
              {
                pItem->m_contextItems.push_back(contextItem);
              }
+             
+             delete contextNode;
+             contextNode = 0;
            }
          }
        }
@@ -1729,13 +1732,17 @@ void CPlexDirectory::Parse(const CURL& url, TiXmlElement* root, CFileItemList &i
         items.Add(item);
       }
     }
+    
+    if (element->NextSiblingElement())
+      delete mediaNode;
   }
 
   if (mediaNode != 0)
   {
     CStdString strURL = url.Get();
     mediaNode->ComputeLabels(strURL, strFileLabel, strSecondFileLabel, strDirLabel, strSecondDirLabel);
-  }
+    delete mediaNode;
+  }  
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
