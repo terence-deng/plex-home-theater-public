@@ -2620,6 +2620,11 @@ void CUtil::SplitExecFunction(const CStdString &execString, CStdString &function
 
 int CUtil::GetMatchingSource(const CStdString& strPath1, VECSOURCES& VECSOURCES, bool& bIsSourceName)
 {
+  return GetMatchingSource(strPath1, VECSOURCES, bIsSourceName, "");
+}
+
+int CUtil::GetMatchingSource(const CStdString& strPath1, VECSOURCES& VECSOURCES, bool& bIsSourceName, const CStdString &strMachineIdentifier)
+{
   if (strPath1.IsEmpty())
     return -1;
 
@@ -2673,7 +2678,8 @@ int CUtil::GetMatchingSource(const CStdString& strPath1, VECSOURCES& VECSOURCES,
     if (strPath.Equals(strName))
     {
       bIsSourceName = true;
-      return i;
+      if (strMachineIdentifier == "" || strMachineIdentifier == share.strMachineIdentifier)
+        return i;
     }
   }
 
