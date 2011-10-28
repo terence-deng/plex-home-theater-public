@@ -307,7 +307,7 @@ using namespace ANNOUNCEMENT;
 CApplication& g_application = g_SystemGlobals.m_application;
 
 //extern IDirectSoundRenderer* m_pAudioDecoder;
-CApplication::CApplication(void) : m_itemCurrentFile(new CFileItem), m_progressTrackingItem(new CFileItem)
+CApplication::CApplication(void) : m_itemCurrentFile(new CFileItem), m_progressTrackingItem(new CFileItem), m_pLaunchHost(NULL)
 {
   m_iPlaySpeed = 1;
   m_pPlayer = NULL;
@@ -368,6 +368,7 @@ CApplication::~CApplication(void)
     SDL_DestroyCond(m_frameCond);
 #endif
   delete m_dpms;
+  delete m_pLaunchHost;
 }
 
 bool CApplication::OnEvent(XBMC_Event& newEvent)
@@ -548,6 +549,10 @@ bool CApplication::Create()
   // Init our DllLoaders emu env
   init_emu_environ();
 
+  m_pLaunchHost = DetectLaunchHost();
+
+  if (m_pLaunchHost)
+    m_pLaunchHost->OnStartup();
 
 #ifdef HAS_SDL
   CLog::Log(LOGNOTICE, "Setup SDL");
@@ -3239,6 +3244,9 @@ bool CApplication::Cleanup()
 
     g_windowManager.Remove(WINDOW_DIALOG_SEEK_BAR);
     g_windowManager.Remove(WINDOW_DIALOG_VOLUME_BAR);
+
+    if (m_pLaunchHost)
+      m_pLaunchHost->OnShutdown();
 
 #if 0
     CAddonMgr::Get().DeInit();
