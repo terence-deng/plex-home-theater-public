@@ -48,6 +48,7 @@ static RenderMethodDetail RenderMethodDetails[] = {
     { RENDER_SW     , "Software" },
     { RENDER_PS     , "Pixel Shaders" },
     { RENDER_DXVA   , "DXVA" },
+    { RENDER_SW     , "RGB" },
     { RENDER_INVALID, NULL }
 };
 
@@ -119,7 +120,11 @@ void CWinRenderer::ManageTextures()
 
 void CWinRenderer::SelectRenderMethod()
 {
-  if (CONF_FLAGS_FORMAT_MASK(m_flags) == CONF_FLAGS_FORMAT_DXVA)
+  if (m_flags & CONF_FLAGS_RGB)
+  {
+    m_renderMethod = RENDER_RGB;
+  }
+  else if (CONF_FLAGS_FORMAT_MASK(m_flags) == CONF_FLAGS_FORMAT_DXVA)
   {
     m_renderMethod = RENDER_DXVA;
   }
@@ -188,6 +193,12 @@ bool CWinRenderer::UpdateRenderMethod()
       return false;
     }
   }
+  else if (m_renderMethod == RENDER_RGB && !m_rgbBuffer)
+  {
+    m_rgbBufferSize = m_sourceWidth * m_sourceHeight * 4;
+    m_rgbBuffer = new BYTE[m_rgbBufferSize];
+    memset(m_rgbBuffer, 0, m_rgbBufferSize);
+  }
   return true;
 }
 
@@ -211,13 +222,6 @@ bool CWinRenderer::Configure(unsigned int width, unsigned int height, unsigned i
     }
   }
 
-  if (flags & CONF_FLAGS_RGB && !m_rgbBuffer)
-  {
-    m_rgbBufferSize = width * height * 4;
-    m_rgbBuffer = new BYTE[m_rgbBufferSize];
-    memset(m_rgbBuffer, 0, m_rgbBufferSize);
-  }
-
   m_flags = flags;
 
   // calculate the input frame aspect ratio
@@ -238,7 +242,7 @@ void CWinRenderer::SetRGB32Image(const char *image, int nHeight, int nWidth, int
 {
   CSingleLock lock(g_graphicsContext);
 
-  if (!m_rgbBuffer)
+  if (!m_rgbBuffer || m_renderMethod != RENDER_RGB)
   {
     CLog::Log(LOGERROR, "%s called without first calling Configure", __FUNCTION__);
     return;
@@ -257,7 +261,6 @@ void CWinRenderer::SetRGB32Image(const char *image, int nHeight, int nWidth, int
       memcpy(m_rgbBuffer + (i * nWidth * 4), image + (i * nPitch), nWidth * 4);
 
   m_bRGBImageSet = true;
-  m_renderMethod = RENDER_SW;
 }
 
 int CWinRenderer::NextYV12Texture()
@@ -737,7 +740,7 @@ void CWinRenderer::Render(DWORD flags)
   if ( !(g_graphicsContext.IsFullScreenVideo() || g_graphicsContext.IsCalibrating() ))
     g_graphicsContext.ClipToViewWindow();
 
-  if (m_bRGBImageSet)
+  if (m_renderMethod == RENDER_RGB)
     RenderRGB();
   else if (m_renderMethod == RENDER_SW)
     RenderSW(flags);
