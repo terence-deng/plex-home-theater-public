@@ -144,6 +144,10 @@ vector<in_addr_t> Cocoa_GetLocalAddresses()
       }
     }
   }
+
+  // For some reason, 127.0.0.1 isn't included.
+  ret.push_back(0x0100007F);
+
 #endif
 
   return ret;
