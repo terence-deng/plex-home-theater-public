@@ -40,6 +40,7 @@
   Var VSRedistSetupError
   Var LocalAppDataFolder
   Var SupportedMCEDetected
+  Var MCERegistrationFile
 
 ;--------------------------------
 ;Interface Settings
@@ -99,8 +100,11 @@ Section "Plex" SecPlex
   ;ADD YOUR OWN FILES HERE...
   SetOutPath "$INSTDIR"
   File "${plex_deploy_root}\Plex.exe"
-  File "${plex_deploy_root}\plex-mce-icon.png"
-  File "${plex_deploy_root}\plex-mce-registration.xml"
+  File "${plex_deploy_root}\plex-mce-icon-square.png"
+  File "${plex_deploy_root}\plex-mce-icon-16x9.png"
+  File "${plex_deploy_root}\plex-mce-registration-xp.xml"
+  File "${plex_deploy_root}\plex-mce-registration-vista.xml"
+  File "${plex_deploy_root}\plex-mce-registration-7.xml"
   File "${plex_deploy_root}\copying.txt"
   File "${plex_deploy_root}\LICENSE.GPL"
   File "${plex_deploy_root}\*.dll"
@@ -179,15 +183,15 @@ Section "Media Center Launcher for Plex" SecMCE
   SectionIn 1 #section is in installtype Full, not minimal
 
   ${If} $SupportedMCEDetected == "1"
-    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe /u $INSTDIR\plex-mce-registration.xml"
+    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe /allusers /u $INSTDIR\$MCERegistrationFile"
     StrCpy $0 "?"
-    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" /u "$INSTDIR\plex-mce-registration.xml"'
+    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" /allusers /u "$INSTDIR\$MCERegistrationFile"'
     pop $0
     DetailPrint "RegisterMCEApp /u returned $0"
 
-    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe $INSTDIR\plex-mce-registration.xml"
+    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe /allusers $INSTDIR\$MCERegistrationFile"
     StrCpy $0 "?"
-    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" "$INSTDIR\plex-mce-registration.xml"'
+    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" /allusers "$INSTDIR\$MCERegistrationFile"'
     pop $0
     DetailPrint "RegisterMCEApp returned $0"
 
@@ -250,6 +254,15 @@ Function .onInit
   ${Else}
     DetailPrint "Detected supported MCE version"
     StrCpy $SupportedMCEDetected "1"
+
+    ${If} $0 == 4.0
+      StrCpy $MCERegistrationFile "plex-mce-registration-xp.xml"
+    ${ElseIf} $0 == 5.0
+      StrCpy $MCERegistrationFile "plex-mce-registration-vista.xml"
+    ${Else}
+      StrCpy $MCERegistrationFile "plex-mce-registration-7.xml"
+    ${EndIf}
+
   ${EndIf}
   
   Pop $0
@@ -304,14 +317,27 @@ Function un.UnPageProfileLeave
 ${NSD_GetState} $UnPageProfileCheckbox $UnPageProfileCheckbox_State
 FunctionEnd
 
+Section "Un.Media Center Launcher for Plex" UnSecMCE
+  ${If} $SupportedMCEDetected == "1"
+    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe /allusers /u $INSTDIR\$MCERegistrationFile"
+    StrCpy $0 "?"
+    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" /allusers /u "$INSTDIR\$MCERegistrationFile"'
+    pop $0
+    DetailPrint "RegisterMCEApp /u returned $0"
+  ${EndIf}
+SectionEnd
+
 Section "Uninstall"
 
   SetShellVarContext current
 
   ;ADD YOUR OWN FILES HERE...
   Delete "$INSTDIR\Plex.exe"
-  Delete "$INSTDIR\plex-mce-icon.png"
-  Delete "$INSTDIR\plex-mce-registration.xml"
+  Delete "$INSTDIR\plex-mce-icon-square.png"
+  Delete "$INSTDIR\plex-mce-icon-16x9.png"
+  Delete "$INSTDIR\plex-mce-registration-xp.xml"
+  Delete "$INSTDIR\plex-mce-registration-vista.xml"
+  Delete "$INSTDIR\plex-mce-registration-7.xml"
   Delete "$INSTDIR\copying.txt"
   Delete "$INSTDIR\known_issues.txt"
   Delete "$INSTDIR\LICENSE.GPL"
@@ -416,16 +442,6 @@ Section "-Check DirectX installation" SEC_DIRECTXCHECK
 
 SectionEnd
 
-Section "Un.Media Center Launcher for Plex" UnSecMCE
-  ${If} $SupportedMCEDetected == "1"
-    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe /u $INSTDIR\plex-mce-registration.xml"
-    StrCpy $0 "?"
-    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" /u "$INSTDIR\plex-mce-registration.xml"'
-    pop $0
-    DetailPrint "RegisterMCEApp /u returned $0"
-  ${EndIf}
-SectionEnd
-
 ; Unfortunately NSIS makes it impossible to share code between install and uninstall. So some of this code is duplicated in .onInit
 Function un.onInit
   Push $0
@@ -443,12 +459,21 @@ Function un.onInit
 
   ${If} $0 < 4.0
     DetailPrint "No MCE detected, or unsupported MCE version"
-    SectionSetFlags ${SecMCE} ${SF_RO}
-    SectionSetText ${SecMCE} ""
+    SectionSetFlags ${UnSecMCE} ${SF_RO}
+    SectionSetText ${UnSecMCE} ""
     StrCpy $SupportedMCEDetected "0"
   ${Else}
     DetailPrint "Detected supported MCE version"
     StrCpy $SupportedMCEDetected "1"
+
+    ${If} $0 == 4.0
+      StrCpy $MCERegistrationFile "plex-mce-registration-xp.xml"
+    ${ElseIf} $0 == 5.0
+      StrCpy $MCERegistrationFile "plex-mce-registration-vista.xml"
+    ${Else}
+      StrCpy $MCERegistrationFile "plex-mce-registration-7.xml"
+    ${EndIf}
+
   ${EndIf}
 FunctionEnd
 
