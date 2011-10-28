@@ -585,6 +585,9 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         newItem->SetLabel(item->GetLabel());
         newItem->SetProperty("plex", "1");
         
+        if (item->GetProperty("key").find("/library/sections") != string::npos)
+          newItem->SetProperty("section", "1");
+        
         CStdString sectionName = item->GetLabel();
         if (nameCounts[sectionName.ToLower()] > 1)
           newItem->SetLabel2(item->GetLabel2());
