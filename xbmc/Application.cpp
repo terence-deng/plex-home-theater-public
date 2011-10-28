@@ -3675,7 +3675,7 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
   CPlayerOptions options;
   PLAYERCOREID eNewCore = EPC_NONE;
   
-  if (bestServer->local == false && item.IsWebKit())
+  if (bestServer && bestServer->local == false && item.IsWebKit())
   {
     // We're playing WebKit content from a non-local server - use dvdplayer
     eNewCore = EPC_DVDPLAYER;
