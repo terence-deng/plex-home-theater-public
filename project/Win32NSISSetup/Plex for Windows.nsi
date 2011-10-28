@@ -39,6 +39,7 @@
   Var DirectXSetupError
   Var VSRedistSetupError
   Var LocalAppDataFolder
+  Var SupportedMCEDetected
 
 ;--------------------------------
 ;Interface Settings
@@ -88,16 +89,7 @@
 ;Installer Sections
 
 InstType "Full"
-InstType "Minimal" 
-
-; Unfortunately NSIS makes it impossible to share code between install and uninstall.
-; This code is duplicated in un.onInit
-Function .onInit
-  Push $0
-  System::Call 'shell32::SHGetFolderPathA(i, i, i, i, t) i(0, ${CSIDL_LOCAL_APPDATA}|${CSIDL_FLAG_CREATE}, 0, ${SHGFP_TYPE_DEFAULT}, .r0).r1'
-  StrCpy $LocalAppDataFolder $0
-  Pop $0
-FunctionEnd
+InstType "Minimal"
 
 Section "Plex" SecPlex
 
@@ -107,6 +99,8 @@ Section "Plex" SecPlex
   ;ADD YOUR OWN FILES HERE...
   SetOutPath "$INSTDIR"
   File "${plex_deploy_root}\Plex.exe"
+  File "${plex_deploy_root}\plex-mce-icon.png"
+  File "${plex_deploy_root}\plex-mce-registration.xml"
   File "${plex_deploy_root}\copying.txt"
   File "${plex_deploy_root}\LICENSE.GPL"
   File "${plex_deploy_root}\*.dll"
@@ -180,6 +174,27 @@ Section "Plex" SecPlex
                  "URLInfoAbout" "http://plexapp.com"
 SectionEnd
 
+Section "Media Center Launcher for Plex" SecMCE
+
+  SectionIn 1 #section is in installtype Full, not minimal
+
+  ${If} $SupportedMCEDetected == "1"
+    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe /u $INSTDIR\plex-mce-registration.xml"
+    StrCpy $0 "?"
+    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" /u "$INSTDIR\plex-mce-registration.xml"'
+    pop $0
+    DetailPrint "RegisterMCEApp /u returned $0"
+
+    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe $INSTDIR\plex-mce-registration.xml"
+    StrCpy $0 "?"
+    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" "$INSTDIR\plex-mce-registration.xml"'
+    pop $0
+    DetailPrint "RegisterMCEApp returned $0"
+
+    DetailPrint "MCE integration installed"
+  ${EndIf}
+SectionEnd
+
 SectionGroup "Language" SecLanguages
 Section "English" SecLanguageEnglish
   SectionIn 1 2 #section is in installtype Full and Minimal
@@ -212,6 +227,34 @@ SectionGroupEnd
 !include /nonfatal "plugins.nsi"
 ;SectionGroupEnd
 
+; Unfortunately NSIS makes it impossible to share code between install and uninstall. So some of this code is duplicated in un.onInit
+Function .onInit
+  Push $0
+  ; Set $LocalAppDataFolder variable
+  System::Call 'shell32::SHGetFolderPathA(i, i, i, i, t) i(0, ${CSIDL_LOCAL_APPDATA}|${CSIDL_FLAG_CREATE}, 0, ${SHGFP_TYPE_DEFAULT}, .r0).r1'
+  StrCpy $LocalAppDataFolder $0
+  
+  ; Detect Media Center
+  ; 4.0 - Media Center 2005 with Update Rollup 2
+  ; 5.0 - Media Center on Windows Vista
+  ; 6.0 - Media Center on Windows 7
+  StrCpy $0 "0"
+  ReadRegStr $0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center" "Ident"
+  DetailPrint "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Ident is $0"
+
+  ${If} $0 < 4.0
+    DetailPrint "No MCE detected, or unsupported MCE version"
+    SectionSetFlags ${SecMCE} ${SF_RO}
+    SectionSetText ${SecMCE} ""
+    StrCpy $SupportedMCEDetected "0"
+  ${Else}
+    DetailPrint "Detected supported MCE version"
+    StrCpy $SupportedMCEDetected "1"
+  ${EndIf}
+  
+  Pop $0
+FunctionEnd
+
 ;--------------------------------
 ;Descriptions
 
@@ -230,15 +273,6 @@ Var UnPageProfileDialog
 Var UnPageProfileCheckbox
 Var UnPageProfileCheckbox_State
 Var UnPageProfileEditBox
-
-; Unfortunately NSIS makes it impossible to share code between install and uninstall.
-; This code is duplicated in .onInit
-Function un.onInit
-  Push $0
-  System::Call 'shell32::SHGetFolderPathA(i, i, i, i, t) i(0, ${CSIDL_LOCAL_APPDATA}|${CSIDL_FLAG_CREATE}, 0, ${SHGFP_TYPE_DEFAULT}, .r0).r1'
-  StrCpy $LocalAppDataFolder $0
-  Pop $0
-FunctionEnd
 
 Function un.UnPageProfile
     !insertmacro MUI_HEADER_TEXT "Uninstall Plex" "Remove Plex's profile folder from your computer."
@@ -276,6 +310,8 @@ Section "Uninstall"
 
   ;ADD YOUR OWN FILES HERE...
   Delete "$INSTDIR\Plex.exe"
+  Delete "$INSTDIR\plex-mce-icon.png"
+  Delete "$INSTDIR\plex-mce-registration.xml"
   Delete "$INSTDIR\copying.txt"
   Delete "$INSTDIR\known_issues.txt"
   Delete "$INSTDIR\LICENSE.GPL"
@@ -379,4 +415,41 @@ Section "-Check DirectX installation" SEC_DIRECTXCHECK
     MessageBox MB_OK|MB_ICONSTOP|MB_TOPMOST|MB_SETFOREGROUND "DirectX9 wasn't installed properly.$\nPlease download the DirectX End-User Runtime from Microsoft and install it again."
 
 SectionEnd
+
+Section "Un.Media Center Launcher for Plex" UnSecMCE
+  ${If} $SupportedMCEDetected == "1"
+    DetailPrint "Running $WINDIR\eHome\RegisterMCEApp.exe /u $INSTDIR\plex-mce-registration.xml"
+    StrCpy $0 "?"
+    nsExec::ExecToStack '"$WINDIR\eHome\RegisterMCEApp.exe" /u "$INSTDIR\plex-mce-registration.xml"'
+    pop $0
+    DetailPrint "RegisterMCEApp /u returned $0"
+  ${EndIf}
+SectionEnd
+
+; Unfortunately NSIS makes it impossible to share code between install and uninstall. So some of this code is duplicated in .onInit
+Function un.onInit
+  Push $0
+  System::Call 'shell32::SHGetFolderPathA(i, i, i, i, t) i(0, ${CSIDL_LOCAL_APPDATA}|${CSIDL_FLAG_CREATE}, 0, ${SHGFP_TYPE_DEFAULT}, .r0).r1'
+  StrCpy $LocalAppDataFolder $0
+  Pop $0
+
+  ; Detect Media Center
+  ; 4.0 - Media Center 2005 with Update Rollup 2
+  ; 5.0 - Media Center on Windows Vista
+  ; 6.0 - Media Center on Windows 7
+  StrCpy $0 "0"
+  ReadRegStr $0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center" "Ident"
+  DetailPrint "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Ident is $0"
+
+  ${If} $0 < 4.0
+    DetailPrint "No MCE detected, or unsupported MCE version"
+    SectionSetFlags ${SecMCE} ${SF_RO}
+    SectionSetText ${SecMCE} ""
+    StrCpy $SupportedMCEDetected "0"
+  ${Else}
+    DetailPrint "Detected supported MCE version"
+    StrCpy $SupportedMCEDetected "1"
+  ${EndIf}
+FunctionEnd
+
 !endif

@@ -73,6 +73,8 @@ namespace ADDON
 #include <SDL/SDL_mutex.h>
 #endif
 
+#include "plex/LaunchHost.h"
+
 class CKaraokeLyricsManager;
 class CApplicationMessenger;
 class DPMSSupport;
@@ -368,6 +370,7 @@ protected:
   SDL_mutex* m_frameMutex;
   SDL_cond*  m_frameCond;
 #endif
+  LaunchHost* m_pLaunchHost;
 
   void SetHardwareVolume(long hardwareVolume);
   void UpdateLCD();

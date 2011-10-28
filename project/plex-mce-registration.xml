@@ -1,0 +1,16 @@
+<application title="Plex Media Center"
+             id="{93f14705-bda5-4110-8f7b-43cd68eb26fd}"
+             companyname="Plex Inc."
+             description="Plex Media Center"
+             companylogourl=".\plex-mce-icon.png"
+             startImage=".\plex-mce-icon.png">
+  <entrypoint id="{8625c3c3-b217-4df0-927d-81c3a53ab586}"
+              run=".\Plex.exe"
+              title="Plex Media Center"
+              nowPlayingDirective="stop"
+              description="Plex Media Center for Windows"
+              imageUrl=".\plex-mce-icon.png">
+    <capabilitiesRequired directX="true" audio="true" video="true" />
+    <category category="More Programs" order="0" />
+  </entrypoint>
+</application>
