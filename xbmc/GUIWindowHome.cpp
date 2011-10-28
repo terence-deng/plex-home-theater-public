@@ -329,7 +329,11 @@ void CGUIWindowHome::UpdateContentForSelectedItem(const std::string& key)
     if (globalArt && m_globalArt == false)
     {
       m_globalArt = true;
-      m_workerManager->enqueue(WINDOW_HOME, "http://127.0.0.1:32400/library/arts", CONTENT_LIST_FANART);
+      
+      if (g_guiSettings.GetBool("lookandfeel.enableglobalslideshow") == true)
+        m_workerManager->enqueue(WINDOW_HOME, "http://127.0.0.1:32400/library/arts", CONTENT_LIST_FANART);
+      else
+        SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
     }
     
     // Remember what the last one was.
@@ -661,7 +665,10 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       }
       else
       {
-        m_workerManager->enqueue(WINDOW_HOME, "http://127.0.0.1:32400/library/arts", CONTENT_LIST_FANART);
+        if (g_guiSettings.GetBool("lookandfeel.enableglobalslideshow") == true)
+          m_workerManager->enqueue(WINDOW_HOME, "http://127.0.0.1:32400/library/arts", CONTENT_LIST_FANART);
+        else
+          SET_CONTROL_HIDDEN(SLIDESHOW_MULTIIMAGE);
       }
     }
   }
@@ -698,12 +705,15 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
       }
       else if (controlID == CONTENT_LIST_FANART)
       {
-        // Send the right slideshow information over to the multiimage.
-        CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), SLIDESHOW_MULTIIMAGE, 0, 0, results.get());
-        OnMessage(msg);
-        
-        // Make it visible.
-        SET_CONTROL_VISIBLE(SLIDESHOW_MULTIIMAGE);
+        if (results->Size() > 0)
+        {
+          // Send the right slideshow information over to the multiimage.
+          CGUIMessage msg(GUI_MSG_LABEL_BIND, GetID(), SLIDESHOW_MULTIIMAGE, 0, 0, results.get());
+          OnMessage(msg);
+          
+          // Make it visible.
+          SET_CONTROL_VISIBLE(SLIDESHOW_MULTIIMAGE);
+        }
       }
       
       m_workerManager->destroy(worker->getID());
