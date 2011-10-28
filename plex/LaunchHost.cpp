@@ -75,5 +75,5 @@ LaunchHost* DetectLaunchHost()
 
 #endif
 
-  return NULL;
+  return 0;
 }
