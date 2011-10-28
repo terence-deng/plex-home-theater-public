@@ -42,7 +42,7 @@ public:
     SOURCE_TYPE_VPATH        = 5,
     SOURCE_TYPE_REMOVABLE    = 6
   };
-  CMediaSource() { m_iDriveType=SOURCE_TYPE_UNKNOWN; m_iLockMode=LOCK_MODE_EVERYONE; m_iBadPwdCount=0; m_iHasLock=0; m_ignore=false; strPluginIdentifer=""; strMachineIdentifier=""; strLabel=""; hasPrefs = false; hasStoreServices = false; m_autoDetected=false;};
+  CMediaSource() { m_iDriveType=SOURCE_TYPE_UNKNOWN; m_iLockMode=LOCK_MODE_EVERYONE; m_iBadPwdCount=0; m_iHasLock=0; m_ignore=false; strPluginIdentifer=""; hasPrefs = false; hasStoreServices = false; m_autoDetected=false;};
   virtual ~CMediaSource() {};
 
   bool operator==(const CMediaSource &right) const;
@@ -53,8 +53,6 @@ public:
   CStdString strStatus; ///< Status of the share (eg has disk etc.)
   CStdString strPath; ///< Path of the share, eg. iso9660:// or F:
   CStdString strPluginIdentifer;
-  CStdString strMachineIdentifier;
-  CStdString strLabel;
   bool hasPrefs;
   bool hasStoreServices;
   
@@ -105,6 +103,9 @@ public:
   std::vector<CStdString> vecPaths;
   bool m_ignore; /// <Do not store in xml
   bool m_autoDetected;
+  
+  CStdString strMachineIdentifier;
+  CStdString strLabel;
 };
 
 /*!
