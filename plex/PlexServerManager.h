@@ -233,6 +233,8 @@ public:
   /// Figure out what the best server is.
   void updateBestServer()
   {
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
+    
     PlexServerPtr bestServer;
     int bestScore = 0;
     
