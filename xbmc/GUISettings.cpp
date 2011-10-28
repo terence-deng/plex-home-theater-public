@@ -383,7 +383,7 @@ void CGUISettings::Initialize()
   
   //   -> Remote myPlex library quality.
   map<int,int> transcodeQualityMap;
-  for (int i=-1; i<=12; i++)
+  for (int i=-1; i<=9; i++)
     transcodeQualityMap.insert(make_pair(43000+i,i));
   
   AddInt(myPlex, "myplex.remoteplexquality", 13149, -1, transcodeQualityMap, SPIN_CONTROL_TEXT);
