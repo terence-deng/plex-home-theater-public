@@ -92,7 +92,7 @@ public:
 
   static int GetActiveScannerCount() { return g_activeScannerCount; } 
   
-  static void AutodetectPlexSources(CStdString strPlexPath, VECSOURCES& dstSources, CStdString strMachineIdentifier = "", CStdString strLabel = "", bool onlyShared = false);
+  static void AutodetectPlexSources(CStdString strPlexPath, VECSOURCES& dstSources, CStdString strLabel = "", bool onlyShared = false);
   static void RemovePlexSources(CStdString strPlexPath, VECSOURCES& dstSources);
   
 protected:

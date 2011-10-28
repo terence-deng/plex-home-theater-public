@@ -69,19 +69,19 @@ void CPlexSourceScanner::Process()
     
     // Scan the server.
     path = AppendPathToURL(url, "music");
-    AutodetectPlexSources(path, m_sources->musicSources, m_sources->uuid, realHostLabel, onlyShared);
+    AutodetectPlexSources(path, m_sources->musicSources, realHostLabel, onlyShared);
     dprintf("Plex Source Scanner for %s: found %d music channels.", m_sources->hostLabel.c_str(), m_sources->musicSources.size());
     
     path = AppendPathToURL(url, "video");
-    AutodetectPlexSources(path, m_sources->videoSources, m_sources->uuid, realHostLabel, onlyShared);
+    AutodetectPlexSources(path, m_sources->videoSources, realHostLabel, onlyShared);
     dprintf("Plex Source Scanner for %s: found %d video channels.", m_sources->hostLabel.c_str(), m_sources->videoSources.size());
     
     path = AppendPathToURL(url, "photos");
-    AutodetectPlexSources(path, m_sources->pictureSources, m_sources->uuid, realHostLabel, onlyShared);
+    AutodetectPlexSources(path, m_sources->pictureSources, realHostLabel, onlyShared);
     dprintf("Plex Source Scanner for %s: found %d photo channels.", m_sources->hostLabel.c_str(), m_sources->pictureSources.size());
       
     path = AppendPathToURL(url, "applications");
-    AutodetectPlexSources(path, m_sources->applicationSources, m_sources->uuid, realHostLabel, onlyShared);
+    AutodetectPlexSources(path, m_sources->applicationSources, realHostLabel, onlyShared);
     dprintf("Plex Source Scanner for %s: found %d application channels.", m_sources->hostLabel.c_str(), m_sources->applicationSources.size());
     
     // Library sections.
@@ -228,7 +228,7 @@ void CPlexSourceScanner::MergeSource(VECSOURCES& sources, VECSOURCES& remoteSour
   {
     // If the source doesn't already exist, add it.
     bool bIsSourceName = true;
-    if (CUtil::GetMatchingSource(source.strName, sources, bIsSourceName, source.strMachineIdentifier) < 0)
+    if (CUtil::GetMatchingSource(source.strName, sources, bIsSourceName) < 0)
     {
       source.m_autoDetected = true;
       sources.push_back(source);
@@ -282,7 +282,7 @@ void CPlexSourceScanner::CheckForRemovedSources(VECSOURCES& sources, int windowI
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCES& dstSources, CStdString strMachineIdentifier, CStdString strLabel, bool onlyShared)
+void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCES& dstSources, CStdString strLabel, bool onlyShared)
 {
   bool bIsSourceName = true;
   bool bPerformRemove = true;
@@ -307,11 +307,7 @@ void CPlexSourceScanner::AutodetectPlexSources(CStdString strPlexPath, VECSOURCE
         
         // Add the label (if provided).
         if (strLabel != "")
-          share.strLabel = strLabel;
-        
-        // Add the machine identifier (if provided).
-        if (strMachineIdentifier != "")
-          share.strMachineIdentifier = strMachineIdentifier;
+          share.strName.Format("%s (%s)", share.strName, strLabel);
         
         // Get special attributes for PMS sources
         if (item->HasProperty("hasPrefs"))
