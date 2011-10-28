@@ -1684,7 +1684,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\xbmc\win32\Plex.ico" />
-    <CustomBuild Include="..\plex-mce-icon.png">
+    <CustomBuild Include="..\plex-mce-icon-square.png">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y %(FullPath) $(OutDir)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying %(Filename)%(Extension)...</Message>
@@ -1693,12 +1693,37 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying %(Filename)%(Extension)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\plex-mce-registration.xml">
+    <CustomBuild Include="..\plex-mce-registration-7.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y %(FullPath) $(OutDir)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying %(Filename)%(Extension)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y %(FullPath) $(OutDir)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying %(Filename)%(Extension)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\plex-mce-icon-16x9.png">
+      <FileType>Document</FileType>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y %(FullPath) $(OutDir)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y %(FullPath) $(OutDir)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying %(Filename)%(Extension)...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying %(Filename)%(Extension)...</Message>
+    </CustomBuild>
+    <CustomBuild Include="..\plex-mce-registration-vista.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y %(FullPath) $(OutDir)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y %(FullPath) $(OutDir)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying %(Filename)%(Extension)...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying %(Filename)%(Extension)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\plex-mce-registration-xp.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y %(FullPath) $(OutDir)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y %(FullPath) $(OutDir)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying %(Filename)%(Extension)...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying %(Filename)%(Extension)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>

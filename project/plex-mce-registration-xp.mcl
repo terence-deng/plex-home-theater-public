@@ -1,0 +1,6 @@
+<application name="Plex Media Center"
+             run="C:\Program Files\Plex\Plex Media Center\Plex.exe"
+             nowPlayingDirective="stop"
+             startImage="C:\Program Files\Plex\Plex Media Center\plex-mce-icon-square.png"
+             companyname="Plex Inc."
+             description="Plex Media Center for Windows" />

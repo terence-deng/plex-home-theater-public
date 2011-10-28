@@ -110,6 +110,7 @@ enum RenderMethod
   RENDER_PS      = 0x01,
   RENDER_SW      = 0x02,
   RENDER_DXVA    = 0x03,
+  RENDER_RGB     = 0x04,
 };
 
 #define PLANE_Y 0
