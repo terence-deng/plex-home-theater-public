@@ -12,6 +12,7 @@
 #include "PlexApplicationWin.h"
 #include "BackgroundMusicPlayer.h"
 #include "GUIUserMessages.h"
+#include "MediaSource.h"
 
 BackgroundMusicPlayerPtr bgMusicPlayer;
 
