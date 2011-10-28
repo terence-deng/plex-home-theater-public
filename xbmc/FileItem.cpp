@@ -235,8 +235,6 @@ CFileItem::CFileItem(const CMediaSource& share)
   m_iDriveType = share.m_iDriveType;
   SetThumbnailImage(share.m_strThumbnailImage);
   SetQuickFanart(share.m_strFanartUrl);
-  if (share.strLabel != "")
-    SetProperty("SourceLabel", share.strLabel);
   SetLabelPreformated(true);
 }
 
