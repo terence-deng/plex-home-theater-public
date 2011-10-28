@@ -70,6 +70,7 @@
 #include "MediaManager.h"
 #include "GUIDialogBusy.h"
 #include "PlexDirectory.h"
+#include "PlexServerManager.h"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/foreach.hpp>
@@ -1078,6 +1079,64 @@ class PlexAsyncUrlResolver
   PlexAsyncUrlResolverPtr m_me;
 };
 
+CStdString CDVDPlayer::TranscodeURL(const CStdString url, const CStdString transcodeHost, const CStdString extraOptions)
+{
+  // Initialise the transcode URL
+  CURL transcodeURL(m_filename);
+  transcodeURL.SetProtocol("http");
+  transcodeURL.SetPort(32400);
+  transcodeURL.SetFileName("video/:/transcode/segmented/start.m3u8");
+  
+  // Override the hostname if provided
+  if (transcodeHost != "")
+    transcodeURL.SetHostName(transcodeHost);
+  
+  // Encode the media URL
+  CStdString encodedURL(url);
+  CUtil::URLEncode(encodedURL);
+
+  // Initialise the options string
+  CStdString options = "?url=" + encodedURL;
+
+  // Append any extra options
+  if (extraOptions != "")
+    options += "&" + extraOptions;
+  
+  // Append the quality option
+  int quality = g_guiSettings.GetInt("myplex.remoteplexquality");
+  options += "&quality=" + lexical_cast<string>(quality > -1 ? quality : 7);
+  
+  // Append the session ID
+  options += "&session=" + g_guiSettings.GetString("system.uuid");
+  
+  // Sign it with the public key.
+  time_t time = ::time(0);
+  string apiKey = "KQMIY6GATPC63AIMC4R2";
+  string secretKey = CBase64::Decode("k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0=");
+  
+  // Compute the message.
+  string message = "/" + transcodeURL.GetFileName() + options;
+  message += "@" + lexical_cast<string>(time);
+  
+  // Compute the HMAC.
+  unsigned char mac[32];
+  hmac_sha256((unsigned char* )secretKey.c_str(), secretKey.size(), (unsigned char* )message.c_str(), message.size(), mac, 32);
+  string sig = CBase64::Encode((unsigned char *)mac, 32);
+  boost::replace_all(sig, "/", "%2F");
+  boost::replace_all(sig, "=", "%3D");
+  
+  if (transcodeURL.GetOptions().empty() == false)
+    options += "&" + transcodeURL.GetOptions().substr(1);
+  
+  options += "&X-Plex-Access-Key=" + apiKey;
+  options += "&X-Plex-Access-Time=" + lexical_cast<string>(time);
+  options += "&X-Plex-Access-Code=" + sig;
+  
+  transcodeURL.SetOptions(options);
+
+  return transcodeURL.Get();
+}
+
 void CDVDPlayer::Process()
 {
   CStdString stopURL;
@@ -1114,9 +1173,31 @@ void CDVDPlayer::Process()
 
   m_mimetype = m_item.GetMimeType();
   m_filename = m_item.m_strPath;
+
+  if (m_item.IsWebKit())
+  {
+    int pos = m_filename.find("&") + 1;
+    
+    // Extract the web page URL and decode it
+    CStdString mediaURLString = m_filename.substr(36, pos - 37);
+    CUtil::URLDecode(mediaURLString);
+    
+    // Construct a string of extra options - the prefix (or identifier) from the original URL, plus the webkit argument
+    CStdString extraOptions = m_filename.substr(pos, m_filename.size() - pos);
+    boost::replace_all(extraOptions, "/", "%2F");
+    extraOptions += "&webkit=1";
+
+    // Get the hostname of the best server
+    PlexServerPtr bestServer = PlexServerManager::Get().bestServer();
+    CStdString serverHost = bestServer->address;
+
+    // Generate a transcode URL and set the filename
+    m_filename = TranscodeURL(mediaURLString, serverHost, extraOptions);
+    dprintf("Transcode URL for WebKit content: %s\n", m_filename.c_str());
+  }
   
   // Get details on the item we're playing.
-  if (g_application.CurrentFileItem().IsPlexMediaServerLibrary())
+  else if (g_application.CurrentFileItem().IsPlexMediaServerLibrary())
   {
     CPlexDirectory plex;
     CFileItemList items;
@@ -1137,56 +1218,11 @@ void CDVDPlayer::Process()
       mediaURL.SetPort(32400);
       mediaURL.SetOptions("");
       
-      CStdString encodedMediaURL = mediaURL.Get();
-      CUtil::URLEncode(encodedMediaURL);
-      
-      CURL transcodeURL(m_filename);
-      transcodeURL.SetFileName("video/:/transcode/segmented/start.m3u8");
-      
-      CStdString options;
-      options += "?url=" + encodedMediaURL;
-      options += "&quality=" + lexical_cast<string>(g_guiSettings.GetInt("myplex.remoteplexquality"));
-      options += "&session=" + g_guiSettings.GetString("system.uuid");
-      
-      // Doesn't work yet.
-      //if (m_PlayerOptions.starttime > 0)
-      //  options += "&offset=" + lexical_cast<string>((int)m_PlayerOptions.starttime);
-      
-      // Build the stop URL while we're here.
-      CURL stopTranscodeURL(m_filename);
-      stopTranscodeURL.SetFileName("video/:/transcode/segmented/stop");
-      stopTranscodeURL.SetOptions("?session=" + g_guiSettings.GetString("system.uuid"));
-      stopURL = stopTranscodeURL.Get();
-            
-      // Sign it with the public key.
-      time_t time = ::time(0);
-      string apiKey = "KQMIY6GATPC63AIMC4R2";
-      string secretKey = CBase64::Decode("k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0=");
-
-      // Compute the message.
-      string message = "/" + transcodeURL.GetFileName() + options;
-      message += "@" + lexical_cast<string>(time);
-      
-      // Compute the HMAC.
-      unsigned char mac[32];
-      hmac_sha256((unsigned char* )secretKey.c_str(), secretKey.size(), (unsigned char* )message.c_str(), message.size(), mac, 32);
-      string sig = CBase64::Encode((unsigned char *)mac, 32);
-      boost::replace_all(sig, "/", "%2F");
-      boost::replace_all(sig, "=", "%3D");
-
-      if (transcodeURL.GetOptions().empty() == false)
-        options += "&" + transcodeURL.GetOptions().substr(1);
-      
-      options += "&X-Plex-Access-Key=" + apiKey;
-      options += "&X-Plex-Access-Time=" + lexical_cast<string>(time);
-      options += "&X-Plex-Access-Code=" + sig;
-       
-      transcodeURL.SetOptions(options);
-      m_filename = transcodeURL.Get();
-      dprintf("Transcode URL: %s", m_filename.c_str());
+      m_filename = TranscodeURL(mediaURL.Get());
+      dprintf("Transcode URL for remote content: %s", m_filename.c_str());
     }
   }
-  
+
   try
   {
     if (!OpenInputStream())
