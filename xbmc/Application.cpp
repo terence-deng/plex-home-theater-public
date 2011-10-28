@@ -3790,6 +3790,8 @@ bool CApplication::PlayFile(const CFileItem& item, bool bRestart)
 
 void CApplication::FinishPlayingFile(bool bResult, const CStdString& error)
 {
+  HideBusyIndicator();
+  
   if(bResult)
   {
     if (m_iPlaySpeed != 1)
@@ -4678,7 +4680,7 @@ bool CApplication::OnMessage(CGUIMessage& message)
         DimLCDOnPlayback(false);
       }
 
-      if (!IsPlayingVideo() && g_windowManager.GetActiveWindow() == WINDOW_FULLSCREEN_VIDEO)
+      if ((IsPlayingVideo() == false && m_bPlaybackStarting == false) && g_windowManager.GetActiveWindow() == WINDOW_FULLSCREEN_VIDEO)
       {
         g_windowManager.PreviousWindow();
       }
