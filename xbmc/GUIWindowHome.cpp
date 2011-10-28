@@ -69,6 +69,7 @@ using namespace boost;
 
 CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml")
   , m_globalArt(true)
+  , m_lastSelectedItemKey("Search")
 {
   // Create the worker. We're not going to destroy it because whacking it on exit can cause problems.
   m_workerManager = new PlexContentWorkerManager();
@@ -170,6 +171,12 @@ void CGUIWindowHome::RestoreSelectedMenuItem()
       CFileItem* fileItem = (CFileItem* )item.get();
       if (fileItem->m_strPath == m_lastSelectedItemKey)
       {
+        selectionItem = i;
+        break;
+      }
+      else if (fileItem->GetLabel() == m_lastSelectedItemKey && m_lastSelectedItemKey.empty() == false)
+      {
+        UpdateContentForSelectedItem("");
         selectionItem = i;
         break;
       }
