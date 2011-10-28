@@ -11,7 +11,13 @@ setlocal
 
 set TargetPlatform=Win32
 set TargetConfig=Release
-if "%1"=="debug" (set TargetConfig=Debug)
+set SignCode=1
+
+rem Parse command line args
+for %%b in (%1, %2, %3, %4, %5) do (
+  if "%%b"=="debug" set TargetConfig=Debug
+  if "%%b"=="nosigncode" set SignCode=0
+)
 
 call extract_git_rev.bat
 
@@ -44,44 +50,46 @@ if "%Hour:~0,1%" == " " (
 set TimeStamp=%Year%-%Month%-%Day%--%Hour%-%Minute%-%Second%
 set SetupDir=%BuildRoot%\Windows\%TargetPlatform%\%TargetConfig%\Setup\%TimeStamp%
 
-rem ************************************
-echo Signing drop binaries...
-rem ************************************
-call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\Plex.exe"
-call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\sdl.dll"
-call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\WinSparkle.dll"
-call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\zlib1.dll"
+if "%SignCode%"=="1" (
+  rem ************************************
+  echo Signing drop binaries...
+  rem ************************************
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\Plex.exe"
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\sdl.dll"
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\WinSparkle.dll"
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%DeployDir%\zlib1.dll"
 
-for /R "%DeployDir%\addons" %%f in (*.vis) do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
-)
+  for /R "%DeployDir%\addons" %%f in (*.vis) do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 
-for %%f in ("%DeployDir%\system\*.dll") do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
-)
+  for %%f in ("%DeployDir%\system\*.dll") do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 
-for %%f in ("%DeployDir%\system\cdrip\*.dll") do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
-)
+  for %%f in ("%DeployDir%\system\cdrip\*.dll") do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 
-for %%f in ("%DeployDir%\system\players\dvdplayer\*.dll") do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
-)
+  for %%f in ("%DeployDir%\system\players\dvdplayer\*.dll") do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 
-for %%f in ("%DeployDir%\system\players\paplayer\*.dll") do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
-)
+  for %%f in ("%DeployDir%\system\players\paplayer\*.dll") do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 
-for %%f in ("%DeployDir%\python\*.dll") do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
-)
+  for %%f in ("%DeployDir%\python\*.dll") do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 
-for %%f in ("%DeployDir%\python\DLLs\*.pyd") do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
-)
+  for %%f in ("%DeployDir%\python\DLLs\*.pyd") do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 
-for %%f in ("%DeployDir%\system\webserver\*.dll") do (
-  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  for %%f in ("%DeployDir%\system\webserver\*.dll") do (
+    call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%%f"
+  )
 )
 
 rem ************************************
@@ -155,10 +163,12 @@ if not exist "%PLEX_SETUP_PACKAGE%" (
 )
 echo %PLEX_SETUP_PACKAGE% created successfully
 
-rem ************************************
-echo Signing setup package...
-rem ************************************
-call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%PLEX_SETUP_PACKAGE%"
+if "%SignCode%"=="1" (
+  rem ************************************
+  echo Signing setup package...
+  rem ************************************
+  call "%PlexRoot%\project\CodeSigning\Sign.cmd" "%PLEX_SETUP_PACKAGE%"
+)
 
 rem ************************************
 echo Creating symbols package...
