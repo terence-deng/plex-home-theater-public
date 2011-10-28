@@ -285,6 +285,7 @@ xcuserdata
 /project/VS2010Express/libs
 /project/VS2010Express/objs
 /project/VS2010Express/ipch
+/project/Win32NSISSetup/languages.nsi
 
 # /skin/
 /skin/Confluence/media/Textures.xbt
