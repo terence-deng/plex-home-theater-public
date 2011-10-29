@@ -225,6 +225,7 @@
       <r>Rewind</r>
       <period>StepForward</period>
       <backspace>Close</backspace>
+      <escape>Close</escape>
       <o>CodecInfo</o>
       <i>Close</i>
       <d mod="ctrl">Close</d>
@@ -425,11 +426,13 @@
       <c>Close</c>
       <menu>Close</menu>
       <backspace>Close</backspace>
+      <escape>Close</escape>
     </keyboard>
   </ContextMenu>
   <FileStackingDialog>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
     </keyboard>
   </FileStackingDialog>
   <Scripts>
@@ -512,12 +515,14 @@
   <MusicInformation>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
       <key id='65446'>Close</key>
     </keyboard>
   </MusicInformation>
   <MovieInformation>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
       <i>Close</i>
       <d mod="ctrl">Close</d>
       <key id='65446'>Close</key>
@@ -526,16 +531,19 @@
   <AddonInformation>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
     </keyboard>
   </AddonInformation>
   <AddonSettings>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
     </keyboard>
   </AddonSettings>
   <TextViewer>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
     </keyboard>
   </TextViewer>
   <LockSettings>
@@ -558,6 +566,7 @@
       <d mod="ctrl">Close</d>
       <o>Close</o>
       <backspace>Close</backspace>
+      <escape>Close</escape>
       <space>Pause</space>
     </keyboard>
   </PictureInfo>
@@ -565,17 +574,20 @@
     <keyboard>
       <backspace>Close</backspace>
       <escape>Close</escape>
+      <escape>Close</escape>
       <v>Close</v>
     </keyboard>
   </Teletext>
   <Favourites>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
     </keyboard>
   </Favourites>
   <NumericInput>
     <keyboard>
       <backspace>Close</backspace>
+      <escape>Close</escape>
     </keyboard>
   </NumericInput>
   <NowPlaying>
