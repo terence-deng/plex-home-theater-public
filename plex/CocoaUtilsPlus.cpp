@@ -206,6 +206,6 @@ bool Cocoa_IsHostLocal(const string& host)
   }
 #endif
 
-  CLog::Log(LOGINFO, "Asked to check whether [%s] is local => %d", host.c_str(), ret);
+  CLog::Log(LOGINFO, "Asked to check whether [%s] is localhost => %d", host.c_str(), ret);
   return ret;
 }
