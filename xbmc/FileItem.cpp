@@ -1332,6 +1332,7 @@ CFileItemList::CFileItemList()
   m_displayMessageContents = "";
   m_iBitrate = 0;
   m_autoRefresh = 0;
+  m_defaultViewMode = 0;
 }
 
 CFileItemList::CFileItemList(const CStdString& strPath)
@@ -1350,6 +1351,7 @@ CFileItemList::CFileItemList(const CStdString& strPath)
   m_displayMessageContents = "";
   m_iBitrate = 0;
   m_autoRefresh = 0;
+  m_defaultViewMode = 0;
 }
 
 CFileItemList::~CFileItemList()

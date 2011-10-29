@@ -658,7 +658,10 @@ void CGUIMediaWindow::UpdateButtons()
 void CGUIMediaWindow::ClearFileItems()
 {
   m_viewControl.Clear();
+  int defaultViewMode = m_vecItems->GetDefaultViewMode();
   m_vecItems->Clear(); // will clean up everything
+  m_vecItems->SetDefaultViewMode(defaultViewMode);
+  
   m_unfilteredItems->Clear();
 }
 
@@ -826,6 +829,11 @@ bool CGUIMediaWindow::Update(const CStdString &strDirectory)
   m_history.SetSelectedItem(strSelectedItem, strOldDirectory);
 
   CFileItemList items;
+  
+  // Save the default view mode.
+  if (strOldDirectory == strDirectory)
+    items.SetDefaultViewMode(m_vecItems->GetDefaultViewMode());
+  
   if (!GetDirectory(strDirectory, items) || (items.m_displayMessage && items.Size() == 0))
   {
     if (items.m_displayMessage)
