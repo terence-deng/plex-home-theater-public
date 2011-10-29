@@ -65,7 +65,7 @@ void CPlexSourceScanner::Process()
     }
     
     // Create a new entry.
-    CLog::Log(LOGNOTICE, "Scanning remote server: %s", m_sources->host.c_str());
+    CLog::Log(LOGNOTICE, "Scanning remote server: %s (remote: %d)", m_sources->host.c_str(), remoteOwned);
     
     // Scan the server.
     path = AppendPathToURL(url, "music");
@@ -103,8 +103,8 @@ void CPlexSourceScanner::Process()
       sections.push_back(item);
     }
     
-    // Add the sections.
-    if (sectionSuccess)
+    // Add the sections, but only if they're local (be extra safe).
+    if (remoteOwned == false && url.find("X-Plex-Token") == string::npos)
       PlexLibrarySectionManager::Get().addLocalSections(m_sources->uuid, sections);
     
     // Notify the UI.
