@@ -89,7 +89,8 @@ void CPlexSourceScanner::Process()
     CPlexDirectory plexDir(true, false);
     plexDir.SetTimeout(5);
     m_sources->librarySections.ClearItems();
-    plexDir.GetDirectory(path, m_sources->librarySections);
+    bool sectionSuccess = plexDir.GetDirectory(path, m_sources->librarySections);
+    dprintf("Plex Source Scanner for %s: found %d library sections, success: %d", m_sources->hostLabel.c_str(), m_sources->librarySections.Size(), sectionSuccess);
     
     // Edit for friendly name.
     vector<CFileItemPtr> sections;
@@ -103,7 +104,8 @@ void CPlexSourceScanner::Process()
     }
     
     // Add the sections.
-    PlexLibrarySectionManager::Get().addLocalSections(m_sources->uuid, sections);
+    if (sectionSuccess)
+      PlexLibrarySectionManager::Get().addLocalSections(m_sources->uuid, sections);
     
     // Notify the UI.
     CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE_REMOTE_SOURCES);
@@ -155,7 +157,8 @@ void CPlexSourceScanner::RemoveHost(const std::string& uuid, const std::string& 
 {
   { // Remove the entry from the map in case it was remote.
     boost::recursive_mutex::scoped_lock lock(g_lock);
-    
+ 
+    dprintf("Removing host %s for sources (force: %d)", uuid.c_str(), force);
     HostSourcesPtr sources = g_hostSourcesMap[uuid];
     if (sources)
     {
