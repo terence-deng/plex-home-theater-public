@@ -145,7 +145,7 @@ class PlexLibrarySectionManager
       key = key.substr(lastSlash+1);
       key = string(section->GetProperty("machineIdentifier").c_str()) + "://" + key;
       
-      dprintf("Adding myPlex section %s -> %s (%s)", key.c_str(), section->GetLabel().c_str(), section->m_strPath.c_str());
+      dprintf("Adding myPlex section %s -> %s", key.c_str(), section->GetLabel().c_str());
       map[key] = section;
     }
   }
