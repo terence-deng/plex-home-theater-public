@@ -158,24 +158,16 @@ Section "Plex" SecPlex
   !insertmacro MUI_STARTMENU_WRITE_END  
   
   ;add entry to add/remove programs
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "DisplayName" "Plex"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "UninstallString" "$INSTDIR\uninstall.exe"
-  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "NoModify" 1
-  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "NoRepair" 1
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "InstallLocation" "$INSTDIR"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "DisplayIcon" "$INSTDIR\Plex.exe,0"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "Publisher" "Plex, Inc"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "HelpLink" "http://forums.plexapp.com"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" \
-                 "URLInfoAbout" "http://plexapp.com"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "DisplayName" "Plex"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "DisplayVersion" "0.9.500" # TODO - FIX THIS HARDCODED ATROCITY
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "NoModify" 1
+  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "NoRepair" 1
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "DisplayIcon" "$INSTDIR\Plex.exe,0"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "Publisher" "Plex, Inc"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "HelpLink" "http://forums.plexapp.com"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "URLInfoAbout" "http://plexapp.com"
 SectionEnd
 
 Section "Media Center Launcher for Plex" SecMCE
