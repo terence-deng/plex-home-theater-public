@@ -41,6 +41,7 @@ class PlexLibrarySectionManager
   {
     boost::mutex::scoped_lock lk(m_mutex);
     
+    dprintf("Adding %d local sections for %s", sections.size(), uuid.c_str());
     map<string, CFileItemPtr>& map = ensureMap(uuid);
     map.clear();
     
@@ -57,6 +58,7 @@ class PlexLibrarySectionManager
   void removeLocalSections(const string& uuid)
   {
     boost::mutex::scoped_lock lk(m_mutex);
+    dprintf("Removing local sections for %s", uuid.c_str());
     m_localSections.erase(uuid);
   }
 
