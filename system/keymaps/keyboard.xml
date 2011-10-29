@@ -333,6 +333,8 @@
       <enter>NextCalibration</enter>
       <d>ResetCalibration</d>
       <r>NextResolution</r>
+      <backspace>PreviousMenu</backspace>
+      <escape>PreviousMenu</escape>
     </keyboard>
   </ScreenCalibration>
   <GUICalibration>
@@ -340,6 +342,8 @@
       <return>NextCalibration</return>
       <enter>NextCalibration</enter>
       <d>ResetCalibration</d>
+      <backspace>PreviousMenu</backspace>
+      <escape>PreviousMenu</escape>
     </keyboard>
   </GUICalibration>
   <SelectDialog>
