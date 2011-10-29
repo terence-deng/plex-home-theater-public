@@ -1049,14 +1049,18 @@ bool CApplication::Initialize()
 #ifdef HAS_DX
   g_windowManager.Add(new CGUIWindowTestPatternDX);      // window id = 8
 #endif
+#if 0
   g_windowManager.Add(new CGUIDialogTeletext);               // window id =
+#endif
   g_windowManager.Add(new CGUIWindowSettingsScreenCalibration); // window id = 11
   g_windowManager.Add(new CGUIWindowSettingsCategory);         // window id = 12 slideshow:window id 2007
   g_windowManager.Add(new CGUIWindowVideoNav);                 // window id = 36
   g_windowManager.Add(new CGUIWindowVideoPlaylist);            // window id = 28
   g_windowManager.Add(new CGUIWindowLoginScreen);            // window id = 29
   g_windowManager.Add(new CGUIWindowSettingsProfile);          // window id = 34
+#if 0
   g_windowManager.Add(new CGUIWindowAddonBrowser);          // window id = 40
+#endif
   g_windowManager.Add(new CGUIWindowNowPlaying);         // window id = 50
   g_windowManager.Add(new CGUIWindowPlexSearch);         // window id = 51
   g_windowManager.Add(new CGUIDialogYesNo);              // window id = 100
