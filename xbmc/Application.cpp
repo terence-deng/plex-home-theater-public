@@ -1065,7 +1065,9 @@ bool CApplication::Initialize()
   g_windowManager.Add(&m_guiDialogKaiToast);           // window id = 107
   g_windowManager.Add(new CGUIDialogNumeric);            // window id = 109
   g_windowManager.Add(new CGUIDialogGamepad);            // window id = 110
+#if 0
   g_windowManager.Add(new CGUIDialogButtonMenu);         // window id = 111
+#endif
   g_windowManager.Add(new CGUIDialogMusicScan);          // window id = 112
   g_windowManager.Add(new CGUIDialogPlayerControls);     // window id = 113
 #ifdef HAS_KARAOKE
