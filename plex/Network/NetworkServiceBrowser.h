@@ -183,7 +183,7 @@ class NetworkServiceBrowser : public NetworkServiceBase
       boost::asio::ip::address address = m_endpoint.address();
       if (NetworkInterface::IsLocalAddress(address.to_string()))
       {
-        dprintf("NetworkService: Changing %s to localhost.", address.to_string().c_str());
+        //dprintf("NetworkService: Changing %s to localhost.", address.to_string().c_str());
         address = boost::asio::ip::address::from_string("127.0.0.1");
       }
       
