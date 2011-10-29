@@ -27,6 +27,8 @@ class PlexServer;
 typedef boost::shared_ptr<PlexServer> PlexServerPtr;
 typedef pair<string, PlexServerPtr> key_server_pair;
 
+#define PMS_LIVE_SCORE 50
+
 ////////////////////////////////////////////////////////////////////
 class PlexServer
 {
@@ -66,14 +68,14 @@ class PlexServer
     
     return ret;
   }
-  
+
   /// The score for the server.
   int score()
   {
     int ret = 0;
     
     // Bonus for being alive, being localhost, and being detected.
-    if (live) ret += 50;
+    if (live) ret += PMS_LIVE_SCORE;
     if (local) ret += 10;
     if (detected()) ret += 10;
     
@@ -182,6 +184,7 @@ public:
     set<string> addedServers;
     set<PlexServerPtr> deletedServers;
     computeAddedAndRemoved(remoteServers, addedServers, deletedServers);
+    dprintf("Plex Server Manager: Setting %d remote servers (%d new, %d deleted)", remoteServers.size(), addedServers.size(), deletedServers.size());
     
     // Whack existing detected servers.
     set<string> detected;
@@ -240,7 +243,7 @@ public:
     
     BOOST_FOREACH(key_server_pair pair, m_servers)
     {
-      if (pair.second->score() > bestScore)
+      if (pair.second->score() > bestScore && pair.second->score() >= PMS_LIVE_SCORE)
       {
         bestScore = pair.second->score();
         bestServer = pair.second;
