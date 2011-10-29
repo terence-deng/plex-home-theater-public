@@ -27,16 +27,34 @@
     <ul>
         <li>Install the <a href="http://www.microsoft.com/download/en/details.aspx?id=6812">
             DirectX SDK</a>.</li>
-        <li>Open a Visual Studio command prompt and run <strong>project\BuildDependencies\DownloadBuildDeps.bat</strong></strong>. 
+        <li>Install NSIS from <a href="http://nsis.sourceforge.net/download/">
+            http://nsis.sourceforge.net/Download/</a></li>
+    </ul>
+    <p>
+        Generate a fresh setup package:</p>
+    <ul>
+        <li>Open a Visual Studio command prompt</li>
+        <li>cd to <strong>project </strong>and run <strong>MakeEverything.bat </strong>or 
+            <strongMakeEverything.bat release</strong></li>
+        <li>Once the script is complete, it will tell you where to find the setup packagee</li>
+    </ul>
+    <h3>
+        Building PMC (step by step)</h3>
+    <p>
+        Prerequisites:</p>
+    <ul>
+        <li>Open a Visual Studio command prompt</li>
+        <li>cd to <strong>project\BuildDependencies </strong>and run <strongDownloadBuildDeps.bat</strong>. 
             Let it complete.</li>
     </ul>
     <p>
-        Create a build layout for your Plex build:</p>
+        Create a build layout for your Plex build::</p>
     <ul>
-        <li>Open a Visual Studio command prompt, cd <strong>project </strong>and run <strong>makedrop</strong>:<ul>
-                <li>If you want a release layout, type <strong>makedrop </strong>or <strong>makedrop release</strong>. This is useful for generating a setup package or 
+        <li>Open a Visual Studio command prompt, cd <strong>project </strong>and run <strong>
+            MakeDrop.bat</strong>:<ul>
+                <li>If you want a release layout, type <strong>MakeDrop.bat </strong>or <strong>MakeDrop.bat release</strong>. This is useful for generating a setup package or 
                     testing release bits without the need to run setup.</li>
-                <li>If you want a debug layout, type <strong>makedrop debug</strong>. This will 
+                <li>If you want a debug layout, type <strong>MakeDrop.bat debug</strong>. This will 
                     allow you to build debug and then hit F5 to debug what you just built.</li>
             </ul>
             The build layout will be generated in <strong>Build\Windows\($Platform)\$(Configuration)\Deploy</strong>. You can double-click 
@@ -57,46 +75,36 @@
             </ul>
         </li>
     </ul>
-    <h3>
-        Debugging PMC</h3>
-    <p>
-        To debug PMC from Visual Studio, open the 
-        project properties page for all configurations and set the following under Configuration Properties / Debugging:</p>
-    <ul>
-        <li>Command = <strong>$(OutDir)$(TargetFileName)</strong></li>
-    </ul>
-    <h3>
-        Building a setup package</h3>
-    <p>
-        Prerequisites:</p>
-    <ul>
-        <li>Install NSIS from <a href="http://nsis.sourceforge.net/download/">
-            http://nsis.sourceforge.net/Download/</a></li>
+    Build a setup package<ul>
         <li>Install the test CA certificate located at <strong>
             project\CodeSigning\PlexTestCA.cer</strong>.<ul>
-                <li>Simplest way to do this is to run <strong>InstallCA.cmd</strong> from a Visual 
+                <li>The simplest way to do this is to run <strong>InstallCA.cmd</strong> from a Visual 
                     Studio command prompt</li>
             </ul>
         </li>
-    </ul>
-    <p>
-        To generate a new setup package:</p>
-    <ul>
         <li>Open a Visual Studio command prompt.</li>
         <li>cd <strong>project </strong>and run <strong>makesetup</strong>:<ul>
-            <li>If you want a release setup package, type <strong>makesetup </strong>or <strong>
-                makesetup release</strong>.</li>
-            <li>If you want a debug setup package, type <strong>makesetup debug</strong>.</li>
+            <liIf you want a release setup package, type <strong>MakeSetup.bat </strong>or <strong>
+                MakeSetup.bat release</strong>.</li>
+            <li>If you want a debug setup package, type <strong>MakeSetup.bat debug</strong>.</li>
             </ul>
         </li>
     </ul>
     <p>
         For faster rebuilds 
         of the setup package, code signing can be disabled with the 
-        <strong>nosigncode</strong argument. E.g. <strong> option. E.g. <strong>makesetup release nosigncode</strong></strong>.
+         <strong>nosigncode</strong argument. E.g. <strong option. E.g. <strong>MakeSetup.bat release nosigncode</strong></strong>.
     </p>
+    <h3>
+        Debugging PMCC</h3>
+    <p>
+        To debug PMC from Visual Studio, open the 
+        project properties page for all configurations and set the following under Configuration Properties / Debugging:</p>
+    <ul>
+        <li>Command = <strong>$(OutDir)$(TargetFileName)</strong></li>
+    </ul>
     <h3>Building ffmpeg for PMCPrerequisites:<ul>
-        <li>Install i>Install <a href="http://mingw.org/wiki/msys">MSYS</a> and
+        <li>Install <a href="http://mingw.org/wiki/msys">MSYS</a> and
             <a href="http://yasm.tortall.net/">YASM</a>.</li>
     </ul>
     <p>
@@ -108,11 +116,11 @@
         <li>Type ./make</li>
     </ul>
     <p>
-        When a new build of ffmpeg is generated, run <strong>project\copyffmpeg.bat</strong> 
+        When a new build of ffmpeg is generated, run <strong>project\copyffmpeg.bat</strong 
         to copy the resulting files to their appropriate location. At the time of 
-        writing, ffmpeg files are placed as follows:</p>
+        writing, the ffmpeg files are placed as follows:</p>
     <ul>
-        <li>lib\ffmpeg\libavutil<ul>
+        <li>lib\ffmpeg\libavutill<ul>
             <li>libavutil\avconfig.h</li>
             </ul>
         </li>
