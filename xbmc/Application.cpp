@@ -1034,11 +1034,15 @@ bool CApplication::Initialize()
   g_windowManager.Add(new CGUIWindowHome);                     // window id = 0
   g_windowManager.Add(new CGUIWindowPrograms);                 // window id = 1
   g_windowManager.Add(new CGUIWindowPictures);                 // window id = 2
+#if 0
   g_windowManager.Add(new CGUIWindowFileManager);      // window id = 3
+#endif
   g_windowManager.Add(new CGUIWindowVideoFiles);          // window id = 6
   g_windowManager.Add(new CGUIWindowSharedContent);
   g_windowManager.Add(new CGUIWindowSettings);                 // window id = 4
+#if 0
   g_windowManager.Add(new CGUIWindowSystemInfo);               // window id = 7
+#endif
 #ifdef HAS_GL
   g_windowManager.Add(new CGUIWindowTestPatternGL);      // window id = 8
 #endif
