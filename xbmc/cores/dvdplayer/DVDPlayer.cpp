@@ -1109,7 +1109,7 @@ CStdString CDVDPlayer::TranscodeURL(const CStdString url, const CStdString trans
   
   // Append the quality option
   int quality = g_guiSettings.GetInt("myplex.remoteplexquality");
-  options += "&quality=" + lexical_cast<string>(quality > -1 ? quality : 7);
+  options += "&quality=" + lexical_cast<string>(quality > -1 ? (quality+3) : 7);
   
   // Append the session ID
   options += "&session=" + g_guiSettings.GetString("system.uuid");
