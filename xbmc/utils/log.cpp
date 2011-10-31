@@ -87,7 +87,7 @@ void CLog::Log(int loglevel, const char *format, ... )
 
     CStdString strPrefix, strData;
 
-    strPrefix.Format("%02.2d:%02.2d:%02.2d T:%"PRIu64" M:%9"PRIu64" %7s: ", time.wHour, time.wMinute, time.wSecond, (uint64_t)CThread::GetCurrentThreadId(), (uint64_t)stat.dwAvailPhys, levelNames[loglevel]);
+    strPrefix.Format("%02.2d:%02.2d:%02.2d T:%"PRIu64" M:%2"PRIu64"%% %7s: ", time.wHour, time.wMinute, time.wSecond, (uint64_t)CThread::GetCurrentThreadId(), (uint64_t)stat.dwMemoryLoad, levelNames[loglevel]);
 
     strData.reserve(16384);
     va_list va;
@@ -103,7 +103,7 @@ void CLog::Log(int loglevel, const char *format, ... )
     else if (m_repeatCount)
     {
       CStdString strPrefix2, strData2;
-      strPrefix2.Format("%02.2d:%02.2d:%02.2d T:%"PRIu64" M:%9"PRIu64" %7s: ", time.wHour, time.wMinute, time.wSecond, (uint64_t)CThread::GetCurrentThreadId(), (uint64_t)stat.dwAvailPhys, levelNames[m_repeatLogLevel]);
+      strPrefix2.Format("%02.2d:%02.2d:%02.2d T:%"PRIu64" M:%2"PRIu64"%% %7s: ", time.wHour, time.wMinute, time.wSecond, (uint64_t)CThread::GetCurrentThreadId(), (uint64_t)stat.dwMemoryLoad, levelNames[m_repeatLogLevel]);
 
       strData2.Format("Previous line repeats %d times." LINE_ENDING, m_repeatCount);
       fwrite(strPrefix2.c_str(),strPrefix2.size(),1,m_file);

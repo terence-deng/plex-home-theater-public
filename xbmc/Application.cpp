@@ -240,6 +240,7 @@
 #ifdef _WIN32
 #include <shlobj.h>
 #include "win32util.h"
+#include "plex/version.h"
 #endif
 #ifdef HAS_XRANDR
 #include "XRandR.h"
@@ -513,7 +514,7 @@ bool CApplication::Create()
 #elif defined(_LINUX)
   CLog::Log(LOGNOTICE, "Starting Plex, Platform: Linux (%s, %s). Built on %s (Git:%s)", g_sysinfo.GetLinuxDistro().c_str(), g_sysinfo.GetUnameVersion().c_str(), __DATE__, GIT_REV);
 #elif defined(_WIN32)
-  CLog::Log(LOGNOTICE, "Starting Plex, Platform: %s. Built on %s (Git:%s, compiler %i)",g_sysinfo.GetKernelVersion().c_str(), __DATE__, GIT_REV, _MSC_VER);
+  CLog::Log(LOGNOTICE, "Starting Plex %s, Platform: %s. Built on %s (Git:%s, compiler VC++ %i)", APPLICATION_VERSION, g_sysinfo.GetKernelVersion().c_str(), __DATE__, CURRENT_GIT_REVISION, _MSC_VER);
   CLog::Log(LOGNOTICE, g_cpuInfo.getCPUModel().c_str());
   CLog::Log(LOGNOTICE, CWIN32Util::GetResInfoString());
   CLog::Log(LOGNOTICE, "Running with %s rights", (CWIN32Util::IsCurrentUserLocalAdministrator() == TRUE) ? "administrator" : "restricted");
