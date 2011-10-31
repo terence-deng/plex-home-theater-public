@@ -1081,17 +1081,22 @@ class PlexAsyncUrlResolver
 
 CStdString CDVDPlayer::TranscodeURL(const CStdString url, const CStdString transcodeHost, const CStdString extraOptions)
 {
-  // Initialise the transcode URL
+  // Initialise the transcode URL.
   CURL transcodeURL(m_filename);
-  transcodeURL.SetProtocol("http");
-  transcodeURL.SetPort(32400);
   transcodeURL.SetFileName("video/:/transcode/segmented/start.m3u8");
+  
+  // If we came in with plex:// protocol, fix it.
+  if (transcodeURL.GetProtocol() == "plex")
+  {
+    transcodeURL.SetProtocol("http");
+    transcodeURL.SetPort(32400);
+  }
   
   // Override the hostname if provided
   if (transcodeHost != "")
     transcodeURL.SetHostName(transcodeHost);
   
-  // Encode the media URL
+  // Encode the media URL.
   CStdString encodedURL(url);
   CUtil::URLEncode(encodedURL);
 
