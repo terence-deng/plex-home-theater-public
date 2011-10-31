@@ -56,7 +56,12 @@ void CGUIWindowOSD::FrameMove()
 
 bool CGUIWindowOSD::OnAction(const CAction &action)
 {
-  if (action.GetID() == ACTION_NEXT_ITEM || action.GetID() == ACTION_PREV_ITEM)
+  if (action.GetID() == ACTION_SHOW_OSD || action.GetID() == ACTION_PARENT_DIR)
+  {
+    Close();
+    return true;
+  }
+  else if (action.GetID() == ACTION_NEXT_ITEM || action.GetID() == ACTION_PREV_ITEM)
   {
     // these could indicate next chapter if video supports it
     if (g_application.m_pPlayer != NULL && g_application.m_pPlayer->OnAction(action))
