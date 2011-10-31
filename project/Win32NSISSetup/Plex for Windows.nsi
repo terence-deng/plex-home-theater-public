@@ -30,6 +30,16 @@
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
 
+  VIProductVersion "${plex_product_version}"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "Plex Media Center"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "InternalName" "Plex Media Center"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "Plex, Inc."
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright (c) Plex, Inc.  All rights reserved."
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "Plex Media Center"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${plex_product_version}"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${plex_product_version}"
+ 
+
 ;--------------------------------
 ;Variables
 
@@ -159,7 +169,7 @@ Section "Plex" SecPlex
   
   ;add entry to add/remove programs
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "DisplayName" "Plex"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "DisplayVersion" "0.9.500" # TODO - FIX THIS HARDCODED ATROCITY
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "DisplayVersion" "${plex_setup_version}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "UninstallString" "$INSTDIR\uninstall.exe"
   WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "NoModify" 1
   WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Plex" "NoRepair" 1

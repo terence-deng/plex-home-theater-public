@@ -1,14 +1,12 @@
 @echo off
 
-setlocal
-
-set PlexRoot=..
+set VerPlexRoot=..
 
 for /F "tokens=1 delims=\ " %%a in ('call git rev-parse --short HEAD') do (
   set GitRevision=%%a
 )
 
-for /F "tokens=1,2 delims=\=;\ " %%a in ('findstr APPLICATION_VERSION "%PlexRoot%\Plex.xcodeproj\project.pbxproj"') do (
+for /F "tokens=1,2 delims=\=;\ " %%a in ('findstr APPLICATION_VERSION "%VerPlexRoot%\Plex.xcodeproj\project.pbxproj"') do (
   set AppVersion=%%b
 )
 
@@ -18,6 +16,8 @@ for /F "tokens=1,2,3,4 delims=." %%a in ("%AppVersion%") do (
   set AppBuildNumber=%%c
   set AppRevisionNumber=%%d
 )
+
+set /a AppSetupBuildNumber=%AppBuildNumber% * 100 + %AppRevisionNumber%
 
 rem Major.Minor.Build.Revision
 
@@ -31,5 +31,3 @@ echo #define APPLICATION_MAJOR_VERSION_INT %AppMajorVersion%
 echo #define APPLICATION_MINOR_VERSION_INT %AppMinorVersion%
 echo #define APPLICATION_BUILD_NUMBER_INT %AppBuildNumber%
 echo #define APPLICATION_REVISION_NUMBER_INT %AppRevisionNumber%
-
-endlocal

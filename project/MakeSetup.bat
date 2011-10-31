@@ -148,6 +148,17 @@ IF NOT EXIST "%NSISExePath%\makensis.exe" (
 )
 echo Found MakeNSIS.exe at "%NSISExePath%"
 
+rem ************************************
+echo Obtaining version...
+rem ************************************
+pushd "%PlexRoot%\project"
+call genversion.cmd
+set PlexProductVersion=%AppMajorVersion%.%AppMinorVersion%.%AppBuildNumber%.%AppRevisionNumber%
+echo PlexProductVersion is %PlexProductVersion%
+set PlexSetupVersion=%AppMajorVersion%.%AppMinorVersion%.%AppSetupBuildNumber%
+echo PlexSetupVersion is %PlexSetupVersion%
+popd
+
 set PLEX_SETUP_PACKAGE=Plex-Media-Center-v%GIT_REV%-en-US.exe
 rem ************************************
 echo Creating installer package %PLEX_SETUP_PACKAGE%...
@@ -155,7 +166,7 @@ rem ************************************
 
 if exist "%PLEX_SETUP_PACKAGE%" del /f "%PLEX_SETUP_PACKAGE%"
 set NSISExe=%NSISExePath%\makensis.exe
-"%NSISExe%" /V1 /X"SetCompressor /FINAL lzma" /Dplex_dependency_root="%PlexRoot%\project\Win32BuildSetup\dependencies" /Dplex_vcredist_root="%PlexRoot%\project\Win32BuildSetup\vs_redistributable\vs2010" /Dplex_deploy_root="%DeployDir%" /Dplex_revision="%GIT_REV%" /Dplex_target="dx" "Plex for Windows.nsi"
+"%NSISExe%" /V1 /X"SetCompressor /FINAL lzma" /Dplex_product_version=%PlexProductVersion% /Dplex_setup_version=%PlexSetupVersion% /Dplex_dependency_root="%PlexRoot%\project\Win32BuildSetup\dependencies" /Dplex_vcredist_root="%PlexRoot%\project\Win32BuildSetup\vs_redistributable\vs2010" /Dplex_deploy_root="%DeployDir%" /Dplex_revision="%GIT_REV%" /Dplex_target="dx" "Plex for Windows.nsi"
 
 if not exist "%PLEX_SETUP_PACKAGE%" (
   echo FATAL ERROR - Failed to create %PLEX_SETUP_PACKAGE%!
