@@ -7,14 +7,13 @@
 //
 
 #include "CocoaUtils.h"
+#include "version.h"
 
 #ifdef _WIN32
 
-// TODO - mfeingol - Implement these correctly
-
 const char* Cocoa_GetAppVersion()
 {
-  return "0.9.5";
+  return APPLICATION_VERSION;
 }
 
 #endif
