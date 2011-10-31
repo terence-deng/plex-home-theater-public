@@ -8,7 +8,7 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "windows.h"
-#include "XBMC_PC.rc2"
+#include "version.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -34,7 +34,7 @@ END
 2 TEXTINCLUDE 
 BEGIN
     "#include ""windows.h""\r\n"
-    "#include ""XBMC_PC.rc2""\r\n"
+    "#include ""version.h""\r\n"
     "\0"
 END
 
@@ -46,17 +46,47 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
-// Icon
+// Version
 //
 
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_MAIN_ICON           ICON                    "plex.ico"
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION APPLICATION_MAJOR_VERSION_INT,APPLICATION_MINOR_VERSION_INT,APPLICATION_BUILD_NUMBER_INT,APPLICATION_REVISION_NUMBER_INT
+ PRODUCTVERSION APPLICATION_MAJOR_VERSION_INT,APPLICATION_MINOR_VERSION_INT,APPLICATION_BUILD_NUMBER_INT,APPLICATION_REVISION_NUMBER_INT
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Plex, Inc."
+            VALUE "FileDescription", "Plex Media Center"
+            VALUE "FileVersion", APPLICATION_VERSION
+            VALUE "InternalName", "Plex.exe"
+            VALUE "LegalCopyright", "Copyright (c) Plex, Inc.  All rights reserved."
+            VALUE "OriginalFilename", "Plex.exe"
+            VALUE "ProductName", "Plex Media Center"
+            VALUE "ProductVersion", FULL_APPLICATION_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
-
 
 
 #ifndef APSTUDIO_INVOKED

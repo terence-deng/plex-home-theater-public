@@ -97,7 +97,28 @@
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\plex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>set guid=cacd8cd2-5ded-4f70-85a3-49a69fe9f70f
+set PlexRoot=..\..
+pushd "%PlexRoot%\project"
+call genversion.cmd &gt; "%temp%\%guid%.h"
+popd
+if not exist "%PlexRoot%\plex\version.h" (
+  move /y "%temp%\%guid%.h" "%PlexRoot%\plex\version.h" &gt; nul
+  echo Generated version.h
+) else (
+  fc /b "%PlexRoot%\plex\version.h" "%temp%\%guid%.h" &gt; nul
+  if errorlevel 1 (
+   move /y "%temp%\%guid%.h" "%PlexRoot%\plex\version.h" &gt; nul
+   echo Re-generated version.h
+  ) else (
+    del /f "%temp%\%guid%.h"
+    echo version.h unchanged
+  )
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -150,7 +171,28 @@
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\plex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>set guid=cacd8cd2-5ded-4f70-85a3-49a69fe9f70f
+set PlexRoot=..\..
+pushd "%PlexRoot%\project"
+call genversion.cmd &gt; "%temp%\%guid%.h"
+popd
+if not exist "%PlexRoot%\plex\version.h" (
+  move /y "%temp%\%guid%.h" "%PlexRoot%\plex\version.h" &gt; nul
+  echo Generated version.h
+) else (
+  fc /b "%PlexRoot%\plex\version.h" "%temp%\%guid%.h" &gt; nul
+  if errorlevel 1 (
+   move /y "%temp%\%guid%.h" "%PlexRoot%\plex\version.h" &gt; nul
+   echo Re-generated version.h
+  ) else (
+    del /f "%temp%\%guid%.h"
+    echo version.h unchanged
+  )
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\plex\CocoaUtils.cpp" />
@@ -903,6 +945,7 @@
     <ClInclude Include="..\..\plex\PlexUtils.h" />
     <ClInclude Include="..\..\plex\Utility\BackgroundMusicPlayer.h" />
     <ClInclude Include="..\..\plex\Utility\HTTP.h" />
+    <ClInclude Include="..\..\plex\version.h" />
     <ClInclude Include="..\..\xbmc\AddonDatabase.h" />
     <ClInclude Include="..\..\xbmc\addons\AddonInstaller.h" />
     <ClInclude Include="..\..\xbmc\addons\PluginSource.h" />
@@ -1717,6 +1760,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying %(Filename)%(Extension)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <SubType>Designer</SubType>
     </CustomBuild>
     <CustomBuild Include="..\plex-mce-registration-xp.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y %(FullPath) $(OutDir)</Command>
@@ -1725,7 +1769,9 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying %(Filename)%(Extension)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <SubType>Designer</SubType>
     </CustomBuild>
+    <None Include="..\..\xbmc\win32\XBMC_PC.rc2" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc" />
