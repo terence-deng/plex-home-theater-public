@@ -90,7 +90,7 @@ void LogGraphicsInfo();
 
 #ifdef _WIN32
 #define dprintf(format,  ...) \
-  CLog::Log(LOGDEBUG, format, __VA_ARGS__)
+  CLog::Log(LOGINFO, format, __VA_ARGS__)
 
 #define eprintf(format, ...) \
   CLog::Log(LOGERROR, format, __VA_ARGS__)
