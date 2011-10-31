@@ -23,7 +23,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>0.9.5</string>
+	<string>${APPLICATION_VERSION}</string>
 	<key>CFBundleIconFile</key>
 	<string>Plex.icns</string>
 	<key>CFBundleIdentifier</key>
