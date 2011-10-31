@@ -825,7 +825,8 @@ bool CGUIWindowVideoBase::OnFileAction(int iItem, int action)
     OnPopupMenu(iItem);
     return true;
   case SELECT_ACTION_RESUME:
-    item->m_lStartOffset = STARTOFFSET_RESUME;
+    if (item)
+      item->m_lStartOffset = STARTOFFSET_RESUME;
     break;
   case SELECT_ACTION_PLAY:
   default:
