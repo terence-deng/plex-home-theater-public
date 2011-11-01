@@ -985,10 +985,11 @@ int CWinSystemOSX::GetNumScreens()
 #pragma mark -
 #pragma mark Refresh rate support
 
-bool CWinSystemOSX::SwitchRefreshRate(float targetFPS)
+bool CWinSystemOSX::SwitchRefreshRate(float targetFPS, int screenID)
 {
     // interrogate display info
-    CGDirectDisplayID currentDisplay = CGDisplayPrimaryDisplay(kCGDirectMainDisplay);
+    CGDirectDisplayID currentDisplay = GetDisplayID(screenID);
+//    CGDirectDisplayID currentDisplay = CGDisplayPrimaryDisplay(kCGDirectMainDisplay);
 	CGDisplayModeRef activeDisplayMode = CGDisplayCopyDisplayMode(currentDisplay);
 	
 	// store current mode

@@ -51,7 +51,7 @@ public:
   
   virtual int GetNumScreens();
     
-    virtual bool SwitchRefreshRate(float targetFPS);
+    virtual bool SwitchRefreshRate(float targetFPS, int screenID);
     virtual bool ResetDesktopRefreshRate();
 
 

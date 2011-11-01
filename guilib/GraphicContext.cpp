@@ -296,7 +296,7 @@ void CGraphicContext::SetCalibrating(bool bOnOff)
 #ifdef __APPLE__
 bool CGraphicContext::SwitchRefreshRate(float refreshRate)
 {
-    return g_Windowing.SwitchRefreshRate(refreshRate);
+    return g_Windowing.SwitchRefreshRate(refreshRate, m_iScreenId);
 }
 
 bool CGraphicContext::ResetDesktopRefreshRate()
