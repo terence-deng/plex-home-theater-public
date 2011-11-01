@@ -180,6 +180,9 @@ extern "C"
   // version
   bool isSnowLeopardOrBetter();
   
+    void *Cocoa_SwitchRefreshRate(double targetFPS);
+    void Cocoa_ResetVideoMode(void *videoMode);
+
 #ifdef __cplusplus
 }
 #endif
