@@ -180,6 +180,8 @@ extern "C"
   // version
   bool isSnowLeopardOrBetter();
   
+  void *Cocoa_SwitchRefreshRate(double targetFPS);
+
 #ifdef __cplusplus
 }
 #endif

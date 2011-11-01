@@ -637,9 +637,9 @@ void CGUISettings::Initialize()
   //AddInt(5, "videoplayer.displayresolution", 169, (int)RES_AUTORES, (int)RES_AUTORES, 1, (int)CUSTOM+MAX_RESOLUTIONS, SPIN_CONTROL_TEXT);
   AddInt(NULL, "videoplayer.displayresolution", 169, (int)RES_AUTORES, (int)RES_AUTORES, 1, (int)RES_AUTORES, SPIN_CONTROL_TEXT);
   
-#if !defined(__APPLE__)
+//#if !defined(__APPLE__)
   AddBool(vp, "videoplayer.adjustrefreshrate", 170, false);
-#endif
+//#endif
   
   //sync settings not available on windows gl build
 #if defined(_WIN32) && defined(HAS_GL)
