@@ -60,9 +60,6 @@ public:
   RESOLUTION GetResolution() const;
   void GetVideoRect(CRect &source, CRect &dest);
   float GetAspectRatio() const;
-#ifdef __APPLE__
-    void ResetDesktopVideoMode();
-#endif
 
 protected:
   void ChooseBestResolution(float fps);
@@ -74,9 +71,6 @@ protected:
   unsigned int m_sourceWidth;
   unsigned int m_sourceHeight;
   float m_sourceFrameRatio;
-#ifdef __APPLE__
-    void *_desktopVideoMode;
-#endif
 
   CRect m_destRect;
   CRect m_sourceRect;

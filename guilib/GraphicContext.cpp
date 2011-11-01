@@ -84,7 +84,7 @@ bool CGraphicContext::SetClipRegion(float x, float y, float w, float h)
 
   // ok, now intersect with our old clip region
   CRect rect(x, y, x + w, y + h);
-  rect += origin;
+  rect += origin;   
   if (m_clipRegions.size())
   {
     // intersect with original clip region
@@ -292,6 +292,19 @@ void CGraphicContext::SetCalibrating(bool bOnOff)
 {
   m_bCalibrating = bOnOff;
 }
+
+#ifdef __APPLE__
+bool CGraphicContext::SwitchRefreshRate(float refreshRate)
+{
+    return g_Windowing.SwitchRefreshRate(refreshRate);
+}
+
+bool CGraphicContext::ResetDesktopRefreshRate()
+{
+    return g_Windowing.ResetDesktopRefreshRate();
+}
+
+#endif
 
 bool CGraphicContext::IsValidResolution(RESOLUTION res)
 {
