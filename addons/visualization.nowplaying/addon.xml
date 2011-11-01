@@ -5,7 +5,7 @@
   name="Now Playing"
   provider-name="Plex Inc">
   <extension
-    point="xbmc.player.musicviz">
+    point="xbmc.player.musicviz"/>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Now Playing Visualization</summary>
     <description lang="en">Plex's yummy now playing visualization</description>
