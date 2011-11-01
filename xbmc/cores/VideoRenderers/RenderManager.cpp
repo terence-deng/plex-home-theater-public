@@ -516,3 +516,11 @@ void CXBMCRenderManager::UpdateResolution()
     m_bReconfigured = false;
   }
 }
+
+#ifdef __APPLE__
+void CXBMCRenderManager::ResetDesktopVideoMode()
+{
+    m_pRenderer->ResetDesktopVideoMode();
+}
+#endif
+

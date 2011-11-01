@@ -1328,8 +1328,16 @@ void *Cocoa_SwitchRefreshRate(double targetFPS)
             }	
 		}
 	}
-    return desktopDisplayMode;
+    return (void *)desktopDisplayMode;
+}
 
+void Cocoa_ResetVideoMode(void *videoMode)
+{
+    CGError err = CGDisplaySetDisplayMode(kCGDirectMainDisplay, (CGDisplayModeRef)videoMode, NULL);
+    if (err != kCGErrorSuccess)
+    {
+        NSLog(@"Restore desktop mode switch failed");
+    }	
 }
 
 size_t displayBitsPerPixelForMode(CGDisplayModeRef mode)

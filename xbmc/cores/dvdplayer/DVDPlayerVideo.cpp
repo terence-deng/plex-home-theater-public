@@ -703,7 +703,10 @@ void CDVDPlayerVideo::OnExit()
     m_pOverlayCodecCC->Dispose();
     m_pOverlayCodecCC = NULL;
   }
-
+#ifdef __APPLE__
+    // restore desktop video mode
+    g_renderManager.ResetDesktopVideoMode(); 
+#endif
   CLog::Log(LOGNOTICE, "thread end: video_thread");
 }
 
