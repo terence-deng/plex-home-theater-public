@@ -87,7 +87,11 @@ public:
   bool IsFullScreenVideo() const;
   bool IsCalibrating() const;
   void SetCalibrating(bool bOnOff);
-  bool IsValidResolution(RESOLUTION res);
+#ifdef __APPLE__
+    bool SwitchRefreshRate(float refreshRate);
+    bool ResetDesktopRefreshRate();
+#endif
+    bool IsValidResolution(RESOLUTION res);
   void SetVideoResolution(RESOLUTION res, bool forceUpdate = false);
   RESOLUTION GetVideoResolution() const;
   void ResetOverscan(RESOLUTION res, OVERSCAN &overscan);

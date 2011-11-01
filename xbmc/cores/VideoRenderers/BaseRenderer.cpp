@@ -36,9 +36,6 @@ CBaseRenderer::CBaseRenderer()
   m_sourceWidth = 720;
   m_sourceHeight = 480;
   m_resolution = RES_DESKTOP;
-#ifdef __APPLE__
-    _desktopVideoMode = NULL;
-#endif
 }
 
 CBaseRenderer::~CBaseRenderer()
@@ -53,10 +50,7 @@ void CBaseRenderer::ChooseBestResolution(float fps)
   // Adjust refreshrate to match source fps
     if (g_guiSettings.GetBool("videoplayer.adjustrefreshrate"))
     {
-#if defined (__APPLE__)
-    _desktopVideoMode = Cocoa_SwitchRefreshRate(fps);
-#else
-
+#if !defined (__APPLE__)
     // Find closest refresh rate
     for (size_t i = (int)RES_CUSTOM; i < g_settings.m_ResInfo.size(); i++)
     {
@@ -84,20 +78,9 @@ void CBaseRenderer::ChooseBestResolution(float fps)
 
   }
 
-  else
-    CLog::Log(LOGNOTICE, "Display resolution %s : %s (%d)", m_resolution == RES_DESKTOP ? "DESKTOP" : "USER", g_settings.m_ResInfo[m_resolution].strMode.c_str(), m_resolution);
+  //else
+  //  CLog::Log(LOGNOTICE, "Display resolution %s : %s (%d)", m_resolution == RES_DESKTOP ? "DESKTOP" : "USER", g_settings.m_ResInfo[m_resolution].strMode.c_str(), m_resolution);
 }
-
-#ifdef __APPLE__
-void CBaseRenderer::ResetDesktopVideoMode() 
-{
-    if (_desktopVideoMode)
-    {
-        Cocoa_ResetVideoMode(_desktopVideoMode);
-        _desktopVideoMode = NULL;
-    }
-}
-#endif
 
 RESOLUTION CBaseRenderer::GetResolution() const
 {

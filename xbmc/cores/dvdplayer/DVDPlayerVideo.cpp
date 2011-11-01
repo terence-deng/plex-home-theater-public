@@ -44,6 +44,9 @@
 #include <numeric>
 #include <iterator>
 #include "utils/log.h"
+#ifdef __APPLE__
+#include "GraphicContext.h"
+#endif
 
 using namespace std;
 
@@ -274,6 +277,13 @@ void CDVDPlayerVideo::OnStartup()
     g_renderManager.PreInit();
     m_output.inited = true;
   }
+#ifdef __APPLE__
+    if (g_guiSettings.GetBool("videoplayer.adjustrefreshrate"))
+    {
+        g_graphicsContext.SwitchRefreshRate(m_fFrameRate);
+        
+    }
+#endif
 #endif
   g_dvdPerformanceCounter.EnableVideoDecodePerformance(ThreadHandle());
 }
@@ -705,7 +715,7 @@ void CDVDPlayerVideo::OnExit()
   }
 #ifdef __APPLE__
     // restore desktop video mode
-    g_renderManager.ResetDesktopVideoMode(); 
+    g_graphicsContext.ResetDesktopRefreshRate(); 
 #endif
   CLog::Log(LOGNOTICE, "thread end: video_thread");
 }

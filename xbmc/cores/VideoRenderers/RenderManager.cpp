@@ -517,10 +517,3 @@ void CXBMCRenderManager::UpdateResolution()
   }
 }
 
-#ifdef __APPLE__
-void CXBMCRenderManager::ResetDesktopVideoMode()
-{
-    m_pRenderer->ResetDesktopVideoMode();
-}
-#endif
-

@@ -50,6 +50,9 @@ public:
   virtual bool IsSystemScreenSaverEnabled();
   
   virtual int GetNumScreens();
+    
+    virtual bool SwitchRefreshRate(float targetFPS, int screenID);
+    virtual bool ResetDesktopRefreshRate();
 
 
 protected:
@@ -60,10 +63,14 @@ protected:
   bool  SwitchToVideoMode(int width, int height, double refreshrate);
   void  GetVideoModes(void);
   bool  FlushBuffer(void);
+    virtual size_t DisplayBitsPerPixelForMode(void *mode);
+
 
   void* m_glContext;
   static void* m_lastOwnedContext;
   SDL_Surface* m_SDLSurface;
+    
+    void* m_desktopVideoMode;
 };
 
 #endif // WINDOW_SYSTEM_H
