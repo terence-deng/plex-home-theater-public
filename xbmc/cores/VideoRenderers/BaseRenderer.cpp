@@ -27,6 +27,7 @@
 #include "GraphicContext.h"
 #include "utils/log.h"
 #include "MathUtils.h"
+#include "CocoaUtils.h"
 
 
 CBaseRenderer::CBaseRenderer()
@@ -47,9 +48,9 @@ void CBaseRenderer::ChooseBestResolution(float fps)
   if ( m_resolution == RES_WINDOW )
     m_resolution = RES_DESKTOP;
   // Adjust refreshrate to match source fps
-#if !defined(__APPLE__)
-  if (g_guiSettings.GetBool("videoplayer.adjustrefreshrate"))
-  {
+    if (g_guiSettings.GetBool("videoplayer.adjustrefreshrate"))
+    {
+#if !defined (__APPLE__)
     // Find closest refresh rate
     for (size_t i = (int)RES_CUSTOM; i < g_settings.m_ResInfo.size(); i++)
     {
@@ -73,10 +74,12 @@ void CBaseRenderer::ChooseBestResolution(float fps)
     }
 
     CLog::Log(LOGNOTICE, "Display resolution ADJUST : %s (%d)", g_settings.m_ResInfo[m_resolution].strMode.c_str(), m_resolution);
-  }
-  else
 #endif
-    CLog::Log(LOGNOTICE, "Display resolution %s : %s (%d)", m_resolution == RES_DESKTOP ? "DESKTOP" : "USER", g_settings.m_ResInfo[m_resolution].strMode.c_str(), m_resolution);
+
+  }
+
+  //else
+  //  CLog::Log(LOGNOTICE, "Display resolution %s : %s (%d)", m_resolution == RES_DESKTOP ? "DESKTOP" : "USER", g_settings.m_ResInfo[m_resolution].strMode.c_str(), m_resolution);
 }
 
 RESOLUTION CBaseRenderer::GetResolution() const

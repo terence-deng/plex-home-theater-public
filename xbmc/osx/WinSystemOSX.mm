@@ -211,6 +211,7 @@ CWinSystemOSX::CWinSystemOSX() : CWinSystemBase()
   m_eWindowSystem = WINDOW_SYSTEM_OSX;
   m_glContext = 0;
   m_SDLSurface = NULL;
+    m_desktopVideoMode = NULL;
 }
 
 CWinSystemOSX::~CWinSystemOSX()
@@ -979,6 +980,109 @@ int CWinSystemOSX::GetNumScreens()
 {
   int numDisplays = [[NSScreen screens] count];
   return(numDisplays);
+}
+
+#pragma mark -
+#pragma mark Refresh rate support
+
+bool CWinSystemOSX::SwitchRefreshRate(float targetFPS, int screenID)
+{
+    // interrogate display info
+    CGDirectDisplayID currentDisplay = GetDisplayID(screenID);
+//    CGDirectDisplayID currentDisplay = CGDisplayPrimaryDisplay(kCGDirectMainDisplay);
+	CGDisplayModeRef activeDisplayMode = CGDisplayCopyDisplayMode(currentDisplay);
+	
+	// store current mode
+	m_desktopVideoMode = activeDisplayMode;
+	
+	size_t currentHeight = CGDisplayModeGetHeight(activeDisplayMode);
+	size_t currentWidth = CGDisplayModeGetWidth(activeDisplayMode);
+	UInt32 currentRefresh = lrintf(CGDisplayModeGetRefreshRate(activeDisplayMode));	
+	size_t currentBitDepth = DisplayBitsPerPixelForMode(activeDisplayMode);
+	NSLog(@"Current display mode: %i x %i @ %i Hz %i bit", currentWidth, currentHeight, currentRefresh, currentBitDepth);
+	
+	// get all available modes and match resolution
+	CFArrayRef displayModes = CGDisplayCopyAllDisplayModes(currentDisplay, NULL);
+	CFMutableArrayRef matchingModes = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
+	
+	UInt32 integerRate = lrintf(targetFPS);
+    
+	for (UInt32 i=0; i<CFArrayGetCount(displayModes); i++) 
+	{
+		CGDisplayModeRef displayMode = (CGDisplayModeRef)CFArrayGetValueAtIndex(displayModes, i);
+		size_t height = CGDisplayModeGetHeight(displayMode);
+		size_t width = CGDisplayModeGetWidth(displayMode);
+		UInt32 refresh = lrintf(CGDisplayModeGetRefreshRate(displayMode));
+		size_t bitDepth = DisplayBitsPerPixelForMode(displayMode);
+		BOOL interlaced = (CGDisplayModeGetIOFlags(displayMode) & kDisplayModeInterlacedFlag) == kDisplayModeInterlacedFlag;
+		NSLog(@"Available: %i x %i @ %i Hz %i bit %@", width, height, refresh, bitDepth, interlaced == YES ? @"interlaced" : @"progressive");
+        
+		BOOL frameRateMatch = (refresh % integerRate == 0);
+		if (height == currentHeight && width == currentWidth && bitDepth == currentBitDepth && frameRateMatch == YES && !interlaced)
+		{
+			NSLog(@"Matching: %i x %i @ %i Hz %i bit", width, height, refresh, bitDepth);
+			CFArrayAppendValue(matchingModes, displayMode);
+		}
+	}
+	if (CFArrayGetCount(matchingModes) > 0)
+	{
+		CGDisplayModeRef displayMode = (CGDisplayModeRef)CFArrayGetValueAtIndex(matchingModes, 0);
+		size_t height = CGDisplayModeGetHeight(displayMode);
+		size_t width = CGDisplayModeGetWidth(displayMode);
+		UInt32 refresh = lrintf(CGDisplayModeGetRefreshRate(displayMode));
+		size_t bitDepth = DisplayBitsPerPixelForMode(displayMode);
+		
+		if (refresh != currentRefresh)
+		{
+            NSLog(@"Trying %i x %i @ %i Hz %i bit", width, height, refresh, bitDepth);
+            // attempt mode switch
+            CGError err = CGDisplaySetDisplayMode(kCGDirectMainDisplay, displayMode, NULL);
+            if (displayModes) CFRelease(displayModes);
+            CFRelease(matchingModes);
+            if (err != kCGErrorSuccess)
+            {
+                //CLog::Log(LOG_ERR, @"Display mode switch failed");
+                m_desktopVideoMode = nil;
+                return false;
+            }	
+		}
+	}
+    return true;
+}
+
+bool CWinSystemOSX::ResetDesktopRefreshRate()
+{
+    if (!m_desktopVideoMode)
+    {
+        return false;
+    }
+    CGError err = CGDisplaySetDisplayMode(kCGDirectMainDisplay, (CGDisplayModeRef)m_desktopVideoMode, NULL);
+    if (err != kCGErrorSuccess)
+    {
+        NSLog(@"Restore desktop mode switch failed");
+        return false;
+    }	
+    return true;
+}
+
+size_t CWinSystemOSX::DisplayBitsPerPixelForMode(void *mode)
+{
+	size_t depth = 0;
+	CFStringRef pixEnc = CGDisplayModeCopyPixelEncoding((CGDisplayModeRef)mode);
+	if(CFStringCompare(pixEnc, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+	{
+		depth = 32;
+	}
+	else if(CFStringCompare(pixEnc, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+	{
+		depth = 16;
+	}
+	else if(CFStringCompare(pixEnc, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+	{
+		depth = 8;
+	}
+	if (pixEnc) CFRelease(pixEnc);
+    return depth;
 }
 
 #endif

@@ -516,3 +516,4 @@ void CXBMCRenderManager::UpdateResolution()
     m_bReconfigured = false;
   }
 }
+

@@ -23,6 +23,8 @@
 #include <IOKit/pwr_mgt/IOPMLib.h>
 #include <IOKit/IOKitLib.h>
 #include <SDL/SDL.h>
+#import <QuartzCore/QuartzCore.h>
+
 #ifdef WORKING
 #include "CocoaUtils.h"
 #include "CocoaToCppThunk.h"
@@ -1257,4 +1259,6 @@ bool isSnowLeopardOrBetter()
 	}
 	return false;
 }
+
 #endif
+
