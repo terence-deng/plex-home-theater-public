@@ -957,7 +957,7 @@ int CButtonTranslator::TranslateWindow(const CStdString &window)
       return windows[index].action;
   }
 
-  CLog::Log(LOGERROR, "Window Translator: Can't find window %s", strWindow.c_str());
+  CLog::Log(LOGWARNING, "Window Translator: Can't find window %s", strWindow.c_str());
   return WINDOW_INVALID;
 }
 
