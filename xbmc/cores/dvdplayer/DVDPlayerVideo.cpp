@@ -406,14 +406,20 @@ void CDVDPlayerVideo::Process()
     else if (pMsg->IsType(CDVDMsg::GENERAL_RESET))
     {
       if(m_pVideoCodec)
+      {
         m_pVideoCodec->Reset();
+        memset(&picture, 0, sizeof(DVDVideoPicture));
+      }
       m_packets.clear();
       m_started = false;
     }
     else if (pMsg->IsType(CDVDMsg::GENERAL_FLUSH)) // private message sent by (CDVDPlayerVideo::Flush())
     {
       if(m_pVideoCodec)
+      {
         m_pVideoCodec->Reset();
+        memset(&picture, 0, sizeof(DVDVideoPicture));
+      }
       m_packets.clear();
 
       m_pullupCorrection.Flush();
@@ -529,6 +535,7 @@ void CDVDPlayerVideo::Process()
           }
 
           m_pVideoCodec->Reset();
+          memset(&picture, 0, sizeof(DVDVideoPicture));
           m_packets.clear();
           break;
         }
@@ -673,6 +680,7 @@ void CDVDPlayerVideo::Process()
           {
             CLog::Log(LOGWARNING, "Decoder Error getting videoPicture.");
             m_pVideoCodec->Reset();
+            memset(&picture, 0, sizeof(DVDVideoPicture));
           }
         }
 
