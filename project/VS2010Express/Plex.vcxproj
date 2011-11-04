@@ -941,6 +941,7 @@ if not exist "%PlexRoot%\plex\version.h" (
     <ClInclude Include="..\..\plex\PlexContentPlayerMixin.h" />
     <ClInclude Include="..\..\plex\PlexContentWorker.h" />
     <ClInclude Include="..\..\plex\PlexMediaServerQueue.h" />
+    <ClInclude Include="..\..\plex\PlexServerManager.h" />
     <ClInclude Include="..\..\plex\PlexSourceScanner.h" />
     <ClInclude Include="..\..\plex\PlexUtils.h" />
     <ClInclude Include="..\..\plex\Utility\BackgroundMusicPlayer.h" />
