@@ -76,7 +76,7 @@ BEGIN
             VALUE "LegalCopyright", "Copyright (c) Plex, Inc.  All rights reserved."
             VALUE "OriginalFilename", "Plex.exe"
             VALUE "ProductName", "Plex Media Center"
-            VALUE "ProductVersion", FULL_APPLICATION_VERSION
+            VALUE "ProductVersion", APPLICATION_VERSION
         END
     END
     BLOCK "VarFileInfo"
