@@ -69,6 +69,9 @@ class HostSources
   VECSOURCES    pictureSources;
   VECSOURCES    applicationSources;
   CFileItemList librarySections;
+
+  // This lock is used in CPlexSourceScanner::Process to protect the vectors defined above from concurrent use.
+  boost::recursive_mutex lock;
 };
 
 typedef boost::shared_ptr<HostSources> HostSourcesPtr;

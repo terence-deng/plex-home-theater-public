@@ -40,6 +40,11 @@ void CPlexSourceScanner::Process()
     boost::recursive_mutex::scoped_lock lock(g_lock);
     g_activeScannerCount++;
   }
+
+  // Take the per-HostSources instance lock. We want parallelism, so we don't use g_lock.
+  // However, we may have threads scanning the same HostSources object, so we need to protect the vectors
+  // Otherwise, extremely nasty heap corruption can ensue.
+  boost::recursive_mutex::scoped_lock sources_lock(m_sources->lock);
   
   if (m_sources->host.find("members.mac.com") != std::string::npos)
   {
