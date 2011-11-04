@@ -11,7 +11,13 @@ setlocal
 
 set TargetPlatform=Win32
 set TargetConfig=Release
-if "%1"=="debug" (set TargetConfig=Debug)
+set CopyOnly=0
+
+rem Parse command line args
+for %%b in (%1, %2, %3, %4, %5) do (
+  if "%%b"=="debug" set TargetConfig=Debug
+  if "%%b"=="copyonly" set CopyOnly=1
+)
 
 set PlexRoot=..
 set BuildRoot=%PlexRoot%\Build
@@ -23,17 +29,18 @@ rem ************************************
 echo Creating drop for %TargetPlatform% - %TargetConfig%
 rem ************************************
 
-rem ************************************
-echo Cleaning up deployment directory...
-rem ************************************
+if not "%CopyOnly%" == "1" (
+  rem ************************************
+  echo Cleaning up deployment directory...
+  rem ************************************
 
-if exist "%DeployDir%" rd /s /q "%DeployDir%"
-if exist "%DeployDir%" (
-  echo FATAL ERROR - Could not delete %DeployDir%!
-  goto :End
+  if exist "%DeployDir%" rd /s /q "%DeployDir%"
+  if exist "%DeployDir%" (
+    echo FATAL ERROR - Could not delete %DeployDir%!
+    goto :End
+  )
+  md "%DeployDir%"
 )
-md "%DeployDir%"
-
 rem ************************************
 echo Preparing exclusion file...
 rem ************************************
@@ -101,25 +108,27 @@ xcopy "%PlexRoot%\xbmc\lib\libPython\Python\Lib" "%DeployDir%\system\python\Lib"
 
 del /f py_exclude.txt
 
-rem ************************************
-echo Building MediaStream skin...
-echo Creating MediaStream build folder...
-rem ************************************
+if not "%CopyOnly%" == "1" (
+  rem ************************************
+  echo Building MediaStream skin...
+  echo Creating MediaStream build folder...
+  rem ************************************
 
-set MediaStreamSourceDir=%PlexRoot%\addons\skin.mediastream
-set MediaStreamDeployDir=%DeployDir%\addons\skin.mediastream
+  set MediaStreamSourceDir=%PlexRoot%\addons\skin.mediastream
+  set MediaStreamDeployDir=%DeployDir%\addons\skin.mediastream
 
-if not exist "%MediaStreamDeployDir%\Media" md "%MediaStreamDeployDir%\Media"
+  if not exist "%MediaStreamDeployDir%\Media" md "%MediaStreamDeployDir%\Media"
 
-echo Creating XBT texture files...
-echo Running command "%PlexRoot%\Tools\TexturePacker\TexturePacker.exe" -input "%MediaStreamSourceDir%\Media" -output "%MediaStreamDeployDir%\Media\Textures.xbt"
-start "" /b /wait "%PlexRoot%\Tools\TexturePacker\TexturePacker.exe" -input "%MediaStreamSourceDir%\Media" -output "%MediaStreamDeployDir%\Media\Textures.xbt"
+  echo Creating XBT texture files...
+  echo Running command "%PlexRoot%\Tools\TexturePacker\TexturePacker.exe" -input "%MediaStreamSourceDir%\Media" -output "%MediaStreamDeployDir%\Media\Textures.xbt"
+  start "" /b /wait "%PlexRoot%\Tools\TexturePacker\TexturePacker.exe" -input "%MediaStreamSourceDir%\Media" -output "%MediaStreamDeployDir%\Media\Textures.xbt"
 
-if not exist "%MediaStreamDeployDir%\Media\Textures.xbt" (
-  echo FATAL ERROR - Could not create Textures.xbt!
-  goto :End
+  if not exist "%MediaStreamDeployDir%\Media\Textures.xbt" (
+    echo FATAL ERROR - Could not create Textures.xbt!
+    goto :End
+  )
+  echo XBT texture files created...
 )
-echo XBT texture files created...
 
 echo ------------------------------------------------------------
 echo MakeDrop Succeeded!
