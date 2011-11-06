@@ -324,7 +324,7 @@ void CGUISettings::Initialize()
   AddString(NULL, "scrobbler.librefmpass", 15219, "", EDIT_CONTROL_MD5_INPUT, false, 15219);
   
   CSettingsCategory *bgm = AddCategory(3, "backgroundmusic", 15230);
-  AddBool(bgm, "backgroundmusic.bgmusicenabled", 18104, true);
+  AddBool(0, "backgroundmusic.bgmusicenabled", 18104, true);
   AddBool(bgm, "backgroundmusic.thememusicenabled", 18102, true);
   AddInt(bgm, "backgroundmusic.bgmusicvolume", 18101, 50, 5, 5, 100, SPIN_CONTROL_INT_PLUS, MASK_PERCENT);
 
