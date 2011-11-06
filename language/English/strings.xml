@@ -1838,7 +1838,7 @@
   <string id="20343">TV Shows</string>
   <string id="20344">This directory contains</string>
   <string id="20345">Run Automated Scan</string>
-  <string id="20346">Scan Recursively</string>
+  <string id="20350">Scan Recursively</string>
   <string id="20347">as</string>
   <string id="20348">Directors</string>
   <string id="20349">No video files found in this path!</string>
@@ -2124,6 +2124,18 @@
 
 
   <!-- strings 32000 thru 32999 reserved for scripts -->
+  
+  <string id="34100">Speaker Configuration</string>
+  <string id="34101">2.0</string>
+  <string id="34102">2.1</string>
+  <string id="34103">3.0</string>
+  <string id="34104">3.1</string>
+  <string id="34105">4.0</string>
+  <string id="34106">4.1</string>
+  <string id="34107">5.0</string>
+  <string id="34108">5.1</string>
+  <string id="34109">7.0</string>
+  <string id="34110">7.1</string>
 
   <string id="40000">Software Update</string>
   <string id="40001">New Version Available</string>

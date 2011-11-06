@@ -461,8 +461,8 @@ void CGUISettings::Initialize()
   map<int,int> channelLayout;
   for(int layout = 0; layout < PCM_MAX_LAYOUT; ++layout)
     channelLayout.insert(make_pair(34101+layout, layout));
-  AddInt(NULL, "audiooutput.channellayout", 34100, PCM_LAYOUT_2_0, channelLayout, SPIN_CONTROL_TEXT);
-  AddBool(NULL, "audiooutput.dontnormalizelevels", 346, true);
+  AddInt(ao, "audiooutput.channellayout", 34100, PCM_LAYOUT_2_0, channelLayout, SPIN_CONTROL_TEXT);
+  AddBool(ao, "audiooutput.dontnormalizelevels", 346, true);
 
   AddBool(ao, "audiooutput.ac3passthrough", 364, true);
   AddBool(ao, "audiooutput.dtspassthrough", 254, true);
