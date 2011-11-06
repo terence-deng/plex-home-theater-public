@@ -780,8 +780,8 @@ void CGUISettings::Initialize()
   //AddString(NULL, "lookandfeel.rssedit", 21450, "", BUTTON_CONTROL_STANDARD);
 
   CSettingsCategory* loc = AddCategory(7, "locale", 20026);
-  AddString(NULL, "locale.language",248,"english", SPIN_CONTROL_TEXT);
-  AddString(NULL, "locale.country", 20026, "USA", SPIN_CONTROL_TEXT);
+  AddString(loc, "locale.language",248,"english", SPIN_CONTROL_TEXT);
+  AddString(loc, "locale.country", 20026, "USA", SPIN_CONTROL_TEXT);
   AddString(loc, "locale.charset", 735, "DEFAULT", SPIN_CONTROL_TEXT); // charset is set by the language file
 #if defined(_LINUX) && !defined(__APPLE__)
   AddSeparator(loc, "locale.sep1");
