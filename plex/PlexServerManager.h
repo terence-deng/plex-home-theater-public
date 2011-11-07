@@ -245,15 +245,20 @@ public:
     {
       if (pair.second->score() > bestScore && pair.second->score() >= PMS_LIVE_SCORE)
       {
+        // Compute the score.
         bestScore = pair.second->score();
         bestServer = pair.second;
+        
+        // Bonus if it's the current server.
+        if (bestServer->equals(m_bestServer))
+          bestScore++;
       }
     }
     
     if (bestServer)
-      dprintf("PlexServerManager: Computed best server to be [%s] (%s:%d) with score %d.", bestServer->name.c_str(), bestServer->address.c_str(), bestServer->port, bestScore);
+      dprintf("Plex Server Manager: Computed best server to be [%s] (%s:%d) with score %d.", bestServer->name.c_str(), bestServer->address.c_str(), bestServer->port, bestScore);
     else
-      dprintf("PlexServerManager: There is no worthy server.");
+      dprintf("Plex Server Manager: There is no worthy server.");
     
     // If the server changed, notify the home screen, there may be repercussions.
     if ((!m_bestServer && bestServer) ||
