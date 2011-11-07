@@ -1809,12 +1809,8 @@ void CPlexDirectory::Process()
   
   m_http.SetRequestHeader("X-Plex-Client-Identifier", g_guiSettings.GetString("system.uuid"));
   
-  // Build an audio codecs description.
-#ifdef _WIN32
-  CStdString protocols = "protocols=shoutcast,http-video;audioDecoders=mp3,aac";
-#else
+  // Build a description of what we support.
   CStdString protocols = "protocols=shoutcast,webkit,http-video;audioDecoders=mp3,aac";
-#endif
   
   if (AUDIO_IS_BITSTREAM(g_guiSettings.GetInt("audiooutput.mode")))
   {
