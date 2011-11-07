@@ -94,7 +94,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& path, CFileItemList &items)
       url.SetPort(server->port);
       strPath = url.Get();
       
-      dprintf("PlexServerManager: Using selected best server %s to make URL %s", server->name.c_str(), strPath.c_str());
+      dprintf("Plex Server Manager: Using selected best server %s to make URL %s", server->name.c_str(), strPath.c_str());
     }
   }
   
@@ -200,6 +200,16 @@ bool CPlexDirectory::ReallyGetDirectory(const CStdString& strPath, CFileItemList
   // Is the server local?
   CURL url(m_url);
   bool localServer = Cocoa_IsHostLocal(url.GetHostName());
+  
+  // Save some properties.
+  if (root->Attribute("updatedAt"))
+    items.SetProperty("updatedAt", root->Attribute("updatedAt"));
+  
+  if (root->Attribute("friendlyName"))
+    items.SetProperty("friendlyName", root->Attribute("friendlyName"));
+
+  if (root->Attribute("machineIdentifier"))
+    items.SetProperty("machineIdentifier", root->Attribute("machineIdentifier"));
 
   // Get the fanart.
   const char* fanart = root->Attribute("art");
