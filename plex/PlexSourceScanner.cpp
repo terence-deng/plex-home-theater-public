@@ -104,6 +104,12 @@ void CPlexSourceScanner::Process()
       CFileItemPtr item = m_sources->librarySections[i];
       item->SetLabel2(m_sources->hostLabel);
       item->SetProperty("machineIdentifier", m_sources->uuid);
+      
+      // Load and set fanart.
+      item->CacheLocalFanart();
+      if (CFile::Exists(item->GetCachedProgramFanart()))
+        item->SetProperty("fanart_image", item->GetCachedProgramFanart());
+      
       CLog::Log(LOGNOTICE, " -> Local section '%s' found.", item->GetLabel().c_str());
       sections.push_back(item);
     }

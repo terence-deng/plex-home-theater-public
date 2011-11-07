@@ -620,11 +620,6 @@ bool CGUIWindowHome::OnMessage(CGUIMessage& message)
         newItem->SetQuickFanart(item->GetQuickFanart());
         newItem->m_iprogramCount = id++;
 
-        // Load and set fanart.
-        newItem->CacheLocalFanart();
-        if (CFile::Exists(newItem->GetCachedProgramFanart()))
-          newItem->SetProperty("fanart_image", newItem->GetCachedProgramFanart());
-
         newList.push_back(newItem);
         
         // See if it matches the selected item.
