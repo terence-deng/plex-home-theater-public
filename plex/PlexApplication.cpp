@@ -12,6 +12,7 @@
 #include "PlexApplicationWin.h"
 #include "BackgroundMusicPlayer.h"
 #include "GUIUserMessages.h"
+#include "ManualServerScanner.h"
 #include "MediaSource.h"
 
 BackgroundMusicPlayerPtr bgMusicPlayer;
@@ -20,9 +21,9 @@ BackgroundMusicPlayerPtr bgMusicPlayer;
 PlexApplicationPtr PlexApplication::Create()
 {
 #ifdef _WIN32
-  return PlexApplicationPtr( new PlexApplicationWin() );
+  return PlexApplicationPtr(new PlexApplicationWin());
 #else
-  return PlexApplicationPtr( new PlexApplication() );
+  return PlexApplicationPtr(new PlexApplication());
 #endif
 }
 
@@ -32,6 +33,17 @@ PlexApplication::PlexApplication()
   // We don't want the background music player whacked on exit (destructor issues), so we'll keep a reference.
   m_serviceListener = PlexServiceListener::Create();
   bgMusicPlayer = m_bgMusicPlayer = BackgroundMusicPlayer::Create();
+  
+  // Make sure we always scan for localhost.
+  ManualServerScanner::Get().addServer("127.0.0.1");
+  
+  // Add the manual server if it exists and is enabled.
+  if (g_guiSettings.GetBool("plexmediaserver.manualaddress"))
+  {
+    string address = g_guiSettings.GetString("plexmediaserver.address");
+    if (IsValidIP(address))
+      ManualServerScanner::Get().addServer(address);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

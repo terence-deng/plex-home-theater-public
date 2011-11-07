@@ -2606,6 +2606,8 @@
 		E3B53E7A0D97B08100021A96 /* DVDSubtitleParserMicroDVD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DVDSubtitleParserMicroDVD.cpp; sourceTree = "<group>"; };
 		E3B53E7B0D97B08100021A96 /* DVDSubtitleParserMicroDVD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDSubtitleParserMicroDVD.h; sourceTree = "<group>"; };
 		E3BBB7980D7EA78A00CAAFD3 /* MythSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MythSession.cpp; sourceTree = "<group>"; };
+		E3CACBFC1466A2260045B1C9 /* ManualServerScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManualServerScanner.h; sourceTree = "<group>"; };
+		E3CACBFD1467DF4C0045B1C9 /* PlexUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexUtils.h; path = plex/PlexUtils.h; sourceTree = "<group>"; };
 		E3D01F361361779300EBD00D /* PlexContentWorker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlexContentWorker.cpp; path = plex/PlexContentWorker.cpp; sourceTree = "<group>"; };
 		E3D01F371361779300EBD00D /* PlexContentWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlexContentWorker.h; path = plex/PlexContentWorker.h; sourceTree = "<group>"; };
 		E3D87AE90D3182F4000CF031 /* XCriticalSection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XCriticalSection.cpp; sourceTree = "<group>"; };
@@ -3050,6 +3052,7 @@
 			children = (
 				E344330E145A81CB00B94C07 /* LaunchHost.cpp */,
 				E344330F145A81CB00B94C07 /* LaunchHost.h */,
+				E3CACBFC1466A2260045B1C9 /* ManualServerScanner.h */,
 				E385F6051457D6430030F848 /* PlexServerManager.h */,
 				E3957ED714525C5900D31C95 /* MyPlexManager.h */,
 				E34B56B114524E2C004A7CCE /* PlexLibrarySectionManager.h */,
@@ -3060,6 +3063,7 @@
 				E329D64213F3668D00AFCC3E /* Players */,
 				E3D01F361361779300EBD00D /* PlexContentWorker.cpp */,
 				E3D01F371361779300EBD00D /* PlexContentWorker.h */,
+				E3CACBFD1467DF4C0045B1C9 /* PlexUtils.h */,
 				E31A8E011357B44800EEB013 /* PlexUtils.cpp */,
 				74A4E98E12F7FFB40021FEDB /* AddOns */,
 				7482B37812E8E3510077A38C /* CocoaUtils.h */,

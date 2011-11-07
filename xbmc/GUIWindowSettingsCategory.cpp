@@ -103,6 +103,8 @@
 #include "WindowingFactory.h"
 
 #include "MyPlexManager.h"
+#include "ManualServerScanner.h"
+#include "PlexUtils.h"
 
 #if defined(HAVE_LIBCRYSTALHD)
 #include "cores/dvdplayer/DVDCodecs/Video/CrystalHD.h"
@@ -822,6 +824,12 @@ void CGUIWindowSettingsCategory::UpdateSettings()
       CGUIControl *pControl = (CGUIControl *)GetControl(pSettingControl->GetID());
       if (pControl) pControl->SetEnabled(g_guiSettings.GetInt("musicplayer.crossfade") > 0 &&
                                          g_guiSettings.GetString("audiooutput.audiodevice").find("wasapi:") == CStdString::npos);
+    }
+    else if (strSetting.Equals("plexmediaserver.address"))
+    {
+      bool enabled = g_guiSettings.GetBool("plexmediaserver.manualaddress");
+      CGUIControl *pControl = (CGUIControl *)GetControl(pSettingControl->GetID());
+      if (pControl) pControl->SetEnabled(enabled);
     }
 #ifdef HAS_WEB_SERVER
     else if (strSetting.Equals("services.webserverusername"))
@@ -2079,6 +2087,20 @@ void CGUIWindowSettingsCategory::Render()
 
 void CGUIWindowSettingsCategory::CheckNetworkSettings()
 {
+  // Check manual server.
+  if (g_guiSettings.GetBool("plexmediaserver.manualaddress"))
+  {
+    string address = g_guiSettings.GetString("plexmediaserver.address");
+    if (IsValidIP(address))
+      ManualServerScanner::Get().addServer(address, true);
+    else
+      ManualServerScanner::Get().removeAllServersButLocal();
+  }
+  else
+  {
+    ManualServerScanner::Get().removeAllServersButLocal();
+  }
+  
   if (!g_application.IsStandAlone())
     return;
 

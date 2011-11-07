@@ -9,6 +9,8 @@
 
 #define BOOST_ASIO_DISABLE_IOCP 1; // IOCP reactor reads failed using boost 1.44.
 
+#include <boost/lexical_cast.hpp>
+
 #include "Plex/PlexUtils.h"
 #include "Network/NetworkServiceBrowser.h"
 #include "PlexSourceScanner.h"
@@ -43,7 +45,6 @@ public:
     
     // Scan the host.
     dprintf("NetworkServiceBrowser: SERVICE arrived: %s", service->address().to_string().c_str());
-    CPlexSourceScanner::ScanHost(service->getResourceIdentifier(), service->address().to_string(), service->getParam("Name"), service->getUrl());
     PlexServerManager::Get().addServer(service->getResourceIdentifier(), service->getParam("Name"), service->address().to_string(), service->port());
   }
   
@@ -51,16 +52,19 @@ public:
   virtual void handleServiceDeparture(NetworkServicePtr& service) 
   {
     dprintf("NetworkServiceBrowser: SERVICE departed after not being seen for %f seconds: %s", service->timeSinceLastSeen(), service->address().to_string().c_str());
-    CPlexSourceScanner::RemoveHost(service->getResourceIdentifier(), service->getUrl(), true);
     PlexServerManager::Get().removeServer(service->getResourceIdentifier(), service->getParam("Name"), service->address().to_string(), service->port());
   }
   
   /// Notify of a service update.
   virtual void handleServiceUpdate(NetworkServicePtr& service)
   {
-    // Scan the host.
+    // Update the server.
     dprintf("NetworkServiceBrowser: SERVICE updated: %s", service->address().to_string().c_str());
-    CPlexSourceScanner::ScanHost(service->getResourceIdentifier(), service->address().to_string(), service->getParam("Name"), service->getUrl());
+    time_t updatedAt = 0;
+    if (service->hasParam("Updated-At"))
+      updatedAt = boost::lexical_cast<time_t>(service->getParam("Updated-At"));
+    
+    PlexServerManager::Get().updateServer(service->getResourceIdentifier(), service->getParam("Name"), service->address().to_string(), service->port(), updatedAt);
   }
 };
 

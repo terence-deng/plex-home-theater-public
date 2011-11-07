@@ -36,7 +36,7 @@ class PlexServer
 
   /// Constructor.
   PlexServer(const string& uuid, const string& name, const string& addr, unsigned short port, const string& token)
-    : uuid(uuid), name(name), address(addr), port(port), token(token)
+    : uuid(uuid), name(name), address(addr), port(port), token(token), updatedAt(0), m_count(1)
   {
     // See if it's running on this machine.
     if (token.empty())
@@ -97,7 +97,26 @@ class PlexServer
   /// Equality operator.
   bool equals(const PlexServerPtr& rhs)
   {
+    if (!rhs)
+      return false;
+    
     return (uuid == rhs->uuid && address == rhs->address && port == rhs->port);
+  }
+  
+  /// Ref counting.
+  void incRef()
+  {
+    ++m_count;
+  }
+  
+  int decRef()
+  {
+    return --m_count;
+  }
+  
+  int refCount() const
+  {
+    return m_count;
   }
   
   bool live;
@@ -107,10 +126,12 @@ class PlexServer
   string token;
   string address;
   unsigned short port;
+  time_t updatedAt;
   
  private:
   
   string m_key;
+  int    m_count;
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -144,7 +165,21 @@ public:
   {
     boost::recursive_mutex::scoped_lock lk(m_mutex);
     PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, addr, port, token));
-    m_servers[server->key()] = server;
+    
+    // Keep a reference count for servers in case we get updated.
+    if (m_servers.find(server->key()) != m_servers.end())
+    {
+      // Same server, found a different way.
+      dprintf("Plex Server Manager: added existing server '%s' (%s).", name.c_str(), addr.c_str());
+      m_servers[server->key()]->incRef();
+    }
+    else
+    {
+      // Brand new server, add and scan.
+      dprintf("Plex Server Manager: added new server '%s' (%s).", name.c_str(), addr.c_str());
+      m_servers[server->key()] = server;
+      CPlexSourceScanner::ScanHost(uuid, addr, name, server->url());
+    }
     
     updateBestServer();
     dump();
@@ -155,12 +190,48 @@ public:
   {
     boost::recursive_mutex::scoped_lock lk(m_mutex);
     PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, addr, port, ""));
-    m_servers.erase(server->key());
+    
+    // Decrease reference count.
+    if (m_servers.find(server->key()) != m_servers.end())
+    {
+      if (m_servers[server->key()]->decRef() == 0)
+      {
+        dprintf("Plex Server Manager: removed existing server '%s' (%s).", name.c_str(), addr.c_str());
+        m_servers.erase(server->key());
+        CPlexSourceScanner::RemoveHost(uuid, server->url(), true);
+      }
+      else
+      {
+        dprintf("Plex Server Manager: lost a reference to server '%s' (%s).", name.c_str(), addr.c_str());
+      }
+    }
     
     updateBestServer();
     dump();
   }
 
+  /// Server was updated.
+  void updateServer(const string& uuid, const string& name, const string& addr, unsigned short port, time_t updatedAt)
+  {
+    boost::recursive_mutex::scoped_lock lk(m_mutex);
+    
+    PlexServerPtr server = PlexServerPtr(new PlexServer(uuid, name, addr, port, ""));
+    if (m_servers.find(server->key()) != m_servers.end())
+    {
+      // See if anything actually changed.
+      if (m_servers[server->key()]->updatedAt < updatedAt)
+      {
+        dprintf("Plex Server Manager: the server '%s' was updated, rescanning (updated at %d)", name.c_str(), updatedAt);
+        m_servers[server->key()]->updatedAt = updatedAt;
+        CPlexSourceScanner::ScanHost(uuid, addr, name, server->url());
+      }
+      else
+      {
+        dprintf("Plex Server Manager: the server '%s' was already up to date, not scanning.", name.c_str());
+      }
+    }
+  }
+  
   /// Set the shared servers.
   void setSharedServers(const vector<PlexServerPtr>& sharedServers)
   {
@@ -266,7 +337,7 @@ public:
         (m_bestServer && bestServer && m_bestServer->equals(bestServer) == false))
     {
       // Notify the main menu.
-      dprintf("PlexServerManager: Notifying home screen about change to best server.");
+      dprintf("Plex Server Manager: Notifying home screen about change to best server.");
       CGUIMessage msg(GUI_MSG_UPDATE_MAIN_MENU, WINDOW_HOME, 300);
       g_windowManager.SendThreadMessage(msg);
     }
@@ -280,7 +351,7 @@ public:
     
     dprintf("SERVERS:");
     BOOST_FOREACH(key_server_pair pair, m_servers)
-      dprintf("  * %s [%s:%d] local: %d live: %d (%s)", pair.second->name.c_str(), pair.second->address.c_str(), pair.second->port, pair.second->local, pair.second->live, pair.second->uuid.c_str());
+      dprintf("  * %s [%s:%d] local: %d live: %d (%s) count: %d", pair.second->name.c_str(), pair.second->address.c_str(), pair.second->port, pair.second->local, pair.second->live, pair.second->uuid.c_str(), pair.second->refCount());
   }
   
   void run()
@@ -295,7 +366,7 @@ public:
       m_mutex.unlock();
       
       // Run connectivity checks.
-      dprintf("PlexServerManager: Running connectivity check.");
+      dprintf("Plex Server Manager: Running connectivity check.");
       BOOST_FOREACH(key_server_pair pair, servers)
         pair.second->reachable();
       
