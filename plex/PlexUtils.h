@@ -3,6 +3,7 @@
 #include <string>
 
 std::string GetHostName();
+bool IsValidIP(const std::string& address);
 
 #ifdef _WIN32
 

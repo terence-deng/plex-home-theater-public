@@ -1,8 +1,36 @@
+#include <string>
+#include <vector>
+
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "PlexUtils.h"
 
 using namespace std;
+using namespace boost;
+
+///////////////////////////////////////////////////////////////////////////////
+bool IsValidIP(const std::string& address)
+{
+  bool valid = false;
+  
+  vector<string> octets;
+  split(octets, address, is_any_of("."));
+  if (octets.size() == 4)
+  {
+    BOOST_FOREACH(string octet, octets)
+    {
+      try { int i = lexical_cast<int>(octet); if (i < 0 || i > 255) return false; }
+      catch (...) { return false; }
+    }
+    
+    valid = true;
+  }    
+  
+  return valid;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 string GetHostName() 
