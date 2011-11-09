@@ -590,7 +590,7 @@ bool CDVDPlayer::OpenDemuxStream()
   m_SelectionStreams.Update(m_pInputStream, m_pDemuxer);
   
   // Compute the bitrate, letting the item override.
-  CFileItem file = g_application.CurrentFileItem();
+  CFileItem& file = g_application.CurrentFileItem();
   int bitrate = m_pDemuxer->GetStreamBitrate();
   
   if (file.IsPlexMediaServerLibrary() && bitrate > file.m_iBitrate)
@@ -1109,7 +1109,15 @@ CStdString CDVDPlayer::TranscodeURL(const CStdString url, const CStdString trans
   
   // Append the quality option
   int quality = g_guiSettings.GetInt("myplex.remoteplexquality");
-  options += "&quality=" + lexical_cast<string>(quality > -1 ? (quality+3) : 7);
+  quality = (quality > -1) ? (quality+3) : 7;
+  options += "&quality=" + lexical_cast<string>(quality);
+  
+  // Set the quality on the file item, since the demuxer seems to get it wrong. We'll multiply
+  // by a factor since we're doing a remote stream, seems to work better.
+  //
+  static int bitrateQualities[] = {64,96,208,320,720,1500,2000,3000,4000,8000,10000,12000,20000};
+  CFileItem& file = g_application.CurrentFileItem();
+  file.m_iBitrate = bitrateQualities[quality] * 4;
   
   // Append the session ID
   options += "&session=" + g_guiSettings.GetString("system.uuid");
