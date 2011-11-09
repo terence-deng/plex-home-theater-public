@@ -177,7 +177,7 @@ void CPlexSourceScanner::RemoveHost(const std::string& uuid, const std::string& 
       // Remove the URL, and if we still have routes to the sources, get out.
       sources->urls.erase(url);
       dprintf("Plex Source Scanner: removing server %s (url: %s), %d urls left.", sources->hostLabel.c_str(), url.c_str(), sources->urls.size());
-      if (sources->urls.size() > 0 && force == false)
+      if (sources->urls.size() > 0)
         return;
       
       // If the count went down to zero, whack it.
