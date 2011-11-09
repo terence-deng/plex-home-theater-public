@@ -104,7 +104,7 @@ void LogGraphicsInfo();
 
 #else
 #define dprintf(format, args...) \
-  CLog::Log(LOGDEBUG, format, ## args)
+  CLog::Log(LOGINFO, format, ## args)
 
 #define eprintf(format, args...) \
   CLog::Log(LOGERROR, format, ## args)
