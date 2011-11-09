@@ -50,6 +50,7 @@ public:
   virtual bool IsSystemScreenSaverEnabled();
   
   virtual int GetNumScreens();
+  virtual int GetCurrentScreen();
     
     virtual bool SwitchRefreshRate(float targetFPS, int screenID);
     virtual bool ResetDesktopRefreshRate();

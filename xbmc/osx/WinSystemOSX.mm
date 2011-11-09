@@ -982,6 +982,24 @@ int CWinSystemOSX::GetNumScreens()
   return(numDisplays);
 }
 
+int CWinSystemOSX::GetCurrentScreen()
+{
+  NSOpenGLContext* context = (NSOpenGLContext* )m_glContext;
+  NSView* view = [context view];
+  NSScreen* screen = [[view window] screen];
+  
+  int numDisplays = [[NSScreen screens] count];
+  int i = 0;
+  
+  for (i=0; i<numDisplays; i++)
+  {
+    if ([[NSScreen screens] objectAtIndex:i] == screen)
+      return i;
+  }
+  
+  return -1;
+}
+
 #pragma mark -
 #pragma mark Refresh rate support
 
