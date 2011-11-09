@@ -729,7 +729,7 @@ bool CGraphicContext::ToggleFullScreenRoot ()
     if (g_guiSettings.m_LookAndFeelResolution > RES_DESKTOP)
       newRes = g_guiSettings.m_LookAndFeelResolution;
     else
-      newRes = RES_DESKTOP;
+      newRes = (RESOLUTION)(RES_DESKTOP + g_Windowing.GetCurrentScreen());
     uiRes = newRes;
 
 #if defined(HAS_VIDEO_PLAYBACK)
