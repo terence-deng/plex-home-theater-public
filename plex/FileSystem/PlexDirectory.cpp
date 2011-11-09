@@ -48,9 +48,24 @@ CFileItemListPtr CPlexDirectory::g_filterList;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CPlexDirectory::CPlexDirectory(bool parseResults, bool displayDialog)
+: m_bStop(false)
+, m_bSuccess(true)
+, m_bParseResults(parseResults)
+, m_bReplaceLocalhost(true)
+, m_dirCacheType(DIR_CACHE_ALWAYS)
+{
+  m_timeout = 300;
+  
+  if (displayDialog == false)
+    m_allowPrompting = false;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+CPlexDirectory::CPlexDirectory(bool parseResults, bool displayDialog, bool replaceLocalhost)
   : m_bStop(false)
   , m_bSuccess(true)
   , m_bParseResults(parseResults)
+  , m_bReplaceLocalhost(replaceLocalhost)
   , m_dirCacheType(DIR_CACHE_ALWAYS)
 {
   m_timeout = 300;
@@ -85,7 +100,7 @@ bool CPlexDirectory::GetDirectory(const CStdString& path, CFileItemList &items)
   // which historically was always 127.0.0.1 but now of course could be anywhere.
   //
   CURL url(strPath);
-  if (url.GetHostName() == "127.0.0.1")
+  if (m_bReplaceLocalhost == true && url.GetHostName() == "127.0.0.1")
   {
     PlexServerPtr server = PlexServerManager::Get().bestServer();
     if (server)

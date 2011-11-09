@@ -117,7 +117,8 @@ class ManualServerScanner
       // See if they're alive.
       BOOST_FOREACH(address_server_pair pair, servers)
       {
-        CPlexDirectory dir;
+        // Make sure we don't replace localhost when we ask for listing.
+        CPlexDirectory dir(true, false, false);
         CFileItemList  list;
         
         dprintf("Manual Server Scanner: About to manually test server %s (deleted: %d)", pair.second->address.c_str(), pair.second->deleted);

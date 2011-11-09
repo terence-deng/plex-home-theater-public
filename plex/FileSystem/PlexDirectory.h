@@ -37,6 +37,7 @@ class CPlexDirectory : public IDirectory,
                        public CThread
 {
  public:
+  CPlexDirectory(bool parseResults, bool displayDialog, bool replaceLocalhost);
   CPlexDirectory(bool parseResults=true, bool displayDialog=true);
   virtual ~CPlexDirectory();
   
@@ -71,6 +72,7 @@ class CPlexDirectory : public IDirectory,
   CStdString m_body;
   bool       m_bSuccess;
   bool       m_bParseResults;
+  bool       m_bReplaceLocalhost;
   int        m_timeout;
   CFileCurl  m_http;
   DIR_CACHE_TYPE m_dirCacheType;
