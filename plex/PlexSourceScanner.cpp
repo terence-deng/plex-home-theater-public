@@ -56,6 +56,7 @@ void CPlexSourceScanner::Process()
     std::string realHostLabel = m_sources->hostLabel;
     bool onlyShared = false;
     string url = m_sources->url();
+    dprintf("Plex Source Scanner using best URL %s", url.c_str());
 
     // Act a bit differently if we're talking to a local server.
     bool remoteOwned = false;

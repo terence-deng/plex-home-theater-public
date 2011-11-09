@@ -170,8 +170,8 @@ public:
     if (m_servers.find(server->key()) != m_servers.end())
     {
       // Same server, found a different way.
-      dprintf("Plex Server Manager: added existing server '%s' (%s).", name.c_str(), addr.c_str());
       m_servers[server->key()]->incRef();
+      dprintf("Plex Server Manager: added existing server '%s' (%s) ref=%d.", name.c_str(), addr.c_str(), m_servers[server->key()]->refCount());
     }
     else
     {
@@ -202,7 +202,7 @@ public:
       }
       else
       {
-        dprintf("Plex Server Manager: lost a reference to server '%s' (%s).", name.c_str(), addr.c_str());
+        dprintf("Plex Server Manager: lost a reference to server '%s' (%s) ref=%d.", name.c_str(), addr.c_str(), server->refCount());
       }
     }
     
