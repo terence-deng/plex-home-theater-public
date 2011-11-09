@@ -31,10 +31,12 @@
 #include "utils/log.h"
 #include "PlexHelper.h"
 #include "SystemInfo.h"
+#include "log.h"
 #undef BOOL
 
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
+#import <IOKit/graphics/IOGraphicsLib.h>
 #import <Carbon/Carbon.h>   // ShowMenuBar, HideMenuBar
 
 #define MAX_DISPLAYS 32
@@ -45,57 +47,57 @@ void* CWinSystemOSX::m_lastOwnedContext = 0;
 //------------------------------------------------------------------------------------------
 Boolean GetDictionaryBoolean(CFDictionaryRef theDict, const void* key)
 {
-        // get a boolean from the dictionary
-        Boolean value = false;
-        CFBooleanRef boolRef;
-        boolRef = (CFBooleanRef)CFDictionaryGetValue(theDict, key);
-        if (boolRef != NULL)
-                value = CFBooleanGetValue(boolRef);
-        return value;
+  // get a boolean from the dictionary
+  Boolean value = false;
+  CFBooleanRef boolRef;
+  boolRef = (CFBooleanRef)CFDictionaryGetValue(theDict, key);
+  if (boolRef != NULL)
+    value = CFBooleanGetValue(boolRef);
+  return value;
 }
 //------------------------------------------------------------------------------------------
 long GetDictionaryLong(CFDictionaryRef theDict, const void* key)
 {
-        // get a long from the dictionary
-        long value = 0;
-        CFNumberRef numRef;
-        numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
-        if (numRef != NULL)
-                CFNumberGetValue(numRef, kCFNumberLongType, &value);
-        return value;
+  // get a long from the dictionary
+  long value = 0;
+  CFNumberRef numRef;
+  numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
+  if (numRef != NULL)
+    CFNumberGetValue(numRef, kCFNumberLongType, &value);
+  return value;
 }
 //------------------------------------------------------------------------------------------
 int GetDictionaryInt(CFDictionaryRef theDict, const void* key)
 {
-        // get a long from the dictionary
-        int value = 0;
-        CFNumberRef numRef;
-        numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
-        if (numRef != NULL)
-                CFNumberGetValue(numRef, kCFNumberIntType, &value);
-        return value;
+  // get a long from the dictionary
+  int value = 0;
+  CFNumberRef numRef;
+  numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
+  if (numRef != NULL)
+    CFNumberGetValue(numRef, kCFNumberIntType, &value);
+  return value;
 }
 //------------------------------------------------------------------------------------------
 float GetDictionaryFloat(CFDictionaryRef theDict, const void* key)
 {
-        // get a long from the dictionary
-        int value = 0;
-        CFNumberRef numRef;
-        numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
-        if (numRef != NULL)
-                CFNumberGetValue(numRef, kCFNumberFloatType, &value);
-        return value;
+  // get a long from the dictionary
+  int value = 0;
+  CFNumberRef numRef;
+  numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
+  if (numRef != NULL)
+    CFNumberGetValue(numRef, kCFNumberFloatType, &value);
+  return value;
 }
 //------------------------------------------------------------------------------------------
 double GetDictionaryDouble(CFDictionaryRef theDict, const void* key)
 {
-        // get a long from the dictionary
-        double value = 0.0;
-        CFNumberRef numRef;
-        numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
-        if (numRef != NULL)
-                CFNumberGetValue(numRef, kCFNumberDoubleType, &value);
-        return value;
+  // get a long from the dictionary
+  double value = 0.0;
+  CFNumberRef numRef;
+  numRef = (CFNumberRef)CFDictionaryGetValue(theDict, key);
+  if (numRef != NULL)
+    CFNumberGetValue(numRef, kCFNumberDoubleType, &value);
+  return value;
 }
 
 //---------------------------------------------------------------------------------
@@ -106,6 +108,7 @@ CGDirectDisplayID GetDisplayID(int screen_index)
 
   // Get the list of displays.
   CGGetActiveDisplayList(MAX_DISPLAYS, displayArray, &numDisplays);
+  dprintf("Cocoa Screen: Asked to get screen %d from an array of %d.", screen_index, numDisplays);
   return(displayArray[screen_index]);
 }
 
@@ -203,7 +206,6 @@ void DisplayFadeFromBlack(CGDisplayFadeReservationToken fade_token)
   }
 }
 
-
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 CWinSystemOSX::CWinSystemOSX() : CWinSystemBase()
@@ -211,7 +213,8 @@ CWinSystemOSX::CWinSystemOSX() : CWinSystemBase()
   m_eWindowSystem = WINDOW_SYSTEM_OSX;
   m_glContext = 0;
   m_SDLSurface = NULL;
-    m_desktopVideoMode = NULL;
+  m_desktopVideoMode = 0;
+  m_desktopScreenID = 0;
 }
 
 CWinSystemOSX::~CWinSystemOSX()
@@ -1003,21 +1006,27 @@ int CWinSystemOSX::GetCurrentScreen()
 #pragma mark -
 #pragma mark Refresh rate support
 
+NSString* screenNameForDisplay(CGDirectDisplayID displayID);
+
 bool CWinSystemOSX::SwitchRefreshRate(float targetFPS, int screenID)
 {
-    // interrogate display info
-    CGDirectDisplayID currentDisplay = GetDisplayID(screenID);
-//    CGDirectDisplayID currentDisplay = CGDisplayPrimaryDisplay(kCGDirectMainDisplay);
+  if (targetFPS < 1.0f)
+    CLog::Log(LOGERROR, "Target FPS for rate switch invalid (%.2f)", targetFPS);
+  
+  // interrogate display info
+  CGDirectDisplayID currentDisplay = GetDisplayID(screenID);
+  CLog::Log(LOGINFO, "Switching display mode for %s", [screenNameForDisplay(currentDisplay) UTF8String]);
+
+  // store current mode
 	CGDisplayModeRef activeDisplayMode = CGDisplayCopyDisplayMode(currentDisplay);
-	
-	// store current mode
 	m_desktopVideoMode = activeDisplayMode;
+  m_desktopScreenID = screenID;
 	
 	size_t currentHeight = CGDisplayModeGetHeight(activeDisplayMode);
 	size_t currentWidth = CGDisplayModeGetWidth(activeDisplayMode);
 	UInt32 currentRefresh = lrintf(CGDisplayModeGetRefreshRate(activeDisplayMode));	
 	size_t currentBitDepth = DisplayBitsPerPixelForMode(activeDisplayMode);
-	NSLog(@"Current display mode: %i x %i @ %i Hz %i bit", currentWidth, currentHeight, currentRefresh, currentBitDepth);
+  CLog::Log(LOGINFO, "Current display mode: %i x %i @ %i Hz %i bit", currentWidth, currentHeight, currentRefresh, currentBitDepth);
 	
 	// get all available modes and match resolution
 	CFArrayRef displayModes = CGDisplayCopyAllDisplayModes(currentDisplay, NULL);
@@ -1031,17 +1040,29 @@ bool CWinSystemOSX::SwitchRefreshRate(float targetFPS, int screenID)
 		size_t height = CGDisplayModeGetHeight(displayMode);
 		size_t width = CGDisplayModeGetWidth(displayMode);
 		UInt32 refresh = lrintf(CGDisplayModeGetRefreshRate(displayMode));
+    
 		size_t bitDepth = DisplayBitsPerPixelForMode(displayMode);
 		BOOL interlaced = (CGDisplayModeGetIOFlags(displayMode) & kDisplayModeInterlacedFlag) == kDisplayModeInterlacedFlag;
-		NSLog(@"Available: %i x %i @ %i Hz %i bit %@", width, height, refresh, bitDepth, interlaced == YES ? @"interlaced" : @"progressive");
-        
-		BOOL frameRateMatch = (refresh % integerRate == 0);
-		if (height == currentHeight && width == currentWidth && bitDepth == currentBitDepth && frameRateMatch == YES && !interlaced)
-		{
-			NSLog(@"Matching: %i x %i @ %i Hz %i bit", width, height, refresh, bitDepth);
-			CFArrayAppendValue(matchingModes, displayMode);
-		}
+    BOOL frameRateMatch = (refresh % integerRate == 0);
+    
+		if (height == currentHeight && width == currentWidth && bitDepth == currentBitDepth && !interlaced)
+    {
+      if (refresh == 0)
+      {
+        CLog::Log(LOGINFO, "Invalid: %i x %i @ %i Hz %i bit %@", width, height, refresh, bitDepth, interlaced == YES ? "interlaced" : "progressive");
+      }
+      else if (frameRateMatch)
+      {
+        CLog::Log(LOGINFO, "Matching: %i x %i @ %i Hz %i bit %s", width, height, refresh, bitDepth, interlaced == YES ? "interlaced" : "progressive");
+        CFArrayAppendValue(matchingModes, displayMode);
+      }
+      else
+      {
+        CLog::Log(LOGDEBUG, "Available: %i x %i @ %i Hz %i bit %s", width, height, refresh, bitDepth, interlaced == YES ? "interlaced" : "progressive");
+      }
+    }
 	}
+    
 	if (CFArrayGetCount(matchingModes) > 0)
 	{
 		CGDisplayModeRef displayMode = (CGDisplayModeRef)CFArrayGetValueAtIndex(matchingModes, 0);
@@ -1052,17 +1073,19 @@ bool CWinSystemOSX::SwitchRefreshRate(float targetFPS, int screenID)
 		
 		if (refresh != currentRefresh)
 		{
-            NSLog(@"Trying %i x %i @ %i Hz %i bit", width, height, refresh, bitDepth);
-            // attempt mode switch
-            CGError err = CGDisplaySetDisplayMode(kCGDirectMainDisplay, displayMode, NULL);
-            if (displayModes) CFRelease(displayModes);
-            CFRelease(matchingModes);
-            if (err != kCGErrorSuccess)
-            {
-                //CLog::Log(LOG_ERR, @"Display mode switch failed");
-                m_desktopVideoMode = nil;
-                return false;
-            }	
+      CLog::Log(LOGINFO, "Trying %i x %i @ %i Hz %i bit", width, height, refresh, bitDepth);
+      
+      // Attempt mode switch
+      CGError err = CGDisplaySetDisplayMode(currentDisplay, displayMode, NULL);
+      if (displayModes) CFRelease(displayModes);
+      CFRelease(matchingModes);
+      
+      if (err != kCGErrorSuccess)
+      {
+        CLog::Log(LOGERROR, "Display mode switch failed");
+        m_desktopVideoMode = nil;
+        return false;
+      }	
 		}
 	}
     return true;
@@ -1070,17 +1093,21 @@ bool CWinSystemOSX::SwitchRefreshRate(float targetFPS, int screenID)
 
 bool CWinSystemOSX::ResetDesktopRefreshRate()
 {
-    if (!m_desktopVideoMode)
-    {
-        return false;
-    }
-    CGError err = CGDisplaySetDisplayMode(kCGDirectMainDisplay, (CGDisplayModeRef)m_desktopVideoMode, NULL);
-    if (err != kCGErrorSuccess)
-    {
-        NSLog(@"Restore desktop mode switch failed");
-        return false;
-    }	
-    return true;
+  if (!m_desktopVideoMode)
+    return false;
+  
+  // Interrogate display info.
+  CGDirectDisplayID currentDisplay = GetDisplayID(m_desktopScreenID);
+  CLog::Log(LOGINFO, "Switching display mode for %s", [screenNameForDisplay(currentDisplay) UTF8String]);
+  
+  CGError err = CGDisplaySetDisplayMode(currentDisplay, (CGDisplayModeRef)m_desktopVideoMode, NULL);
+  if (err != kCGErrorSuccess)
+  {
+    NSLog(@"Restore desktop mode switch failed");
+    return false;
+  }	
+  
+  return true;
 }
 
 size_t CWinSystemOSX::DisplayBitsPerPixelForMode(void *mode)
@@ -1101,6 +1128,21 @@ size_t CWinSystemOSX::DisplayBitsPerPixelForMode(void *mode)
 	}
 	if (pixEnc) CFRelease(pixEnc);
     return depth;
+}
+
+NSString* screenNameForDisplay(CGDirectDisplayID displayID)
+{
+    NSString *screenName = nil;
+    
+    NSDictionary *deviceInfo = (NSDictionary *)IODisplayCreateInfoDictionary(CGDisplayIOServicePort(displayID), kIODisplayOnlyPreferredName);
+    NSDictionary *localizedNames = [deviceInfo objectForKey:[NSString stringWithUTF8String:kDisplayProductName]];
+    
+    if ([localizedNames count] > 0) {
+        screenName = [[localizedNames objectForKey:[[localizedNames allKeys] objectAtIndex:0]] retain];
+    }
+    
+    [deviceInfo release];
+    return [screenName autorelease];
 }
 
 #endif

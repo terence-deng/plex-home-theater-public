@@ -52,9 +52,8 @@ public:
   virtual int GetNumScreens();
   virtual int GetCurrentScreen();
     
-    virtual bool SwitchRefreshRate(float targetFPS, int screenID);
-    virtual bool ResetDesktopRefreshRate();
-
+  virtual bool SwitchRefreshRate(float targetFPS, int screenID);
+  virtual bool ResetDesktopRefreshRate();
 
 protected:
   void* CreateWindowedContext(void* shareCtx);
@@ -71,7 +70,8 @@ protected:
   static void* m_lastOwnedContext;
   SDL_Surface* m_SDLSurface;
     
-    void* m_desktopVideoMode;
+  void* m_desktopVideoMode;
+  int m_desktopScreenID;
 };
 
 #endif // WINDOW_SYSTEM_H
