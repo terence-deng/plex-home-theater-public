@@ -439,8 +439,16 @@ void CGUIWindowPlexSearch::StartSearch(const string& search)
   }
   else
   {
-    // Issue the root of the new search, and note that when we receive results, clear out the old ones.
-    m_workerManager->enqueue(WINDOW_PLEX_SEARCH, BuildSearchUrl("http://127.0.0.1:32400/search", search), 0);
+    if (PlexServerManager::Get().bestServer())
+    {
+      // Issue the root of the new search.
+      m_workerManager->enqueue(WINDOW_PLEX_SEARCH, BuildSearchUrl("http://127.0.0.1:32400/search", search), 0);
+    }
+    else
+    {
+      // Issue the request to the cloud.
+      m_workerManager->enqueue(WINDOW_PLEX_SEARCH, BuildSearchUrl("http://node.plexapp.com:32400/system/search", search), 0);
+    }
     
     // If we have shared servers, search them too.
     if (g_guiSettings.GetBool("myplex.searchsharedlibraries"))
@@ -455,6 +463,7 @@ void CGUIWindowPlexSearch::StartSearch(const string& search)
       }
     }
     
+    // Note that when we receive results, we need to clear out the old ones.
     m_resetOnNextResults = true;
   }
 }
