@@ -262,6 +262,8 @@ void CAdvancedSettings::Initialize()
   m_bEnableViewRestrictions = true;
   m_bEnableKeyboardBacklightControl = false;
   
+  m_bEnablePlexTokensInLogs = false;
+  
 //caused lots of jerks
 //#ifdef _WIN32
 //  m_ForcedSwapTime = 2.0;
@@ -572,6 +574,7 @@ bool CAdvancedSettings::Load()
   
   XMLUtils::GetBoolean(pRootElement, "enableviewrestrictions", m_bEnableViewRestrictions);
   XMLUtils::GetBoolean(pRootElement, "enablekeyboardbacklightcontrol", m_bEnableKeyboardBacklightControl);
+  XMLUtils::GetBoolean(pRootElement, "enableplextokensinlogs", m_bEnablePlexTokensInLogs);
 
   XMLUtils::GetBoolean(pRootElement,"rootovershoot",m_bUseEvilB);
   XMLUtils::GetBoolean(pRootElement,"glrectanglehack", m_GLRectangleHack);

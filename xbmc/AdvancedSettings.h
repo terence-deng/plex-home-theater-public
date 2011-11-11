@@ -281,6 +281,7 @@ class CAdvancedSettings
     bool m_bUseAnamorphicZoom;
     bool m_bEnableViewRestrictions;
     bool m_bEnableKeyboardBacklightControl;
+    bool m_bEnablePlexTokensInLogs;
   
     CStdString m_language;
     CStdString m_units;
