@@ -422,6 +422,7 @@
       <delete>Delete</delete>
       <u>MoveItemUp</u>
       <d>MoveItemDown</d>
+      <escape>Playlist</escape>
     </keyboard>
   </MyVideoPlaylist>
   <ContextMenu>
