@@ -1781,8 +1781,8 @@ pre túto vizualizáciu</string>
   <string id="22001">Vždy aktualizuj knižnicu na pozadí</string>
   <string id="22002">- DNS prípona</string>
   <string id="22003">Povoliť úpravu a rozhodnutie zoznamov</string>
-  <string id="22004">Oneskorený o %2.3fs</string>
-  <string id="22005">Vpredu o %2.3fs</string>
+  <string id="22004">Oneskorený o %d ms</string>
+  <string id="22005">Vpredu o %d ms</string>
   <string id="22006">Ofset tituliek</string>
   <string id="22007">OpenGL výrobca:</string>
   <string id="22008">OpenGL karta:</string>

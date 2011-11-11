@@ -2132,9 +2132,9 @@ fyrir þessa myndskreytingu</string>
   <string id="22001">Uppfæra alltaf safn í bakgrunni</string>
   <string id="22002">- DNS viðskeyti</string>
 
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Seinkað: %2.3fs</string>
-  <string id="22005">Á undan: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Seinkað: %d ms</string>
+  <string id="22005">Á undan: %d ms</string>
   <string id="22006">Færsla þýðingartexta</string>
   <string id="22007">OpenGL framleiðandi:</string>
   <string id="22008">OpenGL teiknari:</string>

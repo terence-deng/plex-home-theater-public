@@ -273,7 +273,7 @@
   <string id="343">Adjust Framerate</string>
   <string id="344">Actors</string>
   <string id="345">Year</string>
-  <string id="346">Boost volume level on downmix</string>
+  <string id="346">Boost Volume Level on Downmix</string>
   <string id="350">Applications</string>
   <string id="351">Off</string>
   <string id="352">Dim</string>
@@ -565,7 +565,7 @@
   <string id="656">Browse for Playlist</string>
   <string id="657">Browse for Folder</string>
   <string id="658">Song Information</string>
-  <string id="659"></string>
+  <string id="659">Non-linear stretch</string>
   <string id="660">Volume Amplification</string>
   <string id="661">Choose Export Folder</string>
 
@@ -2097,9 +2097,9 @@
   <string id="22000">Update library on startup</string>
   <string id="22001">Always update library in background</string>
   <string id="22002">- DNS Suffix</string>
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Delayed by: %2.3fs</string>
-  <string id="22005">Ahead by: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Delayed %d ms</string>
+  <string id="22005">Ahead %d ms</string>
   <string id="22006">Subtitle Offset</string>
 
   <string id="22007">OpenGL Vendor:</string>
@@ -2111,7 +2111,7 @@
   <string id="22013">Profile Data</string>
   <string id="22014">Use Dim if paused during video playback</string>
 
-  <string id="22021">Allowed error in aspect ratio to minimize black bars</string>
+  <string id="22021">Allowed error to minimize black bars</string>
 
   <!-- strings 29800 thru 29998 reserved strings used only in the default Project Mayhem III skin and not c++ code -->
   <string id="29800">Library Mode</string>

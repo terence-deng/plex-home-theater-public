@@ -1952,8 +1952,8 @@ ole määriteltäviä asetuksia</string>
   <string id="22000">Päivitä kirjasto ohjelman käynnistyessä</string>
   <string id="22001">Piilota päivityksen edistyminen</string>
   <string id="22002">- DNS-loppupääte</string>
-  <string id="22004">Viivästetty: %2.3fs</string>
-  <string id="22005">Aiennettu: %2.3fs</string>
+  <string id="22004">Viivästetty: %d ms</string>
+  <string id="22005">Aiennettu: %d ms</string>
   <string id="22006">Tekstityksen ajoitus</string>
   <string id="22007">OpenGL-valmistaja:</string>
   <string id="22008">OpenGL-renderoija:</string>

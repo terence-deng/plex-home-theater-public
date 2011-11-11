@@ -2058,9 +2058,9 @@
   <string id="22000">Bibliotheek bijwerken bij het opstarten</string>
   <string id="22001">Bibliotheek altijd op de achtergrond bijwerken</string>
   <string id="22002">- DNS-suffix</string>
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Eerder %2.3fs</string>
-  <string id="22005">Later %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Eerder %d ms</string>
+  <string id="22005">Later %d ms</string>
   <string id="22006">Ondertitels synchroniseren</string>
   <string id="22007">OpenGL-leverancier:</string>
   <string id="22008">OpenGL-renderer:</string>

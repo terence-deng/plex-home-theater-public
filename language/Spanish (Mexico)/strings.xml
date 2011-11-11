@@ -2129,9 +2129,9 @@
   <string id="22001">Siempre actualizar la biblioteca en segundo plano</string>
   <string id="22002">- Sufijo DNS</string>
 
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Retrasado en: %2.3fs</string>
-  <string id="22005">Adelantado en: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Retrasado en: %d ms</string>
+  <string id="22005">Adelantado en: %d ms</string>
   <string id="22006">Retraso de subtítulos</string>
   <string id="22007">Distribuidor OpenGL:</string>
   <string id="22008">Renderizador OpenGL:</string>

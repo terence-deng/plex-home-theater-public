@@ -1719,8 +1719,8 @@
   <string id="22000">開始時にライブラリを更新</string>
   <string id="22001">常にライブラリの更新状況を表示しない</string>
   <string id="22002">- DNS Suffix</string>
-  <string id="22004">Delayed by: %2.3fs</string>
-  <string id="22005">Ahead by: %2.3fs</string>
+  <string id="22004">Delayed by: %d ms</string>
+  <string id="22005">Ahead by: %d ms</string>
   <string id="22006">字幕オフセット</string>
   <string id="22007">OpenGL Vendor:</string>
   <string id="22008">OpenGL Renderer:</string>

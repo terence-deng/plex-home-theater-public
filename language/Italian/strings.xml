@@ -2005,8 +2005,8 @@
   <string id="22000">Aggiorna l'archivio all'avvio</string>
   <string id="22001">Nascondi avanzamento aggiornamento archivio</string>
   <string id="22002">- Suffisso DNS</string>
-  <string id="22004">In ritardo di: %2.3fs</string>
-  <string id="22005">In anticipo di: %2.3fs</string>
+  <string id="22004">In ritardo di: %d ms</string>
+  <string id="22005">In anticipo di: %d ms</string>
   <string id="22006">Offset sottotitoli</string>
   <string id="22007">Marca OpenGL:</string>
   <string id="22008">Renderer OpenGL:</string>

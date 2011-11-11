@@ -2132,9 +2132,9 @@
   <string id="22001">Kitaplık güncellemelerinin ilerleme durumunu gizle</string>
   <string id="22002">- DNS soneki</string>
 
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Geriye :% 2.3fs</string>
-  <string id="22005">İleriye: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Geriye :% d ms</string>
+  <string id="22005">İleriye: %d ms</string>
   <string id="22006">Altyazı gecikmesi</string>
   <string id="22007">OpenGL üreticisi:</string>
   <string id="22008">OpenGL işleyicisi:</string>

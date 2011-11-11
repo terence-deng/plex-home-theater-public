@@ -1911,9 +1911,9 @@
   <string id="22000">Ενημέρωση της συλλογής κατά την εκκίνηση</string>
   <string id="22001">Απόκρυψη εξέλιξης ενημερώσεων συλλογής</string>
   <string id="22002">- Κατάληξη DNS</string>
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Καθυστέρηση κατά: %2.3fs</string>
-  <string id="22005">Προβάδισμα κατά: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Καθυστέρηση κατά: %d ms</string>
+  <string id="22005">Προβάδισμα κατά: %d ms</string>
   <string id="22006">Μετατόπιση υπότιτλων</string>
   <string id="22007">Κατασκευαστής OpenGL:</string>
   <string id="22008">Αποτυπωτής OpenGL:</string>

@@ -2119,9 +2119,9 @@ the English template, and make it easier for translators to see which line belon
   <string id="22001">Ikke vis biblioteksoppdateringer som skjer i bakgrunnen</string>
   <string id="22002">- DNS suffiks</string>
   
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Forsinket med: %2.3fs</string>
-  <string id="22005">Framskyndet med: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Forsinket med: %d ms</string>
+  <string id="22005">Framskyndet med: %d ms</string>
   <string id="22006">Tidsforskyvning for undertekst </string>
   <string id="22007">OpenGL leverandør:</string>
   <string id="22008">OpenGL renderer:</string>

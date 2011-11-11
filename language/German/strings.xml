@@ -2100,9 +2100,9 @@
   <string id="22001">Fortschritt von Datenbank-Aktualisierungen verbergen</string>
   <string id="22002">DNS Suffix</string>
 
-  <string id="22003">%2.3fs</string> 
-  <string id="22004">Verzögert um: %2.3fs</string>
-  <string id="22005">Beschleunigt um: %2.3fs</string>
+  <string id="22003">%d ms</string> 
+  <string id="22004">Verzögert um: %d ms</string>
+  <string id="22005">Beschleunigt um: %d ms</string>
   <string id="22006">Untertitelabstand</string>
   <string id="22007">OpenGL-Anbieter:</string>
   <string id="22008">OpenGL-Renderer:</string>

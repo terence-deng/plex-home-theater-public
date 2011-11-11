@@ -1899,9 +1899,9 @@
   <string id="22000">Aktualizuj bibliotekę na starcie</string>
   <string id="22001">Ukryj postęp aktualizacji biblioteki</string>
   <string id="22002">- DNS suffix</string>
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Opóźnij o: %2.3fs</string>
-  <string id="22005">Przyspiesz o: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Opóźnij o: %d ms</string>
+  <string id="22005">Przyspiesz o: %d ms</string>
   <string id="22006">Przesunięcie napisów</string>
   <string id="22007">Dostawca OpenGL:</string>
   <string id="22008">Renderer OpenGL:</string>

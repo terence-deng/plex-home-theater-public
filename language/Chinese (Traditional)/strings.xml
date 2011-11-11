@@ -1902,8 +1902,8 @@
   <string id="22001">總是在幕後更新資料庫</string>
   <string id="22002">- DNS 的尾碼</string>
   <string id="22003">%2.3f秒</string>
-  <string id="22004">延遲：%2.3fs</string>
-  <string id="22005">提前：%2.3fs</string>
+  <string id="22004">延遲：%d ms</string>
+  <string id="22005">提前：%d ms</string>
   <string id="22006">字幕位移</string>
   <string id="22007">OpenGL 廠商：</string>
   <string id="22008">OpenGL 渲染：</string>

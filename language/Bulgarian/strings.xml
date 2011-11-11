@@ -2091,8 +2091,8 @@
   <string id="22001">Винаги опреснявай библиотеката във фонов режим</string>
   <string id="22002">- DNS наставка</string>
 
-  <string id="22004">Забавен с: %2.3fs</string>
-  <string id="22005">Напред с: %2.3fs</string>
+  <string id="22004">Забавен с: %d ms</string>
+  <string id="22005">Напред с: %d ms</string>
   <string id="22006">Отместване на субтитри</string>
   <string id="22007">OpenGL доставчик:</string>
   <string id="22008">OpenGL рендер:</string>

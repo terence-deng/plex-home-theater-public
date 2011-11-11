@@ -2114,9 +2114,9 @@
   <string id="22000">Actualizar Biblioteca ao iniciar</string>
   <string id="22001">Esconder progresso de actualização da biblioteca</string>
   <string id="22002">- Sufixo de DNS</string>
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Atrasado por: %2.3fs</string>
-  <string id="22005">Adiantado por: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Atrasado por: %d ms</string>
+  <string id="22005">Adiantado por: %d ms</string>
   <string id="22006">Deslocação das legendas</string>
   <string id="22007">Fabricante do OpenGL:</string>
   <string id="22008">Descodificador de OpenGL:</string>

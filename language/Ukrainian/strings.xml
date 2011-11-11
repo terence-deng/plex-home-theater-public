@@ -1905,8 +1905,8 @@
   <string id="22001">Завжди оновлювати Бібліотеку у фоновому режимі</string>
   <string id="22002">- DNS суфікс</string>
   <string id="22003">Задіяти списки виправлень та рішень</string>
-  <string id="22004">Затримано на: %2.3fs</string>
-  <string id="22005">Випереджає на: %2.3fs</string>
+  <string id="22004">Затримано на: %d ms</string>
+  <string id="22005">Випереджає на: %d ms</string>
   <string id="22006">Зміщення субтитрів</string>
   <string id="22007">Виробник OpenGL:</string>
   <string id="22008">Обробник OpenGL:</string>

@@ -419,12 +419,17 @@ CStdString CGUIDialogAudioSubtitleSettings::FormatDecibel(float value, float int
 CStdString CGUIDialogAudioSubtitleSettings::FormatDelay(float value, float interval)
 {
   CStdString text;
-  if (fabs(value) < 0.5f*interval)
-    text.Format(g_localizeStrings.Get(22003).c_str(), 0.0);
+  
+  int msValue = (int)(value*1000.0);
+  int error = msValue % 25;
+  
+  if (abs(msValue) < 500.0*interval)
+    text.Format(g_localizeStrings.Get(22003).c_str(), 0);
   else if (value < 0)
-    text.Format(g_localizeStrings.Get(22004).c_str(), fabs(value));
+    text.Format(g_localizeStrings.Get(22004).c_str(), abs(msValue-error));
   else
-    text.Format(g_localizeStrings.Get(22005).c_str(), value);
+    text.Format(g_localizeStrings.Get(22005).c_str(), msValue-error);
+  
   return text;
 }
 

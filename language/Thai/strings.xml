@@ -2158,8 +2158,8 @@
   <string id="22002">- DNS ต่อท้าย</string>
   <string id="22003">
   </string>
-  <string id="22004">หน่วงเวลา: %2.3fs</string>
-  <string id="22005">ไปข้างหน้า: %2.3fs</string>
+  <string id="22004">หน่วงเวลา: %d ms</string>
+  <string id="22005">ไปข้างหน้า: %d ms</string>
   <string id="22006">ซับไตไติ้ลออฟเซ็ต</string>
   <string id="22007">ผู้ผลิด OpenGL:</string>
   <string id="22008">OpenGL renderer:</string>

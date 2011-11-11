@@ -2127,9 +2127,9 @@
   <string id="22001">Aktualizovat knihovnu vždy na pozadí</string>
   <string id="22002">- DNS sufix</string>
 
-  <string id="22003">%2.3fs</string>
-  <string id="22004">zpoždění o %2.3fs</string>
-  <string id="22005">předběhnutí o %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">zpoždění o %d ms</string>
+  <string id="22005">předběhnutí o %d ms</string>
   <string id="22006">Posunutí titulků</string>
   <string id="22007">OpenGL ovladače:</string>
   <string id="22008">OpenGL renderer:</string>

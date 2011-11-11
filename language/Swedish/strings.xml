@@ -1905,9 +1905,9 @@ den här visualiseringen</string>
   <string id="22000">Uppdatera biblioteket vid uppstart</string>
   <string id="22001">Dölj framsteg för biblioteksuppdateringar</string>
   <string id="22002">- DNS-suffix</string>
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Fördröjd med: %2.3fs</string>
-  <string id="22005">Förväg med: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Fördröjd med: %d ms</string>
+  <string id="22005">Förväg med: %d ms</string>
   <string id="22006">Undertextkompensering</string>
   <string id="22007">OpenGL-tillverkare:</string>
   <string id="22008">OpenGL-renderare:</string>

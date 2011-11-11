@@ -1911,9 +1911,9 @@
   <string id="22000">Atualizar coleção ao iniciar</string>
   <string id="22001">Ocultar progresso de atualizações de coleção</string>
   <string id="22002">- Sufixo de DNS</string>
-  <string id="22003">%2.3fs</string>
-  <string id="22004">Atrasado em: %2.3fs</string>
-  <string id="22005">Adiantado em: %2.3fs</string>
+  <string id="22003">%d ms</string>
+  <string id="22004">Atrasado em: %d ms</string>
+  <string id="22005">Adiantado em: %d ms</string>
   <string id="22006">Posição da legenda</string>
   <string id="22007">Fabricante OpenGL:</string>
   <string id="22008">Renderizador OpenGL:</string>

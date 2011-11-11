@@ -2124,9 +2124,9 @@
   <string id="22001">隐藏资料库更新进度条</string>
   <string id="22002">- DNS 后缀</string>
 
-  <string id="22003">%2.3f秒</string>
-  <string id="22004">延迟：%2.3f秒</string>
-  <string id="22005">提前：%2.3f秒</string>
+  <string id="22003">%d秒</string>
+  <string id="22004">延迟：%d秒</string>
+  <string id="22005">提前：%d秒</string>
   <string id="22006">字幕位置</string>
   <string id="22007">OpenGL 提供商：</string>
   <string id="22008">OpenGL 渲染器：</string>

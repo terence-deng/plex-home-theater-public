@@ -1930,8 +1930,8 @@
   <string id="22000">Opdater databasen ved opstart</string>
   <string id="22001">Opdater altid databasen i baggrunden</string>
   <string id="22002">- DNS-suffiks</string>
-  <string id="22004">Forsinket med: %2.3fs</string>
-  <string id="22005">Foran med: %2.3fs</string>
+  <string id="22004">Forsinket med: %d ms</string>
+  <string id="22005">Foran med: %d ms</string>
   <string id="22006">Undertekstforskydelse</string>
   <string id="22007">OpenGL-leverandør:</string>
   <string id="22008">OpenGL-renderer:</string>

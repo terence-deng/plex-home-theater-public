@@ -2124,9 +2124,9 @@
   <string id="22001">Masquer l'avancement lors de la màj de la mediathèque</string>
   <string id="22002">- Suffixe DNS</string>
   
-  <string id="22003">%2.3fs</string>  
-  <string id="22004">Retarder de : %2.3fs</string>
-  <string id="22005">Avancer de : %2.3fs</string>
+  <string id="22003">%d ms</string>  
+  <string id="22004">Retarder de : %d ms</string>
+  <string id="22005">Avancer de : %d ms</string>
   <string id="22006">Décalage sous-titres</string>
   <string id="22007">Vendor OpenGL :</string>
   <string id="22008">Rendu OpenGL :</string>
