@@ -2743,7 +2743,9 @@ float CDVDPlayer::GetPercentage()
 
 void CDVDPlayer::SetAVDelay(float fValue)
 {
-  m_dvdPlayerVideo.SetDelay( (fValue * DVD_TIME_BASE) ) ;
+  // Start with the global delay and offset from there.
+  float totalDelay = g_guiSettings.GetInt("audiooutput.defaultdelay")/1000.0 + fValue;
+  m_dvdPlayerVideo.SetDelay( (totalDelay * DVD_TIME_BASE) ) ;
 }
 
 float CDVDPlayer::GetAVDelay()
