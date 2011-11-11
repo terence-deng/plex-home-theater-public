@@ -1951,7 +1951,6 @@ string CPlexDirectory::ProcessUrl(const string& parent, const string& url, bool 
   // If we have an auth token, make sure it gets propagated.
   map<CStdString, CStdString> options = theFullURL.GetOptionsAsMap();
   finalURL = CheckAuthToken(options, finalURL, "X-Plex-Token");
-  finalURL = CheckAuthToken(options, finalURL, "auth_token");
   
   //CLog::Log(LOGNOTICE, "Processed [%s] + [%s] => [%s]\n", parent.c_str(), url.c_str(), finalURL.c_str());
   return finalURL;

@@ -73,7 +73,6 @@ class MyPlexManager
             const char* strToken = token->FirstChild()->Value();
             
             // Save the token.
-            dprintf("Setting myPlex token to %s", strToken);
             g_guiSettings.SetString("myplex.token", strToken);
             g_guiSettings.SetString("myplex.status", g_localizeStrings.Get(19011));
             
@@ -145,7 +144,7 @@ class MyPlexManager
   /// Get a playlist URL.
   string getPlaylistUrl(const string& playlist)
   {
-    return GetBaseUrl(true) + "/pms/playlists/" + playlist + "?auth_token=" + string(g_guiSettings.GetString("myplex.token"));
+    return GetBaseUrl(true) + "/pms/playlists/" + playlist + "?X-Plex-Token=" + string(g_guiSettings.GetString("myplex.token"));
   }
   
   /// Get all sections.
@@ -277,7 +276,7 @@ class MyPlexManager
     {
       // Add the token to the request.
       string request = url;
-      request += "?auth_token=" + g_guiSettings.GetString("myplex.token");
+      request += "?X-Plex-Token=" + g_guiSettings.GetString("myplex.token");
       
       CPlexDirectory plexDir(true, false);
       return plexDir.GetDirectory(request, list);
