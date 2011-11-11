@@ -19,6 +19,7 @@
  *
  */
 
+#include <boost/xpressive/xpressive.hpp>
 #include <stdexcept>
 
 #include "system.h"
@@ -38,6 +39,9 @@ FILE*       CLog::m_file            = NULL;
 int         CLog::m_repeatCount     = 0;
 int         CLog::m_repeatLogLevel  = -1;
 CStdString* CLog::m_repeatLine      = NULL;
+
+using namespace boost;
+using namespace xpressive;
 
 static CCriticalSection critSec;
 
@@ -95,6 +99,13 @@ void CLog::Log(int loglevel, const char *format, ... )
     strData.FormatV(format,va);
     va_end(va);
 
+    // Take out tokens.
+    if (g_advancedSettings.m_bEnablePlexTokensInLogs == false)
+    {
+      static sregex reToken = sregex::compile("X-Plex-Token=[0-9a-z]+", regex_constants::icase);
+      strData = regex_replace(strData, reToken, "X-Plex-Token=<secret>");
+    }
+    
     if (m_repeatLogLevel == loglevel && *m_repeatLine == strData)
     {
       m_repeatCount++;
