@@ -1079,7 +1079,7 @@ class PlexAsyncUrlResolver
   PlexAsyncUrlResolverPtr m_me;
 };
 
-CStdString CDVDPlayer::TranscodeURL(const CStdString url, const CStdString transcodeHost, const CStdString extraOptions)
+CStdString CDVDPlayer::TranscodeURL(CStdString& stopURL, const CStdString& url, const CStdString& transcodeHost, const CStdString& extraOptions)
 {
   // Initialise the transcode URL.
   CURL transcodeURL(m_filename);
@@ -1121,6 +1121,12 @@ CStdString CDVDPlayer::TranscodeURL(const CStdString url, const CStdString trans
   
   // Append the session ID
   options += "&session=" + g_guiSettings.GetString("system.uuid");
+  
+  // Build the stop URL while we're here.
+  CURL stopTranscodeURL(m_filename);
+  stopTranscodeURL.SetFileName("video/:/transcode/segmented/stop");
+  stopTranscodeURL.SetOptions("?session=" + g_guiSettings.GetString("system.uuid"));
+  stopURL = stopTranscodeURL.Get();
   
   // Sign it with the public key.
   time_t time = ::time(0);
@@ -1205,7 +1211,7 @@ void CDVDPlayer::Process()
     CStdString serverHost = bestServer->address;
 
     // Generate a transcode URL and set the filename
-    m_filename = TranscodeURL(mediaURLString, serverHost, extraOptions);
+    m_filename = TranscodeURL(stopURL, mediaURLString, serverHost, extraOptions);
     dprintf("Transcode URL for WebKit content: %s\n", m_filename.c_str());
   }
   
@@ -1231,7 +1237,7 @@ void CDVDPlayer::Process()
       mediaURL.SetPort(32400);
       mediaURL.SetOptions("");
       
-      m_filename = TranscodeURL(mediaURL.Get());
+      m_filename = TranscodeURL(stopURL, mediaURL.Get());
       dprintf("Transcode URL for remote content: %s", m_filename.c_str());
     }
   }
