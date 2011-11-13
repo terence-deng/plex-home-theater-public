@@ -2747,7 +2747,7 @@ CStdString CFileItem::GetCachedVideoThumb(size_t i) const
 {
   CStdString path = m_strPath;
   
-  if (IsPlexMediaServer() && m_strThumbnailImageList.size() > i+1)
+  if (IsPlexMediaServer() && m_strThumbnailImageList.size() > i)
   {
     return GetCachedThumb(m_strThumbnailImageList[i], g_settings.GetPlexMediaServerThumbFolder(),true);
   }
