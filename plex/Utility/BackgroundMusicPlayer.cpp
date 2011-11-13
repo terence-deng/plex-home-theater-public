@@ -61,8 +61,8 @@ void BackgroundMusicPlayer::SetTheme(const CStdString& theme)
   if (m_theme.Equals(theme))
     return;
   
-  // Playing music already?
-  if (g_application.IsPlayingAudio() == true)
+  // Playing music/video already?
+  if (g_application.IsPlayingAudio() == true || g_application.IsPlayingVideo() == true)
     return;
 
   // Play the new theme.
