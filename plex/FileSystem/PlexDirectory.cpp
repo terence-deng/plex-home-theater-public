@@ -239,9 +239,12 @@ bool CPlexDirectory::ReallyGetDirectory(const CStdString& strPath, CFileItemList
     strThumb = ProcessMediaElement(strPath, thumb, MAX_THUMBNAIL_AGE, localServer);
 
   // See if the item is too old.
-  string cachedFile(CFileItem::GetCachedPlexMediaServerThumb(strFanart));
-  if (CFile::Age(cachedFile) > MAX_FANART_AGE)
-    CFile::Delete(cachedFile);
+  if (strFanart.empty() == false)
+  {
+    string cachedFile(CFileItem::GetCachedPlexMediaServerThumb(strFanart));
+    if (CFile::Age(cachedFile) > MAX_FANART_AGE)
+      CFile::Delete(cachedFile);
+  }
 
   // Walk the parsed tree.
   string strFileLabel = "%N - %T";

@@ -119,9 +119,11 @@ CFileItem::CFileItem(const CVideoInfoTag& movie)
   }
   *GetVideoInfoTag() = movie;
   FillInDefaultIcon();
-  SetCachedVideoThumb();
   
-  if (!HasThumbnail())
+  if (m_strPath != "/")
+    SetCachedVideoThumb();
+  
+  if (!HasThumbnail() && !m_strPath.empty() && m_strPath != "/")
   {
     // Try auto-generated thumbnail.
     CStdString cachedThumb(GetCachedVideoThumb());

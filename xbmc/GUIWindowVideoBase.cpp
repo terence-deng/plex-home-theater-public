@@ -1495,6 +1495,7 @@ void CGUIWindowVideoBase::OnPrepareFileItems(CFileItemList &items)
   if (!items.m_strPath.Equals("plugin://video/"))
     items.SetCachedVideoThumbs();
 
+#if 0
   if (items.GetContent() != "episodes")
   { // we don't set cached fanart for episodes, as this requires a db fetch per episode
     for (int i = 0; i < items.Size(); ++i)
@@ -1508,6 +1509,7 @@ void CGUIWindowVideoBase::OnPrepareFileItems(CFileItemList &items)
       }
     }
   }
+#endif
 }
 
 void CGUIWindowVideoBase::AddToDatabase(int iItem)
