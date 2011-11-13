@@ -1991,4 +1991,3 @@ AC_OUTPUT
 
 final_message="$final_message\n  prefix:\t$prefix\n$dashes"
 echo -e "$final_message\n"
-f
