@@ -6,6 +6,7 @@
 //  Copyright 2011 Kirk Consulting Limited. All rights reserved.
 //
 
+#include "Application.h"
 #include "BackgroundMusicPlayer.h"
 #include "FileItem.h"
 #include "GUISettings.h"
@@ -58,6 +59,10 @@ void BackgroundMusicPlayer::SetTheme(const CStdString& theme)
   
   // Same theme?
   if (m_theme.Equals(theme))
+    return;
+  
+  // Playing music already?
+  if (g_application.IsPlayingAudio() == true)
     return;
 
   // Play the new theme.
