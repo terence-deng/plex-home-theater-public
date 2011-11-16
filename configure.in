@@ -327,6 +327,14 @@ AC_ARG_ENABLE([external-libdts],
   [use_external_libdts=$enableval],
   [use_external_libdts=$use_external_libraries])
 
+### PLEX ADDED OPTION TO FORCE FFMPEG CC
+AC_ARG_WITH([ffmpeg-cc],
+  [AS_HELP_STRING([--with-ffmpeg-cc],
+    [Compiler to compile FFmpeg with (default is gcc)])],
+  [use_ffmpeg_compiler=$withval],
+  [use_ffmpeg_compiler=gcc])
+  
+
 dnl AC_ARG_ENABLE([external-python],
 dnl   [AS_HELP_STRING([--enable-external-python],
 dnl   [enable use of external python library (default is no) 'Linux only'])],
@@ -1627,7 +1635,7 @@ XB_CONFIG_MODULE([xbmc/cores/dvdplayer/Codecs/ffmpeg], [
   if test "$host_vendor" = "apple" ; then
     ./configure \
       --extra-cflags="$CFLAGS -Qunused-arguments -arch i386 -w -D_DARWIN_C_SOURCE -Dattribute_deprecated=" \
-      --cc=clang --arch=x86_32 --extra-ldflags="-arch i386" --target-os=darwin --enable-cross-compile \
+      --cc=$use_ffmpeg_compiler --extra-ldflags="-arch i386" --target-os=darwin --enable-cross-compile \
       --disable-amd3dnow \
       --disable-static \
       `if test "$use_debug" = "no"; then echo --disable-debug; fi` \

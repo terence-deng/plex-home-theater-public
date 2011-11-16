@@ -6,7 +6,7 @@ bootstrap.py
 Created by Jamie Kirkpatrick on 2011-01-15.
 Copyright (c) 2011 Plex Inc. All rights reserved.
 """
-import getopt
+import optparse
 import subprocess
 import sys
 import os
@@ -84,16 +84,17 @@ def update_submodules():
     run_cmd(args, "Updating submodules", env = None)
 
 
-def configure_internal_libs(debug):
+def configure_internal_libs(options):
     '''Configure the internal vendor libraries'''
     clean = ['find', '.', '-name', 'config.cache', '-exec', 'rm', '{}', ';']
     run_cmd(clean, "Cleaning caches")
     run_cmd(["./bootstrap"], "Bootstrapping internal libs")
-    configure = ['./configure', '--with-arch=i386']
-    if not debug:
+    configure = ['./configure', '--with-arch=i386', '--with-ffmpeg-cc=' + options.ffmpegcc]
+    if not options.debug:
         configure.append('--disable-debug')
     run_cmd(configure, "Configuring internal libs")
-    run_cmd(['make', 'clean'])
+    if not options.noclean:
+        run_cmd(['make', 'clean'])
 
 
 def build_internal_libs():
@@ -115,44 +116,27 @@ def bootstrap_dependencies():
     run_cmd("make", "Building vendor dependencies", cwd = working_dir)
 
 
-def usage():
-    '''Print script usage information'''
-    print 'bootstrap.py: boostrap a PLEX build environment'
-    print
-    print 'usage: bootstrap.py [--verbose] [--debug] [--configure-only]'
-
-
 def process_args():
     '''Process command line arguments'''
     global VERBOSE
-    result = {
-        'configure_only': False,
-        'debug': False
-        }
-    try:
-        options = ["verbose", "debug", "configure-only"]
-        opts, args = getopt.getopt(sys.argv[1:], "", options)
-    except getopt.GetoptError, e:
-        print str(e)
-        usage()
-        sys.exit(2)
-    for o, a in opts:
-        if o == '--verbose':
-            VERBOSE=True
-        elif o == '--configure-only':
-            result['configure_only'] = True
-        elif o == '--debug':
-            result['debug'] = True
-    return result
+    parser = optparse.OptionParser()
+    parser.add_option('-v', '--verbose', action='store_true', dest='verbose', default=False, help='Increase the chatter')
+    parser.add_option('-d', '--debug', action='store_true', dest='debug', default=False, help='Make a debug build')
+    parser.add_option('-c', '--configure-only', action='store_true', dest='confonly', default=False, help="Don't build, just configure")
+    parser.add_option('-n', '--no-clean', action='store_true', dest='noclean', default=False, help="Don't clean caches, just build")
+    parser.add_option('-f', '--ffmpeg-cc', action='store', type='string', dest='ffmpegcc', default='gcc', help='Compiler to use for FFmpeg')
+    (options, args) = parser.parse_args()
+    VERBOSE = options.verbose
 
+    return options
 
 def main():
     try:
         options = process_args()
         update_submodules()
         bootstrap_dependencies()
-        configure_internal_libs(options['debug'])
-        if not options['configure_only']:
+        configure_internal_libs(options)
+        if not options.confonly:
             build_internal_libs()
     except BootstrapError, e:
         print bcolors.FAIL + ("...%s" % e) + bcolors.ENDC
