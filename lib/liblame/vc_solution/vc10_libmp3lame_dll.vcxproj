@@ -60,7 +60,8 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    </CustomBuildAfterTargets>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     </CustomBuildAfterTargets>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release non-NASM|Win32'">Build</CustomBuildAfterTargets>
@@ -165,7 +166,7 @@ copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
 copy /b /y "$(TargetPath)" "$(DeployDir)\system\cdrip\$(TargetFileName)"
 copy /b /y "$(OutDir)$(TargetName).pdb" "$(DeployDir)\system\cdrip"</Command>
       <Message>Copy Output</Message>
-      <Inputs>$(TargetPath)</Inputs>
+      <Inputs>$(TargetPath);configMS.h</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
