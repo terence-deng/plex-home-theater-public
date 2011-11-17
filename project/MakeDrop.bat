@@ -23,6 +23,9 @@ set PlexRoot=..
 set BuildRoot=%PlexRoot%\Build
 set DeployDir=%BuildRoot%\Windows\%TargetPlatform%\%TargetConfig%\Deploy
 
+set MediaStreamSourceDir=%PlexRoot%\addons\skin.mediastream
+set MediaStreamDeployDir=%DeployDir%\addons\skin.mediastream
+
 set LibBuildRoot=%PlexRoot%\project\VS2010Express\libs
 
 rem ************************************
@@ -41,6 +44,7 @@ if not "%CopyOnly%" == "1" (
   )
   md "%DeployDir%"
 )
+
 rem ************************************
 echo Preparing exclusion file...
 rem ************************************
@@ -109,13 +113,11 @@ xcopy "%PlexRoot%\xbmc\lib\libPython\Python\Lib" "%DeployDir%\system\python\Lib"
 del /f py_exclude.txt
 
 if not "%CopyOnly%" == "1" (
+
   rem ************************************
   echo Building MediaStream skin...
   echo Creating MediaStream build folder...
   rem ************************************
-
-  set MediaStreamSourceDir=%PlexRoot%\addons\skin.mediastream
-  set MediaStreamDeployDir=%DeployDir%\addons\skin.mediastream
 
   if not exist "%MediaStreamDeployDir%\Media" md "%MediaStreamDeployDir%\Media"
 
