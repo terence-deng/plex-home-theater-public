@@ -3578,7 +3578,7 @@ bool CApplication::PlayStack(const CFileItem& item, bool bRestart)
     {
       int duration = 0;
       
-      if (item.m_mediaParts.size() > i && item.m_mediaParts[i]->duration > 0)
+      if (item.m_mediaParts.size() > (unsigned int)i && item.m_mediaParts[i]->duration > 0)
       {
         duration = item.m_mediaParts[i]->duration;
       }

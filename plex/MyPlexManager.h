@@ -186,7 +186,7 @@ class MyPlexManager
     // Get the list of sections.
     if (getSections(sections))
     {
-      for (size_t i=0; i<sections.Size(); i++)
+      for (int i=0; i<sections.Size(); i++)
       {
         // Separate into owned and shared.
         CFileItemPtr section = sections[i];
