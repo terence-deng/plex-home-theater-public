@@ -1828,7 +1828,7 @@ void CPlexDirectory::Process()
   m_http.SetRequestHeader("X-Plex-Client-Identifier", g_guiSettings.GetString("system.uuid"));
   
   // Build a description of what we support.
-  CStdString protocols = "protocols=shoutcast,webkit,http-video;videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders=mp3,aac,ac3{bitrate:800000&channels:8},dts{bitrate=800000&channels:8}";
+  CStdString protocols = "protocols=shoutcast,webkit,http-video;videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders=mp3,aac";
   
   if (AUDIO_IS_BITSTREAM(g_guiSettings.GetInt("audiooutput.mode")))
   {
