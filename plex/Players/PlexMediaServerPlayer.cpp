@@ -438,14 +438,14 @@ void CPlexMediaServerPlayer::OnPlaybackStarted()
   m_callback.OnPlayBackStarted();    
   
   try
-  {
-    // Configure renderer.
-    g_renderManager.Configure(m_width, m_height, m_width, m_height, 30.0f, CONF_FLAGS_FULLSCREEN | CONF_FLAGS_RGB);
-    
+  {  
     // Set the initial frame to all black.
     ipc::scoped_lock<ipc::named_mutex> lock(m_frameMutex);
     memset(m_mappedRegion->get_address(), 0, m_height*m_width*4);
     g_renderManager.SetRGB32Image((const char*)m_mappedRegion->get_address(), m_height, m_width, m_width*4);
+    
+    // Configure renderer.
+    g_renderManager.Configure(m_width, m_height, m_width, m_height, 30.0f, CONF_FLAGS_FULLSCREEN | CONF_FLAGS_RGB);
     
     g_application.NewFrame();
   }
