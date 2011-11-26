@@ -188,6 +188,11 @@ bool CPlexMediaServerPlayer::CloseFile()
     m_pDlgCache->Close();
   m_pDlgCache = NULL;
   
+  // Need to uninitialize the renderer here, otherwise we'll leave textures around that will be
+  // deleted in a different thread.
+  //
+  g_renderManager.UnInit();
+  
   return true;
 }
 
