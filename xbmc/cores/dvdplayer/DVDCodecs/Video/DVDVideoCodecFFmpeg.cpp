@@ -240,7 +240,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   }
 
   // set acceleration
-  m_pCodecContext->dsp_mask = 0;//FF_MM_FORCE | FF_MM_MMX | FF_MM_MMXEXT | FF_MM_SSE;
+  m_pCodecContext->dsp_mask = 0;
 
   // advanced setting override for skip loop filter (see avcodec.h for valid options)
   // TODO: allow per video setting?
@@ -248,7 +248,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   {
     m_pCodecContext->skip_loop_filter = (AVDiscard)g_advancedSettings.m_iSkipLoopFilter;
   }
-
+  
   // set any special options
   for(CDVDCodecOptions::iterator it = options.begin(); it != options.end(); it++)
   {
