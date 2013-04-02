@@ -276,7 +276,7 @@
 						<item id="101">
                             <description>Addons Button</description>
                                 <label> $LOCALIZE[41000] </label>
-                            <onclick>RunAddon(os.openelec.settings)</onclick>
+                            <onclick>RunAddon(service.openelec.settings)</onclick>
                         </item>
                         <item id="102">
                             <description>Update button Button</description>
