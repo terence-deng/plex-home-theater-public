@@ -118,6 +118,7 @@ add_definitions(
     -D_LINUX 
     -D_ARMEL 
     -DTARGET_RASPBERRY_PI
+    -DTARGET_RPI
     -DHAS_GLES=2
     -DHAVE_LIBGLESV2
     -DHAS_EGL
