@@ -510,17 +510,9 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   encodedUrl = mediaUrl.Get();
   CURL::Encode(encodedUrl);
 
-  // Pick the sizes.
-
-/*  #ifdef TARGET_RASPBERRY_PI
-    CStdString width = "640";
-    CStdString height = "360";
-  #else
-  */
-    CStdString width = "1280";
-    CStdString height = "720";
-//  #endif
-
+  CStdString width = "1280";
+  CStdString height = "720";
+  
   if (strstr(imageURL.c_str(), "poster") || strstr(imageURL.c_str(), "thumb"))
   {
     width = boost::lexical_cast<string>(g_advancedSettings.GetThumbSize());
@@ -558,7 +550,7 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   }
   
   url.SetOptions("");
-  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl + token);
+  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&format=jpg" + "&url=" + encodedUrl + token);
   return url.Get();
 }
 
