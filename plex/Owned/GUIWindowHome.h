@@ -94,9 +94,11 @@ class CPlexSectionFanout : public IJobCallback
     CFileItemListPtr GetContentList(int type);
     void Refresh();
     void Show();
+    void CancelJobs();
 
     bool NeedsRefresh();
     static CStdString GetBestServerUrl(const CStdString& extraUrl="");
+    CStdString GetContent(const CStdString& url);
 
   private:
     int LoadSection(const CStdString& url, int contentType);
@@ -109,6 +111,9 @@ class CPlexSectionFanout : public IJobCallback
     CCriticalSection m_critical;
     int m_sectionType;
     std::vector<int> m_outstandingJobs;
+
+    std::map<CStdString, CStdString> m_UrlCache;
+    CCurlFile  m_http;
   
     /* Thumb loaders, we pre-cache posters to make the fanouts quick and nice */
     CVideoThumbLoader m_videoThumb;

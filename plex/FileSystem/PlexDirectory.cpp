@@ -510,10 +510,9 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   encodedUrl = mediaUrl.Get();
   CURL::Encode(encodedUrl);
 
-  // Pick the sizes.
   CStdString width = "1280";
   CStdString height = "720";
-
+  
   if (strstr(imageURL.c_str(), "poster") || strstr(imageURL.c_str(), "thumb"))
   {
     width = boost::lexical_cast<string>(g_advancedSettings.GetThumbSize());
@@ -521,8 +520,10 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   }
   else if (strstr(imageURL.c_str(), "banner"))
   {
+
     width = "800";
     height = "200";
+
   }
   else if (strstr(imageURL.c_str(), "system"))
   {
@@ -549,7 +550,12 @@ string CPlexDirectory::BuildImageURL(const string& parentURL, const string& imag
   }
   
   url.SetOptions("");
-  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl + token);
+
+  // Convert all arts to jpeg except mediaflags (.png)
+  if (url.Get().find("media%2fflag")>0)
+	  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&url=" + encodedUrl + token);
+  else
+	  url.SetFileName("photo/:/transcode?width=" + width + "&height=" + height + "&format=jpg" + "&url=" + encodedUrl + token);
   return url.Get();
 }
 
@@ -828,8 +834,9 @@ class PlexMediaNode
            if (!CTextureCache::Get().HasCachedImage(url))
              CTextureCache::Get().BackgroundCacheImage(url);
          }
-       }
 #endif
+       }
+
 
        string value = val;
 

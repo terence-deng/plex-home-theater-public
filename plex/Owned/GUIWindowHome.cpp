@@ -42,6 +42,7 @@
 #include "MediaSource.h"
 #include "AlarmClock.h"
 #include "Key.h"
+#include "GUILargeTextureManager.h"
 
 #include "MyPlexManager.h"
 #include "PlexDirectory.h"
@@ -60,6 +61,7 @@
 
 #include "powermanagement/PowerManager.h"
 
+#include "Application.h" // needed for rasplex only
 #include "ApplicationMessenger.h"
 
 #include "AdvancedSettings.h"
@@ -115,10 +117,36 @@ std::vector<contentListPair> CPlexSectionFanout::GetContentLists()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+CStdString CPlexSectionFanout::GetContent(const CStdString& url)
+{
+	CURL check_url(url);
+	bool bReload = true;
+
+	m_http.UseOldHttpVersion(true);
+	m_http.SetTimeout(1000);
+
+	CStdString Answer;
+
+	m_http.Get(check_url.Get(), Answer);
+
+	return Answer;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 int CPlexSectionFanout::LoadSection(const CStdString& url, int contentType)
 {
-  CPlexSectionLoadJob* job = new CPlexSectionLoadJob(url, contentType);
-  return CJobManager::GetInstance().AddJob(job, this, CJob::PRIORITY_HIGH);
+	std::map<CStdString,CStdString>::iterator it;
+
+	CStdString Content = GetContent(url);
+	it = m_UrlCache.find(url);
+
+	if (it!=m_UrlCache.end())
+		it->second = Content;
+	else
+		m_UrlCache.insert( std::pair<CStdString,CStdString>(url,Content));
+
+	CPlexSectionLoadJob* job = new CPlexSectionLoadJob(url, contentType);
+	return CJobManager::GetInstance().AddJob(job, this, CJob::PRIORITY_HIGH);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -149,6 +177,18 @@ CStdString CPlexSectionFanout::GetBestServerUrl(const CStdString& extraUrl)
 
   return bestServerUrl;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+void CPlexSectionFanout::CancelJobs()
+{
+    BOOST_FOREACH(int PrevJob,m_outstandingJobs)
+    {
+    	CLog::Log(LOGNOTICE,"Canceling Job %d",PrevJob);
+    	CJobManager::GetInstance().CancelJob(PrevJob);
+    }
+    m_outstandingJobs.clear();
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 void CPlexSectionFanout::Refresh()
@@ -195,20 +235,19 @@ void CPlexSectionFanout::Refresh()
       /* On slow/limited systems we don't want to have the full list */
 #if defined(TARGET_RPI) || defined(TARGET_DARWIN_IOS)
       trueUrl.SetOption("X-Plex-Container-Start", "0");
-      trueUrl.SetOption("X-Plex-Container-Size", "20");
+      trueUrl.SetOption("X-Plex-Container-Size", "10");
 #endif
       
-      CURL recentlyAdded(trueUrl);
-      recentlyAdded.SetOption("unwatched", "1");
-      recentlyAdded.SetFileName(PlexUtils::AppendPathToURL(recentlyAdded.GetFileName(), "recentlyAdded"));
+      trueUrl.SetOption("unwatched", "1");
+      trueUrl.SetFileName(PlexUtils::AppendPathToURL(trueUrl.GetFileName(), "recentlyAdded"));
       
-      m_outstandingJobs.push_back(LoadSection(recentlyAdded.Get(), CONTENT_LIST_RECENTLY_ADDED));
+      m_outstandingJobs.push_back(LoadSection(trueUrl.Get(), CONTENT_LIST_RECENTLY_ADDED));
 
       if (m_sectionType == PLEX_METADATA_MOVIE || m_sectionType == PLEX_METADATA_SHOW)
       {
-        CURL onDeck(trueUrl);
-        onDeck.SetFileName(PlexUtils::AppendPathToURL(onDeck.GetFileName(), "onDeck"));
-        m_outstandingJobs.push_back(LoadSection(onDeck.Get(), CONTENT_LIST_ON_DECK));
+        trueUrl = CURL(m_url);
+        trueUrl.SetFileName(PlexUtils::AppendPathToURL(trueUrl.GetFileName(), "onDeck"));
+        m_outstandingJobs.push_back(LoadSection(trueUrl.Get(), CONTENT_LIST_ON_DECK));
       }
     }
 
@@ -227,8 +266,23 @@ void CPlexSectionFanout::OnJobComplete(unsigned int jobID, bool success, CJob *j
     m_fileLists[load->GetContentType()] = load->GetFileItemList();
     
     /* Pre-cache stuff */
-    if (load->GetContentType() != CONTENT_LIST_FANART)
-      m_videoThumb.Load(*m_fileLists[load->GetContentType()].get());
+	if (load->GetContentType() != CONTENT_LIST_FANART)
+	m_videoThumb.Load(*m_fileLists[load->GetContentType()].get());
+
+#if defined(TARGET_RPI)
+	// On RPi, we want to preload the images for fanouts as it takes time
+	// therefore we will Queue them to the LargeTextureManager
+    CFileItemPtr it;
+    for (int i=0;i<m_fileLists[load->GetContentType()]->Size();i++)
+    {
+    	it = m_fileLists[load->GetContentType()]->Get(i);
+    	if (it->HasArt("thumb"))
+    	{
+    		CLog::Log(LOGDEBUG,"Queueing %s ",it->GetArt("thumb").c_str());
+    		g_largeTextureManager.QueueImage(it->GetArt("thumb"));
+    	}
+    }
+#endif
   }
 
   m_age.restart();
@@ -272,15 +326,44 @@ void CPlexSectionFanout::Show()
 //////////////////////////////////////////////////////////////////////////////
 bool CPlexSectionFanout::NeedsRefresh()
 {
-  int refreshTime = 5;
+
+  bool isPlaying = g_application.IsPlayingVideo(); 
+  int scaleFactor = 1; // for desktop
+
+#if (defined(TARGET_RPI))
+  // On RPI check if content has changed, based on PMS answer
+  CStdString Content;
+  for (std::map<CStdString,CStdString>::iterator it = m_UrlCache.begin();it!=m_UrlCache.end();++it)
+  {
+	  Content = GetContent(it->first);
+	  if (it->second != Content)
+	  {
+		  CLog::Log(LOGDEBUG, "GUIWindowHome:SectionFanout:NeedsRefresh is Needed.");
+		  return true;
+	  }
+  }
+
+  CLog::Log(LOGDEBUG, "GUIWindowHome:SectionFanout:NeedsRefresh is NOT Needed.");
+
+  return false;
+#endif
+
+  CLog::Log(LOGDEBUG, "GUIWindowHome:SectionFanout:NeedsRefresh is playing: %s", isPlaying ?  "true" : "false");
+
+  if ( isPlaying ) // bail out if playing on raspberry pi
+      return false;
+
+  scaleFactor = 1; // only on rpi
+
+  int refreshTime = 5 * scaleFactor;
   if (m_sectionType == PLEX_METADATA_ALBUM ||
       m_sectionType == PLEX_METADATA_MIXED ||
       (m_sectionType >= PLEX_METADATA_CHANNEL_VIDEO &&
        m_sectionType <= PLEX_METADATA_CHANNEL_APPLICATION))
-    refreshTime = 20;
+    refreshTime = 20 * scaleFactor;
 
   if (m_sectionType == PLEX_METADATA_GLOBAL_IMAGES)
-    refreshTime = 100;
+    refreshTime = 100 * scaleFactor;
 
   CLog::Log(LOGDEBUG, "GUIWindowHome:SectionFanout:NeedsRefresh %s, age %f, refresh %s", m_url.c_str(), m_age.elapsed(), m_age.elapsed() > refreshTime ? "yes" : "no");
   return m_age.elapsed() > refreshTime;
@@ -333,6 +416,15 @@ bool CGUIWindowHome::OnAction(const CAction &action)
       CGUIListItemPtr pItem = pControl->GetListItem(0);
       if (pItem)
       {
+
+    	#if defined(TARGET_RPI)
+    	// In order to avoid to spawn to many jobs on RPi when scrolling quickly
+    	// between the menu items, we eventually cancel the current item Jobs if they
+    	// are not yet completed
+        if (m_sections.find(m_lastSelectedItem)!= m_sections.end())
+      	  	  m_sections[m_lastSelectedItem]->CancelJobs();
+		#endif
+
         m_lastSelectedItem = GetCurrentItemName();
         if (!ShowSection(pItem->GetProperty("sectionPath").asString()) && !m_globalArt)
         {

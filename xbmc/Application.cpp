@@ -329,6 +329,7 @@
   #include "input/windows/IRServerSuite.h"
 #endif
 
+#undef HAS_SDL_JOYSTICK
 #if defined(TARGET_WINDOWS)
 #include "input/windows/WINJoystick.h"
 #elif defined(HAS_SDL_JOYSTICK) || defined(HAS_EVENT_SERVER)
@@ -1375,9 +1376,9 @@ bool CApplication::Initialize()
     g_windowManager.Add(new CGUIWindowLoginScreen);
     g_windowManager.Add(new CGUIWindowSettingsProfile);
     g_windowManager.Add(new CGUIWindow(WINDOW_SKIN_SETTINGS, "SkinSettings.xml"));
-#ifndef __PLEX__
+
     g_windowManager.Add(new CGUIWindowAddonBrowser);
-#endif
+
     g_windowManager.Add(new CGUIWindowScreensaverDim);
     g_windowManager.Add(new CGUIWindowDebugInfo);
     g_windowManager.Add(new CGUIWindowPointer);
@@ -2524,7 +2525,7 @@ void CApplication::Render()
   if (limitFrames || !flip)
   {
     if (!limitFrames)
-      singleFrameTime = 40; //if not flipping, loop at 25 fps
+      singleFrameTime = 100; //if not flipping, loop at 15 fps
 
     unsigned int frameTime = now - m_lastFrameTime;
     if (frameTime < singleFrameTime)
@@ -3175,6 +3176,7 @@ void CApplication::FrameMove(bool processEvents, bool processGUI)
 
 bool CApplication::ProcessGamepad(float frameTime)
 {
+#undef HAS_SDL_JOYSTICK
 #ifdef HAS_SDL_JOYSTICK
   if (!m_AppFocused)
     return false;
@@ -3627,9 +3629,9 @@ bool CApplication::Cleanup()
     g_windowManager.Remove(WINDOW_DIALOG_VOLUME_BAR);
 
 
-#ifndef __PLEX__
-    CAddonMgr::Get().DeInit();
 
+    CAddonMgr::Get().DeInit();
+#ifndef __PLEX__
 #if defined(HAS_LIRC) || defined(HAS_IRSERVERSUITE)
     CLog::Log(LOGNOTICE, "closing down remote control service");
     g_RemoteControl.Disconnect();
