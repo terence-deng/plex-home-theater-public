@@ -274,15 +274,17 @@
 							<onclick>XBMC.ActivateWindow(4)</onclick>
 						</item>
 						<item id="101">
-			                                <description>RasPlex Settings Button</description>
-                                		        <label> $LOCALIZE[41000] </label>
-                            			        <onclick>RunAddon(service.openelec.settings)</onclick>
-                        			</item>
-                        			<item id="102">
-                            			        <description>Update Button</description>
-                            				<label> $LOCALIZE[41001] </label>
-                            				<onclick>RunAddon(script.rasplex.update)</onclick>
-                        			</item>
+							<description>RasPlex Settings Button</description>
+								<label> $LOCALIZE[41000] </label>
+								<onclick>RunAddon(service.openelec.settings)</onclick>
+						</item>
+<!--
+                        	<item id="102">
+							<description>Update Button</description>
+							<label> $LOCALIZE[41001] </label>
+							<onclick>RunAddon(script.rasplex.update)</onclick>
+						</item>
+-->
 					</content>
 				</control>
 			</control>
