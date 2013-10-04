@@ -278,13 +278,11 @@
 								<label> $LOCALIZE[41000] </label>
 								<onclick>RunAddon(service.openelec.settings)</onclick>
 						</item>
-<!--
-                        	<item id="102">
+                        <item id="102">
 							<description>Update Button</description>
 							<label> $LOCALIZE[41001] </label>
 							<onclick>RunAddon(script.rasplex.update)</onclick>
 						</item>
--->
 					</content>
 				</control>
 			</control>
