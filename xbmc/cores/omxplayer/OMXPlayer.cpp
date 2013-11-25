@@ -1017,7 +1017,7 @@ bool COMXPlayer::ReadPacket(DemuxPacket*& packet, CDemuxStream*& stream)
           int count = m_SelectionStreams.Count(STREAM_SUBTITLE);
           for (int i = 0; i<count; i++)
           {
-            SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
+            OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
             if (s.plexID == m_vobsubToDisplay && OpenSubtitleStream(s.id, s.source))
             {
               OpenSubtitleStream(s.id, s.source);
@@ -4480,7 +4480,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
 {
   int  count;
   bool valid;
-  SelectionStream st;
+  OMXSelectionStream st;
 
   // open video stream
   count = m_SelectionStreams.Count(STREAM_VIDEO);
@@ -4497,7 +4497,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
 
   for(int i = 0;i<count && !valid;i++)
   {
-    SelectionStream& s = m_SelectionStreams.Get(STREAM_VIDEO, i);
+    OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_VIDEO, i);
     if(OpenVideoStream(s.id, s.source, reset))
       valid = true;
   }
@@ -4530,7 +4530,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
           count = m_SelectionStreams.Count(STREAM_AUDIO);
           for (int i=0; i<count && !valid; i++)
           {
-            SelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
+            OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
             if (s.plexID == streamId && OpenAudioStream(s.id, s.source, reset))
             {
               CLog::Log(LOGINFO, "COMXPlayer::OpenDefaultStreams selected stream %d[%s]", streamId, streamLang.c_str());
@@ -4546,7 +4546,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
     // If that didn't work, just pick the first valid stream.
     for(int i = 0; i<count && !valid; i++)
     {
-      SelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
+      OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
       if(OpenAudioStream(s.id, s.source, reset))
       {
         CLog::Log(LOGINFO, "COMXPlayer::OpenDefaultStreams failed to find the stream based plexId, instead you will get %d[%s]", s.plexID, s.language.c_str());
@@ -4576,7 +4576,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
 
         for (int i = 0; i<count && !valid; i++)
         {
-          SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
+          OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
           if (s.plexID == stream->GetProperty("id").asInteger() && OpenSubtitleStream(s.id, s.source))
           {
             // We're going to need to open this later.
@@ -4594,7 +4594,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
     // If that didn't pick one, just open the first stream and make it invisible.
     if (valid == false && count > 0)
     {
-      SelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, 0);
+      OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, 0);
       OpenSubtitleStream(s.id, s.source);
 
       if (s.source == STREAM_SOURCE_DEMUX_SUB)
@@ -4634,7 +4634,7 @@ void COMXPlayer::RelinkPlexStreams()
         int count = m_SelectionStreams.Count(type);
         for (int i=0; i<count; i++)
         {
-          SelectionStream& s = m_SelectionStreams.Get(type, i);
+          OMXSelectionStream& s = m_SelectionStreams.Get(type, i);
 
           if (s.id == stream->GetProperty("index").asInteger() || s.id == stream->GetProperty("subIndex").asInteger())
           {
@@ -4652,18 +4652,18 @@ void COMXPlayer::RelinkPlexStreams()
 
 int COMXPlayer::GetAudioStreamPlexID()
 {
-  SelectionStream& stream = m_SelectionStreams.Get(STREAM_AUDIO, m_SelectionStreams.IndexOf(STREAM_AUDIO, *this));
+  OMXSelectionStream& stream = m_SelectionStreams.Get(STREAM_AUDIO, m_SelectionStreams.IndexOf(STREAM_AUDIO, *this));
   return stream.plexID;
 }
 
 int COMXPlayer::GetSubtitlePlexID()
 {
-  SelectionStream& stream = m_SelectionStreams.Get(STREAM_SUBTITLE, m_SelectionStreams.IndexOf(STREAM_SUBTITLE, *this));
+  OMXSelectionStream& stream = m_SelectionStreams.Get(STREAM_SUBTITLE, m_SelectionStreams.IndexOf(STREAM_SUBTITLE, *this));
   return stream.plexID;
 }
 void COMXPlayer::SetAudioStreamPlexID(int plexID)
 {
-  std::vector<SelectionStream> audiost = m_SelectionStreams.Get(STREAM_AUDIO);
+  std::vector<OMXSelectionStream> audiost = m_SelectionStreams.Get(STREAM_AUDIO);
   for (int i = 0; i < audiost.size(); i ++)
   {
     if (audiost[i].plexID == plexID)
@@ -4676,7 +4676,7 @@ void COMXPlayer::SetAudioStreamPlexID(int plexID)
 
 void COMXPlayer::SetSubtitleStreamPlexID(int plexID)
 {
-  std::vector<SelectionStream> subst = m_SelectionStreams.Get(STREAM_SUBTITLE);
+  std::vector<OMXSelectionStream> subst = m_SelectionStreams.Get(STREAM_SUBTITLE);
   for (int i = 0; i < subst.size(); i ++)
   {
     if (subst[i].plexID == plexID)
