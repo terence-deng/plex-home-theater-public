@@ -25,7 +25,6 @@
 
 /* PLEX */
 #include "Variant.h"
-#include "PlexMediaPart.h"
 /* END PLEX */
 
 
@@ -383,12 +382,13 @@ public:
   virtual int GetAudioStreamPlexID();
   virtual int GetPlexMediaPartID()
   {
-    PlexMediaPartPtr part = GetMediaPart();
-    if (part)
-      return part->id;
-
-    return -1;
+     CFileItemPtr part = m_item.m_selectedMediaPart;
+     if (part)
+         return part->GetProperty("id").asInteger();
+     
+     return -1;
   }
+
   virtual bool CanOpenAsync() { return false; }
   virtual void Abort() { m_bAbortRequest = true; }
   bool PlexProcess(CStdString& stopURL);
@@ -574,24 +574,6 @@ private:
   bool         m_hidingSub;
   int          m_vobsubToDisplay;
 
-  PlexMediaPartPtr GetMediaPart()
-  {
-    PlexMediaPartPtr part;
-
-    if (m_itemWithDetails)
-    {
-      // Figure out what part we're on.
-      int partIndex = 0;
-      if (m_item.HasProperty("partIndex"))
-        partIndex = m_item.GetProperty("partIndex").asInteger();
-
-      // Get the part if we have it.
-      if (partIndex >= 0 && size_t(partIndex) < m_itemWithDetails->m_mediaParts.size())
-        part = m_itemWithDetails->m_mediaParts[partIndex];
-    }
-
-    return part;
-  }
 
   unsigned int m_readRate;
   void UpdateReadRate();
