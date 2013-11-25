@@ -709,7 +709,7 @@ bool COMXPlayer::OpenInputStream()
         if (stream->GetProperty("streamType").asInteger() == PLEX_STREAM_SUBTITLE &&
             stream->GetProperty("index").asInteger() == -1)
         {
-          SelectionStream s;
+          OMXSelectionStream s;
           s.type     = STREAM_SUBTITLE;
           s.id       = stream->GetProperty("subIndex").asInteger() >= 0 ? stream->GetProperty("subIndex").asInteger() : stream->GetProperty("id").asInteger();
           s.plexID   = stream->GetProperty("id").asInteger();

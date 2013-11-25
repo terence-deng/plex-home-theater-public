@@ -377,21 +377,21 @@ public:
   virtual void  GetSubtitleCapabilities(std::vector<int> &subCaps);
 
 
-  /* PLEX */
+   /* PLEX */
   virtual int GetSubtitlePlexID();
   virtual int GetAudioStreamPlexID();
+  virtual void SetAudioStreamPlexID(int plexID);
+  virtual void SetSubtitleStreamPlexID(int plexID);
   virtual int GetPlexMediaPartID()
   {
-     CFileItemPtr part = m_item.m_selectedMediaPart;
-     if (part)
-         return part->GetProperty("id").asInteger();
-     
-     return -1;
-  }
+    CFileItemPtr part = m_item.m_selectedMediaPart;
+    if (part)
+      return part->GetProperty("id").asInteger();
 
+    return -1;
+  }
   virtual bool CanOpenAsync() { return false; }
   virtual void Abort() { m_bAbortRequest = true; }
-  bool PlexProcess(CStdString& stopURL);
   /* END PLEX */
 
 protected:
@@ -567,7 +567,6 @@ private:
 
   /* PLEX */
   void RelinkPlexStreams();
-  virtual CStdString TranscodeURL(CStdString& stopURL, const CStdString& url, int quality=-1, const CStdString& transcodeHost = "", const CStdString& extraOptions = "");
 
   CStdString   m_strError;
   CFileItemPtr m_itemWithDetails;
