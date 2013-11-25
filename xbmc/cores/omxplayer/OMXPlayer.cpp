@@ -4561,7 +4561,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
 
   // open subtitle stream
   valid = false;
-  m_dvdPlayerVideo.EnableSubtitle(true);
+  m_player_video.EnableSubtitle(true);
 
   // Open subtitle stream.
   CFileItemPtr part = m_item.m_selectedMediaPart;
