@@ -10,7 +10,7 @@ set(CONFIG_FLAGS --target-os=${OS} --disable-muxers --disable-encoders --disable
 
 ExternalProject_Add(
   ffmpeg
-  URL .
+  SOURCE_DIR .
   PREFIX ffmpeg
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> ${CONFIG_FLAGS}
   BUILD_COMMAND make -j 4
