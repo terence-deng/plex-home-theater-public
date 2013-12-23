@@ -1251,3 +1251,15 @@ plex/Dependencies/built-depends/*
 
 *.autosave
 /plex-home-theater
+
+*.config
+
+*.creator
+
+*.user
+
+*.3
+
+*.files
+
+*.includes
