@@ -842,7 +842,9 @@ CStdString CURL::GetUrlWithoutOptions() const
 void CURL::AddOptions(const CUrlOptions &options)
 {
   for (CUrlOptions::UrlOptions::const_iterator option = options.GetOptions().begin(); option != options.GetOptions().end(); option++)
-    SetOption(option->first, option->second.asString());
+    m_options.AddOption(option->first, option->second.asString());
+  
+  m_strOptions = m_options.GetOptionsString(true);
 }
 /* END PLEX */
 

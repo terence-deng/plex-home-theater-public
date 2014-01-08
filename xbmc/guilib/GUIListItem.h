@@ -32,6 +32,7 @@
 
 #include <map>
 #include <string>
+#include "utils/Variant.h"
 
 //  Forward
 class CGUIListItemLayout;
@@ -166,7 +167,10 @@ public:
 
   bool m_bIsFolder;     ///< is item a folder or a file
 
-  void SetProperty(const CStdString &strKey, const CVariant &value);
+  inline void SetProperty(const CStdString &strKey, const CVariant &value)
+  {
+    m_mapProperties[strKey] = value;
+  }
 
   void IncrementProperty(const CStdString &strKey, int nVal);
   void IncrementProperty(const CStdString &strKey, double dVal);
@@ -183,12 +187,26 @@ public:
   void Archive(CArchive& ar);
   void Serialize(CVariant& value);
 
-  bool       HasProperty(const CStdString &strKey) const;
+  inline bool HasProperty(const CStdString &strKey) const
+  {
+    PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
+    if (iter == m_mapProperties.end())
+      return false;
+
+    return true;
+  }
+
   bool       HasProperties() const { return m_mapProperties.size() > 0; };
   void       ClearProperty(const CStdString &strKey);
 
-  CVariant   GetProperty(const CStdString &strKey) const;
+  inline CVariant GetProperty(const CStdString &strKey) const
+  {
+    PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
+    if (iter == m_mapProperties.end())
+      return CVariant(CVariant::VariantTypeNull);
 
+    return iter->second;
+  }
   /* PLEX */
   int GetOverlayImageID() const { return m_overlayIcon; }
 

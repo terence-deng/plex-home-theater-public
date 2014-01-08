@@ -2486,7 +2486,11 @@ void CApplication::Render()
   bool decrement = false;
   bool hasRendered = false;
   bool limitFrames = false;
+  #if defined(TARGET_RASPBERRY_PI)
+  unsigned int singleFrameTime = 66; // default limit 15 fps
+  #else
   unsigned int singleFrameTime = 10; // default limit 100 fps
+  #endif
 
   {
     // Less fps in DPMS

@@ -159,11 +159,14 @@ void CPlexAttributeParserMediaUrl::Process(const CURL &url, const CStdString &ke
     height = "1080";
   }
 
-  mediaUrl.SetOption("width", width);
-  mediaUrl.SetOption("height", height);
-  mediaUrl.SetOption("url", imageURL.Get());
+  CUrlOptions Options;
+  Options.AddOption("width", width);
+  Options.AddOption("height", height);
+  Options.AddOption("url", imageURL.Get());
   if (g_advancedSettings.m_bForceJpegImageFormat)
-    mediaUrl.SetOption("format", "jpg");
+    Options.AddOption("format", "jpg");
+
+  mediaUrl.AddOptions(Options);
 
   mediaUrl.SetFileName("photo/:/transcode");
 
@@ -174,39 +177,52 @@ void CPlexAttributeParserMediaUrl::Process(const CURL &url, const CStdString &ke
 ////////////////////////////////////////////////////////////////////////////////
 void CPlexAttributeParserMediaFlag::Process(const CURL &url, const CStdString &key, const CStdString &value, CFileItem *item)
 {
-  CURL mediaTagUrl;
+  static std::map<std::string,std::string> FlagsMap;
 
-  mediaTagUrl.SetProtocol("http");
-  mediaTagUrl.SetHostName("127.0.0.1");
-  mediaTagUrl.SetPort(32400);
+    // Look if we found a flag in the cache
+    std::map<std::string,std::string>::const_iterator got = FlagsMap.find (key+"|"+value);
+    if (( got != FlagsMap.end()) && true)
+    {
+        item->SetArt("mediaTag::" + key,got->second);
+        item->SetProperty("mediaTag-" + key, value);
+    }
+    else
+    {
+      CURL mediaTagUrl;
 
-  if (!item->HasProperty("mediaTagPrefix"))
-  {
-    CLog::Log(LOGWARNING, "CPlexAttributeParserMediaFlag::Process got a mediaflag on %s but we don't have any mediaTagPrefix", url.Get().c_str());
-    return;
-  }
+      mediaTagUrl.SetProtocol("http");
+      mediaTagUrl.SetHostName("127.0.0.1");
+      mediaTagUrl.SetPort(32400);
 
-  CStdString mediaTagPrefix = item->GetProperty("mediaTagPrefix").asString();
-  CStdString mediaTagVersion = item->GetProperty("mediaTagVersion").asString();
+      if (!item->HasProperty("mediaTagPrefix"))
+      {
+        CLog::Log(LOGWARNING, "CPlexAttributeParserMediaFlag::Process got a mediaflag on %s but we don't have any mediaTagPrefix", url.Get().c_str());
+        return;
+      }
 
-  CStdString flagUrl = mediaTagPrefix;
+      CStdString mediaTagPrefix = item->GetProperty("mediaTagPrefix").asString();
+      CStdString mediaTagVersion = item->GetProperty("mediaTagVersion").asString();
 
-  flagUrl = PlexUtils::AppendPathToURL(flagUrl, key);
-  flagUrl = PlexUtils::AppendPathToURL(flagUrl, CURL::Encode(value));
+      CStdString flagUrl = mediaTagPrefix;
 
-  if (boost::starts_with(flagUrl, "/"))
-    mediaTagUrl.SetFileName(flagUrl.substr(1, std::string::npos));
-  else
-    mediaTagUrl.SetFileName(flagUrl);
+      flagUrl = PlexUtils::AppendPathToURL(flagUrl, key);
+      flagUrl = PlexUtils::AppendPathToURL(flagUrl, CURL::Encode(value));
 
-  if (!mediaTagVersion.empty())
-    mediaTagUrl.SetOption("t", mediaTagVersion);
+      if (boost::starts_with(flagUrl, "/"))
+        mediaTagUrl.SetFileName(flagUrl.substr(1, std::string::npos));
+      else
+        mediaTagUrl.SetFileName(flagUrl);
 
-  //CLog::Log(LOGDEBUG, "CPlexAttributeParserMediaFlag::Process MEDIATAG: mediaTag::%s = %s | mediaTag-%s = %s", key.c_str(), mediaTagUrl.Get().c_str(), key.c_str(), value.c_str());
-  CPlexAttributeParserMediaUrl::Process(url, "mediaTag::" + key, mediaTagUrl.Get(), item);
+      if (!mediaTagVersion.empty())
+        mediaTagUrl.SetOption("t", mediaTagVersion);
 
-  /* also store the raw value */
-  item->SetProperty("mediaTag-" + key, value);
+      //CLog::Log(LOGDEBUG, "CPlexAttributeParserMediaFlag::Process MEDIATAG: mediaTag::%s = %s | mediaTag-%s = %s", key.c_str(), mediaTagUrl.Get().c_str(), key.c_str(), value.c_str());
+      CPlexAttributeParserMediaUrl::Process(url, "mediaTag::" + key, mediaTagUrl.Get(), item);
+
+      /* also store the raw value */
+      item->SetProperty("mediaTag-" + key, value);
+      FlagsMap[key+"|"+value] = item->GetArt("mediaTag::"+ key);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
