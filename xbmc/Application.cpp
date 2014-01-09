@@ -4261,6 +4261,21 @@ bool CApplication::PlayFile(const CFileItem& item_, bool bRestart)
       if (!m_itemCurrentFile->IsStack())
         *m_itemCurrentFile = newItem;
     }
+
+    /* let's set some options if we need to */
+    CFileItemPtr mediaPart = CPlexMediaDecisionEngine::getMediaPart(newItem);
+    if (mediaPart)
+    {
+      CFileItemPtr videoStream = PlexUtils::GetSelectedStreamOfType(mediaPart, PLEX_STREAM_VIDEO);
+      if (videoStream)
+      {
+        if (videoStream->GetProperty("scanType").asString() == "interlaced")
+        {
+          CLog::Log(LOGDEBUG, "CApplication::PlayFile interlaced video found, switching player options to de-interlacing");
+          g_settings.m_currentVideoSettings.m_DeinterlaceMode = VS_DEINTERLACEMODE_FORCE;
+        }
+      }
+    }
   }
   /* END PLEX */
 
@@ -6367,15 +6382,6 @@ void CApplication::UpdateFileState(const string& aState, bool force)
   {
     if (g_plexApplication.timelineManager)
       g_plexApplication.timelineManager->ReportProgress(m_itemCurrentFile, state, GetTime() * 1000, force);
-
-    // Update the item in place.
-    CGUIMediaWindow* mediaWindow = (CGUIMediaWindow* )g_windowManager.GetWindow(WINDOW_VIDEO_FILES);
-    if (mediaWindow)
-      mediaWindow->UpdateSelectedItem(m_itemCurrentFile);
-
-    mediaWindow = (CGUIMediaWindow* )g_windowManager.GetWindow(WINDOW_VIDEO_NAV);
-    if (mediaWindow)
-      mediaWindow->UpdateSelectedItem(m_itemCurrentFile);
   }
 }
 
