@@ -46,18 +46,6 @@ using namespace rapidxml;
 #endif
 
 /* IDirectory Interface */
-unsigned long CPlexDirectory::ComputeHash(CStdString Data)
-{
-    unsigned long hash = 5381;
-    int c;
-    const char* str = Data.c_str();
-
-    while (c = *str++)
-    hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-
-    return hash;
-}
-
 bool
 CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
 {
@@ -113,7 +101,6 @@ CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
     return false;
     }
 
-    m_Hash = ComputeHash(m_data);
 
 #ifdef USE_RAPIDXML
 
@@ -327,27 +314,25 @@ CPlexDirectory::CopyAttributes(XML_ELEMENT* el, CFileItem* item, const CURL &url
 		attr = attr->Next();
 	}
   #else
-    XML_ATTRIBUTE *attr = el->first_attribute();
+	XML_ATTRIBUTE *attr = el->first_attribute();
 
-    while (attr)
-    {
-      CStdString key = attr->name();
-      CStdString valStr = CStdString(attr->value());
+	 while (attr)
+	  {
+		CStdString key = attr->name();
+		CStdString valStr = CStdString(attr->value());
 
-      std::map<CStdString, CPlexAttributeParserBase*>::iterator it;
-      it = g_attributeMap.find(key);
+		if (g_attributeMap.find(key) != g_attributeMap.end())
+		{
+		  CPlexAttributeParserBase* attr = g_attributeMap[key];
+		  attr->Process(url, key, valStr, item);
+		}
+		else
+		{
+		  g_defaultAttr->Process(url, key, valStr, item);
+		}
 
-      if ( it != g_attributeMap.end())
-      {
-        it->second->Process(url, key, valStr, item);
-      }
-      else
-      {
-        g_defaultAttr->Process(url, key, valStr, item);
-      }
-
-      attr = attr->next_attribute();
-    }
+		attr = attr->next_attribute();
+	  }
   #endif
 }
 
