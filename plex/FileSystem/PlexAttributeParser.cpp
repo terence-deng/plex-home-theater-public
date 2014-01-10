@@ -177,52 +177,39 @@ void CPlexAttributeParserMediaUrl::Process(const CURL &url, const CStdString &ke
 ////////////////////////////////////////////////////////////////////////////////
 void CPlexAttributeParserMediaFlag::Process(const CURL &url, const CStdString &key, const CStdString &value, CFileItem *item)
 {
-  static std::map<std::string,std::string> FlagsMap;
+  CURL mediaTagUrl;
 
-    // Look if we found a flag in the cache
-    std::map<std::string,std::string>::const_iterator got = FlagsMap.find (key+"|"+value);
-    if (( got != FlagsMap.end()) && true)
-    {
-        item->SetArt("mediaTag::" + key,got->second);
-        item->SetProperty("mediaTag-" + key, value);
-    }
-    else
-    {
-      CURL mediaTagUrl;
+  mediaTagUrl.SetProtocol("http");
+  mediaTagUrl.SetHostName("127.0.0.1");
+  mediaTagUrl.SetPort(32400);
 
-      mediaTagUrl.SetProtocol("http");
-      mediaTagUrl.SetHostName("127.0.0.1");
-      mediaTagUrl.SetPort(32400);
+  if (!item->HasProperty("mediaTagPrefix"))
+  {
+    CLog::Log(LOGWARNING, "CPlexAttributeParserMediaFlag::Process got a mediaflag on %s but we don't have any mediaTagPrefix", url.Get().c_str());
+    return;
+  }
 
-      if (!item->HasProperty("mediaTagPrefix"))
-      {
-        CLog::Log(LOGWARNING, "CPlexAttributeParserMediaFlag::Process got a mediaflag on %s but we don't have any mediaTagPrefix", url.Get().c_str());
-        return;
-      }
+  CStdString mediaTagPrefix = item->GetProperty("mediaTagPrefix").asString();
+  CStdString mediaTagVersion = item->GetProperty("mediaTagVersion").asString();
 
-      CStdString mediaTagPrefix = item->GetProperty("mediaTagPrefix").asString();
-      CStdString mediaTagVersion = item->GetProperty("mediaTagVersion").asString();
+  CStdString flagUrl = mediaTagPrefix;
 
-      CStdString flagUrl = mediaTagPrefix;
+  flagUrl = PlexUtils::AppendPathToURL(flagUrl, key);
+  flagUrl = PlexUtils::AppendPathToURL(flagUrl, CURL::Encode(value));
 
-      flagUrl = PlexUtils::AppendPathToURL(flagUrl, key);
-      flagUrl = PlexUtils::AppendPathToURL(flagUrl, CURL::Encode(value));
+  if (boost::starts_with(flagUrl, "/"))
+    mediaTagUrl.SetFileName(flagUrl.substr(1, std::string::npos));
+  else
+    mediaTagUrl.SetFileName(flagUrl);
 
-      if (boost::starts_with(flagUrl, "/"))
-        mediaTagUrl.SetFileName(flagUrl.substr(1, std::string::npos));
-      else
-        mediaTagUrl.SetFileName(flagUrl);
+  if (!mediaTagVersion.empty())
+    mediaTagUrl.SetOption("t", mediaTagVersion);
 
-      if (!mediaTagVersion.empty())
-        mediaTagUrl.SetOption("t", mediaTagVersion);
+  //CLog::Log(LOGDEBUG, "CPlexAttributeParserMediaFlag::Process MEDIATAG: mediaTag::%s = %s | mediaTag-%s = %s", key.c_str(), mediaTagUrl.Get().c_str(), key.c_str(), value.c_str());
+  CPlexAttributeParserMediaUrl::Process(url, "mediaTag::" + key, mediaTagUrl.Get(), item);
 
-      //CLog::Log(LOGDEBUG, "CPlexAttributeParserMediaFlag::Process MEDIATAG: mediaTag::%s = %s | mediaTag-%s = %s", key.c_str(), mediaTagUrl.Get().c_str(), key.c_str(), value.c_str());
-      CPlexAttributeParserMediaUrl::Process(url, "mediaTag::" + key, mediaTagUrl.Get(), item);
-
-      /* also store the raw value */
-      item->SetProperty("mediaTag-" + key, value);
-      FlagsMap[key+"|"+value] = item->GetArt("mediaTag::"+ key);
-    }
+  /* also store the raw value */
+  item->SetProperty("mediaTag-" + key, value);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
