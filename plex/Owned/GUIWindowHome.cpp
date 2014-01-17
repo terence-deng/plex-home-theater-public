@@ -102,7 +102,6 @@ using namespace boost;
 
 #define SLIDESHOW_MULTIIMAGE 10101
 
-CPlexGlobalCacher *pg_Cacher = NULL;
 
 typedef std::pair<CStdString, CPlexSectionFanout*> nameSectionPair;
 
@@ -331,11 +330,24 @@ CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml"), m_gl
   // Here we start the global cacher
   // it will request all the section data and try to cache them locally
   // it will create a plex.cached in userdata directory when it has been done at least once in order not to reprocess at every start
-  if (!pg_Cacher)
+
+  // first Check if we have already completed the global cache	
+  if (XFILE::CFile::Exists("special://masterprofile/plex.cached")) 
   {
-		pg_Cacher = new CPlexGlobalCacher();
-		pg_Cacher->Start();
+  	CLog::Log(LOGNOTICE,"Global Cache : Will skip, global caching already done.");
+  	return;
+  }else
+  {
+      CFile CacheFile;
+      if (CacheFile.OpenForWrite("special://masterprofile/plex.cached"))
+      {
+          CacheFile.Close();
+          CPlexGlobalCacher* pg_Cacher = CPlexGlobalCacher::getGlobalCacher();
+          pg_Cacher->Start();
+      }
+      else CLog::Log(LOGERROR,"Global Cache : Cannot Create %s","special://masterprofile/plex.cached");
   }
+
 
 }
 
