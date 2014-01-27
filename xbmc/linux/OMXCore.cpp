@@ -644,9 +644,11 @@ OMX_ERRORTYPE COMXCoreComponent::AllocInputBuffers(bool use_buffers /* = false *
   m_input_buffer_count  = portFormat.nBufferCountActual;
   m_input_buffer_size   = portFormat.nBufferSize;
 
+#if OMX_DEBUG_VERBOSE
   CLog::Log(LOGDEBUG, "COMXCoreComponent::AllocInputBuffers component(%s) - port(%d), nBufferCountMin(%u), nBufferCountActual(%u), nBufferSize(%u), nBufferAlignmen(%u)\n",
             m_componentName.c_str(), GetInputPort(), portFormat.nBufferCountMin,
             portFormat.nBufferCountActual, portFormat.nBufferSize, portFormat.nBufferAlignment);
+#endif
 
   for (size_t i = 0; i < portFormat.nBufferCountActual; i++)
   {
@@ -720,9 +722,11 @@ OMX_ERRORTYPE COMXCoreComponent::AllocOutputBuffers(bool use_buffers /* = false 
   m_output_buffer_count  = portFormat.nBufferCountActual;
   m_output_buffer_size   = portFormat.nBufferSize;
 
+#if OMX_DEBUG_VERBOSE
   CLog::Log(LOGDEBUG, "COMXCoreComponent::AllocOutputBuffers component(%s) - port(%d), nBufferCountMin(%u), nBufferCountActual(%u), nBufferSize(%u) nBufferAlignmen(%u)\n",
             m_componentName.c_str(), m_output_port, portFormat.nBufferCountMin,
             portFormat.nBufferCountActual, portFormat.nBufferSize, portFormat.nBufferAlignment);
+#endif
 
   for (size_t i = 0; i < portFormat.nBufferCountActual; i++)
   {
@@ -844,7 +848,14 @@ OMX_ERRORTYPE COMXCoreComponent::FreeOutputBuffers()
     }
   }
 
-  WaitForCommand(OMX_CommandPortDisable, m_output_port);
+  omx_err = WaitForCommand(OMX_CommandPortDisable, m_output_port,1000);
+  if(omx_err != OMX_ErrorNone && omx_err != OMX_ErrorSameState)
+  {
+    CLog::Log(LOGERROR, "COMXCoreComponent::FreeOutputBuffers error waiting for disabled state on %s omx_err(0x%08x)\n", m_componentName.c_str(), omx_err);
+    UnLock();
+    return omx_err;
+  }
+
   assert(m_omx_output_buffers.size() == m_omx_output_available.size());
 
   m_omx_output_buffers.clear();
@@ -1425,8 +1436,10 @@ bool COMXCoreComponent::Initialize( const std::string &component_name, OMX_INDEX
   if (m_output_port > port_param.nStartPortNumber+port_param.nPorts-1)
     m_output_port = port_param.nStartPortNumber+port_param.nPorts-1;
 
+  #if OMX_DEBUG_VERBOSE
   CLog::Log(LOGDEBUG, "COMXCoreComponent::Initialize %s input port %d output port %d\n",
       m_componentName.c_str(), m_input_port, m_output_port);
+  #endif
 
   m_exit = false;
   m_flush_input   = false;
@@ -1467,8 +1480,11 @@ bool COMXCoreComponent::Deinitialize(bool free_component /* = false */)
 
     if(free_component)
     {
+      #if OMX_DEBUG_VERBOSE
       CLog::Log(LOGDEBUG, "COMXCoreComponent::Deinitialize : %s handle %p dllopen : %d\n", 
           m_componentName.c_str(), m_handle, m_DllOMXOpen);
+      #endif
+
       omx_err = m_DllOMX->OMX_FreeHandle(m_handle);
       if (omx_err != OMX_ErrorNone)
       {
