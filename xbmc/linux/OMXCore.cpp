@@ -368,7 +368,7 @@ COMXCoreComponent::COMXCoreComponent()
   m_flush_input         = false;
   m_flush_output        = false;
   m_resource_error      = false;
-
+  m_bitstream_error     = false;
   m_eos                 = false;
 
   m_exit = false;
@@ -1385,6 +1385,7 @@ bool COMXCoreComponent::Initialize( const std::string &component_name, OMX_INDEX
     return false;
 
   m_resource_error = false;
+  m_bitstream_error = false;
   m_componentName = component_name;
   
   m_callbacks.EventHandler    = &COMXCoreComponent::DecoderEventHandlerCallback;
@@ -1497,6 +1498,7 @@ bool COMXCoreComponent::Deinitialize(bool free_component /* = false */)
       m_output_port     = 0;
       m_componentName   = "";
       m_resource_error  = false;
+      m_bitstream_error = false;
     }
   }
 
@@ -1716,6 +1718,7 @@ OMX_ERRORTYPE COMXCoreComponent::DecoderEventHandler(
         break;
         case OMX_ErrorStreamCorrupt:
           CLog::Log(LOGERROR, "%s::%s %s - OMX_ErrorStreamCorrupt, Bitstream corrupt\n", CLASSNAME, __func__, ctx->GetName().c_str());
+          ctx->m_bitstream_error = true;
         break;
         case OMX_ErrorUnsupportedSetting:
           CLog::Log(LOGERROR, "%s::%s %s - OMX_ErrorUnsupportedSetting, unsupported setting\n", CLASSNAME, __func__, ctx->GetName().c_str());

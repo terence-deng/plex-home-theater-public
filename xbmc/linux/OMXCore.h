@@ -160,7 +160,7 @@ public:
   OMX_ERRORTYPE FreeOutputBuffers();
 
   bool IsEOS() { return m_eos; };
-  bool BadState() { return m_resource_error; };
+  bool BadState() { return (m_resource_error || m_bitstream_error); };
   void ResetEos();
 
 private:
@@ -203,6 +203,7 @@ private:
   bool          m_flush_input;
   bool          m_flush_output;
   bool          m_resource_error;
+  bool          m_bitstream_error;
   void              Lock();
   void              UnLock();
 };
