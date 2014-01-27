@@ -37,6 +37,8 @@
 #include "settings/Settings.h"
 #include "settings/AdvancedSettings.h"
 
+#include "Stopwatch.h"
+
 #ifdef CLASSNAME
 #undef CLASSNAME
 #endif
@@ -69,6 +71,10 @@ COMXImage::COMXImage()
   OMX_INIT_STRUCTURE(m_decoded_format);
   OMX_INIT_STRUCTURE(m_encoded_format);
   memset(&m_omx_image, 0x0, sizeof(OMX_IMAGE_PORTDEFINITIONTYPE));
+
+  m_bInitialized = false;
+  m_decoded_buffer = NULL;
+  m_BusyEvent.Set();
 }
 
 COMXImage::~COMXImage()
@@ -118,6 +124,7 @@ void COMXImage::Close()
     m_encoder_open = false;
   }
 
+  m_bInitialized = false;
   m_pFile.Close();
 }
 
@@ -686,6 +693,67 @@ bool COMXImage::HandlePortSettingChange(unsigned int resize_width, unsigned int 
   return true;
 }
 
+bool COMXImage::Initialize()
+{
+  std::string componentName = "";
+  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
+
+  _DEBUG0("initializing decoder");
+  componentName = "OMX.broadcom.image_decode";
+  if(!m_omx_decoder.Initialize((const std::string)componentName, OMX_IndexParamImageInit))
+  {
+    CLog::Log(LOGERROR, "%s::%s error m_omx_decoder.Initialize\n", CLASSNAME, __func__);
+    return false;
+  }
+
+  _DEBUG0("initializing resizer");
+  componentName = "OMX.broadcom.resize";
+  if(!m_omx_resize.Initialize((const std::string)componentName, OMX_IndexParamImageInit))
+  {
+    CLog::Log(LOGERROR, "%s::%s error m_omx_resize.Initialize\n", CLASSNAME, __func__);
+    return false;
+  }
+
+  _DEBUG0("Setting decoder input params");
+  // set input format
+  OMX_IMAGE_PARAM_PORTFORMATTYPE imagePortFormat;
+  OMX_INIT_STRUCTURE(imagePortFormat);
+  imagePortFormat.nPortIndex = m_omx_decoder.GetInputPort();
+  imagePortFormat.eCompressionFormat = OMX_IMAGE_CodingJPEG;
+
+  omx_err = m_omx_decoder.SetParameter(OMX_IndexParamImagePortFormat, &imagePortFormat);
+  if(omx_err != OMX_ErrorNone)
+  {
+    CLog::Log(LOGERROR, "%s::%s m_omx_decoder.SetParameter OMX_IndexParamImagePortFormat result(0x%x)\n", CLASSNAME, __func__, omx_err);
+    return false;
+  }
+
+  _DEBUG0("Allocating decoder input buffers");
+  omx_err = m_omx_decoder.AllocInputBuffers();
+  if(omx_err != OMX_ErrorNone)
+  {
+    CLog::Log(LOGERROR, "%s::%s m_omx_decoder.AllocInputBuffers result(0x%x)", CLASSNAME, __func__, omx_err);
+    return false;
+  }
+
+  _DEBUG0("Setting decoder to executing state");
+  omx_err = m_omx_decoder.SetStateForComponent(OMX_StateExecuting);
+  if (omx_err != OMX_ErrorNone)
+  {
+    CLog::Log(LOGERROR, "%s::%s m_omx_decoder.SetStateForComponent result(0x%x)\n", CLASSNAME, __func__, omx_err);
+    return false;
+  }
+
+  //m_pDecodeBuffer = (OMX_U8*)_aligned_malloc(1920*1080*4, 16);
+  m_tunnel_up = false;
+  m_decoder_open = true;
+  m_encoder_open = false;
+  m_bInitialized = true;
+  m_decoded_buffer = NULL;
+
+  return true;
+}
+
 bool COMXImage::Decode(unsigned width, unsigned height)
 {
   CSingleLock lock(g_OMXSection);
@@ -832,6 +900,404 @@ bool COMXImage::Decode(unsigned width, unsigned height)
   return true;
 }
 
+bool COMXImage::DecodeFile(const CStdString& inputFile, unsigned width, unsigned height)
+{
+  CStopWatch timer;
+  timer.StartZero();
+
+  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
+  OMX_BUFFERHEADERTYPE *omx_buffer = NULL;
+
+  m_BusyEvent.Wait();
+
+  if (!m_bInitialized) Initialize();
+
+  _DEBUGN("************************** Decoding file %s **************************", inputFile.c_str());
+
+  // First, Open the file
+  _DEBUGN("Opening file %s", inputFile.c_str());
+  if(!m_pFile.Open(inputFile, 0))
+  {
+    CLog::Log(LOGERROR, "%s::%s %s not found\n", CLASSNAME, __func__, inputFile.c_str());
+    return false;
+  }
+
+  bool	bDone = false;
+  size_t	stBytesRead = 0;
+  int timeout = 0;
+  m_bFillBufferCalled = false; // No FillBuffer Called Yet
+
+
+  timeout = 0;
+
+  while((!bDone))
+  {
+
+    // Grab the next input buffer
+    omx_buffer = m_omx_decoder.GetInputBuffer(1000);
+    if(omx_buffer == NULL)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_decoder.GetInputBuffer return a NULL Buffer", CLASSNAME, __func__);
+      return false;
+    }
+
+    _DEBUGN("Using Buffer %x",(unsigned int)omx_buffer);
+    omx_buffer->nOffset = omx_buffer->nFlags  = 0;
+
+    // Read Data from file into input buffer
+    stBytesRead = m_pFile.Read(omx_buffer->pBuffer, omx_buffer->nAllocLen);
+    omx_buffer->nFilledLen = stBytesRead;
+    _DEBUGN("Pushing %d bytes to decoder", stBytesRead);
+
+    // check if we have finished the file reading
+    if(stBytesRead < omx_buffer->nAllocLen)
+    {
+      _DEBUG0("Flagging EOS");
+      omx_buffer->nFlags |= OMX_BUFFERFLAG_EOS;
+      bDone = true;
+    }
+
+    // Tell decoder to process input buffer
+    _DEBUG0("Emptying buffer");
+    omx_err = m_omx_decoder.EmptyThisBuffer(omx_buffer);
+    if (omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s OMX_EmptyThisBuffer() failed with result(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+    // Now check if this buffer emptying caused a PortSetting Changed event
+    // We Will have one, only if it requires soe change of configuration for resizer
+    _DEBUG0("Waiting for OMX_EventPortSettingsChanged event ");
+    omx_err = m_omx_decoder.WaitForEvent(OMX_EventPortSettingsChanged, timeout);
+    if(omx_err == OMX_ErrorNone)
+    {
+      // We got, one handle it
+      _DEBUG0("Calling HandlePortSettingChange");
+      if (!HandlePortSettingChangeNew())
+      {
+        CLog::Log(LOGERROR, "%s::%s HandlePortSettingChange() failed\n", CLASSNAME, __func__);
+        return false;
+      }
+    }
+
+
+  } // end while (!bDone)
+
+
+  bool bGotDecoderBuffer;
+  bool bGotResizeBuffer;
+
+  bGotDecoderBuffer = false;
+  bGotResizeBuffer = false;
+
+  int WaitCount;
+  WaitCount = 0;
+  while (!(bGotDecoderBuffer && bGotResizeBuffer))
+  {
+    WaitCount++;
+    if (WaitCount > 500) return false;
+
+    // check pprt changed event
+    omx_err = m_omx_decoder.WaitForEvent(OMX_EventPortSettingsChanged, 0);
+    if(omx_err == OMX_ErrorNone)
+    {
+      // We got, one handle it
+      _DEBUG0("Calling HandlePortSettingChange");
+      if (!HandlePortSettingChangeNew())
+      {
+        CLog::Log(LOGERROR, "%s::%s HandlePortSettingChange() failed\n", CLASSNAME, __func__);
+        return false;
+      }
+    }
+
+    // check decoder bufferflag event
+    omx_err = m_omx_decoder.WaitForEvent(OMX_EventBufferFlag, 0);
+    if(omx_err == OMX_ErrorNone)
+    {
+      _DEBUG0("Got Decoder BufferFlag event");
+      bGotDecoderBuffer = true;
+    }
+    else
+    {
+      if (!m_bFillBufferCalled)
+      {
+        _DEBUG0("Calling FillThisBuffer");
+        omx_err = m_omx_resize.FillThisBuffer(m_decoded_buffer);
+        if(omx_err != OMX_ErrorNone)
+        {
+
+          if(omx_err != OMX_ErrorUndefined)
+          {
+            CLog::Log(LOGERROR, "%s::%s m_omx_resize FillThisBuffer result(0x%x)\n", CLASSNAME, __func__, omx_err);
+            return false;
+          }
+        }
+        else m_bFillBufferCalled = true;
+       }
+    }
+
+    // check resizer bufferflag event
+    omx_err = m_omx_resize.WaitForEvent(OMX_EventBufferFlag, 0);
+    if(omx_err == OMX_ErrorNone)
+    {
+      _DEBUG0("Got Resizer BufferFlag event");
+      bGotResizeBuffer = true;
+    }
+
+    Sleep(1);
+
+  }
+
+  m_omx_decoder.FlushAll();
+  m_omx_resize.FlushAll();
+
+
+  _DEBUGN("********************************** Decoding Done ****************** %f ****************",timer.GetElapsedSeconds());
+
+
+  if(m_omx_decoder.BadState())
+    return false;
+
+  return true;
+}
+
+bool COMXImage::FreeOutputBuffer()
+{
+  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
+
+  if (m_decoded_buffer)
+  {
+
+    if (m_tunnel_up)
+    {
+      _DEBUG0("Closing tunnel");
+      omx_err = m_omx_tunnel_decode.Deestablish();
+      if(omx_err != OMX_ErrorNone)
+      {
+        CLog::Log(LOGERROR, "%s::%s m_omx_tunnel_decode.Deestablish(0x%x)\n", CLASSNAME, __func__, omx_err);
+        return false;
+      }
+
+      m_tunnel_up = false;
+    }
+
+    _DEBUGN("Waiting for resizer input port %d to be disabled",m_omx_resize.GetInputPort());
+    omx_err = m_omx_resize.WaitForCommand(OMX_CommandPortDisable, m_omx_resize.GetInputPort(),1000);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.WaitForCommand result(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    _DEBUGN("Waiting for decoder output port %d to be disabled",m_omx_decoder.GetOutputPort());
+    omx_err = m_omx_decoder.WaitForCommand(OMX_CommandPortDisable, m_omx_decoder.GetOutputPort(),1000);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_decoder.WaitForCommand result(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+
+    _DEBUG0("Setting resizer to Pause state");
+    omx_err = m_omx_resize.SetStateForComponent(OMX_StatePause);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.SetStateForComponent (Pause).(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    _DEBUG0("Setting resizer to Idle state");
+    omx_err = m_omx_resize.SetStateForComponent(OMX_StateIdle);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.SetStateForComponent (Idle).(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    _DEBUG0("Freeing resizer buffers");
+    omx_err = m_omx_resize.FreeOutputBuffers();
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    m_decoded_buffer = NULL;
+
+    _DEBUG0("Setting resizer to Loaded state");
+    omx_err = m_omx_resize.SetStateForComponent(OMX_StateLoaded);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.SetStateForComponent (Loaded).(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+  }
+
+  return true;
+}
+
+bool COMXImage::HandlePortSettingChangeNew()
+{
+  OMX_ERRORTYPE omx_err = OMX_ErrorNone;
+
+  OMX_PARAM_PORTDEFINITIONTYPE decoder_out_port_def;
+  OMX_INIT_STRUCTURE(decoder_out_port_def);
+  OMX_PARAM_PORTDEFINITIONTYPE resizer_out_port_def;
+    OMX_INIT_STRUCTURE(resizer_out_port_def);
+
+
+  // if we already have a buffer, then we need to free it and return to loaded state
+  if (!FreeOutputBuffer()) return false;
+
+  if (!m_decoded_buffer)
+  {
+
+    _DEBUG0("Matching decoder output and resizer input settings");
+    // First Match the decoder output port settings and resizer input port settings
+    decoder_out_port_def.nPortIndex = m_omx_decoder.GetOutputPort();
+    omx_err = m_omx_decoder.GetParameter(OMX_IndexParamPortDefinition, &decoder_out_port_def);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_decoder.GetParameter=%x on Output port\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    decoder_out_port_def.nPortIndex = m_omx_resize.GetInputPort();
+    omx_err = m_omx_resize.SetParameter(OMX_IndexParamPortDefinition, &decoder_out_port_def);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.SetParameter=%x on Input Port\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    // If we haven't a decoded buffer yet, it means we have just been initialized
+    // we need to make some configuration first
+    if (!m_tunnel_up)
+    {
+      // Now initialize the tunnel between decoder and resizer
+      _DEBUG0("Creating Tunnel");
+      m_omx_tunnel_decode.Initialize(&m_omx_decoder, m_omx_decoder.GetOutputPort(), &m_omx_resize, m_omx_resize.GetInputPort());
+
+      omx_err = m_omx_tunnel_decode.Establish(false);
+      if(omx_err != OMX_ErrorNone)
+      {
+        CLog::Log(LOGERROR, "%s::%s m_omx_tunnel_decode.Establish=%x\n", CLASSNAME, __func__, omx_err);
+        return false;
+      }
+
+      _DEBUG0("Waiting resizer output PortSettingsChanged event");
+      omx_err = m_omx_resize.WaitForEvent(OMX_EventPortSettingsChanged);
+      if(omx_err != OMX_ErrorNone)
+      {
+        CLog::Log(LOGERROR, "%s::%s m_omx_decoder.WaitForEvent=%x\n", CLASSNAME, __func__, omx_err);
+        return false;
+      }
+
+      m_tunnel_up = true;
+    }
+
+
+    // Now we need to configure the resizer output
+    resizer_out_port_def.nPortIndex = m_omx_resize.GetOutputPort();
+    omx_err = m_omx_resize.GetParameter(OMX_IndexParamPortDefinition, &resizer_out_port_def);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.GetParameter=%x on Output Port\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    _DEBUG0("Setting new resizer output port params");
+    resizer_out_port_def.nPortIndex = m_omx_resize.GetOutputPort();
+    resizer_out_port_def.format.image.eCompressionFormat = OMX_IMAGE_CodingUnused;
+    resizer_out_port_def.format.image.eColorFormat = OMX_COLOR_Format32bitARGB8888;
+
+    resizer_out_port_def.format.image.nFrameWidth = decoder_out_port_def.format.image.nFrameWidth;
+    resizer_out_port_def.format.image.nFrameHeight = decoder_out_port_def.format.image.nFrameHeight;
+    resizer_out_port_def.format.image.nStride = decoder_out_port_def.format.image.nFrameWidth*4;
+    /*resizer_out_port_def.format.image.nFrameWidth = 200;
+    resizer_out_port_def.format.image.nFrameHeight = 200;
+    resizer_out_port_def.format.image.nStride = 200*4;*/
+
+    resizer_out_port_def.format.image.nSliceHeight = 0;
+    resizer_out_port_def.format.image.bFlagErrorConcealment = OMX_FALSE;
+
+    omx_err = m_omx_resize.SetParameter(OMX_IndexParamPortDefinition, &resizer_out_port_def);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.SetParameter result(0x%x) on output port\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    // Grab again the parameters and store them
+    _DEBUG0("Retrieving destination image format");
+    OMX_INIT_STRUCTURE(m_decoded_format);
+    m_decoded_format.nPortIndex = m_omx_resize.GetOutputPort();
+    omx_err = m_omx_resize.GetParameter(OMX_IndexParamPortDefinition, &m_decoded_format);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.GetParameter result(0x%x) on Output Port\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    m_omx_image.nFrameWidth = decoder_out_port_def.format.image.nFrameWidth;
+    m_omx_image.nFrameHeight = decoder_out_port_def.format.image.nFrameHeight;
+    _DEBUGN("Original image size is %d X %d",m_omx_image.nFrameWidth,m_omx_image.nFrameHeight);
+
+
+    // store the new values
+    _DEBUGN("Frame Size Changed, new Image Size is %d X %d", decoder_out_port_def.format.image.nFrameWidth, decoder_out_port_def.format.image.nFrameHeight);
+    m_width = decoder_out_port_def.format.image.nFrameWidth;
+    m_height = decoder_out_port_def.format.image.nFrameHeight;
+
+
+    // Now that parameters are set, reallocate resizer output buffer
+    _DEBUGN("Creating Resizer Output Bufferwith %X",m_pDecodeBuffer);
+    omx_err = m_omx_resize.AllocOutputBuffers();
+    if(omx_err != OMX_ErrorNone)
+    {
+        CLog::Log(LOGERROR, "%s::%s m_omx_resize.AllocOutputBuffers result(0x%x)\n", CLASSNAME, __func__, omx_err);
+        return false;
+    }
+
+    // Start the resizer
+    _DEBUG0("Setting resizer to Executing State");
+    omx_err = m_omx_resize.SetStateForComponent(OMX_StateExecuting);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize.SetStateForComponent result(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    // Grab the resizer output buffer
+    m_decoded_buffer = m_omx_resize.GetOutputBuffer();
+    if(!m_decoded_buffer)
+    {
+      CLog::Log(LOGERROR, "%s::%s no output buffer\n", CLASSNAME, __func__);
+      return false;
+    }
+    _DEBUGN("Resizer output buffer is now %x", (unsigned int) m_decoded_buffer);
+
+    assert(m_decoded_format.nBufferCountActual == 1);
+
+    _DEBUG0("Calling FillThisBuffer");
+    omx_err = m_omx_resize.FillThisBuffer(m_decoded_buffer);
+    if(omx_err != OMX_ErrorNone)
+    {
+      CLog::Log(LOGERROR, "%s::%s m_omx_resize FillThisBuffer in HandlePortSettingChange result(0x%x)\n", CLASSNAME, __func__, omx_err);
+      return false;
+    }
+
+    m_bFillBufferCalled = true;
+  }
+  // we have finished
+  return true;
+}
+
+void COMXImage::Release()
+{
+  m_BusyEvent.Set();
+}
 
 bool COMXImage::Encode(unsigned char *buffer, int size, unsigned width, unsigned height, unsigned int pitch)
 {

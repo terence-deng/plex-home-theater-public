@@ -44,6 +44,7 @@
 #include "filesystem/File.h"
 /* END PLEX */
 
+#include "Stopwatch.h"
 /************************************************************************/
 /*                                                                      */
 /************************************************************************/
@@ -225,6 +226,7 @@ bool CBaseTexture::LoadFromFileInternal(const CStdString& texturePath, unsigned 
 	// Except .png on which it fails, so we just skip it to avoid loading
   if (URIUtils::GetExtension(texturePath)!=".png")
   {
+    #ifndef TARGET_RASPBERRY_PI
     COMXImage omx_image;
 
     if(omx_image.ReadFile(texturePath))
@@ -285,6 +287,69 @@ bool CBaseTexture::LoadFromFileInternal(const CStdString& texturePath, unsigned 
     }
     // this limits the sizes of jpegs we failed to decode
     omx_image.ClampLimits(maxWidth, maxHeight);
+  #else
+      #define MAX_IMAGE 1
+      static COMXImage g_omx_image[MAX_IMAGE];
+      static int iCurrent = 0;
+      CStopWatch timer,timermemcpy,timeralloc;
+      timer.StartZero();
+
+      if (g_omx_image[iCurrent].DecodeFile(texturePath,0,0))
+      {
+        Allocate(g_omx_image[iCurrent].GetDecodedWidth(), g_omx_image[iCurrent].GetDecodedHeight(), XB_FMT_A8R8G8B8);
+
+        if(!m_pixels)
+        {
+          CLog::Log(LOGERROR, "Texture manager (OMX) out of memory");
+          g_omx_image[iCurrent].Close();
+          return false;
+        }
+
+        m_originalWidth  = g_omx_image[iCurrent].GetOriginalWidth();
+        m_originalHeight = g_omx_image[iCurrent].GetOriginalHeight();
+
+        m_hasAlpha = g_omx_image[iCurrent].IsAlpha();
+
+        if (autoRotate && g_omx_image[iCurrent].GetOrientation())
+          m_orientation = g_omx_image[iCurrent].GetOrientation() - 1;
+
+        if(m_textureWidth != g_omx_image[iCurrent].GetDecodedWidth() || m_textureHeight != g_omx_image[iCurrent].GetDecodedHeight())
+        {
+          unsigned int imagePitch = GetPitch(m_imageWidth);
+          unsigned int imageRows = GetRows(m_imageHeight);
+          unsigned int texturePitch = GetPitch(m_textureWidth);
+
+          unsigned char *src = g_omx_image[iCurrent].GetDecodedData();
+          unsigned char *dst = m_pixels;
+          for (unsigned int y = 0; y < imageRows; y++)
+          {
+            memcpy(dst, src, imagePitch);
+            src += imagePitch;
+            dst += texturePitch;
+          }
+        }
+        else
+        {
+          if(g_omx_image[iCurrent].GetDecodedData())
+          {
+            int size = ( ( GetPitch() * GetRows() ) > g_omx_image[iCurrent].GetDecodedSize() ) ?
+                             g_omx_image[iCurrent].GetDecodedSize() : ( GetPitch() * GetRows() );
+             memcpy(m_pixels, (unsigned char *)g_omx_image[iCurrent].GetDecodedData(), size);
+          }
+        }
+
+        g_omx_image[iCurrent].Release();
+        iCurrent = (iCurrent+1) % MAX_IMAGE;
+
+        return true;
+      }
+      else
+      {
+        g_omx_image[iCurrent].Release();
+        g_omx_image[iCurrent].Close();
+        return false;
+      }
+  #endif
   }
 #endif
   if (URIUtils::GetExtension(texturePath).Equals(".dds"))

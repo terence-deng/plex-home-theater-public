@@ -19,6 +19,7 @@
  *
  */
 
+#define HAVE_OMXLIB
 #if defined(HAVE_OMXLIB)
 
 #include "OMXCore.h"
@@ -34,8 +35,18 @@
 #include "guilib/XBTF.h"
 #endif
 
+#include "threads/Event.h"
+
 using namespace XFILE;
 using namespace std;
+
+#if 0
+  #define _DEBUG0(fmt)  CLog::Log(LOGDEBUG, "COMXImage %s - "fmt,__func__)
+    #define _DEBUGN(fmt, args...)  CLog::Log(LOGDEBUG, "COMXImage %s - "fmt,__func__,args)
+#else
+    #define _DEBUG0(fmt)
+  #define _DEBUGN(fmt, args...)
+#endif
 
 class COMXImage
 {
@@ -59,6 +70,11 @@ public:
   unsigned long GetImageSize() { return m_image_size; };
   OMX_IMAGE_CODINGTYPE GetCompressionFormat() { return m_omx_image.eCompressionFormat; };
   bool Decode(unsigned int width, unsigned int height);
+  bool Initialize();
+  bool DecodeFile(const CStdString& inputFile, unsigned width, unsigned height);
+  bool FreeOutputBuffer();
+  bool HandlePortSettingChangeNew();
+  void Release();
   bool Encode(unsigned char *buffer, int size, unsigned int width, unsigned int height, unsigned int pitch);
   unsigned int GetDecodedWidth() { return (unsigned int)m_decoded_format.format.image.nFrameWidth; };
   unsigned int GetDecodedHeight() { return (unsigned int)m_decoded_format.format.image.nFrameHeight; };
@@ -103,6 +119,12 @@ protected:
 
   bool                          m_decoder_open;
   bool                          m_encoder_open;
+
+  bool                          m_tunnel_up;
+  int                           m_bFillBufferCalled;
+  bool                          m_bInitialized;
+  CEvent                        m_BusyEvent;
+
 };
 
 #endif
