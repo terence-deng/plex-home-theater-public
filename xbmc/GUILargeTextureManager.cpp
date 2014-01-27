@@ -175,6 +175,7 @@ bool CGUILargeTextureManager::GetImage(const CStdString &path, CTextureArray &te
     lock.unlock();
     /* END PLEX */
     QueueImage(path);
+    while (m_queued.size()) Sleep(10);
   }
 
   return true;
