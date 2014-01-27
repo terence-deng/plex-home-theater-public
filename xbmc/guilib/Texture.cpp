@@ -345,9 +345,9 @@ bool CBaseTexture::LoadFromFileInternal(const CStdString& texturePath, unsigned 
       }
       else
       {
-        g_omx_image[iCurrent].Release();
         g_omx_image[iCurrent].Close();
-        return false;
+        g_omx_image[iCurrent].Release();
+        //return false;
       }
   #endif
   }

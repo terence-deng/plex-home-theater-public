@@ -113,14 +113,14 @@ void COMXImage::Close()
     m_omx_tunnel_decode.Flush();
     m_omx_tunnel_decode.Flush();
     m_omx_tunnel_decode.Deestablish();
-    m_omx_decoder.Deinitialize();
-    m_omx_resize.Deinitialize();
+    m_omx_decoder.Deinitialize(true);
+    m_omx_resize.Deinitialize(true);
     m_decoder_open = false;
   }
 
   if(m_encoder_open)
   {
-    m_omx_encoder.Deinitialize();
+    m_omx_encoder.Deinitialize(true);
     m_encoder_open = false;
   }
 
@@ -916,7 +916,7 @@ bool COMXImage::DecodeFile(const CStdString& inputFile, unsigned width, unsigned
 
   // First, Open the file
   _DEBUGN("Opening file %s", inputFile.c_str());
-  if(!m_pFile.Open(inputFile, 0))
+  if(!m_pFile.Open(inputFile, READ_NO_CACHE))
   {
     CLog::Log(LOGERROR, "%s::%s %s not found\n", CLASSNAME, __func__, inputFile.c_str());
     return false;
@@ -926,7 +926,6 @@ bool COMXImage::DecodeFile(const CStdString& inputFile, unsigned width, unsigned
   size_t	stBytesRead = 0;
   int timeout = 0;
   m_bFillBufferCalled = false; // No FillBuffer Called Yet
-
 
   timeout = 0;
 
@@ -947,10 +946,10 @@ bool COMXImage::DecodeFile(const CStdString& inputFile, unsigned width, unsigned
     // Read Data from file into input buffer
     stBytesRead = m_pFile.Read(omx_buffer->pBuffer, omx_buffer->nAllocLen);
     omx_buffer->nFilledLen = stBytesRead;
-    _DEBUGN("Pushing %d bytes to decoder", stBytesRead);
+    _DEBUGN("Pushing %d bytes to decoder", omx_buffer->nFilledLen);
 
     // check if we have finished the file reading
-    if(stBytesRead < omx_buffer->nAllocLen)
+    if(omx_buffer->nFilledLen < omx_buffer->nAllocLen)
     {
       _DEBUG0("Flagging EOS");
       omx_buffer->nFlags |= OMX_BUFFERFLAG_EOS;
@@ -978,6 +977,13 @@ bool COMXImage::DecodeFile(const CStdString& inputFile, unsigned width, unsigned
         CLog::Log(LOGERROR, "%s::%s HandlePortSettingChange() failed\n", CLASSNAME, __func__);
         return false;
       }
+    }
+
+    // check the decoder state
+    if (m_omx_decoder.BadState())
+    {
+      CLog::Log(LOGERROR, "%s::%s Decoder is in bad State (BitStreamError ?)", CLASSNAME, __func__);
+      return false;
     }
 
 
@@ -1252,7 +1258,7 @@ bool COMXImage::HandlePortSettingChangeNew()
 
 
     // Now that parameters are set, reallocate resizer output buffer
-    _DEBUGN("Creating Resizer Output Bufferwith %X",m_pDecodeBuffer);
+    _DEBUG0("Creating Resizer Output Buffer");
     omx_err = m_omx_resize.AllocOutputBuffers();
     if(omx_err != OMX_ErrorNone)
     {
@@ -1296,6 +1302,7 @@ bool COMXImage::HandlePortSettingChangeNew()
 
 void COMXImage::Release()
 {
+  m_pFile.Close();
   m_BusyEvent.Set();
 }
 
