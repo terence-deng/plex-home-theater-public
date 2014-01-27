@@ -58,6 +58,12 @@ bool CGUIPlexMediaWindow::OnMessage(CGUIMessage &message)
     else if (message.GetSenderId() == FILTER_CLEAR_FILTER_BUTTON)
       OnAction(CAction(ACTION_CLEAR_FILTERS));
   }
+  else if (message.GetMessage() == GUI_MSG_WINDOW_DEINIT)
+  {
+    CGUIDialog *dialog = (CGUIDialog*) g_windowManager.GetWindow(WINDOW_DIALOG_FILTER_SORT);
+    if (dialog && dialog->IsActive())
+      dialog->Close();
+  }
 
   bool ret = CGUIMediaWindow::OnMessage(message);
 
@@ -932,8 +938,12 @@ void CGUIPlexMediaWindow::CheckPlexFilters(CFileItemList &list)
 {
   CPlexSectionFilterPtr filter = g_plexApplication.filterManager->getFilterForSection(m_sectionRoot.Get());
 
-  list.SetProperty("hasAdvancedFilters", (filter && filter->hasAdvancedFilters()) ? "yes" : "");
-  list.SetProperty("primaryFilterActivated", (!filter || !filter->secondaryFiltersActivated()) ? "yes" : "");
+  if (filter)
+  {
+    list.SetProperty("hasAdvancedFilters", filter->hasAdvancedFilters() ? "yes" : "");
+    list.SetProperty("primaryFilterActivated", filter->secondaryFiltersActivated() ? "" : "yes");
+    list.SetProperty("secondaryFilterActivated", filter->hasActiveSecondaryFilters() ? "yes" : "");
+  }
 
   CFileItemPtr section = g_plexApplication.dataLoader->GetSection(m_sectionRoot);
   if (section && section->GetPlexDirectoryType() == PLEX_DIR_TYPE_HOME_MOVIES)
@@ -950,8 +960,10 @@ void CGUIPlexMediaWindow::CheckPlexFilters(CFileItemList &list)
     if (type == PLEX_DIR_TYPE_SEASON ||
         type == PLEX_DIR_TYPE_EPISODE ||
         type == PLEX_DIR_TYPE_VIDEO)
+    {
       CLog::Log(LOGDEBUG, "CGUIPlexMediaWindow::CheckPlexFilters setting preplay flag");
       list.SetProperty("PlexPreplay", "yes");
+    }
   }
 }
 

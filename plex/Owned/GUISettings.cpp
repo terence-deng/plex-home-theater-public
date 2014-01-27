@@ -639,7 +639,7 @@ void CGUISettings::Initialize()
 
   // Playback/Subtitles
   CSettingsCategory* sub = AddCategory(SETTINGS_VIDEOS, "subtitles", 287);
-  AddString(sub, "subtitles.font", 14089, "Arial", SPIN_CONTROL_TEXT);
+  AddString(sub, "subtitles.font", 14089, "Plex", SPIN_CONTROL_TEXT);
   AddInt(sub, "subtitles.height", 289, 28, 16, 2, 74, SPIN_CONTROL_TEXT); // use text as there is a disk based lookup needed
 
   map<int, int> fontStyles;
@@ -650,7 +650,7 @@ void CGUISettings::Initialize()
 
   AddInt(sub, "subtitles.style", 736, FONT_STYLE_BOLD, fontStyles, SPIN_CONTROL_TEXT);
   AddInt(sub, "subtitles.color", 737, SUBTITLE_COLOR_START + 1, SUBTITLE_COLOR_START, 1, SUBTITLE_COLOR_END, SPIN_CONTROL_TEXT);
-  AddString(sub, "subtitles.charset", 735, "DEFAULT", SPIN_CONTROL_TEXT);
+  AddString(NULL, "subtitles.charset", 735, "DEFAULT", SPIN_CONTROL_TEXT);
   AddBool(sub,"subtitles.overrideassfonts", 21368, false);
   AddSeparator(NULL, "subtitles.sep1");
   AddPath(NULL, "subtitles.custompath", 21366, "", BUTTON_CONTROL_PATH_INPUT, false, 657);
