@@ -14,6 +14,7 @@ public :
 	void Start();
 	void Process();
 	void OnExit();
+	void Continue(bool cont);
 
 private:
 	CPlexGlobalCacher();

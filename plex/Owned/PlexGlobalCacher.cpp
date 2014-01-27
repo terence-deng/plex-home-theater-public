@@ -36,6 +36,10 @@ CPlexGlobalCacher* CPlexGlobalCacher::getGlobalCacher()
     return m_globalCacher;
 }
 
+void CPlexGlobalCacher::Continue(bool cont)
+{
+    m_continue = cont;
+}
 
 void CPlexGlobalCacher::Start()
 {
@@ -64,7 +68,7 @@ void controlGlobalCache()
         if ( ok )
         {
             cacher->Start();
-            m_continue = true;
+            cacher->Continue(true);
         }
     }
     else if ( cacher ->IsRunning() )
@@ -79,7 +83,7 @@ void controlGlobalCache()
         {
             CLog::Log(LOGNOTICE,"Global Cache : Cacher thread stopped by user");
             cacher -> StopThread(false);
-            m_continue = false;
+            cacher -> Continue(false);
         }
     }
 }
@@ -162,5 +166,6 @@ void CPlexGlobalCacher::OnExit()
 {
 
     CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Precaching stopped.", GLOBAL_CACHING_DESC, 5000, false,500);
+    m_globalCacher = NULL;
 
 }
