@@ -82,7 +82,7 @@ INT CXBApplicationEx::Run()
 
   unsigned int lastFrameTime = 0;
   unsigned int frameTime = 0;
-  const unsigned int noRenderFrameTime = 15;  // Simulates ~66fps
+  const unsigned int noRenderFrameTime = 66;  // Simulates ~66fps
 
 #ifdef XBMC_TRACK_EXCEPTIONS
   BYTE processExceptionCount = 0;
