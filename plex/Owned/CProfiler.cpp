@@ -93,7 +93,7 @@ CProfiledFunction *CProfiledFunction::FindChild(CStdString aName)
 
 	 // log information onto file
 	 CStdString sLine;
-     sLine.Format("%s% 3d%%,%5d hit(s), % 2.3fs - %s\n", sPad.c_str(),((int)Percentage),m_NumHits, m_TotalTime,m_Name.c_str());
+     sLine.Format("%s% 3d%%,%5d hit(s), % 2.3fs avg:%2.3fs- %s\n", sPad.c_str(),((int)Percentage),m_NumHits, m_TotalTime,m_TotalTime / m_NumHits, m_Name.c_str());
      fputs(sLine.c_str(),File);
 
      // iterate on childs
