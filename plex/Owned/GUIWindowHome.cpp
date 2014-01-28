@@ -332,6 +332,7 @@ CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml"), m_gl
   // it will create a plex.cached in userdata directory when it has been done at least once in order not to reprocess at every start
 
   // first Check if we have already completed the global cache	
+  /*
   if (XFILE::CFile::Exists("special://masterprofile/plex.cached")) 
   {
   	CLog::Log(LOGNOTICE,"Global Cache : Will skip, global caching already done.");
@@ -347,6 +348,7 @@ CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml"), m_gl
       }
       else CLog::Log(LOGERROR,"Global Cache : Cannot Create %s","special://masterprofile/plex.cached");
   }
+  */
 
 
 }
