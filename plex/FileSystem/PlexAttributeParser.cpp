@@ -159,11 +159,14 @@ void CPlexAttributeParserMediaUrl::Process(const CURL &url, const CStdString &ke
     height = "1080";
   }
 
-  mediaUrl.SetOption("width", width);
-  mediaUrl.SetOption("height", height);
-  mediaUrl.SetOption("url", imageURL.Get());
+  CUrlOptions Options;
+  Options.AddOption("width", width);
+  Options.AddOption("height", height);
+  Options.AddOption("url", imageURL.Get());
   if (g_advancedSettings.m_bForceJpegImageFormat)
-    mediaUrl.SetOption("format", "jpg");
+    Options.AddOption("format", "jpg");
+
+  mediaUrl.AddOptions(Options);
 
   mediaUrl.SetFileName("photo/:/transcode");
 
