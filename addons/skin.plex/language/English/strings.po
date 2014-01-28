@@ -1090,3 +1090,7 @@ msgstr ""
 msgctxt "#41000"
 msgid "RasPlex Settings"
 msgstr ""
+
+msgctxt "#41001"
+msgid "Control Precaching"
+msgstr ""

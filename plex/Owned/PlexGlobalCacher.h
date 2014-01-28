@@ -6,16 +6,22 @@
 #include "threads/Thread.h"
 #include "threads/Event.h"
 
-class CPlexGlobalCacher : public CPlexThumbCacher, CThread
+class CPlexGlobalCacher : public CPlexThumbCacher, public CThread
 {
 public :
-	CPlexGlobalCacher();
+    static CPlexGlobalCacher* getGlobalCacher();
 	~CPlexGlobalCacher();
 	void Start();
 	void Process();
+	void OnExit();
+	void Continue(bool cont);
 
-protected :
+private:
+	CPlexGlobalCacher();
+    static CPlexGlobalCacher* m_globalCacher;
+    bool m_continue;
 
 };
 
+void controlGlobalCache();
 #endif /* _PLEXGLOBALCACHER_H_*/ 

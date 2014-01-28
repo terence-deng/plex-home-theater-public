@@ -6,26 +6,89 @@
 #include "PlexApplication.h"
 #include "utils/Stopwatch.h"
 #include "dialogs/GUIDialogKaiToast.h"
+#include "guilib/GUITextBox.h"
+#include "guilib/GUIEditControl.h"
+#include "dialogs/GUIDialogYesNo.h"
 #include "utils/log.h"
 #include "filesystem/File.h"
 #include "TextureCache.h"
 
 using namespace XFILE;
 
-#define GLOBAL_CACHING_DESC "Global Sections Caching"
+#define GLOBAL_CACHING_DESC "Precaching Metadata"
+
+CPlexGlobalCacher* CPlexGlobalCacher::m_globalCacher = NULL;
 
 CPlexGlobalCacher::CPlexGlobalCacher() : CPlexThumbCacher() , CThread("Plex Global Cacher")
 {
+    m_continue = true;
 }
 
 CPlexGlobalCacher::~CPlexGlobalCacher()
 {
 }
 
+
+CPlexGlobalCacher* CPlexGlobalCacher::getGlobalCacher()
+{
+    if (!m_globalCacher)   // Only allow one instance of class to be generated.
+        m_globalCacher = new CPlexGlobalCacher();
+    return m_globalCacher;
+}
+
+void CPlexGlobalCacher::Continue(bool cont)
+{
+    m_continue = cont;
+}
+
 void CPlexGlobalCacher::Start()
 {
+	CLog::Log(LOGNOTICE,"Global Cache : Creating cacher thread");
 	CThread::Create(true);
+	CLog::Log(LOGNOTICE,"Global Cache : Cacher thread created");
 }
+
+
+void controlGlobalCache()
+{
+    CPlexGlobalCacher* cacher = CPlexGlobalCacher::getGlobalCacher();
+
+
+    //virtual void StopThread(bool bWait = true); 
+   // bool IsRunning() const;        
+   
+    if ( ! cacher->IsRunning() )
+    {
+        bool ok = CGUIDialogYesNo::ShowAndGetInput("Start global caching?",
+        "This will cache all metadata and thumbnails automatically.",
+        "Larger libraries will take longer to precache.",
+        "Reboot for best performance once caching is complete.",
+        "No!", "Yes");
+
+        if ( ok )
+        {
+            cacher->Start();
+            cacher->Continue(true);
+        }
+    }
+    else if ( cacher ->IsRunning() )
+    {
+        bool ok = CGUIDialogYesNo::ShowAndGetInput("Stop global caching?",
+        "A reboot is recommended after stopping ",
+        "the global caching process.",
+        "Stopping may not occur right away.",
+        "No!", "Yes");
+
+        if ( ok )
+        {
+            CLog::Log(LOGNOTICE,"Global Cache : Cacher thread stopped by user");
+            cacher -> StopThread(false);
+            cacher -> Continue(false);
+        }
+    }
+}
+
+
 
 void CPlexGlobalCacher::Process()
 {
@@ -36,20 +99,14 @@ void CPlexGlobalCacher::Process()
 	CStdString Message;
 	int Lastcount = 0;
 	
-	
-	// first Check if we have already completed the global cache	
-	if (XFILE::CFile::Exists("special://masterprofile/plex.cached")) 
-	{
-		CLog::Log(LOGNOTICE,"Global Cache : Will skip, global caching already done.");
-		return;
-	}
-		
+
+			
 	// get all the sections names
 	CFileItemListPtr pAllSections = g_plexApplication.dataLoader->GetAllSections();
 
 	timer.StartZero();
 	CLog::Log(LOGNOTICE,"Global Cache : found %d Sections",pAllSections->Size());
-	for (int i = 0; i < pAllSections->Size(); i ++)
+	for (int i = 0; i < pAllSections->Size() && m_continue; i ++)
 	{
 		looptimer.StartZero();
 		CFileItemPtr Section = pAllSections->Get(i);
@@ -70,7 +127,7 @@ void CPlexGlobalCacher::Process()
 	}
 
     // Here we have the file list, just process the items
-    for (int i = 0; i < list.Size(); i++)
+    for (int i = 0; i < list.Size() && m_continue; i++)
     {
       CFileItemPtr item = list.Get(i);
       if (item->IsPlexMediaServer())
@@ -101,15 +158,14 @@ void CPlexGlobalCacher::Process()
 
     }
 
-	// now write the file to mark that caching has been done once
-	CFile CacheFile;
-	if (CacheFile.OpenForWrite("special://masterprofile/plex.cached"))
-	{
-		CacheFile.Close();
-	}
-	else CLog::Log(LOGERROR,"Global Cache : Cannot Create %s","special://masterprofile/plex.cached");
-
-	CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Processing Complete.", GLOBAL_CACHING_DESC, 5000, false,500);
+    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Processing Complete.", GLOBAL_CACHING_DESC, 5000, false,500);
 }
 
 
+void CPlexGlobalCacher::OnExit()
+{
+
+    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Precaching stopped.", GLOBAL_CACHING_DESC, 5000, false,500);
+    m_globalCacher = NULL;
+
+}

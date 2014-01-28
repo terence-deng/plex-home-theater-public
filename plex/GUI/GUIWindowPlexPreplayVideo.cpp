@@ -121,7 +121,9 @@ void CGUIWindowPlexPreplayVideo::MoveToItem(int idx)
       CURL u(item->GetProperty("parentKey").asString());
       PlexUtils::AppendPathToURL(u, "children");
 
+      #ifndef TARGET_RASPBERRY_PI
       if (m_navHelper.CacheUrl(u.Get(), cancel, false))
+      #endif
       {
         CFileItemList list;
         if (GetDirectory(u.Get(), list))
@@ -134,7 +136,9 @@ void CGUIWindowPlexPreplayVideo::MoveToItem(int idx)
               if (!i2)
                 return;
 
+              #ifndef TARGET_RASPBERRY_PI
               if (m_navHelper.CacheUrl(i2->GetPath(), cancel))
+              #endif
                 Update(i2->GetPath(), false);
             }
           }
