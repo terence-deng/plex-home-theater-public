@@ -97,6 +97,12 @@ void CPlexThemeMusicPlayer::OnJobComplete(unsigned int jobID, bool success, CJob
 
       initPlayer();
       m_player->OpenFile(*m_currentItem.get(), CPlayerOptions());
+
+    #ifdef TARGET_RASPBERRY_PI
+      // fixes theme music playback on RasPI. Seems that volume is reseted at least with OMX player when creating the OMX objects
+      m_player->SetVolume(g_guiSettings.GetInt("backgroundmusic.bgmusicvolume") / 100.0);
+      m_player->FadeOut(2 * 1000);
+    #endif
     }
   }
   else if (m_player && m_player->IsPlaying() && !m_player->IsPaused())
