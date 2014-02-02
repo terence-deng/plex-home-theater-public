@@ -43,10 +43,25 @@ CGUIWindowPlexStartupHelper::CGUIWindowPlexStartupHelper() :
 bool CGUIWindowPlexStartupHelper::OnMessage(CGUIMessage &message)
 {
 #ifdef TARGET_RASPBERRY_PI
-  g_guiSettings.SetInt("audiooutput.mode", AUDIO_HDMI);
-  g_guiSettings.SetInt("audiooutput.channels", GetNumberOfHDMIChannels());
-  g_guiSettings.SetBool("audiooutput.ac3passthrough", false);
-  g_guiSettings.SetBool("audiooutput.dtspassthrough", false);
+  if (message.GetMessage() == GUI_MSG_CLICKED)
+  {
+    if (message.GetSenderId() == 121)
+    {
+      switch (m_page) {
+        case WIZARD_PAGE_WELCOME:
+          // resetting audio output parameters upon wizard on welcome screen
+          g_guiSettings.SetInt("audiooutput.mode", AUDIO_HDMI);
+          g_guiSettings.SetInt("audiooutput.channels", GetNumberOfHDMIChannels());
+          g_guiSettings.SetBool("audiooutput.ac3passthrough", false);
+          g_guiSettings.SetBool("audiooutput.dtspassthrough", false);
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
   if (!g_plexApplication.myPlexManager->IsSignedIn())
   {
     std::vector<CStdString> param;
