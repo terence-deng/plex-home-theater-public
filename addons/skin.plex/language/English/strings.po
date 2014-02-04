@@ -967,7 +967,7 @@ msgstr ""
 #empty strings from id 31957 to 31959
 
 msgctxt "#31960"
-msgid "Sleep"
+msgid "Reboot"
 msgstr ""
 
 msgctxt "#31961"
