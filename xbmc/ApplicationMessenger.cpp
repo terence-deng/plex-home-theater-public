@@ -45,7 +45,6 @@
 #include "music/tags/MusicInfoTag.h"
 
 #include "powermanagement/PowerManager.h"
-#include <sys/reboot.h>
 
 #ifdef _WIN32
 #include "WIN32Util.h"
@@ -269,7 +268,6 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       {
         g_PVRManager.SetWakeupCommand();
         g_powerManager.Hibernate();
-        reboot(RB_AUTOBOOT);
       }
       break;
 
@@ -277,7 +275,6 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       {
         g_PVRManager.SetWakeupCommand();
         g_powerManager.Suspend();
-        reboot(RB_AUTOBOOT);
       }
       break;
 
