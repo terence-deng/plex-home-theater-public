@@ -667,7 +667,7 @@ void CEGLNativeTypeRaspberryPI::CallbackTvServiceCallback(void *userdata, uint32
 
 bool CEGLNativeTypeRaspberryPI::ClampToGUIDisplayLimits(int &width, int &height)
 {
-  const int max_width = 1280, max_height = 720;
+  const int max_width = 1920, max_height = 1080;
   float ar = (float)width/(float)height;
   // bigger than maximum, so need to clamp
   if (width > max_width || height > max_height) {
