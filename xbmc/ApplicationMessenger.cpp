@@ -251,6 +251,10 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       }
       break;
 
+#if TARGET_RASPBERRY_PI
+    case TMSG_SUSPEND:
+    case TMSG_HIBERNATE:
+#endif
     case TMSG_POWERDOWN:
       {
         g_application.Stop(EXITCODE_POWERDOWN);
@@ -264,6 +268,7 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       }
       break;
 
+#ifndef TARGET_RASPBERRY_PI
     case TMSG_HIBERNATE:
       {
         g_PVRManager.SetWakeupCommand();
@@ -277,6 +282,7 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
         g_powerManager.Suspend();
       }
       break;
+#endif
 
     case TMSG_RESTART:
     case TMSG_RESET:
