@@ -224,10 +224,16 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       {
         switch (g_guiSettings.GetInt("powermanagement.shutdownstate"))
         {
+
+          #if TARGET_RASPBERRY_PI
+          case POWERSTATE_SUSPEND:
+          case POWERSTATE_HIBERNATE:
+          #endif
           case POWERSTATE_SHUTDOWN:
             Powerdown();
             break;
 
+          #ifndef TARGET_RASPBERRY_PI
           case POWERSTATE_SUSPEND:
             Suspend();
             break;
@@ -235,6 +241,7 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
           case POWERSTATE_HIBERNATE:
             Hibernate();
             break;
+          #endif
 
           case POWERSTATE_QUIT:
             Quit();
