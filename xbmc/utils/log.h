@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <execinfo.h>
 
 #include "commons/ilog.h"
 #include "threads/CriticalSection.h"
@@ -61,6 +62,26 @@ public:
   /* PLEX */
   static void FatalError(const char* format, ...);
   /* END PLEX */
+
+  #define LOG_STACKTRACE  CLog::StackTrace((char*)__PRETTY_FUNCTION__);
+  static inline void StackTrace(char *FuncName)
+  {
+    void *buffer[100];
+    char **strings;
+    int  nptrs;
+
+     nptrs = backtrace(buffer, 100);
+     strings = backtrace_symbols(buffer, nptrs);
+     if (strings)
+     {
+       Log(LOGDEBUG,"Stacktrace for function %s", FuncName);
+       for (int j = 0; j < nptrs; j++)
+           Log(LOGDEBUG,"%s\n", strings[j]);
+
+       free(strings);
+     }
+  }
+
 private:
   static void OutputDebugString(const std::string& line);
 };
