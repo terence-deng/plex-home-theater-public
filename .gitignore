@@ -46,6 +46,9 @@ config.log
 *.idb
 *ReSharper*
 *.idb
+*.sln
+*.vcxproj.filters
+*.vcxproj
 
 # osx specifics
 /build/
@@ -1247,3 +1250,17 @@ plex/build_xc
 plex/Dependencies/built-depends/*
 
 *.autosave
+/plex-home-theater
+
+*.config
+
+*.creator
+
+*.user
+
+*.3
+
+*.files
+
+*.includes
+*.AppleDouble

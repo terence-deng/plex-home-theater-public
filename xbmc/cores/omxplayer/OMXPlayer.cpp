@@ -18,44 +18,28 @@
  *
  */
 
-#include "system.h"
+
+/* PLEX */
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/foreach.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/thread.hpp>
+#include <boost/thread/locks.hpp>
+#include <boost/shared_ptr.hpp>
+/* END PLEX */
+
+
 
 #if defined (HAS_OMXPLAYER)
 
 #include <sstream>
+#include "system.h"
 #include <iomanip>
 
 #include "OMXPlayerAudio.h"
 #include "OMXPlayerVideo.h"
 #include "OMXPlayer.h"
-#include "Application.h"
-#include "ApplicationMessenger.h"
-#include "GUIInfoManager.h"
-#include "cores/VideoRenderers/RenderManager.h"
-#include "cores/VideoRenderers/RenderFlags.h"
-#include "FileItem.h"
-#include "filesystem/File.h"
-#include "filesystem/SpecialProtocol.h"
-#include "guilib/GUIWindowManager.h"
-#include "settings/AdvancedSettings.h"
-#include "settings/GUISettings.h"
-#include "settings/Settings.h"
-#include "threads/SingleLock.h"
-#include "windowing/WindowingFactory.h"
 
-#include "utils/log.h"
-#include "utils/TimeUtils.h"
-#include "utils/URIUtils.h"
-#include "utils/Variant.h"
-#include "utils/StreamDetails.h"
-#include "xbmc/playlists/PlayListM3U.h"
-
-#include "utils/LangCodeExpander.h"
-#include "guilib/LocalizeStrings.h"
-
-#include "storage/MediaManager.h"
-#include "GUIUserMessages.h"
-#include "utils/StreamUtils.h"
 
 #include "DVDInputStreams/DVDFactoryInputStream.h"
 #include "DVDInputStreams/DVDInputStreamNavigator.h"
@@ -69,21 +53,66 @@
 
 #include "DVDFileInfo.h"
 
+#include "utils/LangCodeExpander.h"
+#include "guilib/LocalizeStrings.h"
+
+#include "utils/URIUtils.h"
+#include "GUIInfoManager.h"
+#include "guilib/GUIWindowManager.h"
+#include "Application.h"
+#include "ApplicationMessenger.h"
+#include "filesystem/File.h"
+
+#include "cores/VideoRenderers/RenderManager.h"
+#include "cores/VideoRenderers/RenderFlags.h"
+
+#include "settings/AdvancedSettings.h"
+#include "FileItem.h"
+#include "settings/GUISettings.h"
+#include "GUIUserMessages.h"
+#include "settings/Settings.h"
+#include "utils/log.h"
+#include "utils/TimeUtils.h"
+#include "utils/StreamDetails.h"
+#include "pvr/PVRManager.h"
+#include "pvr/channels/PVRChannel.h"
+#include "pvr/windows/GUIWindowPVR.h"
+#include "pvr/addons/PVRClients.h"
+#include "filesystem/PVRFile.h"
+#include "utils/StringUtils.h"
+//#include "utils/Variant.h"
+#include "storage/MediaManager.h"
+#include "xbmc/playlists/PlayListM3U.h"
+#include "utils/StreamUtils.h"
 #include "Util.h"
 #include "LangInfo.h"
+#include "ApplicationMessenger.h"
+
+
+#include "filesystem/SpecialProtocol.h"
+//#include "threads/SingleLock.h"
+#include "windowing/WindowingFactory.h"
+
+
 
 #include "utils/JobManager.h"
 //#include "cores/AudioEngine/AEFactory.h"
 //#include "cores/AudioEngine/Utils/AEUtil.h"
 #include "video/VideoThumbLoader.h"
 
-#include "pvr/PVRManager.h"
-#include "pvr/channels/PVRChannel.h"
-#include "pvr/windows/GUIWindowPVR.h"
-#include "pvr/addons/PVRClients.h"
-#include "filesystem/PVRFile.h"
+/* PLEX */
+#include "FileSystem/PlexDirectory.h"
+#include "Client/PlexServerManager.h"
 
-#include "utils/StringUtils.h"
+#include <boost/lexical_cast.hpp>
+
+#include "Client/PlexMediaServerClient.h"
+#include "ApplicationMessenger.h"
+#include "Client/PlexTranscoderClient.h"
+#include "PlexApplication.h"
+/* END PLEX */
+
+
 
 using namespace XFILE;
 using namespace PVR;
@@ -406,6 +435,12 @@ COMXPlayer::COMXPlayer(IPlayerCallback &callback)
       m_player_audio(&m_av_clock, m_messenger),
       m_player_subtitle(&m_overlayContainer),
       m_player_teletext(),
+      /* PLEX */
+      m_hidingSub(false),
+      m_vobsubToDisplay(-1),
+      m_readRate(0),
+      /* END PLEX */
+
       m_ready(true)
 {
   m_bAbortRequest     = false;
@@ -474,14 +509,28 @@ bool COMXPlayer::OpenFile(const CFileItem &file, const CPlayerOptions &options)
     g_renderManager.PreInit();
 
     Create();
-    if(!m_ready.WaitMSec(100))
+
+    // this timeout needs to be big enough, otherwise will not be enough
+    // for proper playback on devices like RPi
+    if(!m_ready.WaitMSec(5000))
     {
       CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
       if(dialog)
       {
         dialog->Show();
         while(!m_ready.WaitMSec(1))
+        {
+          /* PLEX */
+          if (dialog->IsCanceled())
+          {
+            m_bStop = true;
+            Abort();
+          }
+          /* END PLEX */
+
+
           g_windowManager.ProcessRenderLoop(false);
+        }
         dialog->Close();
       }
     }
@@ -569,6 +618,12 @@ bool COMXPlayer::OpenInputStream()
   {
     m_filename = g_mediaManager.TranslateDevicePath("");
   }
+  #ifndef __PLEX__
+    if (filename.Left(7) == "http://" && CURL(filename).GetFileName().Right(5) == ".m3u8")
+  #else
+    CURL url(filename);
+    if (url.GetFileName().Right(5) == ".m3u8" && (url.GetProtocol() == "http" || url.GetProtocol() == "https" || url.GetProtocol() == "plexserver"))
+  #endif
 
   // before creating the input stream, if this is an HLS playlist then get the
   // most appropriate bitrate based on our network settings
@@ -578,6 +633,15 @@ bool COMXPlayer::OpenInputStream()
     int maxrate = g_guiSettings.GetInt("network.bandwidth");
     if(maxrate <= 0)
       maxrate = INT_MAX;
+
+
+    /* PLEX */
+    if (m_item.GetProperty("plexDidTranscode").asBoolean())
+      maxrate = INT_MAX;
+    else
+      maxrate = CPlexTranscoderClient::getBandwidthForQuality(g_guiSettings.GetInt("plexmediaserver.onlinemediaquality"));
+    /* END PLEX */
+
 
     // determine the most appropriate stream
     m_filename = PLAYLIST::CPlayListM3U::GetBestBandwidthStream(m_filename, (size_t)maxrate);
@@ -609,6 +673,7 @@ bool COMXPlayer::OpenInputStream()
   &&  !m_pInputStream->IsStreamType(DVDSTREAM_TYPE_TV)
   &&  !m_pInputStream->IsStreamType(DVDSTREAM_TYPE_HTSP))
   {
+#ifndef __PLEX__
     // find any available external subtitles
     std::vector<CStdString> filenames;
     CUtil::ScanForExternalSubtitles( m_filename, filenames );
@@ -634,8 +699,86 @@ bool COMXPlayer::OpenInputStream()
           AddSubtitleFile(filenames[i]);
         }
       }
-    } // end loop over all subtitle files
+    } // end loop over all subtitle files    
+#else
+    CFileItemPtr part = m_item.m_selectedMediaPart;
+    if (part)
+    {
+      CFileItemPtr   lastIdxStream;
+      int            lastIdxSource = -1;
 
+      BOOST_FOREACH(CFileItemPtr stream, part->m_mediaPartStreams)
+      {
+        if (stream->GetProperty("streamType").asInteger() == PLEX_STREAM_SUBTITLE &&
+            stream->GetProperty("index").asInteger() == -1)
+        {
+          OMXSelectionStream s;
+          s.type     = STREAM_SUBTITLE;
+          s.id       = stream->GetProperty("subIndex").asInteger() >= 0 ? stream->GetProperty("subIndex").asInteger() : stream->GetProperty("id").asInteger();
+          s.plexID   = stream->GetProperty("id").asInteger();
+          s.filename = stream->GetProperty("key").asString();
+          s.name     = stream->GetProperty("language").asString();
+
+          if (stream->GetProperty("codec").asString() == "idx")
+          {
+            // All IDX streams have the same source.
+            if (lastIdxStream)
+              s.source = lastIdxSource;
+            else
+              s.source = m_SelectionStreams.Source(STREAM_SOURCE_DEMUX_SUB, stream->GetProperty("key").asString());
+          }
+          else
+          {
+            // New file, new source.
+            s.source = m_SelectionStreams.Source(STREAM_SOURCE_TEXT, stream->GetProperty("key").asString());
+          }
+
+          // Cache the subtitle locally. Since multiple streams can be served out of a single file,
+          // let's not download it multiple times, one for each stream.
+          //
+          CFileItemPtr idxStream = stream;
+          if (lastIdxStream)
+            idxStream = lastIdxStream;
+
+          CStdString path = "special://temp/subtitle.plex." + idxStream->GetProperty("id").asString() + "." + stream->GetProperty("codec").asString();
+          CLog::Log(LOGINFO, "Considering caching Plex subtitle locally for stream %s (codec: %s) to %s (exists: %d)",
+                    stream->GetProperty("id").asString().c_str(),
+                    stream->GetProperty("codec").asString().c_str(),
+                    path.c_str(),
+                    CFile::Exists(path));
+          
+          CURL newUrl(stream->GetProperty("key").asString());
+          newUrl.SetOption("encoding", "utf-8");
+
+          if (CFile::Exists(path) || CFile::Cache(newUrl.Get(), path))
+          {
+            s.filename = path;
+            m_SelectionStreams.Update(s);
+          }
+
+          // If it's an IDX, we need to cache the SUB file as well.
+          if (stream->GetProperty("codec").asString() == "idx")
+          {
+            CStdString path = "special://temp/subtitle.plex." + idxStream->GetProperty("id").asString() + ".sub";
+            if (CFile::Exists(path) == false)
+            {
+              CLog::Log(LOGINFO, "Caching Plex subtitle locally for stream %lld to %s", stream->GetProperty("id").asInteger(), path.c_str());
+              
+              CURL subUrl(stream->GetProperty("key").asString());
+              subUrl.SetFileName(subUrl.GetFileName() + ".sub");
+              
+              CFile::Cache(subUrl.Get(), path);
+              CLog::Log(LOGINFO, "Done caching %s", subUrl.Get().c_str());
+            }
+
+            // Remember the last IDX stream.
+            lastIdxStream = stream;
+            lastIdxSource = s.source;
+          }
+        }
+      }
+    }
+#endif
     g_settings.m_currentVideoSettings.m_SubtitleCached = true;
   }
 
@@ -660,7 +803,11 @@ bool COMXPlayer::OpenDemuxStream()
     int attempts = 10;
     while(!m_bStop && attempts-- > 0)
     {
-      m_pDemuxer = CDVDFactoryDemuxer::CreateDemuxer(m_pInputStream);
+      /* PLEX */
+      CStdString error;
+      m_pDemuxer = CDVDFactoryDemuxer::CreateDemuxer(m_pInputStream, error);
+      /* END PLEX */
+
       if(!m_pDemuxer && m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER))
       {
         continue;
@@ -690,14 +837,33 @@ bool COMXPlayer::OpenDemuxStream()
   m_SelectionStreams.Clear(STREAM_NONE, STREAM_SOURCE_NAV);
   m_SelectionStreams.Update(m_pInputStream, m_pDemuxer);
 
+  // Update Plex streams from the demuxer.
+  RelinkPlexStreams();
+  /* END PLEX */
+
+#if 0
   int64_t len = m_pInputStream->GetLength();
   int64_t tim = m_pDemuxer->GetStreamLength();
   if(len > 0 && tim > 0)
-    m_pInputStream->SetReadRate(len * 1000 / tim);
+    //m_pInputStream->SetReadRate(len * 1000 / tim);
+  {
+    //cap to intital read rate to 40 megabits/second if less than average bitrate * 1.25
+    m_readRate = std::min((unsigned int)((len * 1000 / tim) * 1.25), (unsigned int) (40000000 / 8));
+    m_pInputStream->SetReadRate(m_readRate);
+  }
+#else
+  /* There is probably a good reason why we limit the readRate in upsteam
+   * But I am just going to ignore that until I run into any problems.
+   */
+  m_readRate = g_advancedSettings.m_cacheReadRate;
+  m_pInputStream->SetReadRate(m_readRate);
+#endif
+
 
   return true;
 }
 
+#ifndef __PLEX__
 void COMXPlayer::OpenDefaultStreams(bool reset)
 {
   // if input stream dictate, we will open later
@@ -768,6 +934,7 @@ void COMXPlayer::OpenDefaultStreams(bool reset)
   //m_av_clock.OMXStop();
   //m_av_clock.OMXReset();
 }
+#endif
 
 bool COMXPlayer::ReadPacket(DemuxPacket*& packet, CDemuxStream*& stream)
 {
@@ -843,6 +1010,28 @@ bool COMXPlayer::ReadPacket(DemuxPacket*& packet, CDemuxStream*& stream)
       {
         m_SelectionStreams.Clear(STREAM_NONE, STREAM_SOURCE_DEMUX);
         m_SelectionStreams.Update(m_pInputStream, m_pDemuxer);
+
+        /* PLEX */
+        // Make sure the Plex streams are still linked.
+        RelinkPlexStreams();
+
+        if (m_vobsubToDisplay != -1)
+        {
+          int count = m_SelectionStreams.Count(STREAM_SUBTITLE);
+          for (int i = 0; i<count; i++)
+          {
+            OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
+            if (s.plexID == m_vobsubToDisplay && OpenSubtitleStream(s.id, s.source))
+            {
+              OpenSubtitleStream(s.id, s.source);
+              break;
+            }
+          }
+
+          m_vobsubToDisplay = -1;
+        }
+        /* END PLEX */
+
       }
     }
     return true;
@@ -945,11 +1134,28 @@ void COMXPlayer::Process()
   bool bOmxWaitAudio = false;
   bool bOmxSentEOFs = false;
 
+#ifndef __PLEX__
   if (!OpenInputStream())
   {
     m_bAbortRequest = true;
     return;
   }
+#else
+  try
+  {
+    if (!OpenInputStream())
+    {
+      m_bAbortRequest = true;
+      return;
+    }
+  }
+  catch (CRedirectException* ex)
+  {
+    CApplicationMessenger::Get().RestartWithNewPlayer(0, ex->m_pNewUrl->Get());
+    delete ex;
+    return;
+  }
+#endif
 
   if (CDVDInputStream::IMenus* ptr = dynamic_cast<CDVDInputStream::IMenus*>(m_pInputStream))
   {
@@ -981,7 +1187,10 @@ void COMXPlayer::Process()
   if (m_CurrentVideo.id >= 0 && m_CurrentVideo.hint.fpsrate > 0 && m_CurrentVideo.hint.fpsscale > 0)
   {
     fFramesPerSecond = (float)m_CurrentVideo.hint.fpsrate / (float)m_CurrentVideo.hint.fpsscale;
+#ifndef __PLEX__
     m_Edl.ReadEditDecisionLists(m_filename, fFramesPerSecond, m_CurrentVideo.hint.height);
+#endif
+
   }
 
   /*
@@ -1311,6 +1520,15 @@ void COMXPlayer::Process()
     // check if in a cut or commercial break that should be automatically skipped
     CheckAutoSceneSkip();
   }
+  /* PLEX */
+  // We're done, if we transcoded we need to stop that now
+  if (m_item.GetProperty("plexDidTranscode").asBoolean())
+  {
+    CPlexServerPtr server = g_plexApplication.serverManager->FindByUUID(m_item.GetProperty("plexserver").asString());
+    if (server)
+      g_plexApplication.mediaServerClient->StopTranscodeSession(server);
+  }
+  /* END PLEX */
 
   // let thumbgen jobs resume.
   CJobManager::GetInstance().UnPause(kJobTypeMediaFlags);
@@ -1533,9 +1751,11 @@ bool COMXPlayer::GetCachingTimes(double& level, double& delay, double& offset)
 
   delay = cache_left - play_left;
 
+#ifndef __PLEX__
   if (full && (currate < maxrate) )
     level = -1.0;                          /* buffer is full & our read rate is too low  */
   else
+#endif
     level = (cached + queued) / (cache_need + queued);
 
   return true;
@@ -2397,11 +2617,15 @@ void COMXPlayer::SetCaching(ECacheState state)
 {
   if(state == CACHESTATE_FLUSH)
   {
+#ifndef __PLEX__
     double level, delay, offset;
     if(GetCachingTimes(level, delay, offset))
       state = CACHESTATE_FULL;
     else
       state = CACHESTATE_INIT;
+#endif
+    state = CACHESTATE_FULL;
+
   }
 
   if(m_caching == state)
@@ -2436,10 +2660,12 @@ void COMXPlayer::SetCaching(ECacheState state)
 
 void COMXPlayer::SetPlaySpeed(int speed)
 {
+// FWD / REW Speeds seems ok with OMX on RPi
+#if !defined(TARGET_RASPBERRY_PI)
   /* only pause and normal playspeeds are allowed */
   if(speed < 0 || speed > DVD_PLAYSPEED_NORMAL)
     return;
-
+#endif
   m_messenger.Put(new CDVDMsgInt(CDVDMsg::PLAYER_SETSPEED, speed));
   SynchronizeDemuxer(100);
 }
@@ -2716,7 +2942,14 @@ float COMXPlayer::GetCachePercentage()
 
 void COMXPlayer::SetAVDelay(float fValue)
 {
-  m_player_video.SetDelay(fValue * DVD_TIME_BASE);
+#ifndef __PLEX__
+  m_player_video.SetDelay( (fValue * DVD_TIME_BASE) ) ;
+#else
+  // Start with the global delay and offset from there.
+  float totalDelay = g_guiSettings.GetInt("audiooutput.defaultdelay")/1000.0 + fValue;
+  m_player_video.SetDelay( (totalDelay * DVD_TIME_BASE) ) ;
+#endif
+
 }
 
 float COMXPlayer::GetAVDelay()
@@ -2770,6 +3003,17 @@ void COMXPlayer::GetSubtitleLanguage(int iStream, CStdString &strStreamLang)
 void COMXPlayer::SetSubtitle(int iStream)
 {
   m_messenger.Put(new CDVDMsgPlayerSetSubtitleStream(iStream));
+
+  /* PLEX */
+  // Return the ID of the selected stream.
+  OMXStreamLock lock(this);
+  OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, iStream);
+
+  // Send the change to the Media Server.
+  CFileItemPtr item = g_application.CurrentFileItemPtr();
+  g_plexApplication.mediaServerClient->SelectStream(item, GetPlexMediaPartID(), g_settings.m_currentVideoSettings.m_SubtitleOn ? s.plexID : 0, -1);
+  /* END PLEX */
+
 }
 
 bool COMXPlayer::GetSubtitleVisible()
@@ -2790,6 +3034,18 @@ void COMXPlayer::SetSubtitleVisible(bool bVisible)
 {
   g_settings.m_currentVideoSettings.m_SubtitleOn = bVisible;
   m_messenger.Put(new CDVDMsgBool(CDVDMsg::PLAYER_SET_SUBTITLESTREAM_VISIBLE, bVisible));
+
+  /* PLEX */
+  // Send the change to the Media Server.
+  CFileItemPtr item = g_application.CurrentFileItemPtr();
+  int partID = GetPlexMediaPartID();
+  int subtitleStreamID = GetSubtitlePlexID();
+
+  // Don't send the message over if we're just hiding the initial sub.
+  if (m_hidingSub == false)
+    g_plexApplication.mediaServerClient->SelectStream(item, partID, g_settings.m_currentVideoSettings.m_SubtitleOn ? subtitleStreamID : 0, -1);
+  /* END PLEX */
+
 }
 
 int COMXPlayer::GetAudioStreamCount()
@@ -2821,6 +3077,15 @@ void COMXPlayer::SetAudioStream(int iStream)
 {
   m_messenger.Put(new CDVDMsgPlayerSetAudioStream(iStream));
   SynchronizeDemuxer(100);
+
+  /* PLEX */
+  OMXStreamLock lock(this);
+
+  // Notify the Plex Media Server.
+  CFileItemPtr item = g_application.CurrentFileItemPtr();
+  g_plexApplication.mediaServerClient->SelectStream(item, GetPlexMediaPartID(), -1, GetAudioStreamPlexID());
+  /* END PLEX */
+
 }
 
 TextCacheStruct_t* COMXPlayer::GetTeletextCache()
@@ -2879,6 +3144,8 @@ int64_t COMXPlayer::GetTotalTime()
 
 void COMXPlayer::ToFFRW(int iSpeed)
 {
+// FWD / RWIND Speeds dont seem to be an issue on RPi
+#if !defined(TARGET_RASPBERRY_PI)
   // can't rewind in menu as seeking isn't possible
   // forward is fine
   if (iSpeed < 0 && IsInMenu()) return;
@@ -2886,6 +3153,7 @@ void COMXPlayer::ToFFRW(int iSpeed)
   /* only pause and normal playspeeds are allowed */
   if(iSpeed > 1 || iSpeed < 0)
     return;
+#endif
 
   SetPlaySpeed(iSpeed * DVD_PLAYSPEED_NORMAL);
 }
@@ -4205,10 +4473,230 @@ bool COMXPlayer::SwitchChannel(const CPVRChannel &channel)
 
 bool COMXPlayer::CachePVRStream(void) const
 {
+  /* PLEX */
+  return true;
+  /* END PLEX */
+
+
   return m_pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER) &&
       !g_PVRManager.IsPlayingRecording() &&
       g_advancedSettings.m_bPVRCacheInDvdPlayer;
 }
+
+/* PLEX */
+void COMXPlayer::OpenDefaultStreams(bool reset)
+{
+  int  count;
+  bool valid;
+  OMXSelectionStream st;
+
+  // open video stream
+  count = m_SelectionStreams.Count(STREAM_VIDEO);
+  valid = false;
+
+  if(!valid
+  && m_SelectionStreams.Get(STREAM_VIDEO, CDemuxStream::FLAG_DEFAULT, st))
+  {
+    if(OpenVideoStream(st.id, st.source, reset))
+      valid = true;
+    else
+      CLog::Log(LOGWARNING, "%s - failed to open default stream (%d)", __FUNCTION__, st.id);
+  }
+
+  for(int i = 0;i<count && !valid;i++)
+  {
+    OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_VIDEO, i);
+    if(OpenVideoStream(s.id, s.source, reset))
+      valid = true;
+  }
+  if(!valid)
+    CloseVideoStream(true);
+
+  if(!m_PlayerOptions.video_only)
+  {
+    // open audio stream
+    count = m_SelectionStreams.Count(STREAM_AUDIO);
+    valid = false;
+
+    // Pick selected audio stream.
+    CFileItemPtr part = m_item.m_selectedMediaPart;
+    if (part)
+    {
+      BOOST_FOREACH(CFileItemPtr stream, part->m_mediaPartStreams)
+      {
+        int streamType = stream->GetProperty("streamType").asInteger();
+        int streamId = stream->GetProperty("id").asInteger();
+        std::string streamLang = stream->GetProperty("language").asString();
+        bool selected = stream->GetProperty("selected").asBoolean();
+        CLog::Log(LOGINFO, "COMXPlayer::OpenDefaultStreams Considering Plex stream %d[%s] of type %d (selected: %d)",
+                  streamId, streamLang.c_str(), streamType, selected);
+
+        // If we've found the selected audio stream...
+        if (streamType == PLEX_STREAM_AUDIO && selected)
+        {
+          // ...see if we can match it up with our stream.
+          count = m_SelectionStreams.Count(STREAM_AUDIO);
+          for (int i=0; i<count && !valid; i++)
+          {
+            OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
+            if (s.plexID == streamId && OpenAudioStream(s.id, s.source, reset))
+            {
+              CLog::Log(LOGINFO, "COMXPlayer::OpenDefaultStreams selected stream %d[%s]", streamId, streamLang.c_str());
+              valid = true;
+            }
+          }
+        }
+
+        if (valid) break;
+      }
+    }
+
+    // If that didn't work, just pick the first valid stream.
+    for(int i = 0; i<count && !valid; i++)
+    {
+      OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_AUDIO, i);
+      if(OpenAudioStream(s.id, s.source, reset))
+      {
+        CLog::Log(LOGINFO, "COMXPlayer::OpenDefaultStreams failed to find the stream based plexId, instead you will get %d[%s]", s.plexID, s.language.c_str());
+        valid = true;
+      }
+    }
+
+    // If we don't have an audio stream, close it.
+    if(!valid)
+      CloseAudioStream(true);
+  }
+
+  // open subtitle stream
+  valid = false;
+  m_player_video.EnableSubtitle(true);
+
+  // Open subtitle stream.
+  CFileItemPtr part = m_item.m_selectedMediaPart;
+  if (part)
+  {
+    BOOST_FOREACH(CFileItemPtr stream, part->m_mediaPartStreams)
+    {
+      // If we've found the selected subtitle stream...
+      if (stream->GetProperty("streamType").asInteger() == PLEX_STREAM_SUBTITLE && stream->GetProperty("selected").asBoolean())
+      {
+        count = m_SelectionStreams.Count(STREAM_SUBTITLE);
+
+        for (int i = 0; i<count && !valid; i++)
+        {
+          OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, i);
+          if (s.plexID == stream->GetProperty("id").asInteger() && OpenSubtitleStream(s.id, s.source))
+          {
+            // We're going to need to open this later.
+            if (s.source == STREAM_SOURCE_DEMUX_SUB)
+              m_vobsubToDisplay = s.plexID;
+
+            valid = true;
+          }
+        }
+      }
+
+      if (valid) break;
+    }
+
+    // If that didn't pick one, just open the first stream and make it invisible.
+    if (valid == false && count > 0)
+    {
+      OMXSelectionStream& s = m_SelectionStreams.Get(STREAM_SUBTITLE, 0);
+      OpenSubtitleStream(s.id, s.source);
+
+      if (s.source == STREAM_SOURCE_DEMUX_SUB)
+        m_vobsubToDisplay = s.plexID;
+    }
+
+    // Set them on/off based on whether we found one.
+    g_settings.m_currentVideoSettings.m_SubtitleOn = valid;
+
+    // We don't have subtitles to show, close.
+    if (valid == false)
+    {
+      m_hidingSub = true;
+      SetSubtitleVisible(false);
+      m_hidingSub = false;
+    }
+  }
+}
+
+void COMXPlayer::RelinkPlexStreams()
+{
+  CFileItemPtr part = m_item.m_selectedMediaPart;
+  if (part)
+  {
+    BOOST_FOREACH(CFileItemPtr stream, part->m_mediaPartStreams)
+    {
+      StreamType type = STREAM_NONE;
+
+      if (stream->GetProperty("streamType").asInteger() == PLEX_STREAM_SUBTITLE)
+        type = STREAM_SUBTITLE;
+      else if (stream->GetProperty("streamType").asInteger() == PLEX_STREAM_AUDIO)
+        type = STREAM_AUDIO;
+
+      if (type != STREAM_NONE)
+      {
+        // Look for the right index and set the Plex stream ID.
+        int count = m_SelectionStreams.Count(type);
+        for (int i=0; i<count; i++)
+        {
+          OMXSelectionStream& s = m_SelectionStreams.Get(type, i);
+
+          if (s.id == stream->GetProperty("index").asInteger() || s.id == stream->GetProperty("subIndex").asInteger())
+          {
+            s.plexID = stream->GetProperty("id").asInteger();
+            s.language = stream->GetProperty("language").asString();
+
+            if (stream->GetProperty("streamType").asInteger() == PLEX_STREAM_SUBTITLE)
+              s.name = stream->GetProperty("language").asString();
+          }
+        }
+      }
+    }
+  }
+}
+
+int COMXPlayer::GetAudioStreamPlexID()
+{
+  OMXSelectionStream& stream = m_SelectionStreams.Get(STREAM_AUDIO, m_SelectionStreams.IndexOf(STREAM_AUDIO, *this));
+  return stream.plexID;
+}
+
+int COMXPlayer::GetSubtitlePlexID()
+{
+  OMXSelectionStream& stream = m_SelectionStreams.Get(STREAM_SUBTITLE, m_SelectionStreams.IndexOf(STREAM_SUBTITLE, *this));
+  return stream.plexID;
+}
+void COMXPlayer::SetAudioStreamPlexID(int plexID)
+{
+  std::vector<OMXSelectionStream> audiost = m_SelectionStreams.Get(STREAM_AUDIO);
+  for (int i = 0; i < audiost.size(); i ++)
+  {
+    if (audiost[i].plexID == plexID)
+    {
+      SetAudioStream(audiost[i].type_index);
+      break;
+    }
+  }
+}
+
+void COMXPlayer::SetSubtitleStreamPlexID(int plexID)
+{
+  std::vector<OMXSelectionStream> subst = m_SelectionStreams.Get(STREAM_SUBTITLE);
+  for (int i = 0; i < subst.size(); i ++)
+  {
+    if (subst[i].plexID == plexID)
+    {
+      SetSubtitle(subst[i].type_index);
+      break;
+    }
+  }
+}
+
+
+
 
 void COMXPlayer::GetVideoRect(CRect& SrcRect, CRect& DestRect)
 {
@@ -4287,5 +4775,7 @@ void COMXPlayer::GetSubtitleCapabilities(std::vector<int> &subCaps)
 {
   subCaps.push_back(IPC_SUBS_ALL);
 }
+
+
 
 #endif

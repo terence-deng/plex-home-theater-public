@@ -1803,8 +1803,8 @@ bool CApplication::StartAirplayServer()
       {
         txt.push_back(std::make_pair("deviceid", "FF:FF:FF:FF:FF:F2"));
       }
-      txt.push_back(std::make_pair("features", "0x77"));
-      txt.push_back(std::make_pair("model", "Xbmc,1"));
+      txt.push_back(std::make_pair("features", "0x1000009FF"));
+      txt.push_back(std::make_pair("model", "AppleTV3,1"));
       txt.push_back(std::make_pair("srcvers", AIRPLAY_SERVER_VERSION_STR));
       CZeroconf::GetInstance()->PublishService("servers.airplay", "_airplay._tcp", g_infoManager.GetLabel(SYSTEM_FRIENDLY_NAME), listenPort, txt);
       ret = true;
@@ -2454,7 +2454,11 @@ bool CApplication::WaitFrame(unsigned int timeout)
 void CApplication::NewFrame()
 {
   /* PLEX */
+#if !defined(TARGET_RASPBERRY_PI)
+  // on RPi, with OMX player, there is a race condition, causing this function to deadlock on Graphic context
+  // when player is flipping page
   HideBusyIndicator();
+#endif
   /* END PLEX */
 
   // We just posted another frame. Keep track and notify.
@@ -2486,7 +2490,11 @@ void CApplication::Render()
   bool decrement = false;
   bool hasRendered = false;
   bool limitFrames = false;
+  #if defined(TARGET_RASPBERRY_PI)
+  unsigned int singleFrameTime = 66; // default limit 15 fps
+  #else
   unsigned int singleFrameTime = 10; // default limit 100 fps
+  #endif
 
   {
     // Less fps in DPMS
@@ -2578,7 +2586,7 @@ void CApplication::Render()
   if (limitFrames || !flip)
   {
     if (!limitFrames)
-      singleFrameTime = 40; //if not flipping, loop at 25 fps
+      singleFrameTime = 100; //if not flipping, loop at 25 fps
 
     unsigned int frameTime = now - m_lastFrameTime;
     if (frameTime < singleFrameTime)
@@ -3725,6 +3733,7 @@ bool CApplication::Cleanup()
     CLastfmScrobbler::RemoveInstance();
     CLibrefmScrobbler::RemoveInstance();
     CLastFmManager::RemoveInstance();
+    COMXImage::RemoveInstance();
 #ifdef HAS_EVENT_SERVER
     CEventServer::RemoveInstance();
 #endif
@@ -4257,6 +4266,21 @@ bool CApplication::PlayFile(const CFileItem& item_, bool bRestart)
       if (!m_itemCurrentFile->IsStack())
         *m_itemCurrentFile = newItem;
     }
+
+    /* let's set some options if we need to */
+    CFileItemPtr mediaPart = CPlexMediaDecisionEngine::getMediaPart(newItem);
+    if (mediaPart)
+    {
+      CFileItemPtr videoStream = PlexUtils::GetSelectedStreamOfType(mediaPart, PLEX_STREAM_VIDEO);
+      if (videoStream)
+      {
+        if (videoStream->GetProperty("scanType").asString() == "interlaced")
+        {
+          CLog::Log(LOGDEBUG, "CApplication::PlayFile interlaced video found, switching player options to de-interlacing");
+          g_settings.m_currentVideoSettings.m_DeinterlaceMode = VS_DEINTERLACEMODE_FORCE;
+        }
+      }
+    }
   }
   /* END PLEX */
 
@@ -4437,6 +4461,22 @@ bool CApplication::PlayFile(const CFileItem& item_, bool bRestart)
 
   // tell system we are starting a file
   m_bPlaybackStarting = true;
+
+
+  int previousMsgsIgnoredByNewPlaying[] = {
+        GUI_MSG_PLAYBACK_STARTED,
+        GUI_MSG_PLAYBACK_ENDED,
+        GUI_MSG_PLAYBACK_STOPPED,
+        GUI_MSG_PLAYLIST_CHANGED,
+        GUI_MSG_PLAYLISTPLAYER_STOPPED,
+        GUI_MSG_PLAYLISTPLAYER_STARTED,
+        GUI_MSG_PLAYLISTPLAYER_CHANGED,
+        GUI_MSG_QUEUE_NEXT_ITEM,
+        0
+      };
+  int dMsgCount = g_windowManager.RemoveThreadMessageByMessageIds(&previousMsgsIgnoredByNewPlaying[0]);
+  if (dMsgCount > 0)
+    CLog::Log(LOGDEBUG,"%s : Ignored %d playback thread messages", __FUNCTION__, dMsgCount);
 
   // We should restart the player, unless the previous and next tracks are using
   // one of the players that allows gapless playback (paplayer, dvdplayer)
@@ -4660,12 +4700,6 @@ void CApplication::OnPlayBackPaused()
   param["player"]["speed"] = 0;
   param["player"]["playerid"] = g_playlistPlayer.GetCurrentPlaylist();
   CAnnouncementManager::Announce(Player, "xbmc", "OnPause", m_itemCurrentFile, param);
-
-  /* PLEX */
-  CGUIDialogVideoOSD *osd = (CGUIDialogVideoOSD*)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_OSD);
-  if (IsPlayingVideo() && osd && !osd->IsActive())
-    CApplicationMessenger::Get().DoModal(osd, WINDOW_DIALOG_VIDEO_OSD, "pauseOpen", false);
-  /* END PLEX */
 }
 
 void CApplication::OnPlayBackResumed()
@@ -4678,12 +4712,6 @@ void CApplication::OnPlayBackResumed()
   param["player"]["speed"] = 1;
   param["player"]["playerid"] = g_playlistPlayer.GetCurrentPlaylist();
   CAnnouncementManager::Announce(Player, "xbmc", "OnPlay", m_itemCurrentFile, param);
-
-  /* PLEX */
-  CGUIDialogVideoOSD *osd = (CGUIDialogVideoOSD*)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_OSD);
-  if (IsPlayingVideo() && osd && osd->IsOpenedFromPause())
-    CApplicationMessenger::Get().Close(osd, false);
-  /* PLEX */
 }
 
 void CApplication::OnPlayBackSpeedChanged(int iSpeed)
@@ -5389,9 +5417,11 @@ bool CApplication::OnMessage(CGUIMessage& message)
         if (CLastFmManager::GetInstance()->IsRadioEnabled())
           CLastFmManager::GetInstance()->StopRadio();
 
-        delete m_pPlayer;
-        m_pPlayer = 0;
-
+        if (!m_pPlayer->IsPlaying())
+        {
+          delete m_pPlayer;
+          m_pPlayer = 0;
+        }
         // Reset playspeed
         m_iPlaySpeed = 1;
       }
@@ -6375,15 +6405,6 @@ void CApplication::UpdateFileState(const string& aState, bool force)
   {
     if (g_plexApplication.timelineManager)
       g_plexApplication.timelineManager->ReportProgress(m_itemCurrentFile, state, GetTime() * 1000, force);
-
-    // Update the item in place.
-    CGUIMediaWindow* mediaWindow = (CGUIMediaWindow* )g_windowManager.GetWindow(WINDOW_VIDEO_FILES);
-    if (mediaWindow)
-      mediaWindow->UpdateSelectedItem(m_itemCurrentFile);
-
-    mediaWindow = (CGUIMediaWindow* )g_windowManager.GetWindow(WINDOW_VIDEO_NAV);
-    if (mediaWindow)
-      mediaWindow->UpdateSelectedItem(m_itemCurrentFile);
   }
 }
 

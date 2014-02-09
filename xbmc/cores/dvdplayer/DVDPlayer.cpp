@@ -4415,6 +4415,10 @@ void CDVDPlayer::OpenDefaultStreams(bool reset)
       CloseAudioStream(true);
   }
 
+  /* If user have selected to transcode subtitles we should not show it again here */
+  if (m_item.GetProperty("plexDidTranscode").asBoolean() && g_guiSettings.GetBool("plexmediaserver.transcodesubtitles"))
+    return;
+
   // open subtitle stream
   valid = false;
   m_dvdPlayerVideo.EnableSubtitle(true);
@@ -4517,7 +4521,6 @@ int CDVDPlayer::GetSubtitlePlexID()
   SelectionStream& stream = m_SelectionStreams.Get(STREAM_SUBTITLE, m_SelectionStreams.IndexOf(STREAM_SUBTITLE, *this));
   return stream.plexID;
 }
-
 void CDVDPlayer::SetAudioStreamPlexID(int plexID)
 {
   std::vector<SelectionStream> audiost = m_SelectionStreams.Get(STREAM_AUDIO);

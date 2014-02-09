@@ -94,6 +94,7 @@
 /* PLEX */
 #include "PlexApplication.h"
 #include "AutoUpdate/PlexAutoUpdate.h"
+#include "Owned/PlexGlobalCacher.h"
 /* END PLEX */
 
 using namespace std;
@@ -117,6 +118,7 @@ const BUILT_IN commands[] = {
   { "ToggleDisplayBlanking",      false,  "Toggle display blanking" },
   #endif
   { "UpdateAndRestart",           false,  "Update PHT and restart" },
+  { "ControlGlobalCacher",        false,  "Stop or Start the global cacher" },
   /* END PLEX */
   { "Help",                       false,  "This help message" },
   { "Reboot",                     false,  "Reboot the system" },
@@ -301,6 +303,10 @@ int CBuiltins::Execute(const CStdString& execString)
   else if (execute.Equals("minimize"))
   {
     CApplicationMessenger::Get().Minimize();
+  }
+  else if (execute.Equals("controlglobalcacher"))
+  { //ControlGlobalCacher
+    controlGlobalCache();
   }
   else if (execute.Equals("loadprofile"))
   {

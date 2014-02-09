@@ -224,10 +224,16 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       {
         switch (g_guiSettings.GetInt("powermanagement.shutdownstate"))
         {
+
+          #if TARGET_RASPBERRY_PI
+          case POWERSTATE_SUSPEND:
+          case POWERSTATE_HIBERNATE:
+          #endif
           case POWERSTATE_SHUTDOWN:
             Powerdown();
             break;
 
+          #ifndef TARGET_RASPBERRY_PI
           case POWERSTATE_SUSPEND:
             Suspend();
             break;
@@ -235,6 +241,7 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
           case POWERSTATE_HIBERNATE:
             Hibernate();
             break;
+          #endif
 
           case POWERSTATE_QUIT:
             Quit();
@@ -251,6 +258,10 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       }
       break;
 
+#if TARGET_RASPBERRY_PI
+    case TMSG_SUSPEND:
+    case TMSG_HIBERNATE:
+#endif
     case TMSG_POWERDOWN:
       {
         g_application.Stop(EXITCODE_POWERDOWN);
@@ -264,6 +275,7 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       }
       break;
 
+#ifndef TARGET_RASPBERRY_PI
     case TMSG_HIBERNATE:
       {
         g_PVRManager.SetWakeupCommand();
@@ -277,6 +289,7 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
         g_powerManager.Suspend();
       }
       break;
+#endif
 
     case TMSG_RESTART:
     case TMSG_RESET:

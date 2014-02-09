@@ -1,298 +1,639 @@
+<?xml version="1.0"?>
 <fonts>
+	<aliases>
+          <alias font="HelveticaNeue" variant="Condensed Bold" alias="Arial" aliasStyle="bold" />
+          <alias font="HelveticaNeue" variant="Medium" alias="Arial" aliasStyle="normal" />
+          <alias font="HelveticaNeue" variant="Regular" alias="Arial" aliasStyle="normal" />
+          <alias font="HelveticaNeue" variant="Bold" alias="Arial" aliasStyle="bold" />
+          <alias font="HelveticaNeue" variant="" alias="Arial" aliasStyle="normal" />
+          <alias font="Helvetica" variant="Condensed Bold" alias="Arial" aliasStyle="bold" />
+          <alias font="Helvetica" variant="Bold" alias="Arial" aliasStyle="bold" />
+          <alias font="Helvetica" variant="Regular" alias="Arial" aliasStyle="normal" />
+        </aliases>
 	<fontset id="Default" unicode="true">
+		<!--
+		NOTE:
+		in skin, search and replace:
+		1. Bold = Bold
+		2. Regular = Regular
+	    -->
 		<!-- Default -->
 		<font>
 			<name>DefaultFont</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>18</size>
 		</font>
-		<!-- normal weight -->
+		<!-- special cases -->
+		<!-- home screen info card plot -->
 		<font>
-			<name>Normal-17</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>HomePlot</name>
+			<filename>PlexFont-Regular.ttf</filename>
+			<size>16</size>
+			<linespacing>1.1</linespacing>
+		</font>
+		<!-- home screen info card plot -->
+		<font>
+			<name>Plot</name>
+			<filename>PlexFont-Regular.ttf</filename>
+			<size>18</size>
+			<linespacing>1.1</linespacing>
+		</font>
+		<!-- login form description -->
+		<font>
+			<name>PINdescription</name>
+			<filename>PlexFont-Regular.ttf</filename>
+			<size>20</size>
+			<linespacing>1.2</linespacing>
+		</font>
+		<!-- Regular -->
+		<font>
+			<name>Regular-12</name>
+			<filename>PlexFont-Regular.ttf</filename>
+			<size>12</size>
+		</font>
+		<font>
+			<name>Regular-13</name>
+			<filename>PlexFont-Regular.ttf</filename>
+			<size>13</size>
+		</font>
+		<font>
+			<name>Regular-14</name>
+			<filename>PlexFont-Regular.ttf</filename>
+			<size>14</size>
+		</font>
+		<font>
+			<name>Regular-16</name>
+			<filename>PlexFont-Regular.ttf</filename>
+			<size>16</size>
+		</font>
+		<font>
+			<name>Regular-17</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>17</size>
 		</font>
 		<font>
-			<name>Normal-18</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-18</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>18</size>
 		</font>
 		<font>
-			<name>Normal-19</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-19</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>19</size>
 		</font>
 		<font>
-			<name>Normal-20</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-20</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>20</size>
 		</font>
 		<font>
-			<name>Normal-22</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-22</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>22</size>
 		</font>
 		<font>
-			<name>Normal-24</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-24</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>24</size>
 		</font>
 		<font>
-			<name>Normal-26</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-26</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>26</size>
 		</font>
 		<font>
-			<name>Normal-28</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-28</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>28</size>
 		</font>
 		<font>
-			<name>Normal-30</name>
-			<filename>DejaVuSans.ttf</filename>
+			<name>Regular-30</name>
+			<filename>PlexFont-Regular.ttf</filename>
 			<size>30</size>
 		</font>
-		<!-- bold weight -->
+		<!-- Bold -->
+		<font>
+			<name>Bold-10</name>
+			<filename>PlexFont-Bold.ttf</filename>
+			<size>10</size>
+		</font>
+		<font>
+			<name>Bold-11</name>
+			<filename>PlexFont-Bold.ttf</filename>
+			<size>11</size>
+		</font>
+		<font>
+			<name>Bold-12</name>
+			<filename>PlexFont-Bold.ttf</filename>
+			<size>12</size>
+		</font>
+		<font>
+			<name>Bold-13</name>
+			<filename>PlexFont-Bold.ttf</filename>
+			<size>13</size>
+		</font>
+		<font>
+			<name>Bold-14</name>
+			<filename>PlexFont-Bold.ttf</filename>
+			<size>14</size>
+		</font>
+		<font>
+			<name>Bold-15</name>
+			<filename>PlexFont-Bold.ttf</filename>
+			<size>15</size>
+		</font>
+		<font>
+			<name>Bold-16</name>
+			<filename>PlexFont-Bold.ttf</filename>
+			<size>16</size>
+		</font>
 		<font>
 			<name>Bold-17</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>17</size>
 		</font>
 		<font>
 			<name>Bold-18</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>18</size>
 		</font>
 		<font>
 			<name>Bold-19</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>19</size>
 		</font>
 		<font>
 			<name>Bold-20</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>20</size>
 		</font>
 		<font>
 			<name>Bold-22</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>22</size>
 		</font>
 		<font>
 			<name>Bold-24</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>24</size>
 		</font>
 		<font>
 			<name>Bold-26</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>26</size>
 		</font>
 		<font>
 			<name>Bold-28</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>28</size>
 		</font>
 		<font>
 			<name>Bold-30</name>
-			<filename>DejaVuSans-Bold.ttf</filename>
-			<size>30</size>
-		</font>
-		<!-- condensed -->
-		<font>
-			<name>Condensed-12</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>12</size>
-		</font>	
-		<font>
-			<name>Condensed-13</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>13</size>
-		</font>
-		<font>
-			<name>Condensed-14</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>14</size>
-		</font>
-		<font>
-			<name>Condensed-16</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>16</size>
-		</font>
-		<!-- this variant exists solely for line spacing -->	
-		<font>
-			<name>HomePlot</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>16</size>
-			<linespacing>1.1</linespacing>
-		</font>
-		<font>
-			<name>Condensed-17</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>17</size>
-		</font>
-		<font>
-			<name>Condensed-18</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>18</size>
-		</font>
-		<font>
-			<name>Condensed-19</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>19</size>
-		</font>
-		<font>
-			<name>Condensed-20</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>20</size>
-		</font>
-		<!-- this variant exists solely for line spacing -->	
-		<font>
-			<name>PINdescription</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>20</size>
-			<linespacing>1.2</linespacing>
-		</font>
-		<font>
-			<name>Condensed-22</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>22</size>
-		</font>
-		<font>
-			<name>Condensed-24</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>24</size>
-		</font>
-		<font>
-			<name>Condensed-26</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>26</size>
-		</font>
-		<font>
-			<name>Condensed-28</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>28</size>
-		</font>
-		<font>
-			<name>Condensed-30</name>
-			<filename>DejaVuSansCondensed.ttf</filename>
-			<size>30</size>
-		</font>
-		<!-- condensed bold -->
-		<font>
-			<name>CondensedBold-10</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>10</size>
-		</font>
-		<font>
-			<name>CondensedBold-11</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>11</size>
-		</font>
-		<font>
-			<name>CondensedBold-12</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>12</size>
-		</font>
-		<font>
-			<name>CondensedBold-13</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>13</size>
-		</font>
-		<font>
-			<name>CondensedBold-14</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>14</size>
-		</font>
-		<font>
-			<name>CondensedBold-15</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>15</size>
-		</font>
-		<font>
-			<name>CondensedBold-16</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>16</size>
-		</font>
-		<font>
-			<name>CondensedBold-17</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>17</size>
-		</font>
-		<font>
-			<name>CondensedBold-18</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>18</size>
-		</font>
-		<font>
-			<name>CondensedBold-19</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>19</size>
-		</font>
-		<font>
-			<name>CondensedBold-20</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>20</size>
-		</font>
-		<font>
-			<name>CondensedBold-22</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>22</size>
-		</font>
-		<font>
-			<name>CondensedBold-24</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>24</size>
-		</font>
-		<font>
-			<name>CondensedBold-26</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>26</size>
-		</font>
-		<font>
-			<name>CondensedBold-28</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
-			<size>28</size>
-		</font>
-		<font>
-			<name>CondensedBold-30</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>30</size>
 		</font>
 		<font>
-			<name>CondensedBold-32</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<name>Bold-32</name>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>32</size>
 		</font>
 		<font>
-			<name>CondensedBold-34</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<name>Bold-34</name>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>34</size>
 		</font>
 		<font>
-			<name>CondensedBold-36</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<name>Bold-36</name>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>36</size>
 		</font>
 		<font>
-			<name>CondensedBold-42</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<name>Bold-42</name>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>42</size>
 		</font>
 		<font>
-			<name>CondensedBold-48</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<name>Bold-48</name>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>48</size>
 		</font>
 		<font>
-			<name>CondensedBold-52</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<name>Bold-52</name>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>52</size>
 		</font>
 		<font>
-			<name>CondensedBold-126</name>
-			<filename>DejaVuSansCondensed-Bold.ttf</filename>
+			<name>Bold-126</name>
+			<filename>PlexFont-Bold.ttf</filename>
 			<size>126</size>
+		</font>
+		<font>
+			<name>LanguageString</name>
+			<filename>Arial.ttf</filename>
+			<size>18</size>
+		</font>
+		<!-- Search fonts -->
+		<font>
+			<name>LargeSearchFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>35</size>
+		</font>
+		<font>
+			<name>MediumSearchFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>30</size>
+		</font>
+		<font>
+			<name>SearchResult</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>16</size>
+		</font>
+		<font>
+			<name>SearchResultSmaller</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>14</size>
+		</font>
+		<font>
+			<name>SearchResultSmall</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Medium</variant>
+			<size>13</size>
+		</font>
+		<!-- Jay's Fonts -->
+		<font>
+			<name>LargeTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>26</size>
+		</font>
+		<font>
+			<name>MediaPreviewYear</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>MediaPreviewSummary</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>MediaPreviewDetailsHeader</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>17</size>
+		</font>
+		<font>
+			<name>EpisodeTitles</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>17</size>
+		</font>
+		<!-- Default fonts -->
+		<font>
+			<name>NPArtistFont</name>
+			<filename>Helvetica</filename>
+			<variant>Bold</variant>
+			<size>32</size>
+		</font>
+		<font>
+			<name>NPTitleFont</name>
+			<filename>Helvetica</filename>
+			<variant>Bold</variant>
+			<size>16</size>
+		</font>
+		<font>
+			<name>NPAlbumFont</name>
+			<filename>Helvetica</filename>
+			<variant>Bold</variant>
+			<size>20</size>
+		</font>
+		<font>
+			<name>PIN</name>
+			<filename>Helvetica</filename>
+			<variant>Bold</variant>
+			<size>144</size>
+		</font>
+		<font>
+			<name>Login</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>24</size>
+		</font>
+		<font>
+			<name>NPNextFont</name>
+			<filename>Helvetica</filename>
+			<variant>Regular</variant>
+			<size>20</size>
+		</font>
+		<font>
+			<name>XLargeDefaultFont</name>
+			<filename>Helvetica</filename>
+			<variant>Regular</variant>
+			<size>32</size>
+		</font>
+		<font>
+			<name>XLargeDefaultCapsFont</name>
+			<filename>Helvetica</filename>
+			<variant>Condensed Bold</variant>
+			<size>32</size>
+		</font>
+		<font>
+			<name>LargeDefaultFont</name>
+			<filename>Helvetica</filename>
+			<variant>Regular</variant>
+			<size>24</size>
+		</font>
+		<font>
+			<name>LargeDefaultCapsFont</name>
+			<filename>Helvetica</filename>
+			<variant>Regular</variant>
+			<size>24</size>
+		</font>
+		<font>
+			<name>MediumDefaultFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>MediumAltDefaultFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>MediumDefaultCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>MediumSmallDefaultFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>MediumSmallAltDefaultFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>MediumSmallDefaultCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>20</size>
+		</font>
+		<font>
+			<name>DefaultFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>AltDefaultFont</name>
+			<filename>Helvetica</filename>
+			<variant>Regular</variant>
+			<size>16</size>
+		</font>
+		<font>
+			<name>DefaultCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>16</size>
+		</font>
+		<font>
+			<name>SmallDefaultFont</name>
+			<filename>Helvetica</filename>
+			<variant>Regular</variant>
+			<size>14</size>
+		</font>
+		<!-- Popup dialog font and 02:12 duration -->
+		<font>
+			<name>SmallDefaultCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>15</size>
+		</font>
+		<font>
+			<name>SmallerDefaultFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>12</size>
+		</font>
+		<font>
+			<name>SmallerDefaultCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>12</size>
+		</font>
+		<!-- Title fonts -->
+		<font>
+			<name>XXXLargeTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>45</size>
+		</font>
+		<font>
+			<name>XXXXLargeTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>64</size>
+		</font>
+		<font>
+			<name>XLargeTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>36</size>
+		</font>
+		<font>
+			<name>XLargeTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>36</size>
+		</font>
+		<font>
+			<name>LargeTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>30</size>
+		</font>
+		<font>
+			<name>LargeTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>30</size>
+		</font>
+		<font>
+			<name>MediumLargeTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>28</size>
+		</font>
+		<!-- Unselected items on home screen -->
+		<font>
+			<name>HomeScreenUnselectedItems</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>23</size>
+		</font>
+		<!-- InfoList titles -->
+		<font>
+			<name>MediumLargeTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>23</size>
+		</font>
+		<font>
+			<name>TitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>23</size>
+		</font>
+		<font>
+			<name>TitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>23</size>
+		</font>
+		<font>
+			<name>MediumTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>21</size>
+		</font>
+		<!-- Subtitle -->
+		<font>
+			<name>MediumTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>22</size>
+		</font>
+		<!-- RSS Feeds -->
+		<font>
+			<name>RssFeedFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>20</size>
+		</font>
+		<font>
+			<name>MediumSmallTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>17</size>
+		</font>
+		<font>
+			<name>MediumSmallTitleFont2</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>16</size>
+		</font>
+		<font>
+			<name>MediumSmallTitleFont3</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>14</size>
+		</font>
+		<font>
+			<name>MediumSmallTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>17</size>
+		</font>
+		<font>
+			<name>SmallTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>16</size>
+		</font>
+		<font>
+			<name>SmallTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<font>
+			<name>SmallTinyTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>12</size>
+		</font>
+		<font>
+			<name>SmallTinyTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>12</size>
+		</font>
+		<font>
+			<name>TinyTitleFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>8</size>
+		</font>
+		<font>
+			<name>TinyTitleCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>8</size>
+		</font>
+		<!-- Home Screen Fonts -->
+		<font>
+			<name>HomeMenuFocusFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Condensed Bold</variant>
+			<size>42</size>
+		</font>
+		<font>
+			<name>HomeMenuInfoFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>16</size>
+		</font>
+		<!-- Home screen panel font -->
+		<font>
+			<name>HomeSubMenuFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>18</size>
+		</font>
+		<!-- Video Fonts -->
+		<font>
+			<name>VideoDetailXFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>30</size>
+		</font>
+		<font>
+			<name>VideoDetailXCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<variant>Regular</variant>
+			<size>30</size>
+		</font>
+		<!-- Keyboard Focus Font -->
+		<font>
+			<name>KeyboardFocusFont</name>
+			<filename>HelveticaNeue</filename>
+			<style>Regular</style>
+			<size>26</size>
+		</font>
+		<font>
+			<name>KeyboardFocusCapsFont</name>
+			<filename>HelveticaNeue</filename>
+			<style>Regular</style>
+			<size>26</size>
+		</font>
+		<!-- font13 needs to be kept to show debug info etc -->
+		<font>
+			<name>font13</name>
+			<filename>HelveticaNeue</filename>
+			<size>16</size>
 		</font>
 	</fontset>
 </fonts>

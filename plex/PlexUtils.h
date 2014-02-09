@@ -36,11 +36,14 @@ namespace PlexUtils
   bool CurrentSkinHasFilters();
   
   std::string GetPlexCrashPath();
+  CStdString GetPrettyStreamNameFromStreamItem(CFileItemPtr stream);
   CStdString GetPrettyStreamName(const CFileItem& fileItem, bool audio);
 
   CStdString GetSHA1SumFromURL(const CURL &url);
 
   CStdString GetXMLString(const CXBMCTinyXML &document);
+
+  unsigned long GetFastHash(CStdString Data);
 }
 
 #ifdef _WIN32

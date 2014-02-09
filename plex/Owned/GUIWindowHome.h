@@ -68,6 +68,7 @@ enum SectionTypes
 };
 
 typedef std::pair<int, CFileItemList*> contentListPair;
+typedef std::pair<unsigned long, CStdString> cacheURLPair;
 
 class CPlexSectionFanout : public IJobCallback
 {
@@ -95,6 +96,8 @@ class CPlexSectionFanout : public IJobCallback
     CPlexTimer m_age;
     CCriticalSection m_critical;
     std::vector<int> m_outstandingJobs;
+
+    std::map <unsigned long, CStdString> m_LocalCache;
 };
 
 class CGUIWindowHome : public CGUIWindow, public PlexContentPlayerMixin, public IPlexGlobalTimeout, public IJobCallback

@@ -57,7 +57,8 @@ public:
 
 };
 
-#if (defined USE_EXTERNAL_OMX)
+#ifndef TARGET_RASPBERRY_PI
+//#if (defined USE_EXTERNAL_OMX)
 class DllOMX : public DllDynamic, DllOMXInterface
 {
 public:
@@ -89,7 +90,7 @@ public:
 #else
 class DllOMX : public DllDynamic, DllOMXInterface
 {
-  DECLARE_DLL_WRAPPER(DllOMX, "libopenmaxil.so")
+  DECLARE_DLL_WRAPPER(DllOMX, "/usr/lib/libopenmaxil.so")
 
   DEFINE_METHOD0(OMX_ERRORTYPE, OMX_Init)
   DEFINE_METHOD0(OMX_ERRORTYPE, OMX_Deinit)
@@ -113,6 +114,7 @@ class DllOMX : public DllDynamic, DllOMXInterface
 public:
   virtual bool Load()
   {
+//    CLog::Log(LOGDEBUG, "DllOMX: dlloaded openmax library");
     return DllDynamic::Load();
   }
 };

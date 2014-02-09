@@ -44,6 +44,7 @@
 #include "filesystem/File.h"
 /* END PLEX */
 
+#include "Stopwatch.h"
 /************************************************************************/
 /*                                                                      */
 /************************************************************************/
@@ -219,11 +220,13 @@ CBaseTexture *CBaseTexture::LoadFromFileInMemory(unsigned char *buffer, size_t b
 
 bool CBaseTexture::LoadFromFileInternal(const CStdString& texturePath, unsigned int maxWidth, unsigned int maxHeight, bool autoRotate)
 {
+
 #if defined(HAS_OMXPLAYER)
-  if (URIUtils::GetExtension(texturePath).Equals(".jpg") || 
-      URIUtils::GetExtension(texturePath).Equals(".tbn") 
-      /*|| URIUtils::GetExtension(texturePath).Equals(".png")*/)
+	// If we have OMX, just always try it first as it will decode efficiently most files
+	// Except .png on which it fails, so we just skip it to avoid loading
+  if (URIUtils::GetExtension(texturePath)!=".png")
   {
+    #ifndef TARGET_RASPBERRY_PI
     COMXImage omx_image;
 
     if(omx_image.ReadFile(texturePath))
@@ -284,6 +287,63 @@ bool CBaseTexture::LoadFromFileInternal(const CStdString& texturePath, unsigned 
     }
     // this limits the sizes of jpegs we failed to decode
     omx_image.ClampLimits(maxWidth, maxHeight);
+  #else
+      COMXImage* pImage = COMXImage::GetInstance();
+
+      if (pImage->DecodeFile(texturePath,0,0))
+      {
+        Allocate(pImage->GetDecodedWidth(), pImage->GetDecodedHeight(), XB_FMT_A8R8G8B8);
+
+        if(!m_pixels)
+        {
+          CLog::Log(LOGERROR, "Texture manager (OMX) out of memory");
+          pImage->Close();
+          return false;
+        }
+
+        m_originalWidth  = pImage->GetOriginalWidth();
+        m_originalHeight = pImage->GetOriginalHeight();
+
+        m_hasAlpha = pImage->IsAlpha();
+
+        if (autoRotate && pImage->GetOrientation())
+          m_orientation = pImage->GetOrientation() - 1;
+
+        if(m_textureWidth != pImage->GetDecodedWidth() || m_textureHeight != pImage->GetDecodedHeight())
+        {
+          unsigned int imagePitch = GetPitch(m_imageWidth);
+          unsigned int imageRows = GetRows(m_imageHeight);
+          unsigned int texturePitch = GetPitch(m_textureWidth);
+
+          unsigned char *src = pImage->GetDecodedData();
+          unsigned char *dst = m_pixels;
+          for (unsigned int y = 0; y < imageRows; y++)
+          {
+            memcpy(dst, src, imagePitch);
+            src += imagePitch;
+            dst += texturePitch;
+          }
+        }
+        else
+        {
+          if(pImage->GetDecodedData())
+          {
+            int size = ( ( GetPitch() * GetRows() ) > pImage->GetDecodedSize() ) ?
+                             pImage->GetDecodedSize() : ( GetPitch() * GetRows() );
+             memcpy(m_pixels, (unsigned char *)pImage->GetDecodedData(), size);
+          }
+        }
+
+        pImage->Release();
+
+        return true;
+      }
+      else
+      {
+        pImage->Close();
+        pImage->Release();
+      }
+  #endif
   }
 #endif
   if (URIUtils::GetExtension(texturePath).Equals(".dds"))

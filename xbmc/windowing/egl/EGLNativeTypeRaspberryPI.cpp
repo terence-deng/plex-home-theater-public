@@ -20,6 +20,7 @@
 #include "system.h"
 
 #include <EGL/egl.h>
+#include <EGL/eglplatform.h>
 #include "EGLNativeTypeRaspberryPI.h"
 #include "utils/log.h"
 #include "guilib/gui3d.h"
@@ -91,8 +92,15 @@ void CEGLNativeTypeRaspberryPI::Initialize()
   m_dispman_element2        = DISPMANX_NO_HANDLE;
   m_dispman_display         = DISPMANX_NO_HANDLE;
 
+  /* PLEX */
+#if defined(__PLEX__)
+  m_width                   = 1920;
+  m_height                  = 1080;
+#else
   m_width                   = 1280;
   m_height                  = 720;
+#endif
+  /* END PLEX */
   m_initDesktopRes          = true;
 
   m_DllBcmHost = new DllBcmHost;
@@ -120,7 +128,7 @@ bool CEGLNativeTypeRaspberryPI::CreateNativeWindow()
 {
 #if defined(TARGET_RASPBERRY_PI)
   if(!m_nativeWindow)
-    m_nativeWindow = (EGLNativeWindowType) calloc(1,sizeof( EGL_DISPMANX_WINDOW_T));
+    m_nativeWindow = (XBNativeWindowType) calloc(1,sizeof( EGL_DISPMANX_WINDOW_T));
   DLOG("CEGLNativeTypeRaspberryPI::CEGLNativeTypeRaspberryPI\n");
   return true;
 #else
@@ -666,7 +674,13 @@ void CEGLNativeTypeRaspberryPI::CallbackTvServiceCallback(void *userdata, uint32
 
 bool CEGLNativeTypeRaspberryPI::ClampToGUIDisplayLimits(int &width, int &height)
 {
-  const int max_width = 1280, max_height = 720;
+   /* PLEX */
+#if defined(__PLEX__)
+  const int max_width = 1920, max_height = 1080;
+#else
+  const int max_width = 1280, max_height = 720;  
+#endif
+   /* END PLEX */
   float ar = (float)width/(float)height;
   // bigger than maximum, so need to clamp
   if (width > max_width || height > max_height) {

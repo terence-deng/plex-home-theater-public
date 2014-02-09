@@ -1,4 +1,3 @@
-#pragma once
 /*
  *      Copyright (C) 2010-2012 Team XBMC
  *      http://www.xbmc.org
@@ -19,15 +18,14 @@
  *
  */
 
+#ifndef OMXLIBHEADER
+#define OMXLIBHEADER
+
 #if defined(HAVE_OMXLIB)
 
 #include <string>
 #include <queue>
 
-// TODO: should this be in configure
-#ifndef OMX_SKIP64BIT
-#define OMX_SKIP64BIT
-#endif
 
 #include "DllOMX.h"
 
@@ -162,7 +160,7 @@ public:
   OMX_ERRORTYPE FreeOutputBuffers();
 
   bool IsEOS() { return m_eos; };
-  bool BadState() { return m_resource_error; };
+  bool BadState() { return (m_resource_error || m_bitstream_error); };
   void ResetEos();
 
 private:
@@ -205,6 +203,7 @@ private:
   bool          m_flush_input;
   bool          m_flush_output;
   bool          m_resource_error;
+  bool          m_bitstream_error;
   void              Lock();
   void              UnLock();
 };
@@ -226,4 +225,4 @@ protected:
 };
 
 #endif
-
+#endif //#ifndef OMXLIBHEADER

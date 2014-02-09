@@ -156,7 +156,7 @@ public:
 #else
 class DllBcmHost : public DllDynamic, DllBcmHostInterface
 {
-  DECLARE_DLL_WRAPPER(DllBcmHost, "/opt/vc/lib/libbcm_host.so")
+  DECLARE_DLL_WRAPPER(DllBcmHost, "/usr/lib/libbcm_host.so")
 
   DEFINE_METHOD0(void,    bcm_host_init)
   DEFINE_METHOD0(void,    bcm_host_deinit)

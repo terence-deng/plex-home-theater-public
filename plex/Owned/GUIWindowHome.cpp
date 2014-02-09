@@ -81,6 +81,8 @@
 #include "DirectoryCache.h"
 #include "GUI/GUIPlexMediaWindow.h"
 
+#include "Owned/PlexGlobalCacher.h"
+
 using namespace std;
 using namespace XFILE;
 using namespace boost;
@@ -99,6 +101,7 @@ using namespace boost;
 #define CHANNELS_APPLICATION 4
 
 #define SLIDESHOW_MULTIIMAGE 10101
+
 
 typedef std::pair<CStdString, CPlexSectionFanout*> nameSectionPair;
 
@@ -154,7 +157,7 @@ void CPlexSectionFanout::Refresh()
     delete p.second;
   
   m_fileLists.clear();
-
+  m_LocalCache.clear();
   CLog::Log(LOGDEBUG, "GUIWindowHome:SectionFanout:Refresh for %s", m_url.Get().c_str());
 
   CURL trueUrl(m_url);
@@ -261,6 +264,12 @@ void CPlexSectionFanout::OnJobComplete(unsigned int jobID, bool success, CJob *j
 
   m_age.restart();
 
+#if defined(TARGET_RASPBERRY_PI)
+  // Add the Section URL to local cache
+  CLog::Log(LOGDEBUG,"LocalCache : OnJobComplete adding to cache hash=%d, %s",load->m_dir.GetURLHash(),load->m_url.Get().c_str());
+  m_LocalCache[load->m_dir.GetURLHash()] = load->m_url.Get();
+#endif
+
   vector<int>::iterator it = std::find(m_outstandingJobs.begin(), m_outstandingJobs.end(), jobID);
   if (it != m_outstandingJobs.end())
     m_outstandingJobs.erase(it);
@@ -300,12 +309,14 @@ void CPlexSectionFanout::Show()
 //////////////////////////////////////////////////////////////////////////////
 bool CPlexSectionFanout::NeedsRefresh()
 {
+  CSingleLock lk(m_critical);
+
   if (m_needsRefresh)
   {
     m_needsRefresh = false;
     return true;
   }
-  
+
   int refreshTime = 5;
   if (m_sectionType == SECTION_TYPE_ALBUM ||
       m_sectionType == SECTION_TYPE_QUEUE ||
@@ -315,7 +326,28 @@ bool CPlexSectionFanout::NeedsRefresh()
   if (m_sectionType == SECTION_TYPE_GLOBAL_FANART)
     refreshTime = 3600;
 
+#if defined(TARGET_RASPBERRY_PI)
+  if (m_age.elapsed() > refreshTime)
+  {
+    // on RPi, Url xml processing is costly, so we check if URL content has changed before reprocessing it
+    BOOST_FOREACH(cacheURLPair cachePair, m_LocalCache)
+    {
+      CPlexFile File;
+      CStdString strData;
+
+      if (File.Get(cachePair.second,strData))
+      {
+        // if the hash of content is different, content has changed, then refresh
+        if (PlexUtils::GetFastHash(strData) != cachePair.first) return true;
+      }
+      else return true;
+    }
+  }
+
+  return false;
+#else
   return m_age.elapsed() > refreshTime;
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -323,6 +355,31 @@ CGUIWindowHome::CGUIWindowHome(void) : CGUIWindow(WINDOW_HOME, "Home.xml"), m_gl
 {
   m_loadType = LOAD_ON_GUI_INIT;
   AddSection("global://art/", SECTION_TYPE_GLOBAL_FANART);
+  
+  // Here we start the global cacher
+  // it will request all the section data and try to cache them locally
+  // it will create a plex.cached in userdata directory when it has been done at least once in order not to reprocess at every start
+
+  // first Check if we have already completed the global cache	
+  /*
+  if (XFILE::CFile::Exists("special://masterprofile/plex.cached")) 
+  {
+  	CLog::Log(LOGNOTICE,"Global Cache : Will skip, global caching already done.");
+  	return;
+  }else
+  {
+      CFile CacheFile;
+      if (CacheFile.OpenForWrite("special://masterprofile/plex.cached"))
+      {
+          CacheFile.Close();
+          CPlexGlobalCacher* pg_Cacher = CPlexGlobalCacher::getGlobalCacher();
+          pg_Cacher->Start();
+      }
+      else CLog::Log(LOGERROR,"Global Cache : Cannot Create %s","special://masterprofile/plex.cached");
+  }
+  */
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
