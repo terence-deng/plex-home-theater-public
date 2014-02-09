@@ -92,39 +92,57 @@ void controlGlobalCache()
 
 void CPlexGlobalCacher::Process()
 {
-	CPlexDirectory dir;
-	CFileItemList list;
-	CStopWatch timer;
-	CStopWatch looptimer;
-	CStdString Message;
-	int Lastcount = 0;
-	
+  CPlexDirectory dir;
+  CFileItemList list;
+  CStopWatch timer;
+  CStopWatch looptimer;
+  CStopWatch msgtimer;
+  CStdString Message;
+  int totalsize =0;
 
-			
-	// get all the sections names
-	CFileItemListPtr pAllSections = g_plexApplication.dataLoader->GetAllSections();
+  CFileItemListPtr pAllSharedSections = g_plexApplication.dataLoader->GetAllSharedSections();
+  CLog::Log(LOGNOTICE,"Global Cache : found %d Shared Sections",pAllSharedSections->Size());
 
-	timer.StartZero();
-	CLog::Log(LOGNOTICE,"Global Cache : found %d Sections",pAllSections->Size());
-	for (int i = 0; i < pAllSections->Size() && m_continue; i ++)
-	{
-		looptimer.StartZero();
-		CFileItemPtr Section = pAllSections->Get(i);
+  // get all the sections names
+  CFileItemListPtr pAllSections = g_plexApplication.dataLoader->GetAllSections();
+  pAllSections->Append(*pAllSharedSections);
 
-		// Pop the notification
-		Message.Format("Retrieving content from '%s'...", Section->GetLabel());
-		CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, Message, GLOBAL_CACHING_DESC, 5000, false,500);
+  CLog::Log(LOGNOTICE,"Global Cache : found %d Regular Sections",pAllSections->Size());
 
-		// gets all the data from one section
-		CURL url(Section->GetPath());
-		PlexUtils::AppendPathToURL(url, "all");
+  timer.StartZero();
+  msgtimer.StartZero();
+  for (int iSection = 0; iSection < pAllSections->Size() && m_continue; iSection ++)
+  {
+    list.Clear();
 
-		// store them into the list
-		dir.GetDirectory(url, list);
-		
-		CLog::Log(LOGNOTICE,"Global Cache : Processed +%d items in '%s' (total %d), took %f (total %f)",list.Size() - Lastcount,Section->GetLabel().c_str(),list.Size(), looptimer.GetElapsedSeconds(),timer.GetElapsedSeconds());
-		Lastcount = list.Size();
-	}
+    looptimer.StartZero();
+    CFileItemPtr Section = pAllSections->Get(iSection);
+
+    // Pop the notification
+    Message.Format("Retrieving content from '%s'...", Section->GetLabel());
+    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, Message, GLOBAL_CACHING_DESC, 5000, false,500);
+
+    // gets all the data from one section
+    CURL url(Section->GetPath());
+    PlexUtils::AppendPathToURL(url, "all");
+
+    // store them into the list
+    dir.GetDirectory(url, list);
+
+    // Grab the server Name
+    CStdString ServerName = "<unknown>";
+    if (list.Size())
+    {
+      CPlexServerPtr  pServer = g_plexApplication.serverManager->FindFromItem(list.Get(0));
+      if (pServer)
+      {
+        ServerName = pServer->GetName();
+      }
+
+      CLog::Log(LOGNOTICE,"Global Cache : Processed +%d items in '%s' on %s (total %d), took %f (total %f)",list.Size(),Section->GetLabel().c_str(),ServerName.c_str(), totalsize, looptimer.GetElapsedSeconds(),timer.GetElapsedSeconds());
+    }
+
+    totalsize += list.Size();
 
     // Here we have the file list, just process the items
     for (int i = 0; i < list.Size() && m_continue; i++)
@@ -132,6 +150,19 @@ void CPlexGlobalCacher::Process()
       CFileItemPtr item = list.Get(i);
       if (item->IsPlexMediaServer())
       {
+          // Pop the notification window each sec only in order to avoid queuing too many messages
+          if (msgtimer.GetElapsedSeconds() > 1)
+          {
+            CStdString Message,Caption;
+
+            msgtimer.StartZero();
+            Message.Format("(%d / %d) - Processing %0.0f%%..." ,iSection+1,pAllSections->Size(),float(i * 100.0f) / (float)list.Size());
+            Caption.Format("Precaching '%s' on %s",Section->GetLabel(),ServerName);
+
+            CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, Message, Caption, 2000, false,10);
+          }
+
+          // do the caching work
           if (item->HasArt("thumb") &&
               !CTextureCache::Get().HasCachedImage(item->GetArt("thumb")))
             CTextureCache::Get().CacheImage(item->GetArt("thumb"));
@@ -149,16 +180,16 @@ void CPlexGlobalCacher::Process()
           if (item->HasArt("bigPoster") &&
               !CTextureCache::Get().HasCachedImage(item->GetArt("bigPoster")))
             CTextureCache::Get().CacheImage(item->GetArt("bigPoster"));
-
       }
-
-      CStdString Message;
-      Message.Format("Processing %0.0f%%..." ,float(i * 100.0f) / (float)list.Size());
-      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, Message, GLOBAL_CACHING_DESC, 8000, false,10);
 
     }
 
-    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Processing Complete.", GLOBAL_CACHING_DESC, 5000, false,500);
+    CLog::Log(LOGNOTICE,"Global Cache : Processing section %s took %f",Section->GetLabel().c_str(),timer.GetElapsedSeconds());
+  }
+
+  CLog::Log(LOGNOTICE,"Global Cache : Full operation took %f",timer.GetElapsedSeconds());
+
+  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Processing Complete.", GLOBAL_CACHING_DESC, 5000, false,500);
 }
 
 
