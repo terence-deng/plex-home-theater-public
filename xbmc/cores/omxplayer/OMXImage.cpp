@@ -1592,3 +1592,21 @@ bool COMXImage::CreateThumbnailFromSurface(unsigned char* buffer, unsigned int w
 
   return false;
 }
+
+COMXImage *COMXImage::GetInstance()
+{
+  if (!_omx_image)
+    _omx_image = new COMXImage();
+
+  return _omx_image;
+}
+
+void COMXImage::RemoveInstance()
+{
+  if (_omx_image)
+  {
+    _omx_image->Close();
+    delete _omx_image;
+    _omx_image = NULL;
+  }
+}

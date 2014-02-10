@@ -55,6 +55,8 @@ public:
   virtual ~COMXImage();
 
   // Required overrides
+  static COMXImage *GetInstance();
+  static void RemoveInstance();
   void Close(void);
   bool ClampLimits(unsigned int &width, unsigned int &height);
   bool ReadFile(const CStdString& inputFile);
@@ -126,5 +128,8 @@ protected:
   CEvent                        m_BusyEvent;
 
 };
+
+
+static COMXImage* _omx_image=NULL;
 
 #endif

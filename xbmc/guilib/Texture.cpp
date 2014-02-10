@@ -288,38 +288,34 @@ bool CBaseTexture::LoadFromFileInternal(const CStdString& texturePath, unsigned 
     // this limits the sizes of jpegs we failed to decode
     omx_image.ClampLimits(maxWidth, maxHeight);
   #else
-      #define MAX_IMAGE 1
-      static COMXImage g_omx_image[MAX_IMAGE];
-      static int iCurrent = 0;
-      CStopWatch timer,timermemcpy,timeralloc;
-      timer.StartZero();
+      COMXImage* pImage = COMXImage::GetInstance();
 
-      if (g_omx_image[iCurrent].DecodeFile(texturePath,0,0))
+      if (pImage->DecodeFile(texturePath,0,0))
       {
-        Allocate(g_omx_image[iCurrent].GetDecodedWidth(), g_omx_image[iCurrent].GetDecodedHeight(), XB_FMT_A8R8G8B8);
+        Allocate(pImage->GetDecodedWidth(), pImage->GetDecodedHeight(), XB_FMT_A8R8G8B8);
 
         if(!m_pixels)
         {
           CLog::Log(LOGERROR, "Texture manager (OMX) out of memory");
-          g_omx_image[iCurrent].Close();
+          pImage->Close();
           return false;
         }
 
-        m_originalWidth  = g_omx_image[iCurrent].GetOriginalWidth();
-        m_originalHeight = g_omx_image[iCurrent].GetOriginalHeight();
+        m_originalWidth  = pImage->GetOriginalWidth();
+        m_originalHeight = pImage->GetOriginalHeight();
 
-        m_hasAlpha = g_omx_image[iCurrent].IsAlpha();
+        m_hasAlpha = pImage->IsAlpha();
 
-        if (autoRotate && g_omx_image[iCurrent].GetOrientation())
-          m_orientation = g_omx_image[iCurrent].GetOrientation() - 1;
+        if (autoRotate && pImage->GetOrientation())
+          m_orientation = pImage->GetOrientation() - 1;
 
-        if(m_textureWidth != g_omx_image[iCurrent].GetDecodedWidth() || m_textureHeight != g_omx_image[iCurrent].GetDecodedHeight())
+        if(m_textureWidth != pImage->GetDecodedWidth() || m_textureHeight != pImage->GetDecodedHeight())
         {
           unsigned int imagePitch = GetPitch(m_imageWidth);
           unsigned int imageRows = GetRows(m_imageHeight);
           unsigned int texturePitch = GetPitch(m_textureWidth);
 
-          unsigned char *src = g_omx_image[iCurrent].GetDecodedData();
+          unsigned char *src = pImage->GetDecodedData();
           unsigned char *dst = m_pixels;
           for (unsigned int y = 0; y < imageRows; y++)
           {
@@ -330,24 +326,22 @@ bool CBaseTexture::LoadFromFileInternal(const CStdString& texturePath, unsigned 
         }
         else
         {
-          if(g_omx_image[iCurrent].GetDecodedData())
+          if(pImage->GetDecodedData())
           {
-            int size = ( ( GetPitch() * GetRows() ) > g_omx_image[iCurrent].GetDecodedSize() ) ?
-                             g_omx_image[iCurrent].GetDecodedSize() : ( GetPitch() * GetRows() );
-             memcpy(m_pixels, (unsigned char *)g_omx_image[iCurrent].GetDecodedData(), size);
+            int size = ( ( GetPitch() * GetRows() ) > pImage->GetDecodedSize() ) ?
+                             pImage->GetDecodedSize() : ( GetPitch() * GetRows() );
+             memcpy(m_pixels, (unsigned char *)pImage->GetDecodedData(), size);
           }
         }
 
-        g_omx_image[iCurrent].Release();
-        iCurrent = (iCurrent+1) % MAX_IMAGE;
+        pImage->Release();
 
         return true;
       }
       else
       {
-        g_omx_image[iCurrent].Close();
-        g_omx_image[iCurrent].Release();
-        //return false;
+        pImage->Close();
+        pImage->Release();
       }
   #endif
   }
