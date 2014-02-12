@@ -175,9 +175,6 @@ bool CGUILargeTextureManager::GetImage(const CStdString &path, CTextureArray &te
     lock.unlock();
     /* END PLEX */
     QueueImage(path);
-    #ifdef TARGET_RASPBERRY_PI
-      while (m_queued.size()) Sleep(10);
-    #endif
   }
 
   return true;
