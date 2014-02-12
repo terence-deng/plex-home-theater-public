@@ -92,8 +92,8 @@ void CEGLNativeTypeRaspberryPI::Initialize()
   m_dispman_element2        = DISPMANX_NO_HANDLE;
   m_dispman_display         = DISPMANX_NO_HANDLE;
 
-  m_width                   = 1280;
-  m_height                  = 720;
+  m_width                   = 1920;
+  m_height                  = 1080;
   m_initDesktopRes          = true;
 
   m_DllBcmHost = new DllBcmHost;
