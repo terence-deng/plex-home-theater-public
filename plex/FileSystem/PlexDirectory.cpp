@@ -38,6 +38,7 @@
 
 #include "XMLChoice.h"
 
+
 using namespace XFILE;
 
 #ifdef USE_RAPIDXML
@@ -100,52 +101,50 @@ CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
     return false;
   }
 
-#if defined(TARGET_RASPBERRY_PI)
-  // cumpute & store URL Hash for caching
-  m_URLHash = PlexUtils::GetFastHash(m_data);
-#endif
+  {
+
 
 #ifdef USE_RAPIDXML
 
-  xml_document<> doc;    // character type defaults to char
-  try
-  {
-    doc.parse<0>((char*)m_data.c_str());    // 0 means default parse flags
-  }
-  catch (...)
-  {
-    CLog::Log(LOGDEBUG, "CPlexDirectory::GetDirectory Parse with RapidXML failed");
-  }
+    xml_document<> doc;    // character type defaults to char
+    try
+    {
+      doc.parse<0>((char*)m_data.c_str());    // 0 means default parse flags
+    }
+    catch (...)
+    {
+      CLog::Log(LOGDEBUG, "CPlexDirectory::GetDirectory Parse with RapidXML failed");
+    }
 
-  xml_node<>* pRoot =  doc.first_node();
-  if (pRoot)
-  {
-    if (!ReadMediaContainer(pRoot, fileItems))
+    xml_node<>* pRoot =  doc.first_node();
+    if (pRoot)
+    {
+      if (!ReadMediaContainer(pRoot, fileItems))
+      {
+        CLog::Log(LOGERROR, "CPlexDirectory::GetDirectory failed to read root MediaContainer from %s", m_url.Get().c_str());
+        return false;
+      }
+    }
+    else CLog::Log(LOGERROR, "CPlexDirectory::GetDirectory Parsed root is NULL");
+
+
+#else
+    CXBMCTinyXML doc;
+
+    doc.Parse(m_data.c_str());
+    if (doc.Error())
+    {
+      CLog::Log(LOGERROR, "CPlexDirectory::GetDirectory failed to parse XML from %s\nError on %d:%d - %s\n%s", m_url.Get().c_str(), doc.ErrorRow(), doc.ErrorCol(), doc.ErrorDesc(), m_data.c_str());
+      return false;
+    }
+
+    if (!ReadMediaContainer(doc.RootElement(), fileItems))
     {
       CLog::Log(LOGERROR, "CPlexDirectory::GetDirectory failed to read root MediaContainer from %s", m_url.Get().c_str());
       return false;
     }
-  }
-  else CLog::Log(LOGERROR, "CPlexDirectory::GetDirectory Parsed root is NULL");
-
-
-#else	
-  CXBMCTinyXML doc;
-
-  doc.Parse(m_data.c_str());
-  if (doc.Error())
-  {
-    CLog::Log(LOGERROR, "CPlexDirectory::GetDirectory failed to parse XML from %s\nError on %d:%d - %s\n%s", m_url.Get().c_str(), doc.ErrorRow(), doc.ErrorCol(), doc.ErrorDesc(), m_data.c_str());
-    return false;
-  }
-
-  if (!ReadMediaContainer(doc.RootElement(), fileItems))
-  {
-    CLog::Log(LOGERROR, "CPlexDirectory::GetDirectory failed to read root MediaContainer from %s", m_url.Get().c_str());
-    return false;
-  }
 #endif
-
+  }
 
   float elapsed = timer.GetElapsedSeconds();
 
@@ -324,12 +323,10 @@ CPlexDirectory::CopyAttributes(XML_ELEMENT* el, CFileItem* item, const CURL &url
     CStdString key = attr->name();
     CStdString valStr = CStdString(attr->value());
 
-    std::map<CStdString, CPlexAttributeParserBase*>::iterator it;
-    it = g_attributeMap.find(key);
-
-    if ( it != g_attributeMap.end())
+    if (g_attributeMap.find(key) != g_attributeMap.end())
     {
-      it->second->Process(url, key, valStr, item);
+      CPlexAttributeParserBase* attr = g_attributeMap[key];
+      attr->Process(url, key, valStr, item);
     }
     else
     {
