@@ -176,9 +176,11 @@ void CPlexAttributeParserMediaFlag::Process(const CURL &url, const CStdString &k
 {
   static std::map<std::string, std::string> FlagsMap;
   static CCriticalSection FlagsMapSection;
-  CSingleLock Lock(FlagsMapSection);
 
+  FlagsMapSection.lock();
   std::map<std::string, std::string>::const_iterator got = FlagsMap.find(key + "|" + value);
+  FlagsMapSection.unlock();
+
   if ((got != FlagsMap.end()) && true)
   {
     item->SetArt("mediaTag::" + key, got->second);
@@ -220,7 +222,9 @@ void CPlexAttributeParserMediaFlag::Process(const CURL &url, const CStdString &k
     /* also store the raw value */
     item->SetProperty("mediaTag-" + key, value);
 
+    FlagsMapSection.lock();
     FlagsMap[key + "|" + value] = item->GetArt("mediaTag::" + key);
+    FlagsMapSection.unlock();
   }
 }
 
