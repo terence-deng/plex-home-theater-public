@@ -162,24 +162,18 @@ void CPlexGlobalCacher::Process()
             CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, Message, Caption, 2000, false,10);
           }
 
-          // do the caching work
-          if (item->HasArt("thumb") &&
-              !CTextureCache::Get().HasCachedImage(item->GetArt("thumb")))
-            CTextureCache::Get().CacheImage(item->GetArt("thumb"));
+          CStdStringArray art;
+          art.push_back("smallThumb");
+          art.push_back("smallPoster");
+          art.push_back("smallGrandparentThumb");
 
-          if (item->HasArt("fanart") &&
-              !CTextureCache::Get().HasCachedImage(item->GetArt("fanart")))
-            CTextureCache::Get().CacheImage(item->GetArt("fanart"));
-
-
-          if (item->HasArt("grandParentThumb") &&
-              !CTextureCache::Get().HasCachedImage(item->GetArt("grandParentThumb")))
-            CTextureCache::Get().CacheImage(item->GetArt("grandParentThumb"));
-
-
-          if (item->HasArt("bigPoster") &&
-              !CTextureCache::Get().HasCachedImage(item->GetArt("bigPoster")))
-            CTextureCache::Get().CacheImage(item->GetArt("bigPoster"));
+          int i = 0;
+          BOOST_FOREACH(CStdString artKey, art)
+          {
+            if (item->HasArt(artKey) &&
+                !CTextureCache::Get().HasCachedImage(item->GetArt(artKey)))
+              CTextureCache::Get().CacheImage(item->GetArt(artKey));
+          }
       }
 
     }
