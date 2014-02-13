@@ -902,6 +902,7 @@ bool COMXImage::Decode(unsigned width, unsigned height)
 
 bool COMXImage::DecodeFile(const CStdString& inputFile, unsigned width, unsigned height)
 {
+  g_OMXSection.lock();
   CStopWatch timer;
   timer.StartZero();
 
@@ -1304,6 +1305,7 @@ void COMXImage::Release()
 {
   m_pFile.Close();
   m_BusyEvent.Set();
+  g_OMXSection.unlock();
 }
 
 bool COMXImage::Encode(unsigned char *buffer, int size, unsigned width, unsigned height, unsigned int pitch)
