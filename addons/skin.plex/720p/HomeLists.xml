@@ -131,7 +131,7 @@
 			<width>124</width>
 			<height>182</height>
 			<aspectratio scalediffuse="false" align="center">scale</aspectratio>
-			<texture diffuse="mask-poster-small.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
+			<texture diffuse="mask-poster-small.png" background="true">$INFO[ListItem.Art(smallThumb)]</texture>
 			<include>Border</include>
 			<visible>!ListItem.Type(episode)</visible>
 		</control>
@@ -297,7 +297,7 @@
 			<width>132</width>
 			<height>132</height>
 			<aspectratio scalediffuse="false" align="center">scale</aspectratio>
-			<texture diffuse="mask-square.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
+			<texture diffuse="mask-square.png" background="true">$INFO[ListItem.Art(smallThumb)]</texture>
 			<include>Border</include>
 		</control>
 	</include>
