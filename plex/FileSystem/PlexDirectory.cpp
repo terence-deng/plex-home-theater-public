@@ -38,6 +38,7 @@
 
 #include "XMLChoice.h"
 
+#include "Utility/sha1.hpp"
 
 using namespace XFILE;
 
@@ -46,18 +47,6 @@ using namespace rapidxml;
 #endif
 
 /* IDirectory Interface */
-unsigned long CPlexDirectory::ComputeHash(CStdString Data)
-{
-    unsigned long hash = 5381;
-    int c;
-    const char* str = Data.c_str();
-
-    while (c = *str++)
-    hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-
-    return hash;
-}
-
 bool
 CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
 {
@@ -113,8 +102,11 @@ CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
     return false;
     }
 
-    m_Hash = ComputeHash(m_data);
-
+#if defined(TARGET_RASPBERRY_PI)
+    // cumpute & store URL Hash for caching
+    m_URLHash = PlexUtils::GetFastHash(m_data);
+#endif
+    
 #ifdef USE_RAPIDXML
 
     xml_document<> doc;    // character type defaults to char

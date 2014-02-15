@@ -537,3 +537,17 @@ CStdString PlexUtils::GetXMLString(const CXBMCTinyXML &document)
 
   return printer.Str();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+unsigned long PlexUtils::GetFastHash(CStdString Data)
+{
+  // DJB2 FastHash Method (http://www.cse.yorku.ca/~oz/hash.html)
+  unsigned long hash = 5381;
+  int c;
+  const char* str = Data.c_str();
+
+  while (c = *str++)
+    hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+  return hash;
+}

@@ -42,6 +42,8 @@ namespace PlexUtils
   CStdString GetSHA1SumFromURL(const CURL &url);
 
   CStdString GetXMLString(const CXBMCTinyXML &document);
+
+  unsigned long GetFastHash(CStdString Data);
 }
 
 #ifdef _WIN32
