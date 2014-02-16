@@ -61,7 +61,6 @@ public:
 
   /* PLEX */
   static void FatalError(const char* format, ...);
-  /* END PLEX */
 
   #define LOG_STACKTRACE  CLog::StackTrace((char*)__PRETTY_FUNCTION__);
   static inline void StackTrace(char *FuncName)
@@ -81,6 +80,7 @@ public:
        free(strings);
      }
   }
+  /* END PLEX */
 
 private:
   static void OutputDebugString(const std::string& line);
