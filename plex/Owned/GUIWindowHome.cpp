@@ -210,7 +210,6 @@ void CPlexSectionFanout::Refresh()
 
       PlexUtils::AppendPathToURL(trueUrl, "recentlyAdded");
       
-      trueUrl.SetOption("LocalCache","true");
       m_outstandingJobs.push_back(LoadSection(trueUrl.Get(), CONTENT_LIST_RECENTLY_ADDED));
 
       if (m_sectionType == SECTION_TYPE_MOVIE || m_sectionType == SECTION_TYPE_SHOW ||
@@ -218,7 +217,6 @@ void CPlexSectionFanout::Refresh()
       {
         trueUrl = CURL(m_url);
         PlexUtils::AppendPathToURL(trueUrl, "onDeck");
-        trueUrl.SetOption("LocalCache","true");
         m_outstandingJobs.push_back(LoadSection(trueUrl.Get(), CONTENT_LIST_ON_DECK));
       }
     }
@@ -312,6 +310,12 @@ void CPlexSectionFanout::Show()
 bool CPlexSectionFanout::NeedsRefresh()
 {
   CSingleLock lk(m_critical);
+
+  if (m_needsRefresh)
+  {
+    m_needsRefresh = false;
+    return true;
+  }
 
   int refreshTime = 5;
   if (m_sectionType == SECTION_TYPE_ALBUM ||

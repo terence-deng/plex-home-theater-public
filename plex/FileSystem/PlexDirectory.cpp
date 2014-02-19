@@ -296,49 +296,49 @@ static CPlexAttributeParserBase* g_defaultAttr = new CPlexAttributeParserBase;
 void
 CPlexDirectory::CopyAttributes(XML_ELEMENT* el, CFileItem* item, const CURL &url)
 {
-  #ifndef USE_RAPIDXML
-	XML_ATTRIBUTE *attr = el->FirstAttribute();
+#ifndef USE_RAPIDXML
+  XML_ATTRIBUTE *attr = el->FirstAttribute();
 
-	 while (attr)
-	{
-		CStdString key = attr->NameTStr();
-		CStdString valStr = CStdString(attr->Value());
+  while (attr)
+  {
+    CStdString key = attr->NameTStr();
+    CStdString valStr = CStdString(attr->Value());
 
-		if (g_attributeMap.find(key) != g_attributeMap.end())
-		{
-		  CPlexAttributeParserBase* attr = g_attributeMap[key];
-		  attr->Process(url, key, valStr, item);
-		}
-		else
-		{
-		  g_defaultAttr->Process(url, key, valStr, item);
-		}
-
-		attr = attr->Next();
-	}
-  #else
-    XML_ATTRIBUTE *attr = el->first_attribute();
-
-    while (attr)
+    if (g_attributeMap.find(key) != g_attributeMap.end())
     {
-      CStdString key = attr->name();
-      CStdString valStr = CStdString(attr->value());
-
-      std::map<CStdString, CPlexAttributeParserBase*>::iterator it;
-      it = g_attributeMap.find(key);
-
-      if ( it != g_attributeMap.end())
-      {
-        it->second->Process(url, key, valStr, item);
-      }
-      else
-      {
-        g_defaultAttr->Process(url, key, valStr, item);
-      }
-
-      attr = attr->next_attribute();
+      CPlexAttributeParserBase* attr = g_attributeMap[key];
+      attr->Process(url, key, valStr, item);
     }
-  #endif
+    else
+    {
+      g_defaultAttr->Process(url, key, valStr, item);
+    }
+
+    attr = attr->Next();
+  }
+#else
+  XML_ATTRIBUTE *attr = el->first_attribute();
+
+  while (attr)
+  {
+    CStdString key = attr->name();
+    CStdString valStr = CStdString(attr->value());
+
+    std::map<CStdString, CPlexAttributeParserBase*>::iterator it;
+    it = g_attributeMap.find(key);
+
+    if ( it != g_attributeMap.end())
+    {
+      it->second->Process(url, key, valStr, item);
+    }
+    else
+    {
+      g_defaultAttr->Process(url, key, valStr, item);
+    }
+
+    attr = attr->next_attribute();
+  }
+#endif
 }
 
 CFileItemPtr CPlexDirectory::NewPlexElement(XML_ELEMENT *element, const CFileItem &parentItem, const CURL &baseUrl)
@@ -354,11 +354,11 @@ CFileItemPtr CPlexDirectory::NewPlexElement(XML_ELEMENT *element, const CFileIte
     if (parentItem.HasProperty("mediaTagVersion"))
       newItem->SetProperty("mediaTagVersion", parentItem.GetProperty("mediaTagVersion").asString());
   }
-  #ifndef USE_RAPIDXML
+#ifndef USE_RAPIDXML
   newItem->SetProperty("xmlElementName", element->ValueStr());
-  #else
+#else
   newItem->SetProperty("xmlElementName", element->name());
-  #endif
+#endif
 
   CPlexDirectory::CopyAttributes(element, newItem.get(), baseUrl);
 
@@ -366,12 +366,12 @@ CFileItemPtr CPlexDirectory::NewPlexElement(XML_ELEMENT *element, const CFileIte
   {
     /* no type attribute, let's try to use the name of the XML element */
     CPlexAttributeParserType t;
-	#ifndef USE_RAPIDXML
-	t.Process(baseUrl, "type", element->ValueStr(), newItem.get());
-	#else
-	t.Process(baseUrl, "type", CStdString(element->name()), newItem.get());
-	#endif
-   
+#ifndef USE_RAPIDXML
+    t.Process(baseUrl, "type", element->ValueStr(), newItem.get());
+#else
+    t.Process(baseUrl, "type", CStdString(element->name()), newItem.get());
+#endif
+
   }
   else if (newItem->GetPlexDirectoryType() == PLEX_DIR_TYPE_IMAGE)
   {
@@ -379,14 +379,14 @@ CFileItemPtr CPlexDirectory::NewPlexElement(XML_ELEMENT *element, const CFileIte
     // they just have the "key" attribute and that points to the image, so here
     // I make sure to manually pass it through the photo transcoder.
     CPlexAttributeParserMediaUrl t;
-	#ifndef USE_RAPIDXML
+#ifndef USE_RAPIDXML
     t.Process(baseUrl, "art", element->Attribute("key"), newItem.get());
-	#else
-	xml_attribute<> *pA = element->first_attribute("key");
+#else
+    xml_attribute<> *pA = element->first_attribute("key");
 
-	if (pA)	t.Process(baseUrl, "art", CStdString(pA->value()), newItem.get());
-	else    t.Process(baseUrl, "art", "", newItem.get());
-	#endif
+    if (pA)	t.Process(baseUrl, "art", CStdString(pA->value()), newItem.get());
+    else    t.Process(baseUrl, "art", "", newItem.get());
+#endif
 
     newItem->SetProperty("key", newItem->GetArt("fanart"));
   }
@@ -417,11 +417,11 @@ CFileItemPtr CPlexDirectory::NewPlexElement(XML_ELEMENT *element, const CFileIte
 void
 CPlexDirectory::ReadChildren(XML_ELEMENT* root, CFileItemList& container)
 {
-  #ifdef USE_RAPIDXML
+#ifdef USE_RAPIDXML
   for (XML_ELEMENT *element = root->first_node(); element; element = element->next_sibling())
-  #else
+#else
   for (XML_ELEMENT *element = root->FirstChildElement(); element; element = element->NextSiblingElement())
-  #endif
+#endif
   {
     CFileItemPtr item = CPlexDirectory::NewPlexElement(element, container, m_url);
     CPlexDirectoryTypeParserBase::GetDirectoryTypeParser(item->GetPlexDirectoryType())->Process(*item, container, element);
@@ -447,15 +447,15 @@ CPlexDirectory::ReadChildren(XML_ELEMENT* root, CFileItemList& container)
 bool
 CPlexDirectory::ReadMediaContainer(XML_ELEMENT* root, CFileItemList& mediaContainer)
 {
-  #ifndef USE_RAPIDXML
+#ifndef USE_RAPIDXML
   if (root->ValueStr() != "MediaContainer" && root->ValueStr() != "ASContainer")
-  #else
-	 CLog::Log(LOGWARNING, "CPlexDirectory::ReadMediaContainer root name %s", root->name());
+#else
+  CLog::Log(LOGWARNING, "CPlexDirectory::ReadMediaContainer root name %s", root->name());
   if (CStdString(root->name()) != "MediaContainer" && CStdString(root->name()) != "ASContainer")
-  #endif
+#endif
   {
     CLog::Log(LOGWARNING, "CPlexDirectory::ReadMediaContainer got XML document without mediaContainer as root at %s", m_url.Get().c_str());
-	//CLog::Log(LOGWARNING, "root->ValueStr() = %s", root->ValueStr().c_str());
+    //CLog::Log(LOGWARNING, "root->ValueStr() = %s", root->ValueStr().c_str());
     return false;
   }
 
@@ -647,13 +647,13 @@ bool CPlexDirectory::CachePath(const CStdString &path)
 ////////////////////////////////////////////////////////////////////////////////
 bool CPlexDirectory::IsFolder(const CFileItemPtr& item, XML_ELEMENT* element)
 {
-  #ifndef USE_RAPIDXML
-	if (element->ValueStr() == "Directory")
-	return true;
-  #else
-	if (CStdString(element->name()) == "Directory")
+#ifndef USE_RAPIDXML
+  if (element->ValueStr() == "Directory")
     return true;
-  #endif
+#else
+  if (CStdString(element->name()) == "Directory")
+    return true;
+#endif
 
   switch(item->GetPlexDirectoryType())
   {
@@ -755,7 +755,7 @@ bool CPlexDirectory::GetChannelDirectory(CFileItemList &items)
     
     channel->SetProperty("mediaWindow", window);
     channel->SetProperty("type", type);
-    channel->SetPlexDirectoryType(GetDirectoryType(type));    
+    channel->SetPlexDirectoryType(GetDirectoryType(type));
     channel->SetLabel2(channel->GetProperty("serverName").asString());
 
     CLog::Log(LOGDEBUG, "CPlexDirectory::GetChannelDirectory channel %s from server %s", channel->GetLabel().c_str(), channel->GetLabel2().c_str());
