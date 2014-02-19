@@ -133,55 +133,49 @@ endif(ENABLE_PYTHON)
 
 
 # find all image files in the skin
+file(GLOB MEDIA_IMAGES_MEDIASTREAM ${root}/addons/skin.mediastream/Media/*.png ${root}/addons/skin.mediastream/Media/*.gif)
+file(GLOB MEDIA_IMAGES_PLEX_SKIN ${root}/addons/skin.plex/Media/*.png ${root}/addons/skin.plex/Media/*.gif)
 
-if(TARGET_RPI)
-    set(EXCLUDE_TEXTURES ^foo)
-else()  
-  
-  file(GLOB MEDIA_IMAGES_MEDIASTREAM ${root}/addons/skin.mediastream/Media/*.png ${root}/addons/skin.mediastream/Media/*.gif)
-  file(GLOB MEDIA_IMAGES_PLEX_SKIN ${root}/addons/skin.plex/Media/*.png ${root}/addons/skin.plex/Media/*.gif)
-  
-  if(COMPRESS_TEXTURES)
-    # Build the packed textures
-    if(WIN32)
-      set(WORKDIR ${root}/tools/TexturePacker)
-    else(WIN32)
-      set(WORKDIR ${CMAKE_CURRENT_BINARY_DIR})
-    endif(WIN32)
-  
-    if(TEXTUREPACKERPATH)
-      set(TEXTUREPACKER_EXE ${TEXTUREPACKERPATH})
-    else(TEXTUREPACKERPATH)
-      set(TEXTUREPACKER_EXE $<TARGET_FILE:TexturePacker>)
-    endif(TEXTUREPACKERPATH)
-  
+if(COMPRESS_TEXTURES)
+  # Build the packed textures
+  if(WIN32)
+    set(WORKDIR ${root}/tools/TexturePacker)
+  else(WIN32)
+    set(WORKDIR ${CMAKE_CURRENT_BINARY_DIR})
+  endif(WIN32)
+
+  if(TEXTUREPACKERPATH)
+    set(TEXTUREPACKER_EXE ${TEXTUREPACKERPATH})
+  else(TEXTUREPACKERPATH)
+    set(TEXTUREPACKER_EXE $<TARGET_FILE:TexturePacker>)
+  endif(TEXTUREPACKERPATH)
+
+  add_custom_command(
+    OUTPUT Textures_MediaStream.xbt
+    COMMAND ${TEXTUREPACKER_EXE} -input ${root}/addons/skin.mediastream/Media -output ${CMAKE_CURRENT_BINARY_DIR}/Textures_MediaStream.xbt
+    MAIN_DEPENDENCY ${MEDIA_IMAGES_MEDIASTREAM}
+    DEPENDS TexturePacker
+    WORKING_DIRECTORY ${WORKDIR}
+  )
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Textures_MediaStream.xbt DESTINATION ${RESOURCEPATH}/addons/skin.mediastream/Media RENAME Textures.xbt COMPONENT RUNTIME)
+
+  if(ENABLE_NEW_SKIN)
     add_custom_command(
-      OUTPUT Textures_MediaStream.xbt
-      COMMAND ${TEXTUREPACKER_EXE} -input ${root}/addons/skin.mediastream/Media -output ${CMAKE_CURRENT_BINARY_DIR}/Textures_MediaStream.xbt
-      MAIN_DEPENDENCY ${MEDIA_IMAGES_MEDIASTREAM}
+      OUTPUT Textures_Plex.xbt
+      COMMAND ${TEXTUREPACKER_EXE} -input ${root}/addons/skin.plex/Media -output ${CMAKE_CURRENT_BINARY_DIR}/Textures_Plex.xbt
+      MAIN_DEPENDENCY ${MEDIA_IMAGES_PLEX_SKIN}
       DEPENDS TexturePacker
       WORKING_DIRECTORY ${WORKDIR}
     )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Textures_MediaStream.xbt DESTINATION ${RESOURCEPATH}/addons/skin.mediastream/Media RENAME Textures.xbt COMPONENT RUNTIME)
-  
-    if(ENABLE_NEW_SKIN)
-      add_custom_command(
-        OUTPUT Textures_Plex.xbt
-        COMMAND ${TEXTUREPACKER_EXE} -input ${root}/addons/skin.plex/Media -output ${CMAKE_CURRENT_BINARY_DIR}/Textures_Plex.xbt
-        MAIN_DEPENDENCY ${MEDIA_IMAGES_PLEX_SKIN}
-        DEPENDS TexturePacker
-        WORKING_DIRECTORY ${WORKDIR}
-      )
-      add_custom_target(CompressTextures ALL DEPENDS Textures_MediaStream.xbt Textures_Plex.xbt)
-      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Textures_Plex.xbt DESTINATION ${RESOURCEPATH}/addons/skin.plex/Media RENAME Textures.xbt COMPONENT RUNTIME)
-    else(ENABLE_NEW_SKIN)
-      add_custom_target(CompressTextures ALL DEPENDS Textures_MediaStream.xbt)
-    endif(ENABLE_NEW_SKIN)
-  
-    set(EXCLUDE_TEXTURES "skin.(mediastream|plex)/Media/*")
-  else()
-    set(EXCLUDE_TEXTURES ^foo)
-  endif()
+    add_custom_target(CompressTextures ALL DEPENDS Textures_MediaStream.xbt Textures_Plex.xbt)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Textures_Plex.xbt DESTINATION ${RESOURCEPATH}/addons/skin.plex/Media RENAME Textures.xbt COMPONENT RUNTIME)
+  else(ENABLE_NEW_SKIN)
+    add_custom_target(CompressTextures ALL DEPENDS Textures_MediaStream.xbt)
+  endif(ENABLE_NEW_SKIN)
+
+  set(EXCLUDE_TEXTURES "skin.(mediastream|plex)/Media/*")
+else()
+  set(EXCLUDE_TEXTURES ^foo)
 endif()
 
 # Set some variables we need to configure the CMakeCompleteBundle file
@@ -233,31 +227,14 @@ install(DIRECTORY ${root}/addons DESTINATION ${RESOURCEPATH} COMPONENT RUNTIME
         PATTERN xbmc.python EXCLUDE
 )
 
-
-if(ENABLE_PYTHON)
-
-    if (TARGET_RPI)
-        install(DIRECTORY ${RPI_EXTERNAL_PYTHON_HOME}/lib/python2.7
-            DESTINATION ${LIBPATH}/lib/ COMPONENT RUNTIME 
-            PATTERN python2.7/test EXCLUDE
-            REGEX .*\\.pyc$ EXCLUDE
-            REGEX .*\\.pyo$ EXCLUDE
-        )
-        install(FILES
-        ${RPI_EXTERNAL_PYTHON_HOME}/include/python2.7/pyconfig.h DESTINATION
-        ${LIBPATH}/include/python2.7 COMPONENT RUNTIME)
-
-    elseif(TARGET_OSX)
-      install(DIRECTORY ${dependdir}/lib/python2.6 DESTINATION ${LIBPATH}/lib/ COMPONENT RUNTIME 
-        PATTERN python2.6/test EXCLUDE
-        REGEX .*\\.pyc$ EXCLUDE
-        REGEX .*\\.pyo$ EXCLUDE
-      )
-      install(FILES ${dependdir}/include/python2.6/pyconfig.h DESTINATION ${LIBPATH}/include/python2.6 COMPONENT RUNTIME)
-    endif()
-
+if(ENABLE_PYTHON AND TARGET_OSX)
+  install(DIRECTORY /usr/lib/python${PYTHON_VERSION} DESTINATION ${LIBPATH}/lib/ COMPONENT RUNTIME 
+    PATTERN python${PYTHON_VERSION}/test EXCLUDE
+    REGEX .*\\.pyc$ EXCLUDE
+    REGEX .*\\.pyo$ EXCLUDE
+  )
+  install(FILES ${PYTHON_INCLUDE_DIRS}/pyconfig.h DESTINATION "${LIBPATH}/include/python${PYTHON_VERSION}" COMPONENT RUNTIME)
 endif()
-
 
 if(NOT DEFINED PLEX_SPLASH)
   if(TARGET_RPI)
