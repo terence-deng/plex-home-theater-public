@@ -38,8 +38,6 @@
 
 #include "XMLChoice.h"
 
-#include "Utility/sha1.hpp"
-
 using namespace XFILE;
 
 #ifdef USE_RAPIDXML
