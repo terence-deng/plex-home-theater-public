@@ -566,7 +566,7 @@ static void PlexUtils::StackTrace(char *FuncName)
    {
      CLog::Log(LOGDEBUG,"Stacktrace for function %s", FuncName);
      for (int j = 0; j < nptrs; j++)
-         Log(LOGDEBUG,"%s\n", strings[j]);
+         CLog::Log(LOGDEBUG,"%s\n", strings[j]);
 
      free(strings);
    }
