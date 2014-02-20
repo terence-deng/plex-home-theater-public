@@ -5,6 +5,10 @@
 #include "FileItem.h"
 #include "utils/XBMCTinyXML.h"
 
+#if defined(TARGET_RASPBERRY_PI)
+#include <execinfo.h>
+#endif
+
 namespace PlexUtils
 {
   std::string GetHostName();
@@ -44,7 +48,16 @@ namespace PlexUtils
   CStdString GetXMLString(const CXBMCTinyXML &document);
 
   unsigned long GetFastHash(CStdString Data);
+
+#if defined(TARGET_RASPBERRY_PI)
+  static void StackTrace(char *FuncName);
+#endif
 }
+
+#if defined(TARGET_RASPBERRY_PI)
+#define LOG_STACKTRACE  PlexUtils::StackTrace((char*)__PRETTY_FUNCTION__);
+#endif
+
 
 #ifdef _WIN32
 
