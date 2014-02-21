@@ -17,18 +17,14 @@
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool CPlexNavigationHelper::CacheUrl(const std::string& url, bool& cancel, bool closeDialog)
 {
 
   int id = CJobManager::GetInstance().AddJob(new CPlexDirectoryFetchJob(CURL(url)), this, CJob::PRIORITY_HIGH);
 
-  #ifdef TARGET_RASPBERRY_PI
-  // on Rpi 300 ms is too low to ensure event is fired when there's alsready a couple spawn threads
-  if (!m_cacheEvent.WaitMSec(5000))
-  #else
   if (!m_cacheEvent.WaitMSec(300))
-  #endif
   {
     CGUIDialogBusy *busy = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
     cancel = false;
