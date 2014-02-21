@@ -61,7 +61,6 @@ public:
   /* PLEX */
   static void FatalError(const char* format, ...);
   /* END PLEX */
-
 private:
   static void OutputDebugString(const std::string& line);
 };
