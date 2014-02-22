@@ -163,12 +163,12 @@ public:
   virtual void SetRGB32Image(const char *image, int nHeight, int nWidth, int nPitch);
   /* END PLEX */
 
-
-
 protected:
   virtual void Render(DWORD flags, int index);
 
+  /* PLEX */
   bool ValidateRenderer();
+  /* END PLEX */
   virtual void ManageTextures();
   int  NextYV12Texture();
   virtual bool ValidateRenderTarget();
@@ -289,11 +289,9 @@ protected:
   unsigned int m_rgbBufferSize;
 
   CEvent* m_eventTexturesDone[NUM_BUFFERS];
-  
   /* PLEX */
-  bool         m_bRGBImageSet;
+  bool        m_bRGBImageSet;
   /* END PLEX */
-
 };
 
 

@@ -113,7 +113,9 @@ CLinuxRendererGLES::CLinuxRendererGLES()
   m_dllSwScale = new DllSwScale;
   m_sw_context = NULL;
   /* PLEX */
+#if defined(TARGET_RASPBERRY_PI)
   m_bRGBImageSet = false;
+#endif
   /* END PLEX */
 
 }
@@ -348,10 +350,11 @@ void CLinuxRendererGLES::LoadPlane( YUVPLANE& plane, int type, unsigned flipinde
                                 , int stride, void* data )
 {
   /* PLEX */
+#if defined(__PLEX__)
   if(!m_bRGBImageSet && plane.flipindex == flipindex)
     return;
   /* END PLEX */
-#ifndef __PLEX__
+#else
   if(plane.flipindex == flipindex)
     return;
 #endif
@@ -1325,7 +1328,7 @@ void CLinuxRendererGLES::RenderCoreVideoRef(int index, int field)
 #endif
 }
 
-
+/* PLEX */
 bool CLinuxRendererGLES::ValidateRenderer()
 {
   if (!m_bConfigured)
@@ -1362,9 +1365,7 @@ bool CLinuxRendererGLES::ValidateRenderer()
 
   return true;
 }
-
-
- 
+/* END PLEX */
 
 bool CLinuxRendererGLES::RenderCapture(CRenderCapture* capture)
 {
@@ -1431,10 +1432,10 @@ void CLinuxRendererGLES::UploadYV12Texture(int source)
   YV12Image* im     = &buf.image;
   YUVFIELDS& fields =  buf.fields;
 
- 
+
 #if defined(HAVE_LIBOPENMAX)
   if (!(im->flags&IMAGE_FLAG_READY) || m_buffers[source].openMaxBuffer)
-#else //plex case
+#else
   if (!(im->flags&IMAGE_FLAG_READY))
 #endif
   {
@@ -2052,8 +2053,6 @@ void CLinuxRendererGLES::AddProcessor(struct __CVBuffer *cvBufferRef)
 }
 #endif
 
-
-
 /* PLEX */
 void CLinuxRendererGLES::SetRGB32Image(const char *image, int nHeight, int nWidth, int nPitch)
 {
@@ -2087,7 +2086,5 @@ void CLinuxRendererGLES::SetRGB32Image(const char *image, int nHeight, int nWidt
   }
 }
 /* END PLEX */
-
-
 #endif
 

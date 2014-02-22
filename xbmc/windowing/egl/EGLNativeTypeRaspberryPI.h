@@ -26,8 +26,9 @@
 #include <bcm_host.h>
 #endif
 
-
+/* PLEX */
 #include "interface/vmcs_host/vc_dispmanx.h" 
+/* END PLEX */
 
 class DllBcmHost;
 class CEGLNativeTypeRaspberryPI : public CEGLNativeType

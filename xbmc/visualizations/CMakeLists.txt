@@ -10,7 +10,7 @@ add_subdirectory(WaveForm)
 
 if(NOT WIN32)
 
-  if(TARG_RPI)
+  if(TARGET_RPI)
     include_directories(
      ${root}/xbmc/visualizations/EGLHelpers
     )
