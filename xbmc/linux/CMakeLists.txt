@@ -7,6 +7,6 @@ if(NOT TARGET_COMMON_LINUX)
 endif(NOT TARGET_COMMON_LINUX)
 
 if(NOT TARGET_RPI)
-    list(REMOVE_ITEM linux_SRCS ./OMXClock.cpp ./OMXCore.cpp ./RBP.cpp)
+  list(REMOVE_ITEM linux_SRCS ./OMXClock.cpp ./OMXCore.cpp ./RBP.cpp)
 endif()
 add_sources(${linux_SRCS})

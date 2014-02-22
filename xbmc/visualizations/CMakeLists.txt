@@ -14,7 +14,6 @@ if(NOT WIN32)
     include_directories(
      ${root}/xbmc/visualizations/EGLHelpers
     )
-
     add_subdirectory(EGLHelpers)
   else()
     add_subdirectory(XBMCProjectM)
