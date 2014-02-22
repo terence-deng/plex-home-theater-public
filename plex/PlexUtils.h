@@ -50,9 +50,9 @@ namespace PlexUtils
   unsigned long GetFastHash(CStdString Data);
 
 #if defined(HAVE_EXECINFO_H)
-  static void LogStackTrace(char *FuncName);
+  void LogStackTrace(char *FuncName);
 #else
-  static void LogStackTrace(char *FuncName) {}
+  void LogStackTrace(char *FuncName) {}
 #endif
 }
 

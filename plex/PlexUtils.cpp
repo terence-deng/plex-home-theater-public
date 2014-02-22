@@ -553,8 +553,8 @@ unsigned long PlexUtils::GetFastHash(CStdString Data)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-#if defined(TARGET_RASPBERRY_PI)
-static void PlexUtils::LogStackTrace(char *FuncName)
+#if defined(HAVE_EXECINFO_H)
+void PlexUtils::LogStackTrace(char *FuncName)
 {
   void *buffer[100];
   char **strings;
