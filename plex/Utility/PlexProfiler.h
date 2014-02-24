@@ -31,48 +31,75 @@
 #include "Stopwatch.h"
 #include "log.h"
 #include "stdio_utf8.h"
+#include <boost/enable_shared_from_this.hpp>
+#include "PlexApplication.h"
+#include "threads/CriticalSection.h"
 
-extern CStopWatch g_ProfileWatch;
+class CProfiledFunction;
 
+/////////////////////////////////////////////////////////////////////////////////////////
+// Profiler class, will handle the functions called within the code through macros
+class CPlexProfiler : public boost::enable_shared_from_this<CPlexProfiler>
+{
+  protected:
+    std::map<int,CProfiledFunction*> m_root;
+    std::map<int,CProfiledFunction*> m_currentFunction;
+    bool m_enabled;
+    bool m_bstopWatchStarted;
+    CStopWatch m_stopWatch;
+    CCriticalSection m_lock;
+
+  public:
+    CPlexProfiler();
+    ~CPlexProfiler();
+
+    void Clear();
+    void StartFunction(CStdString functionName);
+    void EndFunction(CStdString functionName);
+    void SaveProfile(CStdString fileName="");
+    inline void Enable(bool state) { m_enabled = state; }
+    inline CStopWatch GetStopWatch() { return m_stopWatch; }
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////
 // This class grabs information about a function call.
 // will be created by the CPlexProfiler class and maintained under a tree form
 // to get some proper profiling output.
 class CProfiledFunction
 {
-
   protected:
-    CStdString  m_Name;
-    float m_StartTime;
-    float m_EndTime;
-    float m_TotalTime;
+    CStdString  m_name;
+    float m_startTime;
+    float m_endTime;
+    float m_totalTime;
     bool  m_bStarted;
-    int   m_NumHits;
+    int   m_numHits;
 
-    std::list<CProfiledFunction*> ChildFunctions;
+    std::list<CProfiledFunction*> m_childFunctions;
     CProfiledFunction *m_pParentFunction;
 
   public:
     CProfiledFunction(CStdString aName)
     {
-      m_Name = aName;
-      m_StartTime = m_EndTime =  m_TotalTime = 0;
+      m_name = aName;
+      m_startTime = m_endTime =  m_totalTime = 0;
       m_pParentFunction = NULL;
       m_bStarted = false;
-      m_NumHits = 0;
+      m_numHits = 0;
 
     }
 
     ~CProfiledFunction() { Clear(); }
 
-    inline float GetStartTime()       { return m_StartTime; }
-    inline float GetEndTime()         { return m_EndTime; }
-    inline float GetTotalTime()       { return m_TotalTime; }
-    inline float GetElapsedTime()			{ return (m_EndTime - m_StartTime); }
-    inline CStdString GetName()				{ return m_Name; }
+    inline float GetStartTime()       { return m_startTime; }
+    inline float GetEndTime()         { return m_endTime; }
+    inline float GetTotalTime()       { return m_totalTime; }
+    inline float GetElapsedTime()			{ return (m_endTime - m_startTime); }
+    inline CStdString GetName()				{ return m_name; }
     inline CProfiledFunction* GetParent()             { return m_pParentFunction; }
     inline void SetParent(CProfiledFunction *pParent) { m_pParentFunction = pParent; }
 
-    inline static float GetTime()     { return g_ProfileWatch.GetElapsedSeconds();}
+    inline static float GetTime()     { return g_plexApplication.profiler->GetStopWatch().GetElapsedSeconds();}
 
     CProfiledFunction *FindChild(CStdString aName);
     CProfiledFunction *AddChildFunction(CProfiledFunction *pFunc);
@@ -81,34 +108,12 @@ class CProfiledFunction
     void Start();
     void End();
     void Clear();
-    void PrintStats(FILE* File,int Level);
+    void PrintStats(FILE* file,int Level);
 };
 
-// Profiler class, will handle the functions called within the code through macros
-class CPlexProfiler
+inline CStdString GetClassMethod(const char *text)
 {
-  protected:
-    std::map<int,CProfiledFunction*> m_Root;
-    std::map<int,CProfiledFunction*> m_CurrentFunction;
-    bool m_Enabled;
-    bool m_bStopWatchStarted;
-
-  public:
-    CPlexProfiler();
-    ~CPlexProfiler();
-
-    void Reset();
-    void StartFunction(CStdString FunctionName);
-    void EndFunction(CStdString FunctionName);
-    void PrintStats();
-    inline void Enable(bool State) { m_Enabled = State; }
-};
-
-extern CPlexProfiler g_Profiler;
-
-inline CStdString GetClassMethod(const char *Text)
-{
-  CStdString strName = Text;
+  CStdString strName = text;
   unsigned int pos1 = strName.find("::");
   if (pos1!=CStdString::npos)
   {
@@ -125,15 +130,16 @@ inline CStdString GetClassMethod(const char *Text)
   return strName;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
 // Profiling Macros functions
 #define PROFILER_ACTIVE 0
 
 #if PROFILER_ACTIVE
-#define PROFILE_START					g_Profiler.StartFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
-#define PROFILE_END						g_Profiler.EndFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
+#define PROFILE_START					g_plexApplication.profiler->StartFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
+#define PROFILE_END						g_plexApplication.profiler->EndFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
 #define PROFILE_STEP          CStdString fName;
-#define PROFILE_STEP_START(format,...)	fName.Format("%s() - " format, GetClassMethod(__PRETTY_FUNCTION__).c_str(), __VA_ARGS__); g_Profiler.StartFunction(fName);
-#define PROFILE_STEP_END	g_Profiler.EndFunction(fName);
+#define PROFILE_STEP_START(format,...)	fName.Format("%s() - " format, GetClassMethod(__PRETTY_FUNCTION__).c_str(), __VA_ARGS__); g_plexApplication.profiler->StartFunction(fName);
+#define PROFILE_STEP_END	g_plexApplication.profiler->.EndFunction(fName);
 #else
 #define PROFILE_START                   ;
 #define PROFILE_END                     ;
@@ -142,11 +148,13 @@ inline CStdString GetClassMethod(const char *Text)
 #define PROFILE_STEP_END                ;
 #endif
 
+/////////////////////////////////////////////////////////////////////////////////////////
 // internal debug macros
 #if 0
 #define PROFILE_DEBUG(format,...)		CLog::Log(LOGDEBUG,"PROFILE - %20s - %10X - " format, __PRETTY_FUNCTION__,(unsigned int)CThread::GetCurrentThreadId(), __VA_ARGS__);
 #else
 #define PROFILE_DEBUG(format,...) ;
 #endif
+
 
 #endif /* _CPLEXPROFILER_H_ */
