@@ -30,13 +30,16 @@ set(PLEX_VERSION_MAJOR 1)
 set(PLEX_VERSION_MINOR 0)
 set(PLEX_VERSION_PATCH 10)
 if(DEFINED ENV{BUILD_NUMBER})
-  set(PLEX_VERSION_BUILD ".$ENV{BUILD_NUMBER}")
+  set(PLEX_VERSION_BUILD "$ENV{BUILD_NUMBER}")
+  set(PLEX_VERSION_BUILD_NR "$ENV{BUILD_NUMBER}")
 else()
-  set(PLEX_VERSION_BUILD ".dev")
+  set(PLEX_VERSION_BUILD "dev")
+  set(PLEX_VERSION_BUILD_NR "0")
 endif()
-set(PLEX_VERSION_STRING ${PLEX_VERSION_MAJOR}.${PLEX_VERSION_MINOR}.${PLEX_VERSION_PATCH}${PLEX_VERSION_BUILD}-${PLEX_GIT_REVISION})
+set(PLEX_VERSION_STRING ${PLEX_VERSION_MAJOR}.${PLEX_VERSION_MINOR}.${PLEX_VERSION_PATCH}.${PLEX_VERSION_BUILD}-${PLEX_GIT_REVISION})
 set(PLEX_VERSION_STRING_SHORT ${PLEX_VERSION_MAJOR}.${PLEX_VERSION_MINOR}.${PLEX_VERSION_PATCH})
-set(PLEX_VERSION_STRING_SHORT_BUILD ${PLEX_VERSION_STRING_SHORT}${PLEX_VERSION_BUILD})
+set(PLEX_VERSION_STRING_SHORT_BUILD ${PLEX_VERSION_STRING_SHORT}.${PLEX_VERSION_BUILD})
+set(PLEX_WINDOWS_VERSION ${PLEX_VERSION_MAJOR},${PLEX_VERSION_MINOR},${PLEX_VERSION_PATCH},${PLEX_VERSION_BUILD_NR})
 set(XBMC_VERSION "Frodo")
 
 configure_file(${plexdir}/git_revision.h.in git_revision.h)
@@ -88,14 +91,16 @@ if(TARGET_WIN32)
   )
 endif(TARGET_WIN32)
 
-# Build the texturepacker
-
-if (NOT TARGET_RPI)
+if(NOT TARGET_RPI)
+  # Build the texturepacker
   add_subdirectory(tools/TexturePacker)
 
   # add our visualizations
   add_subdirectory(xbmc/visualizations)
 endif()
+
+# add our visualizations
+add_subdirectory(xbmc/visualizations)
 
 # global includes
 include_directories(
@@ -113,6 +118,28 @@ include_directories(
   ${root}/tools/darwin/depends/libcrystalhd
   ${root}/xbmc/cores/AudioEngine
 )
+
+if(ENABLE_PYTHON)
+    if(EXTERNAL_PYTHON_HOME)
+      if(TARGET_LINUX OR TARGET_OSX OR TARGET_RPI)
+        install(DIRECTORY ${EXTERNAL_PYTHON_HOME}/lib/python${PYTHON_VERSION} DESTINATION ${LIBPATH}/lib/ COMPONENT RUNTIME
+          PATTERN python${PYTHON_VERSION}/test EXCLUDE
+          REGEX .*\\.pyc$ EXCLUDE
+          REGEX .*\\.pyo$ EXCLUDE
+        )
+        install(FILES ${PYTHON_INCLUDE_DIRS}/pyconfig.h DESTINATION "${LIBPATH}/include/python${PYTHON_VERSION}" COMPONENT RUNTIME)
+      endif()
+    elseif()
+      if(TARGET_LINUX OR TARGET_OSX)
+        install(DIRECTORY /usr/lib/python${PYTHON_VERSION} DESTINATION ${LIBPATH}/lib/ COMPONENT RUNTIME
+          PATTERN python${PYTHON_VERSION}/test EXCLUDE
+          REGEX .*\\.pyc$ EXCLUDE
+          REGEX .*\\.pyo$ EXCLUDE
+        )
+        install(FILES ${PYTHON_INCLUDE_DIRS}/pyconfig.h DESTINATION "${LIBPATH}/include/python${PYTHON_VERSION}" COMPONENT RUNTIME)
+      endif()
+    endif()
+endif()
 
 # UPnP includes
 include_directories(
