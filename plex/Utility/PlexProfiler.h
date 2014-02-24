@@ -135,17 +135,21 @@ inline CStdString GetClassMethod(const char *text)
 #define PROFILER_ACTIVE 0
 
 #if PROFILER_ACTIVE
-#define PROFILE_START					g_plexApplication.profiler->StartFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
-#define PROFILE_END						g_plexApplication.profiler->EndFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
+#define PROFILE_RESET         if (g_plexApplication.profiler) { g_plexApplication.profiler->Clear(); g_plexApplication.profiler->Enable(true);}
+#define PROFILE_START         if (g_plexApplication.profiler) g_plexApplication.profiler->StartFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
+#define PROFILE_END           if (g_plexApplication.profiler) g_plexApplication.profiler->EndFunction(GetClassMethod(__PRETTY_FUNCTION__)+"()");
 #define PROFILE_STEP          CStdString fName;
-#define PROFILE_STEP_START(format,...)	fName.Format("%s() - " format, GetClassMethod(__PRETTY_FUNCTION__).c_str(), __VA_ARGS__); g_plexApplication.profiler->StartFunction(fName);
-#define PROFILE_STEP_END	g_plexApplication.profiler->.EndFunction(fName);
+#define PROFILE_STEP_START(format,...)	fName.Format("%s() - " format, GetClassMethod(__PRETTY_FUNCTION__).c_str(), __VA_ARGS__); if (g_plexApplication.profiler) g_plexApplication.profiler->StartFunction(fName);
+#define PROFILE_STEP_END      if (g_plexApplication.profiler) g_plexApplication.profiler->.EndFunction(fName);
+#define PROFILE_SAVE          if (g_plexApplication.profiler) g_plexApplication.profiler->SaveProfile();
 #else
+#define PROFILE_RESET                   ;
 #define PROFILE_START                   ;
 #define PROFILE_END                     ;
 #define PROFILE_STEP                    ;
 #define PROFILE_STEP_START(format,...)	;
 #define PROFILE_STEP_END                ;
+#define PROFILE_SAVE                    ;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////

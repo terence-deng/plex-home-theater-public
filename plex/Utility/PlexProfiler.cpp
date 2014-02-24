@@ -249,6 +249,9 @@ void CPlexProfiler::SaveProfile(CStdString fileName)
   CStdString sLine;
   CStdString OutfileName;
 
+  if (!m_enabled)
+    return;
+
   if (fileName!="")
     OutfileName = fileName;
   else
@@ -288,6 +291,8 @@ void CPlexProfiler::SaveProfile(CStdString fileName)
 void CPlexProfiler::Clear()
 {
   CSingleLock lk(m_lock);
+
+  m_enabled = false;
 
   PROFILE_DEBUG("Clearing Profiler","");
   BOOST_FOREACH(FunctionMapPair p,m_root)
