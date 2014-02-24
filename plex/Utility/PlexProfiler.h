@@ -42,8 +42,8 @@ class CProfiledFunction;
 class CPlexProfiler : public boost::enable_shared_from_this<CPlexProfiler>
 {
   protected:
-    std::map<int,CProfiledFunction*> m_root;
-    std::map<int,CProfiledFunction*> m_currentFunction;
+    std::map<ThreadIdentifier,CProfiledFunction*> m_root;
+    std::map<ThreadIdentifier,CProfiledFunction*> m_currentFunction;
     bool m_enabled;
     bool m_bstopWatchStarted;
     CStopWatch m_stopWatch;
@@ -114,13 +114,13 @@ class CProfiledFunction
 inline CStdString GetClassMethod(const char *text)
 {
   CStdString strName = text;
-  unsigned int pos1 = strName.find("::");
+  size_t pos1 = strName.find("::");
   if (pos1!=CStdString::npos)
   {
-    unsigned int pos2 = strName.rfind(" ",pos1);
+    size_t pos2 = strName.rfind(" ",pos1);
     if (pos2!=CStdString::npos)
     {
-      unsigned int pos3 = strName.find("(",pos1);
+      size_t pos3 = strName.find("(",pos1);
       if (pos3!=CStdString::npos)
       {
         return strName.substr(pos2,pos3-pos2);

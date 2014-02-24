@@ -27,8 +27,8 @@
 #include "system.h"
 #include <boost/foreach.hpp>
 
-typedef std::pair<int, CProfiledFunction*> FunctionMapPair;
-typedef std::map<int, CProfiledFunction*>::iterator FunctionMapIterator;
+typedef std::pair<ThreadIdentifier, CProfiledFunction*> FunctionMapPair;
+typedef std::map<ThreadIdentifier, CProfiledFunction*>::iterator FunctionMapIterator;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // CProfiledFunction Class methods
@@ -147,7 +147,7 @@ void CPlexProfiler::StartFunction(CStdString functionName)
     m_bstopWatchStarted = true;
   }
 
-  int threadID = CThread::GetCurrentThreadId();
+  ThreadIdentifier threadID = CThread::GetCurrentThreadId();
 
   // check if we have a root for this thread
   FunctionMapIterator it = m_root.find(threadID);
@@ -201,7 +201,7 @@ void CPlexProfiler::EndFunction(CStdString functionName)
   if (!m_enabled)
     return;
 
-  int threadID = CThread::GetCurrentThreadId();
+  ThreadIdentifier threadID = CThread::GetCurrentThreadId();
 
   FunctionMapIterator i = m_currentFunction.find(threadID);
   if (i==m_currentFunction.end())
@@ -264,12 +264,13 @@ void CPlexProfiler::SaveProfile(CStdString fileName)
 
     // now print individual theards results
     int iCount =1;
-    for (std::map<int,CProfiledFunction*>::iterator it=m_root.begin(); it!=m_root.end(); ++it)
+    //for (std::map<int,CProfiledFunction*>::iterator it=m_root.begin(); it!=m_root.end(); ++it)
+    BOOST_FOREACH(FunctionMapPair p,m_root)
     {
-      sLine.Format("-----------Thread %2d (%10X)-----------\n",iCount,it->first);
+      sLine.Format("-----------Thread %2d (%10X)-----------\n",iCount,p.first);
       fputs(sLine.c_str(),file);
 
-      it->second->PrintStats(file,0);
+      p.second->PrintStats(file,0);
 
       sLine = "--------------------------------------------\n";
       fputs(sLine.c_str(),file);
