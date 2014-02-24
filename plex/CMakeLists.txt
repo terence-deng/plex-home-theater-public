@@ -15,7 +15,6 @@ include_directories(
 	${root}/plex/Network
 	${root}/plex/Remote
 	${root}/plex/Filters
-	${root}/plex/AutoUpdate
   ${root}/plex/Third-Party/rapidxml
   ${CONFIG_INCLUDE_PATH_SPARKLE}
 )
@@ -60,7 +59,6 @@ add_subdirectory(Utility)
 add_subdirectory(Remote)
 add_subdirectory(Filters)
 add_subdirectory(Windows)
-add_subdirectory(AutoUpdate)
 
 include(BreakpadSymbols)
 
