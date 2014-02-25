@@ -4464,7 +4464,10 @@ bool CApplication::PlayFile(const CFileItem& item_, bool bRestart)
   // tell system we are starting a file
   m_bPlaybackStarting = true;
 
-
+  // for playing a new item, previous playing item's callback may already
+  // pushed some delay message into the threadmessage list, they are not
+  // expected be processed after or during the new item playback starting.
+  // so we clean up previous playing item's playback callback delay messages here.
   int previousMsgsIgnoredByNewPlaying[] = {
         GUI_MSG_PLAYBACK_STARTED,
         GUI_MSG_PLAYBACK_ENDED,
