@@ -509,10 +509,7 @@ bool COMXPlayer::OpenFile(const CFileItem &file, const CPlayerOptions &options)
     g_renderManager.PreInit();
 
     Create();
-
-    // this timeout needs to be big enough, otherwise will not be enough
-    // for proper playback on devices like RPi
-    if(!m_ready.WaitMSec(5000))
+    if(!m_ready.WaitMSec(100))
     {
       CGUIDialogBusy* dialog = (CGUIDialogBusy*)g_windowManager.GetWindow(WINDOW_DIALOG_BUSY);
       if(dialog)

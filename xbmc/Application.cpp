@@ -5422,11 +5422,9 @@ bool CApplication::OnMessage(CGUIMessage& message)
         if (CLastFmManager::GetInstance()->IsRadioEnabled())
           CLastFmManager::GetInstance()->StopRadio();
 
-        if (!m_pPlayer->IsPlaying())
-        {
-          delete m_pPlayer;
-          m_pPlayer = 0;
-        }
+        delete m_pPlayer;
+        m_pPlayer = 0;
+
         // Reset playspeed
         m_iPlaySpeed = 1;
       }
