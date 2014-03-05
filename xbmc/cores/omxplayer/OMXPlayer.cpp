@@ -2657,12 +2657,10 @@ void COMXPlayer::SetCaching(ECacheState state)
 
 void COMXPlayer::SetPlaySpeed(int speed)
 {
-// FWD / REW Speeds seems ok with OMX on RPi
-#if !defined(TARGET_RASPBERRY_PI)
   /* only pause and normal playspeeds are allowed */
   if(speed < 0 || speed > DVD_PLAYSPEED_NORMAL)
     return;
-#endif
+
   m_messenger.Put(new CDVDMsgInt(CDVDMsg::PLAYER_SETSPEED, speed));
   SynchronizeDemuxer(100);
 }
@@ -3141,8 +3139,6 @@ int64_t COMXPlayer::GetTotalTime()
 
 void COMXPlayer::ToFFRW(int iSpeed)
 {
-// FWD / RWIND Speeds dont seem to be an issue on RPi
-#if !defined(TARGET_RASPBERRY_PI)
   // can't rewind in menu as seeking isn't possible
   // forward is fine
   if (iSpeed < 0 && IsInMenu()) return;
@@ -3150,7 +3146,6 @@ void COMXPlayer::ToFFRW(int iSpeed)
   /* only pause and normal playspeeds are allowed */
   if(iSpeed > 1 || iSpeed < 0)
     return;
-#endif
 
   SetPlaySpeed(iSpeed * DVD_PLAYSPEED_NORMAL);
 }
