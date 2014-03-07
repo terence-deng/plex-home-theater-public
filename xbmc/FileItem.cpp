@@ -1494,6 +1494,9 @@ const CStdString& CFileItem::GetMimeType(bool lookup /*= true*/) const
       if (extension == ".m3u" || extension == ".strm")
         m_ref = "audio/mpegurl";
 
+      if (extension == ".m3u8")
+        m_ref = "application/x-mpegURL";
+
       else if (extension == ".pls")
         m_ref = "audio/scpls";
 
