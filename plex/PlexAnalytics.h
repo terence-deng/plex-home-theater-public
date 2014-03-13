@@ -15,6 +15,8 @@ class CPlexAnalytics : public ANNOUNCEMENT::IAnnouncer, public IPlexGlobalTimeou
     void startLogging();
     void stopLogging();
 
+    CStdString TimerName() const { return "analytics"; }
+
   private:
     void setCustomDimensions(CUrlOptions &options);
     void trackEvent(const std::string& category, const std::string& action, const std::string& label, int64_t value, const CUrlOptions &arg = CUrlOptions());

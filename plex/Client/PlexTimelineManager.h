@@ -90,6 +90,8 @@ class CPlexTimelineManager : public IPlexGlobalTimeout
     std::string GetCurrentFocusedTextField() const { return m_textFieldName; }
     bool IsTextFieldFocused() const { return m_textFieldFocused; }
 
+    CStdString TimerName() const { return "timelineManager"; }
+
   private:
     void OnTimeout();
     void ReportProgress(const CPlexTimelineContext &context, bool force);
