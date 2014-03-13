@@ -186,6 +186,7 @@ void CPlexGlobalCacher::Process()
         art.push_back("smallThumb");
         art.push_back("smallPoster");
         art.push_back("smallGrandparentThumb");
+        art.push_back("fanart");
 
         BOOST_FOREACH(CStdString artKey, art)
         {
