@@ -21,6 +21,7 @@
  */
 
 #include "system.h"
+
 #ifdef HAS_GL
   // always define GL_GLEXT_PROTOTYPES before include gl headers
   #if !defined(GL_GLEXT_PROTOTYPES)

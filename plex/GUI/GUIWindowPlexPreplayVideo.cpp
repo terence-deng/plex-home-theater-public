@@ -55,7 +55,6 @@ bool CGUIWindowPlexPreplayVideo::OnMessage(CGUIMessage &message)
       CLog::Log(LOGDEBUG, "CGUIWindowPlexPreplayVideo::OnMessage(deinit) killing local item out of directory cache");
       g_directoryCache.ClearDirectory(item->GetPath());
     }
-
   }
   else if (message.GetMessage() == GUI_MSG_CLICKED)
   {
