@@ -41,6 +41,7 @@ class CVariant;
 
 /* PLEX */
 #include <boost/unordered_map.hpp>
+#include "PlexTypes.h"
 /* END PLEX */
 
 /*!
@@ -162,7 +163,14 @@ public:
 #ifdef __PLEX__
   inline void SetProperty(const CStdString &strKey, const CVariant &value)
   {
+<<<<<<< HEAD
     m_mapProperties[strKey] = value;
+=======
+    CStdString _key(strKey);
+    _key.ToLower();
+
+    m_mapProperties[_key] = value;
+>>>>>>> private/frodo
   }
 #else
   void SetProperty(const CStdString &strKey, const CVariant &value);
@@ -186,7 +194,14 @@ public:
 #ifdef __PLEX__
   inline bool HasProperty(const CStdString &strKey) const
   {
+<<<<<<< HEAD
     PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
+=======
+    CStdString _key(strKey);
+    _key.ToLower();
+
+    PropertyMap::const_iterator iter = m_mapProperties.find(_key);
+>>>>>>> private/frodo
     if (iter == m_mapProperties.end())
       return false;
 
@@ -202,7 +217,14 @@ public:
 #ifdef __PLEX__
   inline CVariant GetProperty(const CStdString &strKey) const
   {
+<<<<<<< HEAD
     PropertyMap::const_iterator iter = m_mapProperties.find(strKey);
+=======
+    CStdString _key(strKey);
+    _key.ToLower();
+
+    PropertyMap::const_iterator iter = m_mapProperties.find(_key);
+>>>>>>> private/frodo
     if (iter == m_mapProperties.end())
       return CVariant(CVariant::VariantTypeNull);
 
@@ -218,7 +240,11 @@ public:
   std::string GetArt(const std::string &type, int index) const;
   bool HasArt(const std::string &type, int index) const;
   void RemoveArt(const std::string &type);
+<<<<<<< HEAD
   const boost::unordered_map<CStdString, CVariant>& GetAllProperties() const { return m_mapProperties; }
+=======
+  const PropertyMap& GetAllProperties() const { return m_mapProperties; }
+>>>>>>> private/frodo
   /* END PLEX */
 
 protected:
@@ -235,12 +261,21 @@ protected:
   {
     bool operator()(const CStdString &s1, const CStdString &s2) const;
   };
+<<<<<<< HEAD
 
   typedef std::map<CStdString, CVariant, icompare> PropertyMap;
 #else
   typedef boost::unordered_map<CStdString, CVariant> PropertyMap;
 #endif
   PropertyMap m_mapProperties;
+=======
+
+  typedef std::map<CStdString, CVariant, icompare> PropertyMap;
+#endif
+
+  PropertyMap m_mapProperties;
+
+>>>>>>> private/frodo
 
 private:
   CStdStringW m_sortLabel;    // text for sorting. Need to be UTF16 for proper sorting

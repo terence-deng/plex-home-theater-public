@@ -118,6 +118,8 @@ CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
     try
     {
       doc.parse<0>((char*)m_data.c_str());    // 0 means default parse flags
+      m_xmlData = m_data;
+      doc.parse<0>((char*)m_xmlData.c_str());    // 0 means default parse flags
     }
     catch (...)
     {
@@ -431,8 +433,13 @@ CPlexDirectory::ReadChildren(XML_ELEMENT* root, CFileItemList& container)
   {
     CFileItemPtr item = CPlexDirectory::NewPlexElement(element, container, m_url);
 
-    if (boost::ends_with(item->GetPath(), "/allLeaves") && g_advancedSettings.m_bVideoLibraryHideAllItems)
-      continue;
+    if (boost::ends_with(item->GetPath(), "/allLeaves"))
+    {
+      if (g_advancedSettings.m_bVideoLibraryHideAllItems)
+        continue;
+
+      item->SetProperty("isAllItems", true);
+    }
 
     CPlexDirectoryTypeParserBase::GetDirectoryTypeParser(item->GetPlexDirectoryType())->Process(*item, container, element);
 

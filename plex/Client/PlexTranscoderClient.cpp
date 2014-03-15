@@ -23,6 +23,7 @@
 #include "Client/PlexServer.h"
 #include "PlexMediaDecisionEngine.h"
 #include "Client/PlexTranscoderClientRPi.h"
+
 #include "log.h"
 
 #include <map>
@@ -203,6 +204,13 @@ CURL CPlexTranscoderClient::GetTranscodeURL(CPlexServerPtr server, const CFileIt
   tURL.SetOption("protocol", "hls");
   tURL.SetOption("directPlay", "0");
   tURL.SetOption("directStream", "1");
+
+  CFileItemPtr mediaItem = CPlexMediaDecisionEngine::getSelectedMediaItem(item);
+  if (mediaItem)
+    tURL.SetOption("mediaIndex", mediaItem->GetProperty("mediaIndex").asString());
+
+  if (mediaItem->m_selectedMediaPart)
+    tURL.SetOption("partIndex", mediaItem->m_selectedMediaPart->GetProperty("partIndex").asString());
   
   /*
   if (item.HasProperty("viewOffset"))
