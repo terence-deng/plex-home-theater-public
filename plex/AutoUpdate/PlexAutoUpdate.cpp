@@ -252,13 +252,8 @@ void CPlexAutoUpdate::DownloadUpdate(CFileItemPtr updateItem)
   m_localManifest = "special://temp/autoupdate/manifest-" + m_downloadItem->GetProperty("version").asString() + "." + packageStr + ".xml";
   m_localBinary = "special://temp/autoupdate/binary-" + m_downloadItem->GetProperty("version").asString() + "." + packageStr + ".zip";
 
-<<<<<<< HEAD
 #ifndef OPENELEC /* OpenELEC doesn't have a manifest */
   if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString()))
-=======
-
-  if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString(), true))
->>>>>>> private/master-next
   {
     CLog::Log(LOGDEBUG, "CPlexAutoUpdate::DownloadUpdate need %s", manifestUrl.c_str());
     CJobManager::GetInstance().AddJob(new CPlexDownloadFileJob(manifestUrl, m_localManifest), this, CJob::PRIORITY_LOW);
@@ -694,7 +689,6 @@ void CPlexAutoUpdate::UpdateAndRestart()
 void CPlexAutoUpdate::UpdateAndRestart()
 {
   // we need to start the Install script here
-<<<<<<< HEAD
 
   // build script path
   CStdString updaterPath;
@@ -727,40 +721,6 @@ void CPlexAutoUpdate::UpdateAndRestart()
 #endif
 
 
-=======
-
-  // build script path
-  CStdString updaterPath;
-  CUtil::GetHomePath(updaterPath);
-  updaterPath += "/tools/openelec_install_update.sh";
-
-  // run the script redirecting stderr to stdin so that we can grab script errors and log them
-  CStdString command = "/bin/sh " + updaterPath + " " + CSpecialProtocol::TranslatePath(m_localBinary) + " 2>&1";
-  CLog::Log(LOGDEBUG,"CPlexAutoUpdate::UpdateAndRestart : Executing '%s'", command.c_str());
-  FILE* fp = popen(command.c_str(), "r");
-  if (fp)
-  {
-    // we grab script output in case we would have an error
-    char output[1000];
-    CStdString commandOutput;
-    if (fgets(output, sizeof(output)-1, fp))
-      commandOutput = CStdString(output);
-
-    int retcode = fclose(fp);
-    if (retcode)
-    {
-      CLog::Log(LOGERROR,"CPlexAutoUpdate::UpdateAndRestart: error %d while running install script : %s", retcode, commandOutput.c_str());
-      return;
-    }
-  }
-
-  // now restart
-  CApplicationMessenger::Get().Restart();
-}
-#endif
-
-
->>>>>>> private/master-next
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void CPlexAutoUpdate::ForceVersionCheckInBackground()
 {
