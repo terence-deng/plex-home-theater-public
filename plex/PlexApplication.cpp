@@ -298,6 +298,8 @@ void PlexApplication::Shutdown()
   filterManager->saveFiltersToDisk();
   filterManager.reset();
 
+  CPlexTranscoderClient::DeleteInstance();
+
   OnTimeout();
 
   delete remoteSubscriberManager;

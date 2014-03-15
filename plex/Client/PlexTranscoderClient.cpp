@@ -23,7 +23,6 @@
 #include "Client/PlexServer.h"
 #include "PlexMediaDecisionEngine.h"
 #include "Client/PlexTranscoderClientRPi.h"
-
 #include "log.h"
 
 #include <map>

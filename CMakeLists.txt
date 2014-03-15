@@ -102,9 +102,6 @@ if(NOT TARGET_RPI)
   add_subdirectory(xbmc/visualizations)
 endif()
 
-# add our visualizations
-add_subdirectory(xbmc/visualizations)
-
 # global includes
 include_directories(
   ${plexdir}

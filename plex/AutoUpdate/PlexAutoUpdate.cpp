@@ -211,8 +211,14 @@ CFileItemPtr CPlexAutoUpdate::GetPackage(CFileItemPtr updateItem)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool CPlexAutoUpdate::NeedDownload(const std::string& localFile, const std::string& expectedHash)
+bool CPlexAutoUpdate::NeedDownload(const std::string& localFile, const std::string& expectedHash, bool isManifest)
 {
+#ifdef OPENELEC
+  // Manifest is not needed in OpenELEC
+  if (isManifest)
+    return false;
+#endif
+
   if (CFile::Exists(localFile, false) && PlexUtils::GetSHA1SumFromURL(CURL(localFile)) == expectedHash)
   {
     CLog::Log(LOGDEBUG, "CPlexAutoUpdate::DownloadUpdate we already have %s with correct SHA", localFile.c_str());
@@ -246,8 +252,13 @@ void CPlexAutoUpdate::DownloadUpdate(CFileItemPtr updateItem)
   m_localManifest = "special://temp/autoupdate/manifest-" + m_downloadItem->GetProperty("version").asString() + "." + packageStr + ".xml";
   m_localBinary = "special://temp/autoupdate/binary-" + m_downloadItem->GetProperty("version").asString() + "." + packageStr + ".zip";
 
+<<<<<<< HEAD
 #ifndef OPENELEC /* OpenELEC doesn't have a manifest */
   if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString()))
+=======
+
+  if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString(), true))
+>>>>>>> private/master-next
   {
     CLog::Log(LOGDEBUG, "CPlexAutoUpdate::DownloadUpdate need %s", manifestUrl.c_str());
     CJobManager::GetInstance().AddJob(new CPlexDownloadFileJob(manifestUrl, m_localManifest), this, CJob::PRIORITY_LOW);
@@ -257,7 +268,7 @@ void CPlexAutoUpdate::DownloadUpdate(CFileItemPtr updateItem)
   m_needManifest = false;
 #endif
 
-  if (NeedDownload(m_localBinary, m_downloadPackage->GetProperty("fileHash").asString()))
+  if (NeedDownload(m_localBinary, m_downloadPackage->GetProperty("fileHash").asString(), false))
   {
     CLog::Log(LOGDEBUG, "CPlexAutoUpdate::DownloadUpdate need %s", m_localBinary.c_str());
     CJobManager::GetInstance().AddJob(new CPlexDownloadFileJob(updateUrl, m_localBinary), this, CJob::PRIORITY_LOW);
@@ -390,7 +401,7 @@ void CPlexAutoUpdate::OnJobComplete(unsigned int jobID, bool success, CJob *job)
   {
     if (fj->m_destination == m_localManifest)
     {
-      if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString()))
+      if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString(), true))
       {
         CLog::Log(LOGWARNING, "CPlexAutoUpdate::OnJobComplete failed to download manifest, SHA mismatch. Retrying in %d seconds", m_searchFrequency);
         return;
@@ -401,7 +412,7 @@ void CPlexAutoUpdate::OnJobComplete(unsigned int jobID, bool success, CJob *job)
     }
     else if (fj->m_destination == m_localBinary)
     {
-      if (NeedDownload(m_localBinary, m_downloadPackage->GetProperty("fileHash").asString()))
+      if (NeedDownload(m_localBinary, m_downloadPackage->GetProperty("fileHash").asString(), false))
       {
         CLog::Log(LOGWARNING, "CPlexAutoUpdate::OnJobComplete failed to download update, SHA mismatch. Retrying in %d seconds", m_searchFrequency);
         return;
@@ -683,6 +694,7 @@ void CPlexAutoUpdate::UpdateAndRestart()
 void CPlexAutoUpdate::UpdateAndRestart()
 {
   // we need to start the Install script here
+<<<<<<< HEAD
 
   // build script path
   CStdString updaterPath;
@@ -715,6 +727,40 @@ void CPlexAutoUpdate::UpdateAndRestart()
 #endif
 
 
+=======
+
+  // build script path
+  CStdString updaterPath;
+  CUtil::GetHomePath(updaterPath);
+  updaterPath += "/tools/openelec_install_update.sh";
+
+  // run the script redirecting stderr to stdin so that we can grab script errors and log them
+  CStdString command = "/bin/sh " + updaterPath + " " + CSpecialProtocol::TranslatePath(m_localBinary) + " 2>&1";
+  CLog::Log(LOGDEBUG,"CPlexAutoUpdate::UpdateAndRestart : Executing '%s'", command.c_str());
+  FILE* fp = popen(command.c_str(), "r");
+  if (fp)
+  {
+    // we grab script output in case we would have an error
+    char output[1000];
+    CStdString commandOutput;
+    if (fgets(output, sizeof(output)-1, fp))
+      commandOutput = CStdString(output);
+
+    int retcode = fclose(fp);
+    if (retcode)
+    {
+      CLog::Log(LOGERROR,"CPlexAutoUpdate::UpdateAndRestart: error %d while running install script : %s", retcode, commandOutput.c_str());
+      return;
+    }
+  }
+
+  // now restart
+  CApplicationMessenger::Get().Restart();
+}
+#endif
+
+
+>>>>>>> private/master-next
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void CPlexAutoUpdate::ForceVersionCheckInBackground()
 {
