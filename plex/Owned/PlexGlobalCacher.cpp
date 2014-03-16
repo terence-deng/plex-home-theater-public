@@ -258,12 +258,19 @@ void CPlexGlobalCacher::Process()
           art.push_back("smallPoster");
           art.push_back("smallGrandparentThumb");
           art.push_back("fanart");
+          art.push_back("banner");
+          art.push_back("thumb");
+          art.push_back("poster");
 
           BOOST_FOREACH(CStdString artKey, art)
           {
             if (item->HasArt(artKey) &&
                 !CTextureCache::Get().HasCachedImage(item->GetArt(artKey)))
+            {
+              if (artKey=="banner")
+                CLog::Log(LOGDEBUG,"CPlexGlobalCacher::Process Caching banner %s ",item->GetArt(artKey).c_str());
               CTextureCache::Get().CacheImage(item->GetArt(artKey));
+            }
           }
 
           // check if cancel button has been pressed
