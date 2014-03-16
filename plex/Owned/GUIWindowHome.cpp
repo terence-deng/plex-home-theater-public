@@ -102,7 +102,6 @@ using namespace boost;
 
 #define SLIDESHOW_MULTIIMAGE 10101
 
-
 typedef std::pair<CStdString, CPlexSectionFanout*> nameSectionPair;
 
 //////////////////////////////////////////////////////////////////////////////
