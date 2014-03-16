@@ -40,8 +40,6 @@
 #include "AdvancedSettings.h"
 
 
-#include "Utility/sha1.hpp"
-
 using namespace XFILE;
 
 #ifdef USE_RAPIDXML
@@ -117,7 +115,6 @@ CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
     xml_document<> doc;    // character type defaults to char
     try
     {
-      doc.parse<0>((char*)m_data.c_str());    // 0 means default parse flags
       m_xmlData = m_data;
       doc.parse<0>((char*)m_xmlData.c_str());    // 0 means default parse flags
     }

@@ -114,7 +114,7 @@ include_directories(
   ${root}/xbmc/settings
   ${root}/lib
   ${CMAKE_BINARY_DIR}/lib/cpluff/cpluff-prefix/src/cpluff/libcpluff
-  
+  ${root}/plex/Third-Party/rapidxml
   ${root}/tools/darwin/depends/libcrystalhd
   ${root}/xbmc/cores/AudioEngine
 )

@@ -150,19 +150,6 @@ add_definitions(
     -DOPENELEC
 )
 
-#include_directories(
-#    /opt/vc/include/ 
-#    /opt/vc/include/EGL 
-#   # /opt/vc/include/GLES 
-#    /opt/vc/include/GLES2 
-#    /opt/vc/include/KHR 
-#    /opt/vc/include/VG 
-#    /opt/vc/include/WF 
-#    /opt/vc/include/vc/include  
-#)
-
-
-
 
 
 plex_find_library(GLESv2 0  0 system/usr/lib 1)
