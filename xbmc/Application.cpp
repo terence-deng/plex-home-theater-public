@@ -32,6 +32,9 @@
 #include "guilib/TextureManager.h"
 #include "cores/dvdplayer/DVDFileInfo.h"
 #include "cores/AudioEngine/AEFactory.h"
+#ifdef TARGET_RASPBERRY_PI
+#include "cores/AudioEngine/Utils/AEChannelInfo.h"
+#endif
 #include "cores/AudioEngine/Utils/AEUtil.h"
 #include "PlayListPlayer.h"
 #include "Autorun.h"
@@ -1562,12 +1565,20 @@ bool CApplication::Initialize()
         g_windowManager.ActivateWindow(g_SkinInfo->GetFirstWindow());
       }
 #else
+#ifndef TARGET_RASPBERRY_PI
       if (g_SkinInfo->HasSkinFile("PlexStartupHelper.xml") && !g_guiSettings.GetBool("system.firstrunwizard"))
       {
         g_windowManager.ActivateWindow(WINDOW_PLEX_STARTUP_HELPER);
         g_guiSettings.SetBool("system.firstrunwizard", true);
       }
       else
+#else
+      g_guiSettings.SetInt("audiooutput.mode", AUDIO_HDMI);
+      g_guiSettings.SetInt("audiooutput.channels", AE_CH_LAYOUT_2_0); // this is why sound is stereo FIXME
+      g_guiSettings.SetBool("audiooutput.ac3passthrough", false);
+      g_guiSettings.SetBool("audiooutput.dtspassthrough", false);
+
+#endif
         g_windowManager.ActivateWindow(g_SkinInfo->GetFirstWindow());
 #endif
     }
