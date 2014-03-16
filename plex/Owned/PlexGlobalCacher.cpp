@@ -148,7 +148,7 @@ void CPlexGlobalCacher::Process()
   dialog->EnableButton(true, 186);
   dialog->SetUseDetails(true);
   dialog->DoModal();
-  CFileItemListPtr selectedSections;
+  CFileItemList* selectedSections = new CFileItemList();
 
   if ( dialog->IsButtonPressed())
   { // switch to the addons browser.
@@ -175,11 +175,11 @@ void CPlexGlobalCacher::Process()
       
       if (std::find(selected.begin(), selected.end(), servername) != selected.end())
       {
-        CLog::Log(LOGNOTICE,"Server %s was selected so adding its section",servername.c_str());
+        CLog::Log(LOGNOTICE,"Server %s was selected so adding its section %s",servername.c_str(), section->GetLabel().c_str());
         selectedSections->Add(section);
       }
       else
-        CLog::Log(LOGNOTICE,"Section removed as server %s wasn't selected",servername.c_str());
+        CLog::Log(LOGNOTICE,"Section %s removed as server %s wasn't selected",section->GetLabel().c_str(),servername.c_str());
     }
 
     m_dlgProgress->SetHeading("Precaching");
@@ -188,7 +188,7 @@ void CPlexGlobalCacher::Process()
     timer.StartZero();
     msgtimer.StartZero();
 
-    for (int iSection = 0; iSection < pAllSections->Size() && m_continue; iSection ++)
+    for (int iSection = 0; iSection < selectedSections->Size() && m_continue; iSection ++)
     {
 
       m_continue = !m_dlgProgress->IsCanceled();
@@ -198,8 +198,8 @@ void CPlexGlobalCacher::Process()
       list.Clear();
 
       looptimer.StartZero();
-      CFileItemPtr Section = pAllSections->Get(iSection);
-      message.Format("Precaching Section %d of %d : '%s'",iSection+1,pAllSections->Size(),Section->GetLabel());
+      CFileItemPtr Section = selectedSections->Get(iSection);
+      message.Format("Precaching Section %d of %d : '%s'",iSection+1,selectedSections->Size(),Section->GetLabel());
       m_dlgProgress->SetLine(0,message);
 
       // Pop the notification
@@ -242,7 +242,7 @@ void CPlexGlobalCacher::Process()
         CFileItemPtr item = list.Get(i);
         if (item->IsPlexMediaServer())
         {
-          message.Format("Precaching Section %d of %d : '%s' on '%s' ", iSection+1, pAllSections->Size(), Section->GetLabel(), ServerName);
+          message.Format("Precaching Section %d of %d : '%s' on '%s' ", iSection+1, selectedSections->Size(), Section->GetLabel(), ServerName);
           m_dlgProgress->SetLine(0,message);
 
           m_dlgProgress->SetPercentage(i*100 / list.Size());
