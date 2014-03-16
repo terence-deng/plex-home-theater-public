@@ -80,8 +80,9 @@
 #include "dialogs/GUIDialogBusy.h"
 #include "DirectoryCache.h"
 #include "GUI/GUIPlexMediaWindow.h"
-
+#ifdef TARGET_RASPBERRY_PI
 #include "Owned/PlexGlobalCacher.h"
+#endif
 
 using namespace std;
 using namespace XFILE;
