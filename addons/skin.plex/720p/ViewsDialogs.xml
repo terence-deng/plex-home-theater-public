@@ -313,6 +313,18 @@
 						<height>220</height>
 						<showonepage>true</showonepage>
 					</control>
+          <control type="button" id="5">
+            <description>Manual button</description>
+            <posy>400</posy>
+            <posx>563</posx>
+            <width>120</width>
+            <label>186</label>
+            <onleft>61</onleft>
+            <onright>3</onright>
+            <onup>3</onup>
+            <ondown>3</ondown>
+            <include>DialogPressButton</include>
+          </control>
 				</control>
 			</control>
 		</control>
