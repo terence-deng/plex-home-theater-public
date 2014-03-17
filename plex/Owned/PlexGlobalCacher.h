@@ -10,7 +10,8 @@
 class CPlexGlobalCacher : public CPlexThumbCacher, public CThread
 {
 public :
-    static CPlexGlobalCacher* getGlobalCacher();
+    static CPlexGlobalCacher* GetInstance();
+    static void DeleteInstance();
 	~CPlexGlobalCacher();
 	void Start();
 	void Process();

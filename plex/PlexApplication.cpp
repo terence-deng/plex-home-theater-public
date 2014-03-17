@@ -33,6 +33,7 @@
 #include "GUIWindowManager.h"
 #include "Utility/PlexProfiler.h"
 #include "Client/PlexTranscoderClient.h"
+#include "PlexGlobalCacher.h"
 
 #include "network/UdpClient.h"
 #include "DNSNameCache.h"
@@ -299,6 +300,10 @@ void PlexApplication::Shutdown()
   filterManager.reset();
 
   CPlexTranscoderClient::DeleteInstance();
+
+#ifdef TARGET_RASPBERRY_PI
+  CPlexGlobalCacher::DeleteInstance();
+#endif
 
   OnTimeout();
 
