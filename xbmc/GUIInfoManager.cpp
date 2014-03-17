@@ -258,6 +258,7 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
                                   { "updateisavailable", SYSTEM_UPDATE_IS_AVAILABLE },
                                   { "noplexservers",    SYSTEM_NO_PLEX_SERVERS },
                                   { "israsplex",        SYSTEM_ISRASPLEX },
+                                  { "isopenelec",       SYSTEM_ISOPENELEC },
                                   /* END PLEX */
                                   { "hasmediadvd",      SYSTEM_MEDIA_DVD },
                                   { "dvdready",         SYSTEM_DVDREADY },
@@ -2413,6 +2414,14 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
   else if (condition == SYSTEM_ISRASPLEX)
   {
 #ifdef TARGET_RASPBERRY_PI
+    bReturn = true;
+#else
+    bReturn = false;
+#endif
+  }
+  else if (condition == SYSTEM_ISOPENELEC)
+  {
+#ifdef OPENELEC
     bReturn = true;
 #else
     bReturn = false;

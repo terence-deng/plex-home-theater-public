@@ -358,11 +358,11 @@
 						<onclick>XBMC.ActivateWindow(appearancesettings)</onclick>
                     </item>
                     <item id="101">
-                        <description>RasPlex Settings Button</description>
+                        <description>OE Settings Button</description>
                         <label> $LOCALIZE[41000] </label>
                         <onclick>Dialog.Close(4998)</onclick>
                         <onclick>RunAddon(service.openelec.settings)</onclick>
-                        <visible>System.isRasPlex</visible>
+                        <visible>System.isOpenElec</visible>
                     </item>
                     <item id="102">
                         <description>Control Global Caching</description>
