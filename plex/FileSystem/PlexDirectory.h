@@ -26,10 +26,6 @@
 
 #include "FileSystem/PlexFile.h"
 
-#ifdef USE_RAPIDXML
-using namespace rapidxml;
-#endif
-
 namespace XFILE
 {
   class CPlexDirectory : public IDirectory

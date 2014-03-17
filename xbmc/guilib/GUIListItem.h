@@ -40,7 +40,6 @@ class CArchive;
 class CVariant;
 
 /* PLEX */
-#include <boost/unordered_map.hpp>
 #include "PlexTypes.h"
 /* END PLEX */
 
@@ -250,6 +249,7 @@ protected:
 #endif
 
   PropertyMap m_mapProperties;
+
 
 private:
   CStdStringW m_sortLabel;    // text for sorting. Need to be UTF16 for proper sorting

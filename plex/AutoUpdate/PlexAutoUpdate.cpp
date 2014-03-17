@@ -46,7 +46,8 @@ CPlexAutoUpdate::CPlexAutoUpdate()
 #else
   m_url = CURL("https://plex.tv/updater/products/2/check.xml");
 #endif
-  m_searchFrequency = 86400000; /* default to 24h */
+
+  m_searchFrequency = 21600000; /* 6 hours */
 
   CheckInstalledVersion();
 
@@ -252,16 +253,13 @@ void CPlexAutoUpdate::DownloadUpdate(CFileItemPtr updateItem)
   m_localManifest = "special://temp/autoupdate/manifest-" + m_downloadItem->GetProperty("version").asString() + "." + packageStr + ".xml";
   m_localBinary = "special://temp/autoupdate/binary-" + m_downloadItem->GetProperty("version").asString() + "." + packageStr + ".zip";
 
-#ifndef OPENELEC /* OpenELEC doesn't have a manifest */
-  if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString()))
+
+  if (NeedDownload(m_localManifest, m_downloadPackage->GetProperty("manifestHash").asString(), true))
   {
     CLog::Log(LOGDEBUG, "CPlexAutoUpdate::DownloadUpdate need %s", manifestUrl.c_str());
     CJobManager::GetInstance().AddJob(new CPlexDownloadFileJob(manifestUrl, m_localManifest), this, CJob::PRIORITY_LOW);
     m_needManifest = true;
   }
-#else
-  m_needManifest = false;
-#endif
 
   if (NeedDownload(m_localBinary, m_downloadPackage->GetProperty("fileHash").asString(), false))
   {
