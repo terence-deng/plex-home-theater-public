@@ -151,7 +151,7 @@ void CPlexGlobalCacher::Process()
   dialog->SetHeading(heading);
   dialog->SetItems(&items);
   dialog->SetMultiSelection(true);
-  dialog->EnableButton(true, 186);
+  dialog->EnableButton(true, 209);
   dialog->SetUseDetails(true);
   dialog->DoModal();
   CFileItemList* selectedSections = new CFileItemList();

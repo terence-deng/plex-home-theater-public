@@ -155,7 +155,7 @@
 					<control type="list" id="3">
 						<width>560</width>
 						<height>300</height>
-						<onleft>-</onleft>
+						<onleft>5</onleft>
 						<onright>5</onright>
 						<onup>3</onup>
 						<ondown>3</ondown>
@@ -200,6 +200,18 @@
 						<posx>563</posx>
 						<width>20</width>
 						<height>300</height>
+					</control>
+					<control type="button" id="5">
+						<description>Manual button</description>
+						<posy>280</posy>
+						<posx>410</posx>
+						<width>120</width>
+						<label>186</label>
+						<onleft>3</onleft>
+						<onright>3</onright>
+						<onup>3</onup>
+						<ondown>3</ondown>
+						<include>DialogPressButton</include>
 					</control>
 				</control>
 			</control>
@@ -952,7 +964,7 @@
 			<viewtype label="535">list</viewtype>
 			<scrolltime>200</scrolltime>
 			<itemlayout width="40">
-      		</itemlayout>
+					</itemlayout>
 			<focusedlayout width="53">
 				<control type="label">
 					<posx>33</posx>
