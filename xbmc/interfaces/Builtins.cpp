@@ -94,7 +94,7 @@
 /* PLEX */
 #include "PlexApplication.h"
 #include "AutoUpdate/PlexAutoUpdate.h"
-#include "Owned/PlexGlobalCacher.h"
+#include "Utility/PlexGlobalCacher.h"
 /* END PLEX */
 
 using namespace std;

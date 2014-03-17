@@ -2147,7 +2147,6 @@ bool CGUIInfoManager::GetBoolValue(unsigned int expression, const CGUIListItem *
 // for toggle button controls and visibility of images.
 bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListItem *item)
 {
-
   bool bReturn = false;
   int condition = abs(condition1);
 
