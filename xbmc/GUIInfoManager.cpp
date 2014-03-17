@@ -257,6 +257,7 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
                                   { "selectedplexmediaserver", SYSTEM_SELECTED_PLEX_MEDIA_SERVER },
                                   { "updateisavailable", SYSTEM_UPDATE_IS_AVAILABLE },
                                   { "noplexservers",    SYSTEM_NO_PLEX_SERVERS },
+                                  { "israsplex",        SYSTEM_ISRASPLEX },
                                   /* END PLEX */
                                   { "hasmediadvd",      SYSTEM_MEDIA_DVD },
                                   { "dvdready",         SYSTEM_DVDREADY },
@@ -2146,6 +2147,7 @@ bool CGUIInfoManager::GetBoolValue(unsigned int expression, const CGUIListItem *
 // for toggle button controls and visibility of images.
 bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListItem *item)
 {
+
   bool bReturn = false;
   int condition = abs(condition1);
 
@@ -2408,6 +2410,14 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
   else if (condition == SYSTEM_NO_PLEX_SERVERS)
   {
     bReturn = !g_plexApplication.serverManager->HasAnyServerWithActiveConnection();
+  }
+  else if (condition == SYSTEM_ISRASPLEX)
+  {
+#ifdef TARGET_RASPBERRY_PI
+    bReturn = true;
+#else
+    bReturn = false;
+#endif
   }
   /* END PLEX */
   else if (g_application.IsPlaying())
