@@ -19,7 +19,6 @@
  *
  */
 
-#define HAVE_OMXLIB
 #if defined(HAVE_OMXLIB)
 
 #include "OMXCore.h"

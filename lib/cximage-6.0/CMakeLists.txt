@@ -7,10 +7,13 @@ else(NOT TARGET_WIN32)
 endif(NOT TARGET_WIN32)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  set(DISABLE_WARNS "-Wno-unused-value -Wno-format -Wno-null-arithmetic -Wno-switch -Wno-string-plus-int -Wno-dangling-else")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DISABLE_WARNS} -fPIC -fno-common")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DISABLE_WARNS} -fPIC -fno-common")
 endif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  set(DISABLE_WARNS "-Wno-unused-value -Wno-format -Wno-null-arithmetic -Wno-switch -Wno-string-plus-int -Wno-dangling-else")
+endif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
 set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${PLEX_LINK_WRAPPED}")
 
