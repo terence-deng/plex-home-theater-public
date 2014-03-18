@@ -4379,6 +4379,13 @@ CStdString CGUIInfoManager::GetVersion()
 #endif
 }
 
+#ifdef TARGET_RASPBERRY_PI
+CStdString CGUIInfoManager::GetRasPlexVersion()
+{
+  return RASPLEX_VERSION;
+}
+#endif
+
 CStdString CGUIInfoManager::GetBuild()
 {
   CStdString tmp;

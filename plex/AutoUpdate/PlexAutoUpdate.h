@@ -77,6 +77,10 @@ class CPlexAutoUpdate : public IJobCallback, public IPlexGlobalTimeout
     bool RenameLocalBinary();
     int m_percentage;
 
+#ifdef TARGET_RASPBERRY_PI
+    CStdString readProcCPUInfoValue(CStdString keyname);
+#endif
+
     std::vector<std::string> GetAllInstalledVersions() const;
 };
 

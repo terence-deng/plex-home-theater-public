@@ -29,7 +29,37 @@
 #include "PlexAnalytics.h"
 #include "GUIUserMessages.h"
 
+#ifdef TARGET_RASPBERRY_PI
+#include <fstream>
+#endif
+
 using namespace XFILE;
+
+
+#ifdef TARGET_RASPBERRY_PI
+
+CStdString CPlexAutoUpdate::readProcCPUInfoValue(CStdString keyname)
+{
+  //std::string foo = "Serial";
+  int index;
+  int keycheck;
+  CStdString result = "";
+  std::ifstream input( "/proc/cpuinfo" );
+  for( CStdString line; getline( input, line ); )
+  {
+    index = line.find(":");
+    keycheck = line.find(keyname);
+    if (index>=0 && keycheck == 0)
+    {
+      result = line.substr(index+2,line.length()-1);
+      CLog::Log(LOGDEBUG,"Read value %s for %s", result.c_str(), keyname.c_str());
+    }
+  }
+  return result;
+}
+
+#endif
+
 
 //#define UPDATE_DEBUG 1
 
@@ -38,11 +68,7 @@ CPlexAutoUpdate::CPlexAutoUpdate()
   : m_forced(false), m_isSearching(false), m_isDownloading(false), m_ready(false), m_percentage(0)
 {
 #if defined(TARGET_RASPBERRY_PI)
-  int channel = g_guiSettings.GetInt("updates.channel");
-  if (channel != CMyPlexUserInfo::ROLE_USER)
-    m_url = CURL("https://raw.github.com/RasPlex/RasPlex.github.io/master/autoupdate/experimental.xml");
-  else
-    m_url = CURL("https://raw.github.com/RasPlex/RasPlex.github.io/master/autoupdate/stable.xml");
+  m_url = CURL("http://updater.rasplex.com/update");
 #else
   m_url = CURL("https://plex.tv/updater/products/2/check.xml");
 #endif
@@ -61,7 +87,12 @@ void CPlexAutoUpdate::CheckInstalledVersion()
 {
   if (g_application.GetReturnedFromAutoUpdate())
   {
-    CLog::Log(LOGDEBUG, "CPlexAutoUpdate::CheckInstalledVersion We are returning from a autoupdate with version %s", g_infoManager.GetVersion().c_str());
+#ifdef TARGET_RASPBERRY_PI
+    CStdString currentVersion = g_infoManager.GetRasPlexVersion();
+#else
+    CStdString currentVersion = g_infoManager.GetVersion();
+#endif
+    CLog::Log(LOGDEBUG, "CPlexAutoUpdate::CheckInstalledVersion We are returning from a autoupdate with version %s", currentVersion.c_str());
 
     std::string version, packageHash, fromVersion;
     bool isDelta;
@@ -69,9 +100,9 @@ void CPlexAutoUpdate::CheckInstalledVersion()
 
     if (GetUpdateInfo(version, isDelta, packageHash, fromVersion))
     {
-      if (version != g_infoManager.GetVersion())
+      if (version != currentVersion)
       {
-        CLog::Log(LOGDEBUG, "CPlexAutoUpdate::CheckInstalledVersion Seems like we failed to upgrade from %s to %s, will NOT try this version again.", fromVersion.c_str(), g_infoManager.GetVersion().c_str());
+        CLog::Log(LOGDEBUG, "CPlexAutoUpdate::CheckInstalledVersion Seems like we failed to upgrade from %s to %s, will NOT try this version again.", fromVersion.c_str(), currentVersion.c_str());
         success = false;
       }
       else
@@ -93,10 +124,17 @@ void CPlexAutoUpdate::OnTimeout()
   m_isSearching = true;
 
   CLog::Log(LOGDEBUG,"CPlexAutoUpdate::OnTimeout Starting");
+
+#ifdef TARGET_RASPBERRY_PI
+    CStdString currentVersion = g_infoManager.GetRasPlexVersion();
+#else
+    CStdString currentVersion = g_infoManager.GetVersion();
+#endif
+
 #ifdef UPDATE_DEBUG
   m_url.SetOption("version", "1.0.0.117-a97636ae");
 #else
-  m_url.SetOption("version", g_infoManager.GetVersion());
+  m_url.SetOption("version", currentVersion);
 #endif
   m_url.SetOption("build", PLEX_BUILD_TAG);
 
@@ -104,12 +142,21 @@ void CPlexAutoUpdate::OnTimeout()
   m_url.SetOption("distribution", "macosx");
 #elif defined(TARGET_WINDOWS)
   m_url.SetOption("distribution", "windows");
+#elif defined(TARGET_LINUX) && defined(TARGET_RASPBERRY_PI)
+  m_url.SetOption("distribution", "rasplex");
 #elif defined(TARGET_LINUX) && defined(OPENELEC)
   m_url.SetOption("distribution", "openelec");
 #endif
 
+#ifdef TARGET_RASPBERRY_PI
+  m_url.SetOption("serial", readProcCPUInfoValue("Serial"));
+  m_url.SetOption("revision", readProcCPUInfoValue("Revision"));
+#endif
+
   int channel = g_guiSettings.GetInt("updates.channel");
+#ifndef TARGET_RASPBERRY_PI
   if (channel != CMyPlexUserInfo::ROLE_USER)
+#endif
     m_url.SetOption("channel", boost::lexical_cast<std::string>(channel));
 
   if (g_plexApplication.myPlexManager->IsSignedIn())
@@ -129,7 +176,7 @@ void CPlexAutoUpdate::OnTimeout()
         CFileItemPtr updateItem = list.Get(i);
         if (updateItem->HasProperty("version") &&
             updateItem->GetProperty("autoupdate").asBoolean() &&
-            updateItem->GetProperty("version").asString() != g_infoManager.GetVersion())
+            updateItem->GetProperty("version").asString() != currentVersion)
         {
           CLog::Log(LOGDEBUG, "CPlexAutoUpdate::OnTimeout got version %s from update endpoint", updateItem->GetProperty("version").asString().c_str());
           if (std::find(alreadyTriedVersion.begin(), alreadyTriedVersion.end(), updateItem->GetProperty("version").asString()) == alreadyTriedVersion.end())
@@ -166,7 +213,8 @@ void CPlexAutoUpdate::OnTimeout()
 
     if (m_forced)
     {
-      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Update available!", "A new version is downloading in the background", 10000, false);
+      CStdString version = selectedItem->GetProperty("version").asString();
+      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Update available!", "Version "+version+" is downloading in the background", 10000, false);
       m_forced = false;
     }
     return;
@@ -355,9 +403,14 @@ void CPlexAutoUpdate::WriteUpdateInfo()
 
   TiXmlElement thisVersion("version");
   thisVersion.SetAttribute("version", m_downloadItem->GetProperty("version").asString());
+#ifdef TARGET_RASPBERRY_PI
+  thisVersion.SetAttribute("fromVersion", std::string(g_infoManager.GetRasPlexVersion()));
+#else
   thisVersion.SetAttribute("delta", m_downloadPackage->GetProperty("delta").asBoolean());
   thisVersion.SetAttribute("packageHash", m_downloadPackage->GetProperty("manifestHash").asString());
   thisVersion.SetAttribute("fromVersion", std::string(g_infoManager.GetVersion()));
+#endif
+
   thisVersion.SetAttribute("installtime", time(NULL));
 
   if (versions->FirstChildElement())
@@ -366,6 +419,20 @@ void CPlexAutoUpdate::WriteUpdateInfo()
     versions->InsertEndChild(thisVersion);
 
   doc.SaveFile("special://profile/plexupdateinfo.xml");
+
+#ifdef TARGET_RASPBERRY_PI
+
+  CURL callback = CURL("http://updater.rasplex.com/updated");
+  callback.SetOption("version", m_downloadItem->GetProperty("version").asString());
+  callback.SetOption("fromVersion", std::string(g_infoManager.GetRasPlexVersion()));
+  callback.SetOption("serial", readProcCPUInfoValue("Serial"));
+  callback.SetOption("revision", readProcCPUInfoValue("Revision"));
+  int channel = g_guiSettings.GetInt("updates.channel");
+  callback.SetOption("channel", boost::lexical_cast<std::string>(channel));
+
+
+  callback.Get();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -713,6 +780,7 @@ void CPlexAutoUpdate::UpdateAndRestart()
     }
   }
 
+  WriteUpdateInfo();
   // now restart
   CApplicationMessenger::Get().Restart();
 }

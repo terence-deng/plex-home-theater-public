@@ -3367,8 +3367,12 @@ void CGUIWindowSettingsCategory::FillInPlexUpdateChannels(CSetting *pSetting)
 
   pControl->AddLabel(g_localizeStrings.Get(40003), CMyPlexUserInfo::ROLE_USER);
 
+#ifdef TARGET_RASPBERRY_PI
+  pControl->AddLabel("PreRelease", CMyPlexUserInfo::ROLE_EMPLOYEE);
+#else
   if (user.hasRole(CMyPlexUserInfo::ROLE_PLEXPASS) || user.hasRole(CMyPlexUserInfo::ROLE_NINJA) || user.hasRole(CMyPlexUserInfo::ROLE_EMPLOYEE))
     pControl->AddLabel(g_localizeStrings.Get(40004), CMyPlexUserInfo::ROLE_PLEXPASS);
+#endif
 
   if (user.hasRole(CMyPlexUserInfo::ROLE_NINJA) || user.hasRole(CMyPlexUserInfo::ROLE_EMPLOYEE))
     pControl->AddLabel(g_localizeStrings.Get(40005), CMyPlexUserInfo::ROLE_NINJA);
