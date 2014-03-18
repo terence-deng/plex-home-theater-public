@@ -298,6 +298,7 @@ CPlexServer::Merge(CPlexServerPtr otherServer)
 
   BOOST_FOREACH(CPlexConnectionPtr conn, otherServer->m_connections)
   {
+    bool found = false;
     BOOST_FOREACH(CPlexConnectionPtr mappedConn, m_connections)
     {
       if (conn->Equals(mappedConn))
