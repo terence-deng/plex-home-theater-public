@@ -763,6 +763,7 @@ void CPlexAutoUpdate::UpdateAndRestart()
   // run the script redirecting stderr to stdin so that we can grab script errors and log them
   CStdString command = "/bin/sh " + updaterPath + " " + CSpecialProtocol::TranslatePath(m_localBinary) + " 2>&1";
   CLog::Log(LOGDEBUG,"CPlexAutoUpdate::UpdateAndRestart : Executing '%s'", command.c_str());
+  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Launching updater", "Progress will be reported.", 10000, false);
   FILE* fp = popen(command.c_str(), "r");
   if (fp)
   {
@@ -780,10 +781,26 @@ void CPlexAutoUpdate::UpdateAndRestart()
     }
   }
 
-  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Installing...", "Should only take a few minutes. Please wait.", 10000, false);
   WriteUpdateInfo();
-  // now restart
-  CApplicationMessenger::Get().Restart();
+  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Update is complete!", "System will reboot twice to apply.", 10000, false);
+  fp = popen("/sbin/reboot", "r");
+  if (fp)
+  {
+    // we grab script output in case we would have an error
+    char output[1000];
+    CStdString commandOutput;
+    if (fgets(output, sizeof(output)-1, fp))
+      commandOutput = CStdString(output);
+
+    int retcode = fclose(fp);
+    if (retcode)
+    {
+      CLog::Log(LOGERROR,"CPlexAutoUpdate::UpdateAndRestart: error %d! Couldn't restart", retcode );
+      return;
+    }
+  }
+
+
 }
 #endif
 
