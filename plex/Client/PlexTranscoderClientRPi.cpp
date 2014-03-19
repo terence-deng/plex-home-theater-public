@@ -77,6 +77,12 @@ bool CPlexTranscoderClientRPi::CheckCodec(std::string codec) { return false; }
 ///////////////////////////////////////////////////////////////////////////////
 bool CPlexTranscoderClientRPi::ShouldTranscode(CPlexServerPtr server, const CFileItem& item)
 {
+  if (!item.IsVideo())
+    return false;
+
+  if (!server || !server->GetActiveConnection())
+    return false;
+
   CFileItemPtr selectedItem = CPlexMediaDecisionEngine::getSelectedMediaItem((item));
 
   bool bShouldTranscode = false;
