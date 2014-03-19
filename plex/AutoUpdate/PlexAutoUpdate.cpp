@@ -780,6 +780,7 @@ void CPlexAutoUpdate::UpdateAndRestart()
     }
   }
 
+  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Installing...", "Should only take a few minutes. Please wait.", 10000, false);
   WriteUpdateInfo();
   // now restart
   CApplicationMessenger::Get().Restart();
