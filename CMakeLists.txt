@@ -51,9 +51,9 @@ if(TARGET_RPI)
     set(RASPLEX_VERSION_STRING_SHORT ${RASPLEX_VERSION_STRING})
     set(RASPLEX_VERSION_STRING_SHORT_BUILD ${RASPLEX_VERSION_STRING})
   else()
-    set(RASPLEX_VERSION_MAJOR 3)
-    set(RASPLEX_VERSION_MINOR 9)
-    set(RASPLEX_VERSION_PATCH 9)
+    set(RASPLEX_VERSION_MAJOR 0)
+    set(RASPLEX_VERSION_MINOR 4)
+    set(RASPLEX_VERSION_PATCH 0)
     set(RASPLEX_VERSION_STRING ${RASPLEX_VERSION_MAJOR}.${RASPLEX_VERSION_MINOR}.${RASPLEX_VERSION_PATCH}.${PLEX_VERSION_BUILD}-${PLEX_GIT_REVISION})
     set(RASPLEX_VERSION_STRING_SHORT ${RASPLEX_VERSION_MAJOR}.${RASPLEX_VERSION_MINOR}.${RASPLEX_VERSION_PATCH})
     set(RASPLEX_VERSION_STRING_SHORT_BUILD ${RASPLEX_VERSION_STRING_SHORT}.${RASPLEX_VERSION_BUILD})
@@ -123,7 +123,6 @@ include_directories(
   ${plexdir}
   ${plexdir}/Utility
   ${plexdir}/Owned
-
   ${root}/xbmc/utils
   ${root}
   ${root}/xbmc/cores/dvdplayer
@@ -134,6 +133,12 @@ include_directories(
   ${root}/tools/darwin/depends/libcrystalhd
   ${root}/xbmc/cores/AudioEngine
 )
+
+if(TARGET_RPI)
+  include_directories(
+    ${root}/plex/AutoUpdate
+  )
+endif()
 
 if(ENABLE_PYTHON)
     if(EXTERNAL_PYTHON_HOME)

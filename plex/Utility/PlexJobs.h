@@ -18,6 +18,13 @@
 #include "FileSystem/PlexDirectory.h"
 #include "threads/CriticalSection.h"
 
+#ifdef TARGET_RASPBERRY_PI
+#include "dialogs/GUIDialogKaiToast.h"
+#include "PlexAutoUpdate.h"
+#include "filesystem/SpecialProtocol.h"
+#include "xbmc/Util.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////
 class CPlexHTTPFetchJob : public CJob
 {
@@ -161,5 +168,23 @@ class CPlexThemeMusicPlayerJob : public CJob
     CFileItem m_item;
     CStdString m_fileToPlay;
 };
+
+#ifdef TARGET_RASPBERRY_PI
+class CPlexAutoUpdate; 
+class CPlexUpdaterJob : public CJob
+{
+  public:
+    CPlexUpdaterJob(CPlexAutoUpdate *autoupdater, const CStdString& localbinary) : 
+      m_localBinary(localbinary)
+    {
+      m_autoupdater = autoupdater;
+    };
+
+    bool DoWork();
+
+    CPlexAutoUpdate *m_autoupdater;
+    CStdString m_localBinary;
+};
+#endif
 
 #endif /* defined(__Plex_Home_Theater__PlexJobs__) */

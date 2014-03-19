@@ -430,8 +430,14 @@ void CPlexAutoUpdate::WriteUpdateInfo()
   int channel = g_guiSettings.GetInt("updates.channel");
   callback.SetOption("channel", boost::lexical_cast<std::string>(channel));
 
+  CStdString data;
+  XFILE::CCurlFile m_http;
+  bool httpSuccess = m_http.Get(callback.Get(), data);
 
-  callback.Get();
+  if (httpSuccess)
+    CLog::Log(LOGINFO, "CPlexAutoUpdate::WriteUpdateInfo updated, got %s seconds", data.c_str());
+  else
+    CLog::Log(LOGERROR, "CPlexAutoUpdate::WriteUpdateInfo failed to update, got %s seconds", data.c_str());
 #endif
 }
 
@@ -750,58 +756,14 @@ void CPlexAutoUpdate::UpdateAndRestart()
 
 #endif
 }
-#else /* OPENELEC */
+
+#else
+
 void CPlexAutoUpdate::UpdateAndRestart()
 {
-  // we need to start the Install script here
-
-  // build script path
-  CStdString updaterPath;
-  CUtil::GetHomePath(updaterPath);
-  updaterPath += "/tools/openelec_install_update.sh";
-
-  // run the script redirecting stderr to stdin so that we can grab script errors and log them
-  CStdString command = "/bin/sh " + updaterPath + " " + CSpecialProtocol::TranslatePath(m_localBinary) + " 2>&1";
-  CLog::Log(LOGDEBUG,"CPlexAutoUpdate::UpdateAndRestart : Executing '%s'", command.c_str());
-  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Launching updater", "Progress will be reported.", 10000, false);
-  FILE* fp = popen(command.c_str(), "r");
-  if (fp)
-  {
-    // we grab script output in case we would have an error
-    char output[1000];
-    CStdString commandOutput;
-    if (fgets(output, sizeof(output)-1, fp))
-      commandOutput = CStdString(output);
-
-    int retcode = fclose(fp);
-    if (retcode)
-    {
-      CLog::Log(LOGERROR,"CPlexAutoUpdate::UpdateAndRestart: error %d while running install script : %s", retcode, commandOutput.c_str());
-      return;
-    }
-  }
-
-  WriteUpdateInfo();
-  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Update is complete!", "System will reboot twice to apply.", 10000, false);
-  fp = popen("/sbin/reboot", "r");
-  if (fp)
-  {
-    // we grab script output in case we would have an error
-    char output[1000];
-    CStdString commandOutput;
-    if (fgets(output, sizeof(output)-1, fp))
-      commandOutput = CStdString(output);
-
-    int retcode = fclose(fp);
-    if (retcode)
-    {
-      CLog::Log(LOGERROR,"CPlexAutoUpdate::UpdateAndRestart: error %d! Couldn't restart", retcode );
-      return;
-    }
-  }
-
-
+    CJobManager::GetInstance().AddJob(new CPlexUpdaterJob(this, m_localBinary), this, CJob::PRIORITY_HIGH);
 }
+
 #endif
 
 
