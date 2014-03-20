@@ -26,11 +26,11 @@ CPlexTranscoderClientRPi::CPlexTranscoderClientRPi()
 
   // Here is as list of audio / video codecs that we support natively on RPi
   m_knownVideoCodecs = boost::assign::list_of<std::string>  ("h264") ("mpeg4");
-  m_knownAudioCodecs = boost::assign::list_of<std::string>  ("aac") ("ac3") ("mp3") ("mp2") ("dca") ("flac");
+  m_knownAudioCodecs = boost::assign::list_of<std::string>  ("") ("aac") ("ac3") ("mp3") ("mp2") ("dca") ("flac");
 
   // check if optionnal codecs are here
   if ( CheckCodec("MPG2") )
-    m_knownVideoCodecs.insert("mpeg2");
+    m_knownVideoCodecs.insert("mpeg2video");
 
   if ( CheckCodec("WVC1") )
     m_knownVideoCodecs.insert("vc1");
@@ -53,7 +53,7 @@ bool CPlexTranscoderClientRPi::CheckCodec(std::string codec)
   {
       if (fgets(output, sizeof(output)-1, fp))
       {
-        if (!strcmp(output, reply.c_str()))
+        if (!strncmp(output, reply.c_str(),reply.length()))
         {
           CLog::Log(LOGDEBUG, "CPlexTranscoderClientRPi :  Codec %s was found.",codec.c_str());
           return true;
