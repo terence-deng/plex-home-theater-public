@@ -300,6 +300,8 @@ bool CPlexUpdaterJob::DoWork()
   CStdString command = "/bin/sh " + updaterPath + " " + CSpecialProtocol::TranslatePath(m_localBinary) + " 2>&1";
   CLog::Log(LOGDEBUG,"CPlexAutoUpdate::UpdateAndRestart : Executing '%s'", command.c_str());
   CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, "Launching updater", "Progress will be reported.", 10000, false);
+
+  //http://www.sw-at.com/blog/2011/03/23/popen-execute-shell-command-from-cc/ should replace with streaming execution, so we can see the output of the script in the log
   FILE* fp = popen(command.c_str(), "r");
   if (fp)
   {
