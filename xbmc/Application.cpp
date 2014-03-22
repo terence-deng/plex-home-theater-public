@@ -1573,10 +1573,15 @@ bool CApplication::Initialize()
       }
       else
 #else
-      g_guiSettings.SetInt("audiooutput.mode", AUDIO_HDMI);
-      g_guiSettings.SetInt("audiooutput.channels", AE_CH_LAYOUT_2_0); // this is why sound is stereo FIXME
-      g_guiSettings.SetBool("audiooutput.ac3passthrough", false);
-      g_guiSettings.SetBool("audiooutput.dtspassthrough", false);
+
+      if (!g_guiSettings.GetBool("system.firstrunwizard"))
+      {
+        g_guiSettings.SetInt("audiooutput.mode", AUDIO_HDMI);
+        g_guiSettings.SetInt("audiooutput.channels", AE_CH_LAYOUT_2_0); // this is why sound is stereo FIXME
+        g_guiSettings.SetBool("audiooutput.ac3passthrough", false);
+        g_guiSettings.SetBool("audiooutput.dtspassthrough", false);
+        g_guiSettings.SetBool("system.firstrunwizard", true);
+      }
 
 #endif
         g_windowManager.ActivateWindow(g_SkinInfo->GetFirstWindow());
