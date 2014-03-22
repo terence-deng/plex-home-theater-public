@@ -87,11 +87,7 @@ void CPlexAutoUpdate::CheckInstalledVersion()
 {
   if (g_application.GetReturnedFromAutoUpdate())
   {
-#ifdef TARGET_RASPBERRY_PI
-    CStdString currentVersion = g_infoManager.GetRasPlexVersion();
-#else
     CStdString currentVersion = g_infoManager.GetVersion();
-#endif
     CLog::Log(LOGDEBUG, "CPlexAutoUpdate::CheckInstalledVersion We are returning from a autoupdate with version %s", currentVersion.c_str());
 
     std::string version, packageHash, fromVersion;
@@ -125,11 +121,7 @@ void CPlexAutoUpdate::OnTimeout()
 
   CLog::Log(LOGDEBUG,"CPlexAutoUpdate::OnTimeout Starting");
 
-#ifdef TARGET_RASPBERRY_PI
-    CStdString currentVersion = g_infoManager.GetRasPlexVersion();
-#else
-    CStdString currentVersion = g_infoManager.GetVersion();
-#endif
+  CStdString currentVersion = g_infoManager.GetVersion();
 
 #ifdef UPDATE_DEBUG
   m_url.SetOption("version", "1.0.0.117-a97636ae");
@@ -403,13 +395,11 @@ void CPlexAutoUpdate::WriteUpdateInfo()
 
   TiXmlElement thisVersion("version");
   thisVersion.SetAttribute("version", m_downloadItem->GetProperty("version").asString());
-#ifdef TARGET_RASPBERRY_PI
-  thisVersion.SetAttribute("fromVersion", std::string(g_infoManager.GetRasPlexVersion()));
-#else
+#ifndef TARGET_RASPBERRY_PI
   thisVersion.SetAttribute("delta", m_downloadPackage->GetProperty("delta").asBoolean());
   thisVersion.SetAttribute("packageHash", m_downloadPackage->GetProperty("manifestHash").asString());
-  thisVersion.SetAttribute("fromVersion", std::string(g_infoManager.GetVersion()));
 #endif
+  thisVersion.SetAttribute("fromVersion", std::string(g_infoManager.GetVersion()));
 
   thisVersion.SetAttribute("installtime", time(NULL));
 
@@ -424,7 +414,7 @@ void CPlexAutoUpdate::WriteUpdateInfo()
 
   CURL callback = CURL("http://updater.rasplex.com/updated");
   callback.SetOption("version", m_downloadItem->GetProperty("version").asString());
-  callback.SetOption("fromVersion", std::string(g_infoManager.GetRasPlexVersion()));
+  callback.SetOption("fromVersion", std::string(g_infoManager.GetVersion()));
   callback.SetOption("serial", readProcCPUInfoValue("Serial"));
   callback.SetOption("revision", readProcCPUInfoValue("Revision"));
   int channel = g_guiSettings.GetInt("updates.channel");

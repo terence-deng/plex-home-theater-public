@@ -597,11 +597,7 @@ void CGUIWindowSettingsCategory::CreateSettings()
     /* PLEX */
     else if (strSetting.Equals("updates.current"))
     {
-#ifdef TARGET_RASPBERRY_PI
-      g_guiSettings.SetString("updates.current", g_infoManager.GetRasPlexVersion());
-#else
       g_guiSettings.SetString("updates.current", g_infoManager.GetVersion());
-#endif
     }
     else if (strSetting.Equals("plexmediaserver.remotequalitystr"))
     {
@@ -1213,11 +1209,7 @@ void CGUIWindowSettingsCategory::UpdateSettings()
       else
       {
         pControl->SetLabel(g_localizeStrings.Get(40029));
-#ifdef TARGET_RASPBERRY_PI
-        g_guiSettings.SetString("updates.current", g_infoManager.GetRasPlexVersion());
-#else
         g_guiSettings.SetString("updates.current", g_infoManager.GetVersion());
-#endif
       }
 #endif
     }

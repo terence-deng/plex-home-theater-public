@@ -452,11 +452,7 @@ void CGUISettings::Initialize()
   
   // System/Update
   CSettingsCategory* update = AddCategory(SETTINGS_SYSTEM, "updates", 40000);
-#ifdef TARGET_RASPBERRY_PI
-  AddString(update, "updates.current", 40029, g_infoManager.GetRasPlexVersion(), EDIT_CONTROL_INPUT, true);
-#else
   AddString(update, "updates.current", 40029, g_infoManager.GetVersion(), EDIT_CONTROL_INPUT, true);
-#endif
 #ifdef ENABLE_AUTOUPDATE
   AddBool(update, "updates.auto", 40017, true);
   AddInt(update, "updates.channel", 40002, CMyPlexUserInfo::ROLE_USER, CMyPlexUserInfo::ROLE_ADMIN, 0, CMyPlexUserInfo::ROLE_USER, SPIN_CONTROL_TEXT);

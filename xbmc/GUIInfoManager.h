@@ -791,7 +791,6 @@ public:
   int GetTotalPlayTime() const;
   CStdString GetCurrentPlayTimeRemaining(TIME_FORMAT format) const;
   CStdString GetVersion();
-  CStdString GetRasPlexVersion();
   CStdString GetBuild();
 
   bool GetDisplayAfterSeek();
