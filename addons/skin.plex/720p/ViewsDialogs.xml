@@ -155,7 +155,7 @@
 					<control type="list" id="3">
 						<width>560</width>
 						<height>300</height>
-						<onleft>5</onleft>
+						<onleft>-</onleft>
 						<onright>5</onright>
 						<onup>3</onup>
 						<ondown>3</ondown>

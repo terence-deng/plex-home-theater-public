@@ -15,7 +15,6 @@ include_directories(
 	${root}/plex/Network
 	${root}/plex/Remote
 	${root}/plex/Filters
-	${root}/plex/AutoUpdate
   ${root}/plex/Third-Party/rapidxml
   ${CONFIG_INCLUDE_PATH_SPARKLE}
 )
@@ -139,7 +138,7 @@ endif(ENABLE_PYTHON)
 file(GLOB MEDIA_IMAGES_MEDIASTREAM ${root}/addons/skin.mediastream/Media/*.png ${root}/addons/skin.mediastream/Media/*.gif)
 file(GLOB MEDIA_IMAGES_PLEX_SKIN ${root}/addons/skin.plex/Media/*.png ${root}/addons/skin.plex/Media/*.gif)
 
-if(COMPRESS_TEXTURES)
+if(COMPRESS_TEXTURES AND NOT TARGET_RPI)
   # Build the packed textures
   if(WIN32)
     set(WORKDIR ${root}/tools/TexturePacker)

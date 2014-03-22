@@ -35,6 +35,9 @@ CPlexServerConnTestThread::Process()
   if (state == CPlexConnection::CONNECTION_STATE_REACHABLE)
     CLog::Log(LOGDEBUG, "CPlexServerConnTestJob:DoWork took %lld sec, Connection SUCCESS %s ~ localConn: %s conn: %s",
               t.elapsed(), m_server->GetName().c_str(), m_conn->IsLocal() ? "YES" : "NO", m_conn->GetAddress().Get().c_str());
+  else if (state == CPlexConnection::CONNECTION_STATE_UNKNOWN)
+    CLog::Log(LOGDEBUG, "CPlexServerConnTestJob:DoWork took %lld sec, Connection ABORTED %s ~ localConn: %s conn: %s",
+              t.elapsed(), m_server->GetName().c_str(), m_conn->IsLocal() ? "YES" : "NO", m_conn->GetAddress().Get().c_str());
   else
     CLog::Log(LOGDEBUG, "CPlexServerConnTestJob:DoWork took %lld sec, Connection FAILURE %s ~ localConn: %s conn: %s",
               t.elapsed(), m_server->GetName().c_str(), m_conn->IsLocal() ? "YES" : "NO", m_conn->GetAddress().Get().c_str());
@@ -152,11 +155,11 @@ CPlexServer::MarkUpdateFinished(int connType)
     vector<CPlexConnectionPtr>::iterator it = find(m_connections.begin(), m_connections.end(), conn);
     m_connections.erase(it);
 
-    if (m_activeConnection == conn)
+    if (m_activeConnection && m_activeConnection->Equals(conn))
+    {
+      CLog::Log(LOGDEBUG, "CPlexServer::MarkUpdateFinished Lost activeConnection for server %s", GetName().c_str());
       m_activeConnection.reset();
-
-    if (m_bestConnection == conn)
-      m_bestConnection.reset();
+    }
   }
 
   return m_connections.size() > 0;
@@ -244,7 +247,7 @@ void CPlexServer::OnConnectionTest(CPlexConnectionPtr conn, int state)
     CSingleLock lk(m_connTestThreadLock);
     BOOST_FOREACH(CPlexServerConnTestThread* thread, m_connTestThreads)
     {
-      if (thread->m_conn == conn)
+      if (thread->m_conn->Equals(conn))
       {
         m_connTestThreads.erase(std::remove(m_connTestThreads.begin(), m_connTestThreads.end(), thread));
         break;
@@ -282,7 +285,8 @@ CPlexServer::Merge(CPlexServerPtr otherServer)
   CSingleLock lk(m_serverLock);
 
   m_name = otherServer->m_name;
-  m_version = otherServer->m_version;
+  if (!otherServer->m_version.empty())
+    m_version = otherServer->m_version;
 
   // Token ownership is the only ownership metric to be believed. Everything else defaults to owned.
   // If something comes after myPlex on the LAN, say, we'll reset ownership to owned.
@@ -294,11 +298,18 @@ CPlexServer::Merge(CPlexServerPtr otherServer)
 
   BOOST_FOREACH(CPlexConnectionPtr conn, otherServer->m_connections)
   {
-    vector<CPlexConnectionPtr>::iterator it;
-    it = find(m_connections.begin(), m_connections.end(), conn);
-    if (it != m_connections.end())
-      (*it)->Merge(conn);
-    else
+    bool found = false;
+    BOOST_FOREACH(CPlexConnectionPtr mappedConn, m_connections)
+    {
+      if (conn->Equals(mappedConn))
+      {
+        mappedConn->Merge(conn);
+        found = true;
+        break;
+      }
+    }
+
+    if (!found)
       AddConnection(conn);
   }
 }
@@ -403,10 +414,6 @@ string CPlexServer::GetAnyToken() const
 void
 CPlexServer::AddConnection(CPlexConnectionPtr connection)
 {
-  if (m_activeConnection && m_activeConnection->IsLocal() &&
-      (!connection->GetAccessToken().empty() && !HasAuthToken()))
-    m_activeConnection.reset();
-  
   m_connections.push_back(connection);
 }
 

@@ -20,7 +20,14 @@
 #include "music/tags/MusicInfoTag.h"
 
 #include <boost/assign/list_of.hpp>
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wredeclared-class-member"
+#endif
 #include <boost/bimap.hpp>
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 #include <boost/foreach.hpp>
 #include <map>
 
@@ -71,7 +78,7 @@ CPlexDirectory::GetDirectory(const CURL& url, CFileItemList& fileItems)
     return GetOnlineChannelDirectory(fileItems);
   }
 
-  if (boost::contains(m_url.GetFileName(), "library/metadata"))
+  if (boost::starts_with(m_url.GetFileName(), "library/metadata") && !boost::ends_with(m_url.GetFileName(), "children"))
     m_url.SetOption("checkFiles", "1");
 
   bool httpSuccess;

@@ -49,11 +49,12 @@ void CPlexRemoteSubscriber::Process()
     if (!m_outgoingTimelines.waitPop(timelines) || !timelines)
       continue;
 
+    int numFails = 0;
     while (!sendTimeline(timelines))
     {
       CLog::Log(LOGWARNING, "CPlexRemoteSubscriber::sendTimeline failed to send timeline to %s", getName().c_str());
       Sleep(500);
-      if (m_bStop)
+      if ((++ numFails > 5) || m_bStop)
       {
         CLog::Log(LOGDEBUG, "CPlexRemoteSubcriber::Process aborting timeline thread for subscriber %s", getName().c_str());
         return;
@@ -165,6 +166,9 @@ CPlexRemoteSubscriberPtr CPlexRemoteSubscriberManager::addSubscriber(CPlexRemote
   }
   else
   {
+    g_application.WakeUpScreenSaverAndDPMS();
+    g_application.ResetSystemIdleTimer();
+
     m_map[subscriber->getUUID()] = subscriber;
     CLog::Log(LOGDEBUG, "CPlexRemoteSubscriberManager::addSubscriber added %s:%d [%s]",
               subscriber->getURL().GetHostName().c_str(), subscriber->getURL().GetPort(), subscriber->getUUID().c_str());
