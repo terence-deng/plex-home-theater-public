@@ -22,14 +22,11 @@
 #include "Client/PlexServerManager.h"
 #include "Client/PlexServer.h"
 #include "PlexMediaDecisionEngine.h"
-<<<<<<< HEAD
 #include "Client/PlexServerVersion.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "PlexTranscoderClientRPi.h"
-
-=======
 #include "Client/PlexTranscoderClientRPi.h"
->>>>>>> [RasPlex][ENH] Adding Transcoding Support
+
 #include "log.h"
 
 #include <map>
@@ -201,7 +198,7 @@ CURL CPlexTranscoderClient::GetTranscodeURL(CPlexServerPtr server, const CFileIt
   bool isLocal = server->GetActiveConnection()->IsLocal();
 
   CPlexServerVersion serverVersion(server->GetVersion());
-  CPlexServerVersion needVersion("0.9.9.8.0-abc123");
+  CPlexServerVersion needVersion("0.9.9.7.429-f80a8d6");
   bool hlsStreaming = false;
   if (needVersion > serverVersion)
   {

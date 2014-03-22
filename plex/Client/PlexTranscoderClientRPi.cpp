@@ -104,10 +104,12 @@ bool CPlexTranscoderClientRPi::ShouldTranscode(CPlexServerPtr server, const CFil
   // default capping values
   m_maxVideoBitrate = 20000;
   m_maxAudioBitrate = 1000;
+  int maxBitDepth = 8;
 
   // grab some other information in the audio / video streams
   int audioBitRate = 0;
   float videoFrameRate = 0;
+  int bitDepth = 0;
 
   CFileItemPtr audioStream,videoStream;
   CFileItemPtr mediaPart = selectedItem->m_mediaParts.at(0);
@@ -119,7 +121,10 @@ bool CPlexTranscoderClientRPi::ShouldTranscode(CPlexServerPtr server, const CFil
       CLog::Log(LOGERROR,"CPlexTranscoderClient::ShouldTranscodeRPi - AudioStream is empty");
 
     if ((videoStream = PlexUtils::GetSelectedStreamOfType(mediaPart, PLEX_STREAM_VIDEO)))
+    {
       videoFrameRate = videoStream->GetProperty("frameRate").asFloat();
+      bitDepth = videoStream->GetProperty("bitDepth").asInteger();
+    }
     else
       CLog::Log(LOGERROR,"CPlexTranscoderClient::ShouldTranscodeRPi - VideoStream is empty");
   }
@@ -131,6 +136,7 @@ bool CPlexTranscoderClientRPi::ShouldTranscode(CPlexServerPtr server, const CFil
   CLog::Log(LOGDEBUG,"-%16s : %s", "videoCodec",videoCodec.c_str());
   CLog::Log(LOGDEBUG,"-%16s : %d", "videoResolution",videoResolution);
   CLog::Log(LOGDEBUG,"-%16s : %3.3f", "videoFrameRate",videoFrameRate);
+  CLog::Log(LOGDEBUG,"-%16s : %d", "bitDepth",bitDepth);
   CLog::Log(LOGDEBUG,"-%16s : %d", "bitrate",videoBitRate);
   CLog::Log(LOGDEBUG,"-%16s : %d", "width",videoWidth);
   CLog::Log(LOGDEBUG,"-%16s : %d", "height",videoHeight);
@@ -176,6 +182,11 @@ bool CPlexTranscoderClientRPi::ShouldTranscode(CPlexServerPtr server, const CFil
   {
     bShouldTranscode = true;
     ReasonWhy.Format("Audio bitrate is too high : %d kbps, (max :%d kbps)",audioBitRate,m_maxAudioBitrate);
+  }
+  else if (bitDepth > maxBitDepth)
+  {
+    bShouldTranscode = true;
+    ReasonWhy.Format("Video bitDepth is too high : %d (max : %d)",bitDepth,maxBitDepth);
   }
 
   if (bShouldTranscode)
