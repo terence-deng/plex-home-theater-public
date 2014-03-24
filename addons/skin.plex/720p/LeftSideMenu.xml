@@ -390,23 +390,15 @@
 						<label>$LOCALIZE[31961]</label>
 						<onclick>Dialog.Close(4998)</onclick>
 						<onclick>Plex.Powerdown</onclick>
-						<visible>!System.isOpenElec</visible>
 					</item>
 					<item id="114">
-					<description>Shut Down</description>
-						<label>$LOCALIZE[31961]</label>
-						<onclick>Dialog.Close(4998)</onclick>
-						<onclick>System.Exec(poweroff)</onclick>
-						<visible>System.isOpenElec</visible>
-					</item>
-					<item id="115">
 						<description>Restart</description>
 						<label>$LOCALIZE[31072]</label>
 						<onclick>Dialog.Close(4998)</onclick>
 						<onclick>System.Exec(reboot)</onclick>
 						<visible>System.isOpenElec</visible>
 					</item>
-					<item id="116">
+					<item id="115">
 						<description>Sleep</description>
 						<label>$LOCALIZE[31960]</label>
 						<onclick>Dialog.Close(4998)</onclick>
