@@ -238,7 +238,7 @@ CURL CPlexTranscoderClient::GetTranscodeURL(CPlexServerPtr server, const CFileIt
     tURL.SetOption("offset", boost::lexical_cast<std::string>(offset));
   }
 
-  std::string bitrate = GetCurrentBitrate(isLocal);
+  std::string bitrate = GetInstance()->GetCurrentBitrate(isLocal);
   tURL.SetOption("maxVideoBitrate", bitrate);
   tURL.SetOption("videoQuality", _qualities[bitrate]);
   tURL.SetOption("videoResolution", _resolutions[bitrate]);
