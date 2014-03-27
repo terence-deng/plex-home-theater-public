@@ -148,7 +148,7 @@ CPlexFile::Exists(const CURL &url)
 CStdString CPlexFile::GetMimeType(const CURL& url)
 {
   /* we only handle plexserver:// stuff here */
-  if (url.GetProtocol() != "http")
+  if (url.GetProtocol() != "plexserver")
     return "";
 
   CStdString path = url.GetFileName();
