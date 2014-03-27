@@ -47,10 +47,10 @@ vector<stringPair> CPlexFile::GetHeaderList()
   if (AUDIO_IS_BITSTREAM(g_guiSettings.GetInt("audiooutput.mode")))
   {
     if (g_guiSettings.GetBool("audiooutput.dtspassthrough"))
-      protocols += ",dts";
+      protocols += ",dts{bitrate:800000&channels:8}";
     
     if (g_guiSettings.GetBool("audiooutput.ac3passthrough"))
-      protocols += ",ac3";
+      protocols += ",ac3{bitrate:800000&channels:8}";
   }
   
   hdrs.push_back(stringPair("X-Plex-Client-Capabilities", protocols));
