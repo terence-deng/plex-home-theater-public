@@ -1460,7 +1460,7 @@ const CStdString& CFileItem::GetMimeType(bool lookup /*= true*/) const
     CStdString& m_ref = (CStdString&)m_mimetype;
 
     /* PLEX */
-    if (GetAsUrl().GetProtocol() == "plexserver")
+    if (GetAsUrl().GetProtocol() == "http")
       m_ref = XFILE::CPlexFile::GetMimeType(GetAsUrl());
     else
     /* END PLEX */
