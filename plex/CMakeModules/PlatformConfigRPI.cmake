@@ -3,7 +3,7 @@
 set(EXTRA_CFLAGS "-fPIC -DPIC")
 
 
-option(USE_INTERNAL_FFMPEG "" ON)
+option(USE_INTERNAL_FFMPEG "" OFF)
 
 set(LINK_PKG
   Freetype
