@@ -5,7 +5,16 @@ set -ex
 
 UPDATEFILE=$1
 INSTALLPATH=/storage/.update
+POST_UPDATE_PATH=/storage/.post_update.sh
 TTL=5000 # how long to show notifications
+
+post_update()
+{
+  if [ -f "$POST_UPDATE_PATH" ]; then
+    chmod +x $POST_UPDATE_PATH 
+    /bin/sh $POST_UPDATE_PATH
+  fi
+}
 
 notify()
 {
@@ -37,6 +46,7 @@ KERNEL=$(echo $CONTENTS | tr " " "\n" | grep KERNEL$)
 SYSTEM=$(echo $CONTENTS | tr " " "\n" | grep SYSTEM$)
 KERNELMD5=$(echo $CONTENTS | tr " " "\n"  | grep KERNEL.md5)
 SYSTEMMD5=$(echo $CONTENTS | tr " " "\n" | grep SYSTEM.md5)
+POST_UPDATE=$(echo $CONTENTS | tr " " "\n" | grep post_update.sh)
 
 [ -z "$KERNEL" ] && abort 'Invalid archive - no kernel.'
 [ -z "$KERNELMD5" ] && abort 'Invalid archive - no kernel check.'
@@ -49,6 +59,13 @@ notify 'Updating...' 'Beginning extraction.'
 tar -xf $UPDATEFILE -C $INSTALLPATH  $KERNEL $SYSTEM $KERNELMD5 $SYSTEMMD5
 
 notify 'Updating...' 'Finished extraction, validating checksums.'
+
+if [ -f "$POST_UPDATE" ];then
+  notify 'Running post update script'
+  cp $POST_UPDATE /storage/.post_update
+  post_update
+  notify 'Post-update complete!'
+fi
 
 kernel_check=`/bin/md5sum $KERNEL | awk '{print $1}'`
 system_check=`/bin/md5sum $SYSTEM | awk '{print $1}'`

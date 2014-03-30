@@ -92,6 +92,10 @@
 
 
 /* PLEX */
+#ifdef TARGET_RASPBERRY_PI
+#include "PlexTypes.h"
+#include "guilib/Key.h"
+#endif
 #include "PlexApplication.h"
 #include "AutoUpdate/PlexAutoUpdate.h"
 #include "Utility/PlexGlobalCacher.h"
@@ -119,6 +123,8 @@ const BUILT_IN commands[] = {
   #endif
   { "UpdateAndRestart",           false,  "Update PHT and restart" },
   { "ControlGlobalCacher",        false,  "Stop or Start the global cacher" },
+  { "MyPlexLogin",                false,  "Launches MyPlex login" },
+  { "CalibrateVideo",             false,  "Calibrate Video" },
   /* END PLEX */
   { "Help",                       false,  "This help message" },
   { "Reboot",                     false,  "Reboot the system" },
@@ -304,10 +310,20 @@ int CBuiltins::Execute(const CStdString& execString)
   {
     CApplicationMessenger::Get().Minimize();
   }
+  /* PLEX */
   else if (execute.Equals("controlglobalcacher"))
   { //ControlGlobalCacher
     controlGlobalCache();
   }
+  else if (execute.Equals("myplexlogin"))
+  {
+    g_windowManager.ActivateWindow(WINDOW_MYPLEX_LOGIN);
+  }
+  else if (execute.Equals("calibratevideo"))
+  {
+    g_windowManager.ActivateWindow(WINDOW_SCREEN_CALIBRATION);
+  }
+  /* PLEX */
   else if (execute.Equals("loadprofile"))
   {
     int index = g_settings.GetProfileIndex(parameter);
@@ -1663,6 +1679,7 @@ int CBuiltins::Execute(const CStdString& execString)
   {
     g_application.StopPVRManager();
   }
+
   /* PLEX */
 #if defined(TARGET_DARWIN_OSX) || defined(TARGET_WINDOWS) || defined(OPENELEC)
   else if (execute.Equals("toggledisplayblanking"))
