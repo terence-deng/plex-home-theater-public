@@ -58,6 +58,8 @@ notify 'Updating...' 'Beginning extraction.'
 # untar both SYSTEM and KERNEL into installation directory
 tar -xf $UPDATEFILE -C $INSTALLPATH  $KERNEL $SYSTEM $KERNELMD5 $SYSTEMMD5 $POST_UPDATE
 
+cd $INSTALLPATH
+
 notify 'Updating...' 'Finished extraction, validating checksums.'
 
 if [ -f "$POST_UPDATE" ];then
@@ -78,7 +80,6 @@ systemmd5=`cat $SYSTEMMD5 | awk '{print $1}'`
 
 notify 'Updating...' 'Checksums valid! Cleaning up...'
 # move extracted files to the toplevel
-cd $INSTALLPATH
 mv $KERNEL $SYSTEM $KERNELMD5 $SYSTEMMD5 .
 
 # remove the directories created by tar
