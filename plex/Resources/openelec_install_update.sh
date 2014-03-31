@@ -56,7 +56,7 @@ POST_UPDATE=$(echo $CONTENTS | tr " " "\n" | grep post_update.sh)
 notify 'Updating...' 'Beginning extraction.'
 
 # untar both SYSTEM and KERNEL into installation directory
-tar -xf $UPDATEFILE -C $INSTALLPATH  $KERNEL $SYSTEM $KERNELMD5 $SYSTEMMD5
+tar -xf $UPDATEFILE -C $INSTALLPATH  $KERNEL $SYSTEM $KERNELMD5 $SYSTEMMD5 $POST_UPDATE
 
 notify 'Updating...' 'Finished extraction, validating checksums.'
 
