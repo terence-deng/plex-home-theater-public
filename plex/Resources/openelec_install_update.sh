@@ -62,7 +62,7 @@ notify 'Updating...' 'Finished extraction, validating checksums.'
 
 if [ -f "$POST_UPDATE" ];then
   notify 'Running post update script'
-  cp $POST_UPDATE /storage/.post_update
+  cp $POST_UPDATE $POST_UPDATE_PATH
   post_update
   notify 'Post-update complete!'
 fi
