@@ -49,8 +49,6 @@
 
 #define XMIN(a,b) ((a)<(b)?(a):(b))
 
-//#define USE_PAGING 1
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool CGUIPlexMediaWindow::OnMessage(CGUIMessage &message)
 {
@@ -70,6 +68,13 @@ bool CGUIPlexMediaWindow::OnMessage(CGUIMessage &message)
     CGUIDialog *dialog = (CGUIDialog*) g_windowManager.GetWindow(WINDOW_DIALOG_FILTER_SORT);
     if (dialog && dialog->IsActive())
       dialog->Close();
+
+    // Store the current selected item
+    if (m_vecItems)
+    {
+      CURL u(m_vecItems->GetPath());
+      m_lastSelectedIndex[u.GetUrlWithoutOptions()] = m_viewControl.GetSelectedItem();
+    }
   }
   else if (message.GetMessage() == GUI_MSG_WINDOW_DEINIT)
     m_sectionFilter.reset();
@@ -99,19 +104,14 @@ bool CGUIPlexMediaWindow::OnMessage(CGUIMessage &message)
         AddFilters();
       m_returningFromSkinLoad = false;
       g_plexApplication.timelineManager->RefreshSubscribers();
-      break;
-    }
+      m_fetchedPages.clear();
 
-    case GUI_MSG_ITEM_SELECT:
-    {
-#ifdef USE_PAGING
-      int currentIdx = m_viewControl.GetSelectedItem();
-      if (currentIdx > m_pagingOffset && m_currentJobId == -1)
-      {
-        /* the user selected something in the middle of where we loaded, let's just cheat and fill in everything */
-        LoadPage(m_pagingOffset, currentIdx + PLEX_DEFAULT_PAGE_SIZE);
-      }
-#endif
+      // Restore selected item for the section
+      int idx = 0;
+      CURL u(m_vecItems->GetPath());
+      if (m_lastSelectedIndex.find(u.GetUrlWithoutOptions()) != m_lastSelectedIndex.end())
+        idx = m_lastSelectedIndex[u.GetUrlWithoutOptions()];
+      m_viewControl.SetSelectedItem(idx);
       break;
     }
 
@@ -162,7 +162,8 @@ bool CGUIPlexMediaWindow::OnMessage(CGUIMessage &message)
 
     case GUI_MSG_PLEX_PAGE_LOADED:
     {
-      InsertPage((CFileItemList*)message.GetPointer());
+      InsertPage((CFileItemList*)message.GetPointer(), message.GetParam2());
+      break;
     }
 
     case GUI_MSG_CHANGE_VIEW_MODE:
@@ -197,7 +198,7 @@ bool CGUIPlexMediaWindow::OnMessage(CGUIMessage &message)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void CGUIPlexMediaWindow::InsertPage(CFileItemList* items)
+void CGUIPlexMediaWindow::InsertPage(CFileItemList* items, int Where)
 {
 #ifdef USE_PAGING
   int nItem = m_viewControl.GetSelectedItem();
@@ -207,12 +208,11 @@ void CGUIPlexMediaWindow::InsertPage(CFileItemList* items)
 
   int itemsToRemove = items->Size();
   for (int i = 0; i < itemsToRemove; i ++)
-    m_vecItems->Remove(m_pagingOffset);
+    m_vecItems->Remove(Where);
 
   for (int i = 0; i < items->Size(); i ++)
-    m_vecItems->Insert(m_pagingOffset + i, items->Get(i));
+    m_vecItems->Insert(Where + i, items->Get(i));
 
-  m_pagingOffset += items->Size();
   m_viewControl.SetItems(*m_vecItems);
   m_viewControl.SetSelectedItem(strSelected);
 
@@ -543,10 +543,7 @@ bool CGUIPlexMediaWindow::OnAction(const CAction &action)
       action.GetID() <= ACTION_PAGE_DOWN) ||
       action.GetID() >= KEY_ASCII) // KEY_ASCII means that we letterjumped.
   {
-    if (m_viewControl.GetSelectedItem() >= m_pagingOffset)
-      LoadPage(m_pagingOffset, m_viewControl.GetSelectedItem() + PLEX_DEFAULT_PAGE_SIZE);
-    else if (m_viewControl.GetSelectedItem() >= (m_pagingOffset - (PLEX_DEFAULT_PAGE_SIZE/2)))
-      LoadNextPage();
+    FetchItemPage(m_viewControl.GetSelectedItem());
   }
 #endif
 
@@ -560,9 +557,6 @@ bool CGUIPlexMediaWindow::GetDirectory(const CStdString &strDirectory, CFileItem
 #ifdef USE_PAGING
   u.SetProtocolOption("containerStart", "0");
   u.SetProtocolOption("containerSize", boost::lexical_cast<std::string>(PLEX_DEFAULT_PAGE_SIZE));
-  m_pagingOffset = PLEX_DEFAULT_PAGE_SIZE - 1;
-#else
-  m_pagingOffset = -1;
 #endif
 
   if (u.GetProtocol() == "plexserver" &&
@@ -634,62 +628,69 @@ bool CGUIPlexMediaWindow::GetDirectory(const CStdString &strDirectory, CFileItem
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void CGUIPlexMediaWindow::LoadPage(int start, int numberOfItems)
+void CGUIPlexMediaWindow::LoadPage(int iPage)
 {
+  int start = iPage * PLEX_DEFAULT_PAGE_SIZE;
+  int numberOfItems = PLEX_DEFAULT_PAGE_SIZE;
+
+  // Check if the page has been already fetched
+  if (m_fetchedPages.find(iPage) != m_fetchedPages.end())
+    return;
+
+  // check if the page is already being fetched
+  if (m_fetchJobs.find(iPage) != m_fetchJobs.end())
+    return;
+
+  // check if we're requesting an invalid page
   if (start >= m_vecItems->GetProperty("totalSize").asInteger())
     return;
-  if (m_currentJobId != -1)
-  {
-    CJobManager::GetInstance().CancelJob(m_currentJobId);
-    m_currentJobId = -1;
-  }
   
   CURL u(m_vecItems->GetPath());
   
   int pageSize = XMIN(numberOfItems, m_vecItems->GetProperty("totalSize").asInteger() - start);
   
-  u.SetProtocolOption("containerStart", boost::lexical_cast<std::string>(start));
-  u.SetProtocolOption("containerSize", boost::lexical_cast<std::string>(pageSize));
+  u.SetOption("X-Plex-Container-Start", boost::lexical_cast<std::string>(start));
+  u.SetOption("X-Plex-Container-Size", boost::lexical_cast<std::string>(pageSize));
   
-  CLog::Log(LOGDEBUG, "CGUIPlexMediaWindow::LoadPage loading %d to %d", start, start+pageSize);
-  
-  m_currentJobId = CJobManager::GetInstance().AddJob(new CPlexDirectoryFetchJob(u), this);
+#if TARGET_RASPBERRY_PI
+  PlexUtils::PauseRendering(true, true);
+#endif
+
+  m_fetchJobs[iPage] = CJobManager::GetInstance().AddJob(new CPlexDirectoryFetchJob(u), this);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void CGUIPlexMediaWindow::LoadNextPage()
+void CGUIPlexMediaWindow::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
-  if (m_vecItems->HasProperty("totalSize"))
-  {
-    if (m_vecItems->GetProperty("totalSize").asInteger() > m_pagingOffset)
-    {
-      LoadPage(m_pagingOffset, PLEX_DEFAULT_PAGE_SIZE);
-    }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void CGUIPlexMediaWindow::OnJobComplete(unsigned int jobID, bool success, CJob *job)
-{
-  CPlexDirectoryFetchJob *fjob = static_cast<CPlexDirectoryFetchJob*>(job);
+  CPlexDirectoryFetchJob* fjob = static_cast<CPlexDirectoryFetchJob*>(job);
   if (!fjob)
     return;
+
+#ifdef USE_PAGING
+  int rangeStart = boost::lexical_cast<int>(fjob->m_url.GetOption("X-Plex-Container-Start"));
+  int pageNum = GetPageFromItemIndex(rangeStart);
 
   if (success)
   {
     CFileItemList* list = new CFileItemList;
     list->Copy(fjob->m_items);
 
-    m_thumbCache.Load(*list);
+    // we update the fetched items list
+    m_fetchedPages.insert(pageNum);
 
     if (list)
     {
-      CGUIMessage msg(GUI_MSG_PLEX_PAGE_LOADED, 0, GetID(), 0, 0, list);
+      CGUIMessage msg(GUI_MSG_PLEX_PAGE_LOADED, 0, GetID(), 0, rangeStart, list);
       g_windowManager.SendThreadMessage(msg);
     }
   }
-  
-  m_currentJobId = -1;
+
+#if TARGET_RASPBERRY_PI
+  PlexUtils::PauseRendering(false, true);
+#endif
+  // remove FetchJob from List
+  m_fetchJobs.erase(pageNum);
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -763,6 +764,7 @@ bool CGUIPlexMediaWindow::OnPlayMedia(int iItem)
   else
   {
     std::string uri = GetFilteredURI(*item);
+
     g_plexApplication.playQueueManager->create(*item, uri);
   }
 
@@ -779,11 +781,22 @@ void CGUIPlexMediaWindow::GetContextButtons(int itemNumber, CContextButtons &but
   if (g_application.IsPlaying())
     buttons.Add(CONTEXT_BUTTON_NOW_PLAYING, 13350);
 
-  buttons.Add(CONTEXT_BUTTON_PLAY_ONLY_THIS, 52602);
+  buttons.Add(CONTEXT_BUTTON_PLAY_ITEM, 208);
+
+  CFileItemList pqlist;
+  g_plexApplication.playQueueManager->getCurrentPlayQueue(pqlist);
+
+  if (pqlist.Size())
+    buttons.Add(CONTEXT_BUTTON_PLAY_ONLY_THIS, 52602);
+  else
+    buttons.Add(CONTEXT_BUTTON_PLAY_ONLY_THIS, 52607);
 
   ePlexMediaType itemType = PlexUtils::GetMediaTypeFromItem(*m_vecItems);
   if (g_plexApplication.playQueueManager->getCurrentPlayQueueType() == itemType)
     buttons.Add(CONTEXT_BUTTON_QUEUE_ITEM, 52603);
+
+  if (m_vecItems->Size())
+    buttons.Add(CONTEXT_BUTTON_SHUFFLE, 52600);
 
   if (IsVideoContainer() && item->IsPlexMediaServerLibrary())
   {
@@ -837,6 +850,12 @@ bool CGUIPlexMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
     case CONTEXT_BUTTON_PLAY_AND_QUEUE:
     {
       PlayAll(false, item);
+      break;
+    }
+
+    case CONTEXT_BUTTON_PLAY_ITEM:
+    {
+      OnAction(ACTION_PLAYER_PLAY);
       break;
     }
 
@@ -1020,15 +1039,6 @@ bool CGUIPlexMediaWindow::Update(const CStdString &strDirectory, bool updateFilt
 
   UpdateSectionTitle();
 
-  /* try to restore selection a bit better */
-  int idx = 0;
-  CURL u(m_vecItems->GetPath());
-  if (m_lastSelectedIndex.find(u.GetUrlWithoutOptions()) != m_lastSelectedIndex.end())
-    idx = m_lastSelectedIndex[u.GetUrlWithoutOptions()];
-
-  if (m_viewControl.GetSelectedItem() == 0 && idx != 0)
-    m_viewControl.SetSelectedItem(idx);
-
   return ret;
 }
 
@@ -1058,12 +1068,14 @@ void CGUIPlexMediaWindow::CheckPlexFilters(CFileItemList &list)
   CURL newPath(list.GetPath());
   if (m_startDirectory != newPath.GetUrlWithoutOptions())
   {
-    EPlexDirectoryType type = list.GetPlexDirectoryType();
-    if (type == PLEX_DIR_TYPE_SEASON ||
-        type == PLEX_DIR_TYPE_EPISODE ||
-        type == PLEX_DIR_TYPE_ALBUM ||
-        type == PLEX_DIR_TYPE_TRACK ||
-        type == PLEX_DIR_TYPE_VIDEO)
+    if (list.Size())
+      m_directoryType = list.GetPlexDirectoryType();
+
+    if (m_directoryType == PLEX_DIR_TYPE_SEASON ||
+        m_directoryType == PLEX_DIR_TYPE_EPISODE ||
+        m_directoryType == PLEX_DIR_TYPE_ALBUM ||
+        m_directoryType == PLEX_DIR_TYPE_TRACK ||
+        m_directoryType == PLEX_DIR_TYPE_VIDEO)
     {
       CLog::Log(LOGDEBUG, "CGUIPlexMediaWindow::CheckPlexFilters setting preplay flag");
       list.SetProperty("PlexPreplay", "yes");
@@ -1372,6 +1384,10 @@ void CGUIPlexMediaWindow::AddFilters()
       }
     }
   }
+
+#ifdef USE_PAGING
+  FetchItemPage(m_viewControl.GetSelectedItem());
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1480,3 +1496,34 @@ bool CGUIPlexMediaWindow::MatchUniformProperty(const CStdString& property)
 
   return same;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+void CGUIPlexMediaWindow::FetchItemPage(int Index)
+{
+  // find the item range we need
+  int NeededRangeStart = Index - PLEX_DEFAULT_PAGE_SIZE / 2;
+  int NeededRangeEnd = Index + PLEX_DEFAULT_PAGE_SIZE / 2;
+
+  int startPage = GetPageFromItemIndex(NeededRangeStart);
+  int endPage = GetPageFromItemIndex(NeededRangeEnd);
+
+  CLog::Log(LOGDEBUG,"CGUIPlexMediaWindow::FetchItemPage for index = %d / %lld, Page (%d-%d)", Index,m_vecItems->GetProperty("totalSize").asInteger(), startPage, endPage);
+
+  // check now if unnecessary fetching jobs should be cancelled
+  BOOST_FOREACH(const FetchJobPair p, m_fetchJobs)
+  {
+    if ((p.first != startPage) || (p.first != endPage))
+      CJobManager::GetInstance().CancelJob(p.second);
+  }
+
+  // now we check if both pages are cached, if its not the case then we need to cache them
+  if (m_fetchedPages.find(startPage) == m_fetchedPages.end())
+    LoadPage(startPage);
+
+  if (endPage != startPage)
+  {
+    if (m_fetchedPages.find(endPage) == m_fetchedPages.end())
+      LoadPage(endPage);
+  }
+}
+

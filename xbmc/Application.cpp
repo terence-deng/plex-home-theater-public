@@ -249,6 +249,10 @@
 #include "pictures/GUIDialogPictureInfo.h"
 #include "addons/GUIDialogAddonSettings.h"
 #include "addons/GUIDialogAddonInfo.h"
+#ifdef __PLEX__
+#include "plex/GUI/GUIDialogPlexSettingsMenu.h"
+#endif
+
 #ifdef HAS_LINUX_NETWORK
 #include "network/GUIDialogAccessPoints.h"
 #endif
@@ -365,6 +369,8 @@
 #include "plex/GUI/GUIWindowPlexPlayQueue.h"
 #include "plex/Playlists/GUIDialogPlexPlayQueue.h"
 #include "plex/GUI/GUIDialogPlexError.h"
+#include "plex/GUI/GUIDialogPlexGlobalCacher.h"
+#include "plex/GUI/GUIDialogPlexVideoOSD.h"
 /* END PLEX */
 
 #if defined(TARGET_ANDROID)
@@ -1395,6 +1401,8 @@ bool CApplication::Initialize()
 #ifndef __PLEX__
     g_windowManager.Add(new CGUIWindowVideoNav);
     g_windowManager.Add(new CGUIWindowVideoPlaylist);
+#else
+    g_windowManager.Add(new CGUIDialogPlexSettingsMenu);
 #endif
     g_windowManager.Add(new CGUIWindowLoginScreen);
     g_windowManager.Add(new CGUIWindowSettingsProfile);
@@ -1496,7 +1504,9 @@ bool CApplication::Initialize()
     g_windowManager.Add(new CGUIWindowKaraokeLyrics);
 #endif
 
+#ifndef __PLEX__
     g_windowManager.Add(new CGUIDialogVideoOSD);
+#endif
     g_windowManager.Add(new CGUIDialogMusicOverlay);
     g_windowManager.Add(new CGUIDialogVideoOverlay);
     g_windowManager.Add(new CGUIWindowScreensaver);
@@ -1523,6 +1533,8 @@ bool CApplication::Initialize()
     g_windowManager.Add(new CGUIPlexScreenSaverPhoto);
     g_windowManager.Add(new CGUIWindowPlexPlayQueue);
     g_windowManager.Add(new CGUIDialogPlexPlayQueue);
+    g_windowManager.Add(new CGUIDialogPlexGlobalCacher);
+    g_windowManager.Add(new CGUIDialogPlexVideoOSD);
     /* END PLEX */
 
     /* window id's 3000 - 3100 are reserved for python */
@@ -5742,7 +5754,7 @@ void CApplication::ProcessSlow()
   /* PLEX */
   if (g_windowManager.GetActiveWindow() == WINDOW_FULLSCREEN_VIDEO && IsPlayingVideo())
   {
-    CGUIDialogVideoOSD *osd = (CGUIDialogVideoOSD*)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_OSD);
+    CGUIDialogPlexVideoOSD *osd = (CGUIDialogPlexVideoOSD*)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_OSD);
     if (IsPaused() && !IsBuffering())
     {
       if (osd && !osd->IsDialogRunning())
