@@ -5,7 +5,7 @@ before_install:
   - brew install ninja
 
 install: 
-  - mkdir pht-ninja-build
-  - cd pht-ninja-build
+  - mkdir ../pht-ninja-build
+  - cd ../pht-ninja-build
   - cmake -GNinja -DCMAKE_INSTALL_PREFIX=/usr/local/PlexHomeTheater -DCOMPRESS_TEXTURES=off -DCREATE_BUNDLE=off -DENABLE_DUMP_SYMBOLS=off ../plex-home-theater-public
   - ninja install
