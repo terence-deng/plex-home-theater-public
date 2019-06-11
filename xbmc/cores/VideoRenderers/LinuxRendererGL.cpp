@@ -348,8 +348,8 @@ bool CLinuxRendererGL::Configure(unsigned int width, unsigned int height, unsign
   // when used on intel gpu - we have to quirk it here
   if (DarwinIsMavericks())
   {
-    std::string rendervendor = g_Windowing.GetRenderVendor();
-    StringUtils::ToLower(rendervendor);
+    CStdString rendervendor = g_Windowing.GetRenderVendor();
+    rendervendor.MakeLower();
     if (rendervendor.find("intel") != std::string::npos)
       m_pboSupported = false;
   }

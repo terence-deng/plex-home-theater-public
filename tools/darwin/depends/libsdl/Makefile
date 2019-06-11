@@ -25,8 +25,9 @@ $(SOURCE): $(TARBALLS_LOCATION)/$(ARCHIVE)
 	echo $(SOURCE) > .gitignore
 	cd $(SOURCE); patch -p0 < ../01-SDL_SetWidthHeight.patch
 	cd $(SOURCE); patch -p0 < ../02-OSX_interpretKeyEvents.patch
+	cd $(SOURCE); patch -p0 < ../02-mmx.patch
 	cd $(SOURCE); patch -p0 < ../03-mavericks-compile.patch
-	cd $(SOURCE); patch -p0 < ../04-fix_external_screen_crash.patch
+	cd $(SOURCE); patch -p0 < ../03-fix_external_screen_crash.patch
 	cd $(SOURCE); $(CONFIGURE)
 
 $(LIBDYLIB): $(SOURCE)
