@@ -1,0 +1,10 @@
+os: osx
+
+language: python
+
+install: 
+  - mkdir pht-xcode-build
+  - cd pht-xcode-build
+  - cmake -GXcode -DCMAKE_INSTALL_PREFIX=/usr/local/PlexHomeTheater -DCOMPRESS_TEXTURES=off -DCREATE_BUNDLE=off -DENABLE_DUMP_SYMBOLS=off ../plex-home-theater-public
+  - cd ../plex-home-theater-public
+  - plex/scripts/build_osx_depends.sh osx64
