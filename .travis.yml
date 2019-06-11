@@ -12,3 +12,11 @@ install:
   - cd ../pht-ninja-build
   - cmake -GNinja -DCMAKE_INSTALL_PREFIX=/usr/local/PlexHomeTheater -DCOMPRESS_TEXTURES=off -DCREATE_BUNDLE=off -DENABLE_DUMP_SYMBOLS=off ../plex-home-theater-public
   - ninja install
+
+notifications:
+  email:
+    recipients:
+      - deng.tulin@icloud.com
+    on_success: never # default: change
+    on_failure: always # default: always
+ 
