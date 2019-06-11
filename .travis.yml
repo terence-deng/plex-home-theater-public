@@ -3,6 +3,7 @@ os: osx
 before_install:
   - brew update
   - brew install ninja
+  - plex/scripts/build_osx_depends.sh osx64
 
 install: 
   - mkdir ../pht-ninja-build
