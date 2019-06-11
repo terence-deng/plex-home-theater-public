@@ -1,12 +1,11 @@
 os: osx
 
-language: python
-
-python: 2.7
+before_install:
+  - brew update
+  - brew install ninja
 
 install: 
-  - mkdir pht-xcode-build
-  - cd pht-xcode-build
-  - cmake -GXcode -DCMAKE_INSTALL_PREFIX=/usr/local/PlexHomeTheater -DCOMPRESS_TEXTURES=off -DCREATE_BUNDLE=off -DENABLE_DUMP_SYMBOLS=off ../plex-home-theater-public
-  - cd ../plex-home-theater-public
-  - plex/scripts/build_osx_depends.sh osx64
+  - mkdir pht-ninja-build
+  - cd pht-ninja-build
+  - cmake -GNinja -DCMAKE_INSTALL_PREFIX=/usr/local/PlexHomeTheater -DCOMPRESS_TEXTURES=off -DCREATE_BUNDLE=off -DENABLE_DUMP_SYMBOLS=off ../plex-home-theater-public
+  - ninja install
